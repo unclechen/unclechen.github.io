@@ -1,6 +1,9 @@
 <div class="sidebar">
   <div class="container sidebar-sticky">
     <div class="sidebar-about">
+	
+	  <a href="{{ site.baseurl }}" title="Link to homepage for {{ site.title }}"><img src="{{ site.logo }}" width="80" alt="{{ site.title }} logo" class="panel-cover__logo logo" /></a>
+	
       <h1>
         <a href="{{ site.baseurl }}">
           {{ site.title }}
@@ -26,11 +29,45 @@
         {% endif %}
       {% endfor %}
 
-      <a class="sidebar-nav-item" href="{{ site.github.repo }}/archive/v{{ site.version }}.zip">Download</a>
-      <a class="sidebar-nav-item" href="{{ site.github.repo }}">GitHub project</a>
-      <span class="sidebar-nav-item">Currently v{{ site.version }}</span>
+      
     </nav>
 
-    <p>&copy; {{ site.time | date: '%Y' }}. All rights reserved.</p>
+	<nav class="sidebar-social">
+      <ul class="navigation">
+        <!-- Weibo -->
+        <li class="social-item twitter">
+          <a href="http://twitter.com/{{ site.twitter }}" title="{{ site.twitter }} on Twitter" target="_blank">
+          <i class='icon fi-social-twitter'></i>
+          <span class="label">Twitter</span>
+          </a>
+        </li>
+
+        <!-- Google+ -->
+        <li class="social-item gplus">
+          <a href="http://plus.google.com/103829716466878605055?rel=author" title="+ChrisBanes" target="_blank">
+          <i class='icon fi-social-google-plus'></i>
+          <span class="label">Google+</span>
+          </a>
+        </li>
+
+        <!-- GitHub -->
+        <li class="social-item github">
+          <a href="http://github.com/chrisbanes" title="@chrisbanes on GitHub" target="_blank">
+          <i class='icon fi-social-github'></i>
+          <span class="label">GitHub</span>
+          </a>
+        </li>
+
+        <!-- LinkedIn -->
+        <li class="social-item linkedin">
+          <a href="http://uk.linkedin.com/in/chrisbanes/" title="Chris Banes on LinkedIn" target="_blank">
+          <i class='icon fi-social-linkedin'></i>
+          <span class="label">LinkedIn</span>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
   </div>
 </div>

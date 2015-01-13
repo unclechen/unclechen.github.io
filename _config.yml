@@ -7,20 +7,24 @@ permalink:        pretty
 relative_permalinks: true
 
 # Setup
-title:            Hyde
-tagline:          'A Jekyll theme'
-description:      'A brazen two-column <a href="http://jekyllrb.com" target="_blank">Jekyll</a> theme that pairs a prominent sidebar with uncomplicated content. Made by <a href="https://twitter.com/mdo" target="_blank">@mdo</a>.'
-url:              http://hyde.getpoole.com
+title:            UncleChen
+description:      'Welcome to unclechen's blog, hope you enjoy my pages.'
+url:              http://unclechen.github.io
 baseurl:          /
+logo:             /content/img/me.jpg
 
 author:
-  name:           'Mark Otto'
-  url:            https://twitter.com/mdo
+  name:           'Chen Xihong'
+  url:            https://github.com/unclechen
 
 paginate:         5
 
-# Custom vars
-version:          2.1.0
-
 github:
-  repo:           https://github.com/poole/hyde
+  repo:           https://github.com/unclechen/uncleche.github.io
+
+disqus_shortname: unclechen
+
+gems:
+  - jekyll-sitemap
+
+twitter: '@nought'
