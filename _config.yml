@@ -22,9 +22,4 @@ paginate:         5
 github:
   repo:           https://github.com/unclechen/uncleche.github.io
 
-disqus_shortname: unclechen
-
-gems:
-  - jekyll-sitemap
-
-twitter: '@nought'
+twitter:          '@nought'
