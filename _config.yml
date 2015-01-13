@@ -1,5 +1,5 @@
 # Dependencies
-markdown:         redcarpet
+markdown:         kramdown
 highlighter:      pygments
 
 # Permalinks
@@ -7,11 +7,11 @@ permalink:        pretty
 relative_permalinks: true
 
 # Setup
-title:            UncleChen
-description:      'Welcome to unclechen's blog, hope you enjoy my pages.'
+title:            Uncle Chen
+description:      'Welcome to my blog, hope you enjoy these pages.'
 url:              http://unclechen.github.io
 baseurl:          /
-logo:             /content/img/me.jpg
+logo:             /content/images/me.jpg
 
 author:
   name:           'Chen Xihong'
@@ -19,7 +19,16 @@ author:
 
 paginate:         5
 
+disqus_shortname: unclechen
+
 github:
   repo:           https://github.com/unclechen/uncleche.github.io
 
-twitter:          '@nought'
+gems:
+  - jekyll-sitemap
+
+twitter: '@unclechen'
+
+kramdown:
+  # Enable GitHub Flavored Markdown (fenced code blocks)
+  input: GFM
