@@ -4,7 +4,7 @@
  <title>Uncle Chen</title>
  <link href="http://unclechen.github.io/atom.xml" rel="self"/>
  <link href="http://unclechen.github.io/"/>
- <updated>2015-01-14T15:42:06+08:00</updated>
+ <updated>2015-01-14T18:38:17+08:00</updated>
  <id>http://unclechen.github.io</id>
  <author>
    <name>Chen Xihong</name>
@@ -13,25 +13,25 @@
 
  
  <entry>
-   <title>使用GitHub Pages搭建博客（上）</title>
+   <title>使用GitHub Pages搭建博客</title>
    <link href="http://unclechen.github.io/2015/01/14/%E4%BD%BF%E7%94%A8Github%20Pages%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/"/>
    <updated>2015-01-14T00:00:00+08:00</updated>
    <id>http://unclechen.github.io/2015/01/14/使用Github Pages搭建个人博客</id>
-   <content type="html">&lt;p&gt;新的一年开始，让我们做点美好的事情。&lt;a href=&quot;https://github.com/&quot;&gt;GitHub&lt;/a&gt; 是一个开源项目的托管网站，相信很多人都听过。在上面有很多高质量的项目代码，我们也可以把自己的项目代码托管到GitHub，与朋友们共享交流。&lt;/p&gt;
+   <content type="html">&lt;p&gt;新的一年开始，一定要做点美好的事情。&lt;a href=&quot;https://github.com/&quot;&gt;GitHub&lt;/a&gt; 是一个开源项目的托管网站，相信很多人都听过。在上面有很多高质量的项目代码，我们也可以把自己的项目代码托管到GitHub，与朋友们共享交流。&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://pages.github.com/&quot;&gt;GitHub Pages&lt;/a&gt; 是Github为大家提供的一项服务，不仅能为托管的项目建立主页，还可以为我们建立个人博客。下面我就分别介绍个人博客和项目主页是如何建立的。这里我们先假设大家已经了解Git一些基本使用，将来我也会发布另外一篇Git基本安装和使用教程。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://pages.github.com/&quot;&gt;GitHub Pages&lt;/a&gt; 是Github为大家提供的一项服务，不仅能为托管的项目建立主页，还可以为我们建立个人博客。下面我就介绍个人博客是如何建立的，这里我们先假设大家已经了解Git一些基本使用，将来我也会发布另外一篇&lt;a href=&quot;http://&quot;&gt;《Git基本安装和使用教程》&lt;/a&gt;。&lt;/p&gt;
 
-&lt;p&gt;在使用GitHub Pages建立个人博客，我们还是简单了解一下GitHub Pages建立的页面有哪些优点：&lt;/p&gt;
+&lt;p&gt;在使用GitHub Pages建立个人博客前，我们象征性地了解一下GitHub Pages建立的页面有哪些优点：&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;极简的配置，轻量级系统，无需数据库&lt;/li&gt;
   &lt;li&gt;使用标记语言，如Markdown&lt;/li&gt;
   &lt;li&gt;使用GitHub托管服务，免费300MB空间&lt;/li&gt;
   &lt;li&gt;可以绑定自己的域名&lt;/li&gt;
-  &lt;li&gt;新版的GitHub Pages支持CDN服务&lt;/li&gt;
+  &lt;li&gt;新版的GitHub Pages还支持CDN服务，提升访问速度&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;要说缺点的话，其实也是有一些的，例如：&lt;/p&gt;
+&lt;p&gt;要说缺点的话，其实也有一些：&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;使用&lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll&lt;/a&gt; 模板系统，属于静态页面。&lt;/li&gt;
@@ -39,433 +39,153 @@
   &lt;li&gt;动态性不好，没有评论系统，不过可以自己配置&lt;a href=&quot;https://disqus.com/&quot;&gt;Disqus&lt;/a&gt; 扩展。&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;总得来说，使用起来是非常简单的。配置好了之后，只需要使用例如Markdown编写自己的博客内容，扔到文件夹里面即可发布了。完全不需要管理网站相关的事务，例如数据库、安全性等问题。&lt;/p&gt;
+&lt;p&gt;总体来说，GitHub Pages搭建的博客使用起来是非常方便的。配置好了之后，只需要使用例如Markdown编写自己的博文，扔到指定的文件夹里即可发布了。完全不需要管理网站相关的事务，例如数据库、安全性等问题。&lt;/p&gt;
 
-&lt;p&gt;开始正题，下面的参考来自于&lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt;的官方网站，再结合我自己的实际操作介绍各个步骤，并说一下可能遇到的问题和解决办法。&lt;/p&gt;
+&lt;p&gt;开始正题，下面的操作步骤参考自&lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt;的主页，再结合我的实际操作介绍各个步骤，并说一下可能遇到的问题和解决办法。&lt;/p&gt;
 
-&lt;p&gt;首先说明下，下面以Window 7环境为例，介绍操作步骤。至于OS X下，我操作的时候感觉还更方便一些。。另外我采用的是Git Bash终端来操作，这在任何系统下是一样的。&lt;/p&gt;
+&lt;p&gt;首先说明下面是以Window 7环境为例的，至于OS X，我操作的时候感觉还更方便一些。。另外我采用的是Git Bash终端来操作，这在任何环境下都是一样的。&lt;/p&gt;
 
-&lt;h2 id=&quot;create-a-repository&quot;&gt;创建一个新的项目托管仓库 （Create a repository）&lt;/h2&gt;
+&lt;h1 id=&quot;section&quot;&gt;搭建步骤&lt;/h1&gt;
 
-&lt;p&gt;&lt;img src=&quot;/content/images/Create a repository.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;h2 id=&quot;create-a-repository&quot;&gt;1. 创建一个新仓库 （Create a repository）&lt;/h2&gt;
 
-&lt;p&gt;如图所示，登录自己的GitHub主页，从右上角新建一个仓库，仓库名（&lt;code&gt;Repository name&lt;/code&gt;）设置为你自己的用户名为前缀，例如我的是&lt;code&gt;unclechen.github.io&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/content/images/create-a-repository.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;在GitHub上，每个用户只允许拥有唯一的一个以个人用户名为前缀，且符合&lt;code&gt;username.github.io&lt;/code&gt;命名的仓库。这个仓库也就是Github Pages说的个人/组织主页（&lt;code&gt;User or organization site&lt;/code&gt;）。因此当我再次想要建立一个同样名字的仓库时，上图中显示我的账号下已存在同名的仓库了。&lt;/p&gt;
+&lt;p&gt;如图所示，登录自己的GitHub主页，从右上角新建一个仓库，仓库名（&lt;strong&gt;Repository name&lt;/strong&gt;）设置为你自己的用户名为前缀，例如我的是&lt;code&gt;unclechen.github.io&lt;/code&gt;。&lt;/p&gt;
 
-&lt;h2 id=&quot;clone-the-repository&quot;&gt;把仓库拉到本地 （Clone the repository）&lt;/h2&gt;
+&lt;p&gt;在GitHub上，每个用户只允许拥有唯一的一个以自己的username为前缀，名为&lt;code&gt;username.github.io&lt;/code&gt;的仓库。这个仓库也就是Github Pages说的&lt;strong&gt;个人/组织主页&lt;/strong&gt;（&lt;strong&gt;User or organization site&lt;/strong&gt;），另一种则是&lt;strong&gt;项目仓库&lt;/strong&gt;（&lt;strong&gt;Project site&lt;/strong&gt;）。因此当我再次想要建立一个同样名字的仓库时，上图中显示我的账号下已存在同名的仓库了。假如你没有建立过的话，是没有问题的。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/content/images/Clone the repository.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;h2 id=&quot;clone-the-repository&quot;&gt;2. 把仓库拉到本地 （Clone the repository）&lt;/h2&gt;
 
-&lt;p&gt;使用任何一种方式将刚才建立的仓库拉取到本地。如上图所示，我喜欢使用Git Bash终端，在Git Bash中输入&lt;code&gt;git clone git@github.com:unclechen/unclechen.github.io.git&lt;/code&gt;，即可将刚才建立的仓库拉取到本地。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/content/images/clone-the-repository.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;indexhtml-hello-world&quot;&gt;建立index.html文件 （Hello World）&lt;/h2&gt;
+&lt;p&gt;使用任何一种方式将刚才建立的仓库拉取到本地。如上图所示，我喜欢使用Git Bash终端，在Git Bash中输入&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/content/images/Create index.html.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;git clone git@github.com:unclechen/unclechen.github.io.git&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;如上图所示，继续在Git Bash中输入&lt;code&gt;cd unclechen.github.io/&lt;/code&gt;命令，进入刚才拉取的仓库。然后在Git Bash中继续输入&lt;code&gt;echo &quot;Hello World&quot; &amp;gt; index.html&lt;/code&gt;命令，建立index.html文件。&lt;/p&gt;
+&lt;p&gt;即可将刚才建立的仓库拉取到本地。&lt;/p&gt;
 
-&lt;h2 id=&quot;github&quot;&gt;提交到GitHub服务器&lt;/h2&gt;
+&lt;h2 id=&quot;indexhtml-hello-world&quot;&gt;3. 建立index.html文件 （Hello World）&lt;/h2&gt;
 
-&lt;p&gt;Let’s get back to the new Lollipop functionality. As mentioned you can now specify a theme directly onto a View in your layout.  The most common use of this will (probably) be using Toolbar:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/content/images/create-index.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;Toolbar&lt;/span&gt;  
-    &lt;span class=&quot;na&quot;&gt;android:layout_height=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;?android:attr/actionBarSize&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:layout_width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;match_parent&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:background=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;?android:attr/colorPrimaryDark&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:theme=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@android:style/ThemeOverlay.Material.Dark.ActionBar&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;如上图所示，继续在Git Bash中输入&lt;/p&gt;
 
-&lt;p&gt;Hopefully you can now see how it all comes together. We have now made the Toolbar have a dark theme, ensuring that it’s content is light in color and has contrast againt the dark background.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;cd unclechen.github.io/&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;One thing to note is that &lt;code&gt;android:theme&lt;/code&gt; in Lollipop propogates to all children declared in the layout:&lt;/p&gt;
+&lt;p&gt;命令，进入刚才拉取的仓库（&lt;strong&gt;记住&lt;/strong&gt;你应该将上面的&lt;code&gt;unclechen&lt;/code&gt;改成自己的&lt;code&gt;username&lt;/code&gt;）。然后在Git Bash中继续输入&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;LinearLayout&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:theme=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@android:style/ThemeOverlay.Material.Dark&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Anything here will also have a dark theme --&amp;gt;&lt;/span&gt;
-    
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/LinearLayout&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;echo &amp;quot;Hello World&amp;quot; &amp;gt; index.html&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Your children can set their own theme if needed.&lt;/p&gt;
+&lt;p&gt;命令，在本地先创建index.html文件。&lt;/p&gt;
 
-&lt;h2 id=&quot;example&quot;&gt;Example&lt;/h2&gt;
+&lt;h2 id=&quot;github-commit-the-file&quot;&gt;4. 提交到GitHub服务器 （Commit the file）&lt;/h2&gt;
 
-&lt;p&gt;Let’s wrap this up with a question that I’ve been asked recently:&lt;/p&gt;
+&lt;p&gt;创建index.html文件后，和使用其他Git仓库的基本操作一样，需要提交修改到服务器才能生效。&lt;/p&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;How do I set android:colorEdgeEffect so that it only takes effect on a single view?&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;所以我们需要依次输入三条Git命令，第一条是&lt;/p&gt;
 
-&lt;p&gt;The &lt;code&gt;colorEdgeEffect&lt;/code&gt; attribute is a new theme attribute in Android 5.0, which is used to customize the color of the overscroll effect for lists, etc.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;git add .&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;As this is a theme attribute you can not just set it directly on the view. Instead we need to use &lt;code&gt;android:theme&lt;/code&gt; with a custom ThemeOverlay. Our custom overlay just sets &lt;code&gt;android:colorEdgeEffect&lt;/code&gt; to be red. We then set this theme on to the view so that it takes effect.&lt;/p&gt;
+&lt;p&gt;第二条是&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;res/values/themes.xml&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;git commit -a -m &amp;quot;my fisrt blog&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;style&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;RedThemeOverlay&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parent=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;android:ThemeOverlay.Material&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;item&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;android:colorEdgeEffect&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;#FF0000&lt;span class=&quot;nt&quot;&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/style&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;第三条是&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;res/layout/fragment_list.xml&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;git push&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;ListView&lt;/span&gt;
-    &lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:theme=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;RedThemeOverlay&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;这样就把刚才建立的&lt;code&gt;index.html&lt;/code&gt;文件提交到了GitHub服务器上，如下图所示：&lt;/p&gt;
 
-&lt;p&gt;Just to note, colorEdgeEffect was just an example here, this technique can be used with &lt;strong&gt;all&lt;/strong&gt; theme attributes.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/content/images/push-to-github.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;theme-vs-style&quot;&gt;Theme vs Style&lt;/h2&gt;
+&lt;h2 id=&quot;and-youre-done&quot;&gt;5. 搭建成功 （…and you’re done!）&lt;/h2&gt;
 
-&lt;p&gt;So what exactly is the difference? Well they are both declared in exactly the same way (which you already know), the difference comes in how they’re used.&lt;/p&gt;
+&lt;p&gt;好了！Push到GitHub之后，你就打开浏览器在地址栏输入&lt;code&gt;http://username.github.io/&lt;/code&gt;来访问你的个人主页了，别忘了将&lt;code&gt;username&lt;/code&gt;改成你自己的用户名。记住，页面初次打开可能会显示404错误。这没有关系，因为需要等待一些时间之后才会生效，我的博客是过了大概10分钟左右生效的吧。&lt;/p&gt;
 
-&lt;p&gt;Themes are meant to be the global source of styling for your app. The new functionality doesn’t change that, it just allows you to tweak it per view.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/content/images/and-you-are-done.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Styles are meant to be applied at a view level. Internally, when you set &lt;code&gt;style&lt;/code&gt; on a View, the LayoutInflater will read the style and apply it to the &lt;a href=&quot;https://developer.android.com/reference/android/util/AttributeSet.html&quot;&gt;AttributeSet&lt;/a&gt; before any explicit attributes (this allows you to override style values on a view).&lt;/p&gt;
+&lt;p&gt;如上图所示，页面显然有点朴素。没有关系，我们先将博客创建出来，再使用基于&lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll&lt;/a&gt; 模板的一些主题，就可以渲染界面。我的博客用的主题是&lt;a href=&quot;https://github.com/poole/hyde&quot;&gt;Hyde&lt;/a&gt;。&lt;/p&gt;
 
-&lt;p&gt;Values in an attribute set can reference values from the View’s theme.&lt;/p&gt;
+&lt;p&gt;至此，我们已经成功使用&lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt;搭建了个人博客（通过&lt;strong&gt;User or organization site&lt;/strong&gt;方式）。至于如何使用Jekyll模板编写，并使用主题来渲染博客，以及绑定自己的域名等等，在我的另一篇博客中&lt;a href=&quot;http://&quot;&gt;《使用Jekyll编写博客》&lt;/a&gt;将会介绍。&lt;/p&gt;
 
-&lt;p&gt;TL;DR: Themes are global, styles are local.&lt;/p&gt;
-
-&lt;h2 id=&quot;appcompat&quot;&gt;AppCompat&lt;/h2&gt;
-
-&lt;p&gt;So how does AppCompat fit into this? Well it obviously backports some of the new color theme attributes.&lt;/p&gt;
-
-&lt;p&gt;It also backports the &lt;code&gt;android:theme&lt;/code&gt; functionality for certain widgets, currently &lt;strong&gt;only&lt;/strong&gt; &lt;code&gt;android.support.v7.widget.Toolbar&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;See my &lt;a href=&quot;https://chris.banes.me/2014/10/17/appcompat-v21/&quot;&gt;AppCompat v21&lt;/a&gt; blog post for more information.&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Theme vs Style</title>
-   <link href="http://unclechen.github.io/2014/11/12/theme-vs-style/"/>
-   <updated>2014-11-12T16:28:02+08:00</updated>
-   <id>http://unclechen.github.io/2014/11/12/theme-vs-style</id>
-   <content type="html">&lt;p&gt;Android 5.0 Lollipop brings with it new functionality which allows you to specify an override theme for a View (and any descendents). Let’s have a look at how and why you would use it.&lt;/p&gt;
-
-&lt;h2 id=&quot;why&quot;&gt;Why?&lt;/h2&gt;
-
-&lt;p&gt;You’ve probably already been using this functionality for a while without knowing: &lt;code&gt;Theme.Holo.Light.DarkActionBar&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Think about the Light.DarkActionBar theme for a second. It’s a light theme for your content (background is light and the foreground is dark), but the action bar use a dark theme (dark background with light foreground color).&lt;/p&gt;
-
-&lt;p&gt;Without being able to supply a seperate theme, you would need to manually set the text color and other foreground colors to some sort of inverse. Eugh.&lt;/p&gt;
-
-&lt;p&gt;That is where the old &lt;code&gt;actionBarWidgetTheme&lt;/code&gt; attribute came in, it allowed you to specify a theme to be used &lt;strong&gt;only&lt;/strong&gt; for your action bar. Here’s an excerpt from the platform DarkActionBar theme:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;style&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Theme.Holo.Light.DarkActionBar&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;item&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;android:actionBarWidgetTheme&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;@android:style/Theme.Holo&lt;span class=&quot;nt&quot;&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/style&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Thus making your action bar using the dark theme.&lt;/p&gt;
-
-&lt;h3 id=&quot;underlying-functionality&quot;&gt;Underlying functionality&lt;/h3&gt;
-
-&lt;p&gt;So how do this work under-the-covers? Simple, it’s the &lt;a href=&quot;https://developer.android.com/reference/android/view/ContextThemeWrapper.html&quot;&gt;ContextThemeWrapper&lt;/a&gt; class which has been available since API v1. It’s a pretty simple class and the clue to what it does is in the name:&lt;/p&gt;
-
-&lt;p&gt;It wraps an existing Context (say your Activity), and then  &lt;strong&gt;overlays&lt;/strong&gt; a new theme on top of that Context’s theme. This is important to understand as this leads on to…&lt;/p&gt;
-
-&lt;h2 id=&quot;themeoverlay&quot;&gt;ThemeOverlay&lt;/h2&gt;
-
-&lt;p&gt;You may have seen these themes in the Lollipop SDK. There are two main overlays:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;ThemeOverlay.Material.Light&lt;/li&gt;
-  &lt;li&gt;ThemeOverlay.Material.Dark&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;So what exactly are these? Well again, the clue is in the name, and they are directly match to how ContextThemeWrapper works.&lt;/p&gt;
-
-&lt;p&gt;They are special themes which overlay the normal &lt;code&gt;Theme.Material&lt;/code&gt; themes, overwriting relevant attributes to make them either light/dark.&lt;/p&gt;
-
-&lt;h3 id=&quot;themeoverlay--actionbar&quot;&gt;ThemeOverlay + ActionBar&lt;/h3&gt;
-
-&lt;p&gt;The keen eyed of you will also have seen the ActionBar ThemeOverlay derivatives:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;ThemeOverlay.Material.Light.ActionBar&lt;/li&gt;
-  &lt;li&gt;ThemeOverlay.Material.Dark.ActionBar&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;These should only be used with the Action Bar via the new &lt;code&gt;actionBarTheme&lt;/code&gt; attribute, or directly set on your &lt;a href=&quot;https://developer.android.com/reference/android/widget/Toolbar.html&quot;&gt;Toolbar&lt;/a&gt; (see below).&lt;/p&gt;
-
-&lt;p&gt;The only things these currently do differently to their parents is that they change the &lt;code&gt;colorControlNormal&lt;/code&gt; to be &lt;code&gt;android:textColorPrimary&lt;/code&gt;, thus making any text and icons opaque.&lt;/p&gt;
-
-&lt;h2 id=&quot;androidtheme&quot;&gt;android:theme&lt;/h2&gt;
-
-&lt;p&gt;Let’s get back to the new Lollipop functionality. As mentioned you can now specify a theme directly onto a View in your layout.  The most common use of this will (probably) be using Toolbar:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;Toolbar&lt;/span&gt;  
-    &lt;span class=&quot;na&quot;&gt;android:layout_height=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;?android:attr/actionBarSize&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:layout_width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;match_parent&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:background=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;?android:attr/colorPrimaryDark&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:theme=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@android:style/ThemeOverlay.Material.Dark.ActionBar&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Hopefully you can now see how it all comes together. We have now made the Toolbar have a dark theme, ensuring that it’s content is light in color and has contrast againt the dark background.&lt;/p&gt;
-
-&lt;p&gt;One thing to note is that &lt;code&gt;android:theme&lt;/code&gt; in Lollipop propogates to all children declared in the layout:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;LinearLayout&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:theme=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;@android:style/ThemeOverlay.Material.Dark&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Anything here will also have a dark theme --&amp;gt;&lt;/span&gt;
-    
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/LinearLayout&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Your children can set their own theme if needed.&lt;/p&gt;
-
-&lt;h2 id=&quot;example&quot;&gt;Example&lt;/h2&gt;
-
-&lt;p&gt;Let’s wrap this up with a question that I’ve been asked recently:&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;How do I set android:colorEdgeEffect so that it only takes effect on a single view?&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;The &lt;code&gt;colorEdgeEffect&lt;/code&gt; attribute is a new theme attribute in Android 5.0, which is used to customize the color of the overscroll effect for lists, etc.&lt;/p&gt;
-
-&lt;p&gt;As this is a theme attribute you can not just set it directly on the view. Instead we need to use &lt;code&gt;android:theme&lt;/code&gt; with a custom ThemeOverlay. Our custom overlay just sets &lt;code&gt;android:colorEdgeEffect&lt;/code&gt; to be red. We then set this theme on to the view so that it takes effect.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;res/values/themes.xml&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;style&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;RedThemeOverlay&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parent=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;android:ThemeOverlay.Material&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;item&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;android:colorEdgeEffect&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;#FF0000&lt;span class=&quot;nt&quot;&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/style&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;res/layout/fragment_list.xml&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;ListView&lt;/span&gt;
-    &lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;android:theme=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;RedThemeOverlay&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Just to note, colorEdgeEffect was just an example here, this technique can be used with &lt;strong&gt;all&lt;/strong&gt; theme attributes.&lt;/p&gt;
-
-&lt;h2 id=&quot;theme-vs-style&quot;&gt;Theme vs Style&lt;/h2&gt;
-
-&lt;p&gt;So what exactly is the difference? Well they are both declared in exactly the same way (which you already know), the difference comes in how they’re used.&lt;/p&gt;
-
-&lt;p&gt;Themes are meant to be the global source of styling for your app. The new functionality doesn’t change that, it just allows you to tweak it per view.&lt;/p&gt;
-
-&lt;p&gt;Styles are meant to be applied at a view level. Internally, when you set &lt;code&gt;style&lt;/code&gt; on a View, the LayoutInflater will read the style and apply it to the &lt;a href=&quot;https://developer.android.com/reference/android/util/AttributeSet.html&quot;&gt;AttributeSet&lt;/a&gt; before any explicit attributes (this allows you to override style values on a view).&lt;/p&gt;
-
-&lt;p&gt;Values in an attribute set can reference values from the View’s theme.&lt;/p&gt;
-
-&lt;p&gt;TL;DR: Themes are global, styles are local.&lt;/p&gt;
-
-&lt;h2 id=&quot;appcompat&quot;&gt;AppCompat&lt;/h2&gt;
-
-&lt;p&gt;So how does AppCompat fit into this? Well it obviously backports some of the new color theme attributes.&lt;/p&gt;
-
-&lt;p&gt;It also backports the &lt;code&gt;android:theme&lt;/code&gt; functionality for certain widgets, currently &lt;strong&gt;only&lt;/strong&gt; &lt;code&gt;android.support.v7.widget.Toolbar&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;See my &lt;a href=&quot;https://chris.banes.me/2014/10/17/appcompat-v21/&quot;&gt;AppCompat v21&lt;/a&gt; blog post for more information.&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Introducing Hyde</title>
-   <link href="http://unclechen.github.io/2013/12/28/introducing-hyde/"/>
-   <updated>2013-12-28T00:00:00+08:00</updated>
-   <id>http://unclechen.github.io/2013/12/28/introducing-hyde</id>
-   <content type="html">&lt;p&gt;Hyde is a brazen two-column &lt;a href=&quot;http://jekyllrb.com&quot;&gt;Jekyll&lt;/a&gt; theme that pairs a prominent sidebar with uncomplicated content. It’s based on &lt;a href=&quot;http://getpoole.com&quot;&gt;Poole&lt;/a&gt;, the Jekyll butler.&lt;/p&gt;
-
-&lt;h3 id=&quot;built-on-poole&quot;&gt;Built on Poole&lt;/h3&gt;
-
-&lt;p&gt;Poole is the Jekyll Butler, serving as an upstanding and effective foundation for Jekyll themes by &lt;a href=&quot;https://twitter.com/mdo&quot;&gt;@mdo&lt;/a&gt;. Poole, and every theme built on it (like Hyde here) includes the following:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Complete Jekyll setup included (layouts, config, &lt;a href=&quot;/404&quot;&gt;404&lt;/a&gt;, &lt;a href=&quot;/atom.xml&quot;&gt;RSS feed&lt;/a&gt;, posts, and &lt;a href=&quot;/about&quot;&gt;example page&lt;/a&gt;)&lt;/li&gt;
-  &lt;li&gt;Mobile friendly design and development&lt;/li&gt;
-  &lt;li&gt;Easily scalable text and component sizing with &lt;code&gt;rem&lt;/code&gt; units in the CSS&lt;/li&gt;
-  &lt;li&gt;Support for a wide gamut of HTML elements&lt;/li&gt;
-  &lt;li&gt;Related posts (time-based, because Jekyll) below each post&lt;/li&gt;
-  &lt;li&gt;Syntax highlighting, courtesy Pygments (the Python-based code snippet highlighter)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;hyde-features&quot;&gt;Hyde features&lt;/h3&gt;
-
-&lt;p&gt;In addition to the features of Poole, Hyde adds the following:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Sidebar includes support for textual modules and a dynamically generated navigation with active link support&lt;/li&gt;
-  &lt;li&gt;Two orientations for content and sidebar, default (left sidebar) and &lt;a href=&quot;https://github.com/poole/lanyon#reverse-layout&quot;&gt;reverse&lt;/a&gt; (right sidebar), available via &lt;code&gt;&amp;lt;body&amp;gt;&lt;/code&gt; classes&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://github.com/poole/hyde#themes&quot;&gt;Eight optional color schemes&lt;/a&gt;, available via &lt;code&gt;&amp;lt;body&amp;gt;&lt;/code&gt; classes&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/poole/hyde#readme&quot;&gt;Head to the readme&lt;/a&gt; to learn more.&lt;/p&gt;
-
-&lt;h3 id=&quot;browser-support&quot;&gt;Browser support&lt;/h3&gt;
-
-&lt;p&gt;Hyde is by preference a forward-thinking project. In addition to the latest versions of Chrome, Safari (mobile and desktop), and Firefox, it is only compatible with Internet Explorer 9 and above.&lt;/p&gt;
-
-&lt;h3 id=&quot;download&quot;&gt;Download&lt;/h3&gt;
-
-&lt;p&gt;Hyde is developed on and hosted with GitHub. Head to the &lt;a href=&quot;https://github.com/poole/hyde&quot;&gt;GitHub repository&lt;/a&gt; for downloads, bug reports, and features requests.&lt;/p&gt;
-
-&lt;p&gt;Thanks!&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Example content</title>
-   <link href="http://unclechen.github.io/2012/02/07/example-content/"/>
-   <updated>2012-02-07T00:00:00+08:00</updated>
-   <id>http://unclechen.github.io/2012/02/07/example-content</id>
-   <content type="html">&lt;div class=&quot;message&quot;&gt;
-  Howdy! This is an example blog post that shows several types of HTML content supported in this theme.
-&lt;/div&gt;
-
-&lt;p&gt;Cum sociis natoque penatibus et magnis &lt;a href=&quot;#&quot;&gt;dis parturient montes&lt;/a&gt;, nascetur ridiculus mus. &lt;em&gt;Aenean eu leo quam.&lt;/em&gt; Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Curabitur blandit tempus porttitor. Nullam quis risus eget urna mollis ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Etiam porta &lt;strong&gt;sem malesuada magna&lt;/strong&gt; mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.&lt;/p&gt;
-
-&lt;h2 id=&quot;inline-html-elements&quot;&gt;Inline HTML elements&lt;/h2&gt;
-
-&lt;p&gt;HTML defines a long list of available inline tags, a complete list of which can be found on the &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/HTML/Element&quot;&gt;Mozilla Developer Network&lt;/a&gt;.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;To bold text&lt;/strong&gt;, use &lt;code&gt;&amp;lt;strong&amp;gt;&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;em&gt;To italicize text&lt;/em&gt;, use &lt;code&gt;&amp;lt;em&amp;gt;&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Abbreviations, like &lt;abbr title=&quot;HyperText Markup Langage&quot;&gt;HTML&lt;/abbr&gt; should use &lt;code&gt;&amp;lt;abbr&amp;gt;&lt;/code&gt;, with an optional &lt;code&gt;title&lt;/code&gt; attribute for the full phrase.&lt;/li&gt;
-  &lt;li&gt;Citations, like &lt;cite&gt;— Mark otto&lt;/cite&gt;, should use &lt;code&gt;&amp;lt;cite&amp;gt;&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;del&gt;Deleted&lt;/del&gt; text should use &lt;code&gt;&amp;lt;del&amp;gt;&lt;/code&gt; and &lt;ins&gt;inserted&lt;/ins&gt; text should use &lt;code&gt;&amp;lt;ins&amp;gt;&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Superscript &lt;sup&gt;text&lt;/sup&gt; uses &lt;code&gt;&amp;lt;sup&amp;gt;&lt;/code&gt; and subscript &lt;sub&gt;text&lt;/sub&gt; uses &lt;code&gt;&amp;lt;sub&amp;gt;&lt;/code&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Most of these elements are styled by browsers with few modifications on our part.&lt;/p&gt;
-
-&lt;h2 id=&quot;heading&quot;&gt;Heading&lt;/h2&gt;
-
-&lt;p&gt;Vivamus sagittis lacus vel augue rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.&lt;/p&gt;
-
-&lt;h3 id=&quot;code&quot;&gt;Code&lt;/h3&gt;
-
-&lt;p&gt;Cum sociis natoque penatibus et magnis dis &lt;code&gt;code element&lt;/code&gt; montes, nascetur ridiculus mus.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Example can be run directly in your JavaScript console&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// Create a function that takes two arguments and returns the sum of those arguments&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;adder&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;b&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;return a + b&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// Call the function&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;adder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// &amp;gt; 8&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.&lt;/p&gt;
-
-&lt;h3 id=&quot;gists-via-github-pages&quot;&gt;Gists via GitHub Pages&lt;/h3&gt;
-
-&lt;p&gt;Vestibulum id ligula porta felis euismod semper. Nullam quis risus eget urna mollis ornare vel eu leo. Donec sed odio dui.&lt;/p&gt;
-
-&lt;script src=&quot;https://gist.github.com/5555251.js?file=gist.md&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec sed odio dui. Vestibulum id ligula porta felis euismod semper.&lt;/p&gt;
-
-&lt;h3 id=&quot;lists&quot;&gt;Lists&lt;/h3&gt;
-
-&lt;p&gt;Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Praesent commodo cursus magna, vel scelerisque nisl consectetur et.&lt;/li&gt;
-  &lt;li&gt;Donec id elit non mi porta gravida at eget metus.&lt;/li&gt;
-  &lt;li&gt;Nulla vitae elit libero, a pharetra augue.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Vestibulum id ligula porta felis euismod semper.&lt;/li&gt;
-  &lt;li&gt;Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.&lt;/li&gt;
-  &lt;li&gt;Maecenas sed diam eget risus varius blandit sit amet non magna.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.&lt;/p&gt;
-
-&lt;dl&gt;
-  &lt;dt&gt;HyperText Markup Language (HTML)&lt;/dt&gt;
-  &lt;dd&gt;The language used to describe and define the content of a Web page&lt;/dd&gt;
-
-  &lt;dt&gt;Cascading Style Sheets (CSS)&lt;/dt&gt;
-  &lt;dd&gt;Used to describe the appearance of Web content&lt;/dd&gt;
-
-  &lt;dt&gt;JavaScript (JS)&lt;/dt&gt;
-  &lt;dd&gt;The programming language used to build advanced Web sites and applications&lt;/dd&gt;
-&lt;/dl&gt;
-
-&lt;p&gt;Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam quis risus eget urna mollis ornare vel eu leo.&lt;/p&gt;
-
-&lt;h3 id=&quot;images&quot;&gt;Images&lt;/h3&gt;
-
-&lt;p&gt;Quisque consequat sapien eget quam rhoncus, sit amet laoreet diam tempus. Aliquam aliquam metus erat, a pulvinar turpis suscipit at.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://placehold.it/800x400&quot; alt=&quot;placeholder&quot; title=&quot;Large example image&quot; /&gt;
-&lt;img src=&quot;http://placehold.it/400x200&quot; alt=&quot;placeholder&quot; title=&quot;Medium example image&quot; /&gt;
-&lt;img src=&quot;http://placehold.it/200x200&quot; alt=&quot;placeholder&quot; title=&quot;Small example image&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;tables&quot;&gt;Tables&lt;/h3&gt;
-
-&lt;p&gt;Aenean lacinia bibendum nulla sed consectetur. Lorem ipsum dolor sit amet, consectetur adipiscing elit.&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Name&lt;/th&gt;
-      &lt;th&gt;Upvotes&lt;/th&gt;
-      &lt;th&gt;Downvotes&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tfoot&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Totals&lt;/td&gt;
-      &lt;td&gt;21&lt;/td&gt;
-      &lt;td&gt;23&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tfoot&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Alice&lt;/td&gt;
-      &lt;td&gt;10&lt;/td&gt;
-      &lt;td&gt;11&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Bob&lt;/td&gt;
-      &lt;td&gt;4&lt;/td&gt;
-      &lt;td&gt;3&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Charlie&lt;/td&gt;
-      &lt;td&gt;7&lt;/td&gt;
-      &lt;td&gt;9&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Nullam id dolor id nibh ultricies vehicula ut id elit. Sed posuere consectetur est at lobortis. Nullam quis risus eget urna mollis ornare vel eu leo.&lt;/p&gt;
+&lt;p&gt;下面介绍的是另外一种使用GitHub Pages中的&lt;strong&gt;Project site&lt;/strong&gt;建立博客的方法，有兴趣或者需要建立多个博客站点的朋友可以看一看。&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;Want to see something else added? &lt;a href=&quot;https://github.com/poole/poole/issues/new&quot;&gt;Open an issue.&lt;/a&gt;&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>What's Jekyll?</title>
-   <link href="http://unclechen.github.io/2012/02/06/whats-jekyll/"/>
-   <updated>2012-02-06T00:00:00+08:00</updated>
-   <id>http://unclechen.github.io/2012/02/06/whats-jekyll</id>
-   <content type="html">&lt;p&gt;&lt;a href=&quot;http://jekyllrb.com&quot;&gt;Jekyll&lt;/a&gt; is a static site generator, an open-source tool for creating simple yet powerful websites of all shapes and sizes. From &lt;a href=&quot;https://github.com/mojombo/jekyll/blob/master/README.markdown&quot;&gt;the project’s readme&lt;/a&gt;:&lt;/p&gt;
+&lt;h1 id=&quot;section-1&quot;&gt;另一种搭建方法（可搭建多个博客站点）&lt;/h1&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;Jekyll is a simple, blog aware, static site generator. It takes a template directory […] and spits out a complete, static website suitable for serving with Apache or your favorite web server. This is also the engine behind GitHub Pages, which you can use to host your project’s page or blog right here from GitHub.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;上面介绍了使用&lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt;中提到的&lt;strong&gt;个人/组织主页&lt;/strong&gt;（&lt;strong&gt;User or organization site&lt;/strong&gt;）来搭建个人博客，前面说过这种名为&lt;code&gt;username.github.io&lt;/code&gt;的仓库，每个GitHub账户下只能拥有一个，如果你需要建立多个博客站点的话多少有些不方便。&lt;/p&gt;
 
-&lt;p&gt;It’s an immensely useful tool and one we encourage you to use here with Hyde.&lt;/p&gt;
+&lt;p&gt;不过没有关系，除了通过建立名为&lt;code&gt;username.github.io&lt;/code&gt;的仓库搭建个人博客以外，还可以通过建立普通名字&lt;code&gt;project name&lt;/code&gt;的仓库来创建个人博客。这就是GitHub Pages上提到的&lt;strong&gt;项目仓库&lt;/strong&gt;（&lt;strong&gt;Project site&lt;/strong&gt;）。&lt;/p&gt;
 
-&lt;p&gt;Find out more by &lt;a href=&quot;https://github.com/mojombo/jekyll&quot;&gt;visiting the project on GitHub&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;然而，使用&lt;strong&gt;项目仓库&lt;/strong&gt;（&lt;strong&gt;Project site&lt;/strong&gt;）创建博客又分为两种场景，一种是通过新建一个仓库（&lt;strong&gt;Generate a site&lt;/strong&gt;）来创建，另一种则是直接从已有的项目仓库（&lt;strong&gt;Start from scratch&lt;/strong&gt;）来创建。但这两种形式本质上都是通过在一个普通的仓库下开辟一个没有父分支的gh-pages分支，将网页的代码在gh-pages分下进行管理，维护页面的。acth）。但是这两种形式本质上都是通过在一个普通的仓库下开辟一个没有父分支的gh-pages分支，将网页的代码在gh-pages分下进行管理，维护页面的。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;第一种场景：使用&lt;strong&gt;Generate a site&lt;/strong&gt;搭建博客。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;create-a-repository-1&quot;&gt;1. 创建新仓库（Create a repository）&lt;/h2&gt;
+
+&lt;p&gt;这里我们就不再使用&lt;code&gt;username.github.io&lt;/code&gt;的名字来建立仓库了，随便使用一个其他的名字，例如&lt;code&gt;blog&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h2 id=&quot;repository-settings&quot;&gt;2. 设置仓库的参数 （Repository Settings）&lt;/h2&gt;
+
+&lt;p&gt;进入刚才建立的新仓库，在GitHub网页的右边面板中点击&lt;code&gt;Settings&lt;/code&gt;。如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/settings.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;automatic-generator&quot;&gt;3. 自动生成页面 （Automatic Generator）&lt;/h2&gt;
+
+&lt;p&gt;在Settings界面下，选择下图所示的&lt;code&gt;Automatic page generator&lt;/code&gt;按钮，在弹出的页面填写一些参数。再选择一个主题，可以自动生成一个页面。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/atomatic-page-generator.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;and-youre-done-1&quot;&gt;4. 搭建完成 （…and you’re done!）&lt;/h2&gt;
+
+&lt;p&gt;在浏览器中输入&lt;code&gt;http://username.github.io/repository&lt;/code&gt;，即可访问页面。记住，你需要将前面的&lt;code&gt;repository&lt;/code&gt;修改成你的项目名字（&lt;code&gt;project name&lt;/code&gt;，例如我的是&lt;code&gt;blog&lt;/code&gt;）。同样这需要等待一些时间之后才能生效。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/you-are-done-again.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;至此，我们就成功使用&lt;strong&gt;Generate a site&lt;/strong&gt;的形式，新建立一个仓库，搭建了自己的博客。如下所示，使用GitHub自动生成的页面比刚才的”Hello World”页面确实漂亮了不少。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;第二种场景：使用&lt;strong&gt;Start from scratch&lt;/strong&gt;搭建博客。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;gh-pages-create-a-gh-pages-branch&quot;&gt;1. 创建gh-pages分支 （Create a gh-pages branch）&lt;/h2&gt;
+
+&lt;p&gt;进入已有仓库的主页，在分支下拉菜单中输入&lt;code&gt;gh-pages&lt;/code&gt;后，按下回车键&lt;code&gt;enter&lt;/code&gt;，自定建立一个没有父分支的gh-pages分支，如下图所示。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/create-gh-pages-branch.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;可选操作：创建&lt;code&gt;gh-pages&lt;/code&gt;分支后，也可以将这个分支设为默认分支（&lt;code&gt;default branch&lt;/code&gt;），将来方便我们自己管理。&lt;/p&gt;
+
+&lt;h2 id=&quot;indexhtml-create-an-index-file&quot;&gt;2. 建立index.html文件 （Create an index file）&lt;/h2&gt;
+
+&lt;p&gt;和上面介绍过的方法一样，在&lt;code&gt;gh-pages&lt;/code&gt;分支下面建立一个&lt;code&gt;index.html&lt;/code&gt;文件，输入&lt;code&gt;Hello World&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h2 id=&quot;commit-the-file&quot;&gt;3. 提交修改 （Commit the file）&lt;/h2&gt;
+
+&lt;p&gt;建立了&lt;code&gt;index.html&lt;/code&gt;文件之后，将修改commit到服务器上。&lt;/p&gt;
+
+&lt;p&gt;这里的第2、3步都可以在GitHub网站的界面直接进行操作，或者和&lt;strong&gt;User or organization site&lt;/strong&gt;方法的第3、4步一样，也可以使用Git Bash终端操作。&lt;/p&gt;
+
+&lt;h2 id=&quot;and-youre-done-2&quot;&gt;4. 搭建成功 （…and you’re done!）&lt;/h2&gt;
+
+&lt;p&gt;等待片刻，博客页面生效。&lt;/p&gt;
+
+&lt;p&gt;至此，我们就成功使用&lt;strong&gt;Start from scratch&lt;/strong&gt;的方式，通过在已有的仓库下建立没有父分支的&lt;code&gt;gh-pages&lt;/code&gt;分支，搭建了自己的博客。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;section-2&quot;&gt;两种搭建方法的对比&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;User or organization site:&lt;/strong&gt; 使用&lt;code&gt;master&lt;/code&gt;分支管理博客站点，命名为&lt;code&gt;username.github.io&lt;/code&gt;的形式，每个GItHub账户下只能拥有一个。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Project site:&lt;/strong&gt; 采用一个没有父分支的&lt;code&gt;gh-pages&lt;/code&gt;来管理博客站点，命名方式普通，每个GitHub账户下可以有多个。&lt;/li&gt;
+&lt;/ul&gt;
+
 </content>
  </entry>
  

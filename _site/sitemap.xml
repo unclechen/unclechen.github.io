@@ -6,34 +6,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://unclechen.github.io/2014/11/12/theme-vs-style/</loc>
-    <lastmod>2014-11-12T16:28:02+08:00</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://unclechen.github.io/2013/12/28/introducing-hyde/</loc>
-    <lastmod>2013-12-28T00:00:00+08:00</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://unclechen.github.io/2012/02/07/example-content/</loc>
-    <lastmod>2012-02-07T00:00:00+08:00</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>http://unclechen.github.io/2012/02/06/whats-jekyll/</loc>
-    <lastmod>2012-02-06T00:00:00+08:00</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>http://unclechen.github.io/404.html</loc>
-    <lastmod>2015-01-14T15:42:06+08:00</lastmod>
+    <lastmod>2015-01-14T18:38:17+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://unclechen.github.io/</loc>
-    <lastmod>2015-01-14T15:42:06+08:00</lastmod>
+    <lastmod>2015-01-14T18:38:17+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
