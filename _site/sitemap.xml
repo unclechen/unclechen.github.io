@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://unclechen.github.io/2015/01/14/%E4%BD%BF%E7%94%A8Github%20Pages%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</loc>
+    <lastmod>2015-01-14T00:00:00+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://unclechen.github.io/2014/11/12/theme-vs-style/</loc>
+    <lastmod>2014-11-12T16:28:02+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>http://unclechen.github.io/2013/12/28/introducing-hyde/</loc>
     <lastmod>2013-12-28T00:00:00+08:00</lastmod>
     <priority>0.8</priority>
@@ -17,13 +27,13 @@
   </url>
   <url>
     <loc>http://unclechen.github.io/404.html</loc>
-    <lastmod>2015-01-13T19:51:55+08:00</lastmod>
+    <lastmod>2015-01-14T15:42:06+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://unclechen.github.io/</loc>
-    <lastmod>2015-01-13T19:51:55+08:00</lastmod>
+    <lastmod>2015-01-14T15:42:06+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
