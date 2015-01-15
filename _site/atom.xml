@@ -4,7 +4,7 @@
  <title>Uncle Chen</title>
  <link href="http://unclechen.github.io/atom.xml" rel="self"/>
  <link href="http://unclechen.github.io/"/>
- <updated>2015-01-15T13:41:33+08:00</updated>
+ <updated>2015-01-15T13:47:33+08:00</updated>
  <id>http://unclechen.github.io</id>
  <author>
    <name>Chen Xihong</name>
@@ -97,7 +97,7 @@
 
 &lt;p&gt;这样就把刚才建立的&lt;code&gt;index.html&lt;/code&gt;文件提交到了GitHub服务器上，如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/content/images/push-to-github.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/content/images/push.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;and-youre-done&quot;&gt;5. 搭建成功 （…and you’re done!）&lt;/h2&gt;
 

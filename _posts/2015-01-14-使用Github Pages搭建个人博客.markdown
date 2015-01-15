@@ -97,7 +97,7 @@ git push
 
 这样就把刚才建立的`index.html`文件提交到了GitHub服务器上，如下图所示：
 
-![](/content/images/push-to-github.png)
+![](/content/images/push.png)
 
 
 ## 5. 搭建成功 （…and you're done!）
