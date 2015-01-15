@@ -138,7 +138,7 @@ git push
 
 在Settings界面下，选择下图所示的`Automatic page generator`按钮，在弹出的页面填写一些参数。再选择一个主题，可以自动生成一个页面。
 
-![](/content/images/atomatic-page-generator.png)
+![](/content/images/automatic-page-generator.png)
 
 ## 4. 搭建完成 （…and you're done!）
 
