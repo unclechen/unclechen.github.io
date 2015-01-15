@@ -4,7 +4,7 @@
  <title>Uncle Chen</title>
  <link href="http://unclechen.github.io/atom.xml" rel="self"/>
  <link href="http://unclechen.github.io/"/>
- <updated>2015-01-14T18:38:17+08:00</updated>
+ <updated>2015-01-15T13:05:15+08:00</updated>
  <id>http://unclechen.github.io</id>
  <author>
    <name>Chen Xihong</name>
@@ -139,7 +139,7 @@
 
 &lt;p&gt;在Settings界面下，选择下图所示的&lt;code&gt;Automatic page generator&lt;/code&gt;按钮，在弹出的页面填写一些参数。再选择一个主题，可以自动生成一个页面。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/content/images/atomatic-page-generator.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/content/images/automatic-page-generator.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;and-youre-done-1&quot;&gt;4. 搭建完成 （…and you’re done!）&lt;/h2&gt;
 
