@@ -4,13 +4,241 @@
  <title>Uncle Chen</title>
  <link href="http://unclechen.github.io/atom.xml" rel="self"/>
  <link href="http://unclechen.github.io/"/>
- <updated>2015-01-14T18:38:17+08:00</updated>
+ <updated>2015-01-31T23:43:32+08:00</updated>
  <id>http://unclechen.github.io</id>
  <author>
    <name>Chen Xihong</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>使用Jekyll渲染GitHub Pages个人博客</title>
+   <link href="http://unclechen.github.io/2015/01/31/%E4%BD%BF%E7%94%A8Jekyll%E6%B8%B2%E6%9F%93GitHub%20Pages%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/"/>
+   <updated>2015-01-31T00:00:00+08:00</updated>
+   <id>http://unclechen.github.io/2015/01/31/使用Jekyll渲染GitHub Pages个人博客</id>
+   <content type="html">&lt;p&gt;上一篇文章介绍了&lt;a href=&quot;http://unclechen.github.io/2015/01/14/%E4%BD%BF%E7%94%A8Github%20Pages%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/&quot;&gt;使用GitHub Pages搭建个人博客&lt;/a&gt; ，这次介绍一下GitHub Pages官方推荐的模板Jekyll渲染博客的页面。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt;是一个简单的免费的Blog生成工具，类似WordPress。但是和WordPress又有很大的不同，原因是jekyll只是一个生成静态网页的工具，不需要数据库支持。但是可以配合第三方服务,例如discuz。最关键的是jekyll可以免费部署在Github上，而且可以绑定自己的域名。下面我主要参考&lt;a href=&quot;https://help.github.com/articles/using-jekyll-with-pages/&quot;&gt;官方网站的指导&lt;/a&gt;来介绍安装Jekyll的步骤，首先还是以MAC为例，介绍安装的步骤。再以Win7为例，介绍我自己碰到的一些问题和解决办法。&lt;/p&gt;
+
+&lt;h1 id=&quot;mac-os-xjekyll&quot;&gt;Mac OS X的Jekyll安装步骤&lt;/h1&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;一. 安装前的准备&lt;/h2&gt;
+
+&lt;p&gt;将之前在GitHub上创建的仓库&lt;code&gt;username.github.io&lt;/code&gt;clone到本地。进入&lt;code&gt;master&lt;/code&gt;分支。如前一篇博客介绍到的，如果你使用的不是&lt;code&gt;username&lt;/code&gt;为前缀的这类型&lt;strong&gt;个人/组织主页&lt;/strong&gt;（&lt;strong&gt;User or organization site&lt;/strong&gt;），而是&lt;strong&gt;个人/组织主页&lt;/strong&gt;（&lt;strong&gt;User or organization site&lt;/strong&gt;）和&lt;strong&gt;项目仓库&lt;/strong&gt;（&lt;strong&gt;Project site&lt;/strong&gt;），那么clone到本地后，需要checkout到&lt;code&gt;gh-pages&lt;/code&gt;分支。关于这两种博客站点的差异，在前一篇文章&lt;a href=&quot;http://unclechen.github.io/2015/01/14/%E4%BD%BF%E7%94%A8Github%20Pages%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/&quot;&gt;使用GitHub Pages搭建个人博客&lt;/a&gt; 中有详细的介绍，不再赘述了。&lt;/p&gt;
+
+&lt;h2 id=&quot;jekyll&quot;&gt;二. 安装Jekyll&lt;/h2&gt;
+
+&lt;p&gt;建议大家都在自己的电脑上安装Jekyll，这样就可以在本地启动一个server来预览自己的博客网站，而不是每一次修改一些博客文章都要commit到GitHub上面再来看看我们的页面是否满意。&lt;/p&gt;
+
+&lt;p&gt;为了安装Jekyll，我们需要进行下面3个步骤：&lt;/p&gt;
+
+&lt;p&gt;1.&lt;strong&gt;安装Ruby环境&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Jekyll的运行需要Ruby的支持，所以我们在Mac上打开终端，输入命令：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;ruby --version&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;查看自己的ruby版本，一般Mac上都预装了Ruby的。我们需要保证的自己的Ruby版本是1.9.3或者是2.0.0，这样就可以进入第二步了，否则请先安装Ruby。&lt;/p&gt;
+
+&lt;p&gt;2.&lt;strong&gt;安装Bundler管理器&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Bundler是一个包管理器，如果你想要在本地环境中预览GitHub Pages页面，Bundler可以使得基于Ruby环境的Jekyll管理起来更加简单。安装了这个管理器之后，我们就可以使用&lt;code&gt;bundler&lt;/code&gt;命令来安装和管理Jekyll。&lt;/p&gt;
+
+&lt;p&gt;安装Bundler的命令是：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;gem install bundler&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;这里&lt;code&gt;gem&lt;/code&gt;相当于Linux下的&lt;code&gt;yum&lt;/code&gt;之类的命令，是Ruby提供的。&lt;/p&gt;
+
+&lt;p&gt;3.&lt;strong&gt;安装Jekyll&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这是最关键的一步，首先在当前仓库中新建一个名为&lt;code&gt;Gemfile&lt;/code&gt;的文件，在其中添加两行：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;source ‘https://ruby.taobao.org’&lt;br /&gt;
+gem ‘github-pages’&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;注意到这里的&lt;code&gt;source&lt;/code&gt;，我们需要改成国内比较快的地址，即&lt;strong&gt;淘宝的Ruby镜像&lt;/strong&gt;&lt;a href=&quot;https://ruby.taobao.org&quot;&gt;https://ruby.taobao.org&lt;/a&gt;，至于原因呢，大家都懂得。&lt;/p&gt;
+
+&lt;p&gt;然后输入命令：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;bundle install&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;系统就会给你哗哗哗装上一堆依赖的软件，这样Jekyll就算安装好了，文件夹下也多了一个&lt;code&gt;Gemfile.lock&lt;/code&gt;文件。&lt;/p&gt;
+
+&lt;h2 id=&quot;jekyll-1&quot;&gt;三. 运行Jekyll&lt;/h2&gt;
+
+&lt;p&gt;安装完了Bundle以后，在命令行输入：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;bundle exec jekyll serve&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;就可以在本地将Jekyll跑起来了，这时你可以通过访问 &lt;a href=&quot;http://localhost:4000&quot;&gt;http://localhost:4000&lt;/a&gt; 来预览你的GitHub Pages。&lt;/p&gt;
+
+&lt;p&gt;到这里已经完成了Jekyll的安装和本地预览。根据我的经验，其实在MAC下安装起来真的是非常顺利，仅仅就是按照官方的指定的步骤执行，没有碰到什么问题。如果还有其他的一些需求，诸如更新或者关闭Jekyll啥的，可以参考官方的&lt;a href=&quot;https://help.github.com/articles/using-jekyll-with-pages/&quot;&gt;help&lt;/a&gt;页面。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;jekyll-2&quot;&gt;Jekyll的文档结构&lt;/h1&gt;
+
+&lt;p&gt;在介绍windows下的Jekyll安装步骤前，简单介绍一下Jekyll模板的文档结构。&lt;/p&gt;
+
+&lt;p&gt;在GitHub Pages站点中，使用Jekyll模板以后，就会看到文件夹的结构如下。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/jekyll-structure.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;他们各自的作用分别为：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;_config.yml：这个文件是为了保存一些公共的配置，可以保存很多公共的字段，这些字段在站点的任何页面都可以直接引用。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;_includes：这个文件夹里存放的是可以重复利用的文件。这个文件可以被其他的文件包含，重复利用，如一些公共的&lt;strong&gt;css&lt;/strong&gt;文件。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;_layouts：这个文件夹存放的是一些公共的&lt;strong&gt;html&lt;/strong&gt;模板文件。通常我们都会有三个文件，分别是&lt;code&gt;default.html&lt;/code&gt;，&lt;code&gt;page.html&lt;/code&gt;，&lt;code&gt;post.html&lt;/code&gt;。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;_posts：这个文件夹存放的就是实际的文章了。一般我们写完博客后，把一个个的markdown文件丢到这里就好了。文件名必须使用YEAR-MONTH-DATE-title.markdown的格式。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;_site：这个文件夹存放的是最终生成的文件。一般可以不把这个文件夹commit到GitHub上。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;CNAME：这个文件就是自定义域名的文件了，将你自己的购买的&lt;strong&gt;域名&lt;/strong&gt;，例如&lt;code&gt;uncle.chen.me&lt;/code&gt;保存在里面就ok了。这样以后就可以通过&lt;code&gt;uncle.chen.me&lt;/code&gt;来访问自己的博客了。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;剩下还有一些文件，如错误页面文件&lt;code&gt;404.html&lt;/code&gt;，&lt;code&gt;README.md&lt;/code&gt;，这些都是常见的文件，大家肯定都知道的。至于&lt;code&gt;public&lt;/code&gt;和&lt;code&gt;content&lt;/code&gt;文件夹是我自己建立的文件夹，大家可以忽略了。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;windowsjekyll&quot;&gt;Windows下的Jekyll安装步骤&lt;/h1&gt;
+
+&lt;p&gt;好了，介绍了完了Mac下的Jekyll安装，我们搞搞Win7的Jekyll安装。相信很多人都和我一样，除了自己买台MAC玩，公司很多时候都会给你配备一台Windows系统的电脑，唉。。谁让咱是Android的RD呢，人家做ios都是发台iMac啊！！好了，言归正传，开始配置。&lt;/p&gt;
+
+&lt;p&gt;其实在Windows下安装，也是按照官网的页面来的，不过我结合自己的情况，讲一讲遇到的一些问题，给大家参考一下。说明一下，我在Windows下使用的终端还是&lt;code&gt;git bash&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;一. 安装前准备&lt;/h2&gt;
+
+&lt;p&gt;1.&lt;strong&gt;安装Ruby&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;还是Ruby，Mac下自带Ruby，Windows下我们只好自己安装了。不多说，使用&lt;a href=&quot;http://rubyinstaller.org/downloads/&quot;&gt;Ruby Installers&lt;/a&gt;上面的新版就好，注意得是新版。因为新版的Ruby自带&lt;code&gt;Gem&lt;/code&gt;，我们前面说了&lt;code&gt;Gem&lt;/code&gt;就相当于Linux中的&lt;code&gt;yum&lt;/code&gt;，方便我们进行软件包的安装和管理。这里我的Ruby版本是2.1。&lt;/p&gt;
+
+&lt;p&gt;2.&lt;strong&gt;安装Devkit&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这个Devkit需要和Ruby的版本对应起来，同样可以在&lt;a href=&quot;http://rubyinstaller.org/downloads/&quot;&gt;Ruby Installers&lt;/a&gt;下载。&lt;/p&gt;
+
+&lt;p&gt;下载好了以后，解压到一个目录，例如我的是&lt;code&gt;C:\Devkit&lt;/code&gt;。在git bash终端或者cmd中输入命令：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;ruby dk.rb init&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;初始化。然后再输入命令：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;ruby dk.rb install&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;进行安装。这里有的同学可能会遇到问题，安装失败并提示你需要修复&lt;code&gt;config.yml&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;这是因为下载过来的Devkit无法自动识别我们的Ruby安装目录，需要我们在&lt;code&gt;config.yml&lt;/code&gt;种指定，因此我们在&lt;code&gt;C:\Devkit&lt;/code&gt;中打开&lt;code&gt;config.yml&lt;/code&gt;文件，增加一行：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;-C:/Ruby21-x64&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这是我的Ruby安装目录，大家将它修改成自己的安装目录即可。&lt;/p&gt;
+
+&lt;p&gt;这样，windows下的安装准备工作算是完成了。&lt;/p&gt;
+
+&lt;h2 id=&quot;jekyll-3&quot;&gt;二. Jekyll的安装&lt;/h2&gt;
+
+&lt;p&gt;1.&lt;strong&gt;安装Bundler&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;同样，在windows下面也需要安装Bundler管理器，输入同样的命令：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;gem install bundler&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;此时如果你顺利安装成功的话，那就恭喜了！但是我遇到了问题。。首先&lt;code&gt;gem install bundler&lt;/code&gt;默认的源是官方的源，身处天朝的我们都懂吧。所以我们还是将Ruby的源换成淘宝的镜像比较好。&lt;/p&gt;
+
+&lt;p&gt;使用命令：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;gem sources -a https://ruby.taobao.org/&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;就好了。&lt;/p&gt;
+
+&lt;p&gt;这里，我遇到了两问题：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;其一，我的终端里面提示错误&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;“ERROR:  While executing gem … (Encoding::UndefinedConversionError)&lt;br /&gt;
+U+7CFB to IBM437 in conversion from UTF-16LE to UTF-8 to IBM437”&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这可能是我脑残的修改了&lt;code&gt;git bash&lt;/code&gt;终端的编码和字体，解决办法是参考&lt;a href=&quot;https://github.com/rubygems/rubygems/issues/1025&quot;&gt;https://github.com/rubygems/rubygems/issues/1025&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;所以按照这个帖子的解决方法，我修改了Ruby的源码文件&lt;code&gt;registry.rb&lt;/code&gt;，在自己的Ruby安装目录下找到这个文件。例如我的是&lt;code&gt;C:\Ruby21-x64\lib\ruby\2.1.0\win32\registry.rb&lt;/code&gt;，然后找到这一行：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;LOCALE = Encoding.find(Encoding.locale_charmap)&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;修改成：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;LOCALE = Encoding::UTF_8&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这样第一个错误就修复了。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;其二，当身处公司内网时，&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Error fetching http://ruby.taobao.org/:Errno::ETIMEDOUT: A connection attempt failed because the connected part&lt;br /&gt;
+y did not properly respond after a period of time, or established connection fai&lt;br /&gt;
+led because connected host has failed to respond. - connect(2) for “ruby.taobao.&lt;br /&gt;
+org” port 80 (http://ruby.taobao.org/specs.4.8.gz)&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;因此需要在上的命令后面加上代理，如&lt;code&gt;gem sources -a https://ruby.taobao.org/ -p http://proxy.tencent.com:8080&lt;/code&gt;，第二个错误就修复了。&lt;/p&gt;
+
+&lt;p&gt;关于设置代理，其实还应该这样做，在终端中输入命令：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;export http_proxy=&amp;#39;http://proxy.tencent.com:8080&amp;#39;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;2.&lt;strong&gt;安装Jekyll&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;安装完Bundler以后，我们也同时设置好了源和公司内网代理，让我们开始安装&lt;code&gt;Jekyll&lt;/code&gt;吧。和在Mac下一样，首先也是新建一个名为&lt;code&gt;Gemfile&lt;/code&gt;的文件，并在其中添加：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;source ‘https://ruby.taobao.org’&lt;br /&gt;
+gem ‘github-pages’ &lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;保存该文件，然后在终端中输入命令：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;bundle install&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;这时系统也是哗啦哗啦地安装了一堆依赖包，这样我们的Jekyll就安装好了，可以看到文件夹下面多了一个&lt;code&gt;Gemfile.lock&lt;/code&gt;文件。&lt;/p&gt;
+
+&lt;h2 id=&quot;jekyll-4&quot;&gt;三. Jekyll的运行&lt;/h2&gt;
+
+&lt;p&gt;安装完了Bundle以后，在命令行输入：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;bundle exec jekyll serve&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;就可以在本地将Jekyll跑起来了，这时你可以通过访问 &lt;a href=&quot;http://localhost:4000&quot;&gt;http://localhost:4000&lt;/a&gt; 来预览你的GitHub Pages。&lt;/p&gt;
+
+&lt;p&gt;到这里就在Windows下完成了Jekyll的安装和本地预览，可以看到在Windows下我还是遇到一些小问题的，不够总的来说还是比较简单的。毕竟做了这些配置以后，我只需要把自己的的markdown文件丢到&lt;code&gt;_post&lt;/code&gt;文件夹下，commit到GitHub上，就发布成功了，后续的博文编辑工作就很轻松了。&lt;/p&gt;
+
+&lt;p&gt;这样我们就完成了Jekyll模板的安装，可以看到渲染之后的博客页面变得好看了很多，可以安心的开始博文的编写工作了。但是我们还可以为自己的博客添加一些好看的主题和评论系统，例如我的博客主题就是&lt;a href=&quot;http://hyde.getpoole.com/&quot;&gt;Hyde&lt;/a&gt;。&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>使用GitHub Pages搭建博客</title>
@@ -107,7 +335,7 @@
 
 &lt;p&gt;如上图所示，页面显然有点朴素。没有关系，我们先将博客创建出来，再使用基于&lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll&lt;/a&gt; 模板的一些主题，就可以渲染界面。我的博客用的主题是&lt;a href=&quot;https://github.com/poole/hyde&quot;&gt;Hyde&lt;/a&gt;。&lt;/p&gt;
 
-&lt;p&gt;至此，我们已经成功使用&lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt;搭建了个人博客（通过&lt;strong&gt;User or organization site&lt;/strong&gt;方式）。至于如何使用Jekyll模板编写，并使用主题来渲染博客，以及绑定自己的域名等等，在我的另一篇博客中&lt;a href=&quot;http://&quot;&gt;《使用Jekyll编写博客》&lt;/a&gt;将会介绍。&lt;/p&gt;
+&lt;p&gt;至此，我们已经成功使用&lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt;搭建了个人博客（通过&lt;strong&gt;User or organization site&lt;/strong&gt;方式）。至于如何使用Jekyll模板编写，并使用主题来渲染博客，以及绑定自己的域名等等，在我的另一篇博客中&lt;a href=&quot;http://&quot;&gt;《使用Jekyll渲染GitHub Pages个人博客》&lt;/a&gt;将会介绍。&lt;/p&gt;
 
 &lt;p&gt;下面介绍的是另外一种使用GitHub Pages中的&lt;strong&gt;Project site&lt;/strong&gt;建立博客的方法，有兴趣或者需要建立多个博客站点的朋友可以看一看。&lt;/p&gt;
 

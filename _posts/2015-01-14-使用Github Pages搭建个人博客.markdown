@@ -108,7 +108,7 @@ git push
 
 如上图所示，页面显然有点朴素。没有关系，我们先将博客创建出来，再使用基于[Jekyll](https://github.com/jekyll/jekyll) 模板的一些主题，就可以渲染界面。我的博客用的主题是[Hyde](https://github.com/poole/hyde)。
 
-至此，我们已经成功使用[Github Pages](https://pages.github.com/)搭建了个人博客（通过**User or organization site**方式）。至于如何使用Jekyll模板编写，并使用主题来渲染博客，以及绑定自己的域名等等，在我的另一篇博客中[《使用Jekyll编写博客》](http://)将会介绍。
+至此，我们已经成功使用[Github Pages](https://pages.github.com/)搭建了个人博客（通过**User or organization site**方式）。至于如何使用Jekyll模板编写，并使用主题来渲染博客，以及绑定自己的域名等等，在我的另一篇博客中[《使用Jekyll渲染GitHub Pages个人博客》](http://)将会介绍。
 
 下面介绍的是另外一种使用GitHub Pages中的**Project site**建立博客的方法，有兴趣或者需要建立多个博客站点的朋友可以看一看。
 
