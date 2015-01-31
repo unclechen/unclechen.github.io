@@ -4,7 +4,11 @@
  <title>Uncle Chen</title>
  <link href="http://unclechen.github.io/atom.xml" rel="self"/>
  <link href="http://unclechen.github.io/"/>
+<<<<<<< HEAD
  <updated>2015-01-31T23:43:32+08:00</updated>
+=======
+ <updated>2015-01-15T13:47:33+08:00</updated>
+>>>>>>> 1a2d61f9ac65516917ed27aabcafc122624d2044
  <id>http://unclechen.github.io</id>
  <author>
    <name>Chen Xihong</name>
@@ -325,7 +329,7 @@ gem ‘github-pages’ &lt;/p&gt;
 
 &lt;p&gt;这样就把刚才建立的&lt;code&gt;index.html&lt;/code&gt;文件提交到了GitHub服务器上，如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/content/images/push-to-github.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/content/images/push.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;and-youre-done&quot;&gt;5. 搭建成功 （…and you’re done!）&lt;/h2&gt;
 
@@ -367,7 +371,7 @@ gem ‘github-pages’ &lt;/p&gt;
 
 &lt;p&gt;在Settings界面下，选择下图所示的&lt;code&gt;Automatic page generator&lt;/code&gt;按钮，在弹出的页面填写一些参数。再选择一个主题，可以自动生成一个页面。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/content/images/atomatic-page-generator.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/content/images/automatic-page-generator.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;and-youre-done-1&quot;&gt;4. 搭建完成 （…and you’re done!）&lt;/h2&gt;
 
