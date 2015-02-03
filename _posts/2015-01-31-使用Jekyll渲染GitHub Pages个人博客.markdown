@@ -11,7 +11,7 @@ title: 使用Jekyll渲染GitHub Pages个人博客
 
 ## 一. 安装前的准备
 
-将之前在GitHub上创建的仓库`username.github.io`clone到本地。进入`master`分支。如前一篇博客介绍到的，如果你使用的不是`username`为前缀的这类型**个人/组织主页**（**User or organization site**），而是**个人/组织主页**（**User or organization site**）和**项目仓库**（**Project site**），那么clone到本地后，需要checkout到`gh-pages`分支。关于这两种博客站点的差异，在前一篇文章[使用GitHub Pages搭建个人博客](http://unclechen.github.io/2015/01/14/%E4%BD%BF%E7%94%A8Github%20Pages%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/) 中有详细的介绍，不再赘述了。
+将之前在GitHub上创建的仓库`username.github.io`clone到本地。进入`master`分支。如前一篇博客介绍到的，如果你使用的不是`username`为前缀的这类型**个人/组织主页**（**User or organization site**），而是**项目仓库**（**Project site**），那么clone到本地后，需要checkout到`gh-pages`分支。关于这两种博客站点的差异，在前一篇文章[使用GitHub Pages搭建个人博客](http://unclechen.github.io/2015/01/14/%E4%BD%BF%E7%94%A8Github%20Pages%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/) 中有详细的介绍，不再赘述了。
 
 ## 二. 安装Jekyll
 
@@ -216,7 +216,7 @@ bundle install
 bundle exec jekyll serve
 {% endhighlight %}
 
-就可以在本地将Jekyll跑起来了，这时你可以通过访问 [http://localhost:4000](http://localhost:4000) 来预览你的GitHub Pages。
+就可以在本地将**Jekyll**跑起来了，这时你可以通过访问 [http://localhost:4000](http://localhost:4000) 来预览你的GitHub Pages。
 
 到这里就在Windows下完成了Jekyll的安装和本地预览，可以看到在Windows下我还是遇到一些小问题的，不够总的来说还是比较简单的。毕竟做了这些配置以后，我只需要把自己的的markdown文件丢到`_post`文件夹下，commit到GitHub上，就发布成功了，后续的博文编辑工作就很轻松了。
 
