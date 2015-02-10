@@ -4,11 +4,7 @@
  <title>Uncle Chen</title>
  <link href="http://unclechen.github.io/atom.xml" rel="self"/>
  <link href="http://unclechen.github.io/"/>
-<<<<<<< HEAD
- <updated>2015-01-31T23:43:32+08:00</updated>
-=======
- <updated>2015-01-15T13:47:33+08:00</updated>
->>>>>>> 1a2d61f9ac65516917ed27aabcafc122624d2044
+ <updated>2015-02-10T21:48:20+08:00</updated>
  <id>http://unclechen.github.io</id>
  <author>
    <name>Chen Xihong</name>
@@ -29,7 +25,7 @@
 
 &lt;h2 id=&quot;section&quot;&gt;一. 安装前的准备&lt;/h2&gt;
 
-&lt;p&gt;将之前在GitHub上创建的仓库&lt;code&gt;username.github.io&lt;/code&gt;clone到本地。进入&lt;code&gt;master&lt;/code&gt;分支。如前一篇博客介绍到的，如果你使用的不是&lt;code&gt;username&lt;/code&gt;为前缀的这类型&lt;strong&gt;个人/组织主页&lt;/strong&gt;（&lt;strong&gt;User or organization site&lt;/strong&gt;），而是&lt;strong&gt;个人/组织主页&lt;/strong&gt;（&lt;strong&gt;User or organization site&lt;/strong&gt;）和&lt;strong&gt;项目仓库&lt;/strong&gt;（&lt;strong&gt;Project site&lt;/strong&gt;），那么clone到本地后，需要checkout到&lt;code&gt;gh-pages&lt;/code&gt;分支。关于这两种博客站点的差异，在前一篇文章&lt;a href=&quot;http://unclechen.github.io/2015/01/14/%E4%BD%BF%E7%94%A8Github%20Pages%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/&quot;&gt;使用GitHub Pages搭建个人博客&lt;/a&gt; 中有详细的介绍，不再赘述了。&lt;/p&gt;
+&lt;p&gt;将之前在GitHub上创建的仓库&lt;code&gt;username.github.io&lt;/code&gt;clone到本地。进入&lt;code&gt;master&lt;/code&gt;分支。如前一篇博客介绍到的，如果你使用的不是&lt;code&gt;username&lt;/code&gt;为前缀的这类型&lt;strong&gt;个人/组织主页&lt;/strong&gt;（&lt;strong&gt;User or organization site&lt;/strong&gt;），而是&lt;strong&gt;项目仓库&lt;/strong&gt;（&lt;strong&gt;Project site&lt;/strong&gt;），那么clone到本地后，需要checkout到&lt;code&gt;gh-pages&lt;/code&gt;分支。关于这两种博客站点的差异，在前一篇文章&lt;a href=&quot;http://unclechen.github.io/2015/01/14/%E4%BD%BF%E7%94%A8Github%20Pages%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/&quot;&gt;使用GitHub Pages搭建个人博客&lt;/a&gt; 中有详细的介绍，不再赘述了。&lt;/p&gt;
 
 &lt;h2 id=&quot;jekyll&quot;&gt;二. 安装Jekyll&lt;/h2&gt;
 
@@ -236,7 +232,7 @@ gem ‘github-pages’ &lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;bundle exec jekyll serve&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;就可以在本地将Jekyll跑起来了，这时你可以通过访问 &lt;a href=&quot;http://localhost:4000&quot;&gt;http://localhost:4000&lt;/a&gt; 来预览你的GitHub Pages。&lt;/p&gt;
+&lt;p&gt;就可以在本地将&lt;strong&gt;Jekyll&lt;/strong&gt;跑起来了，这时你可以通过访问 &lt;a href=&quot;http://localhost:4000&quot;&gt;http://localhost:4000&lt;/a&gt; 来预览你的GitHub Pages。&lt;/p&gt;
 
 &lt;p&gt;到这里就在Windows下完成了Jekyll的安装和本地预览，可以看到在Windows下我还是遇到一些小问题的，不够总的来说还是比较简单的。毕竟做了这些配置以后，我只需要把自己的的markdown文件丢到&lt;code&gt;_post&lt;/code&gt;文件夹下，commit到GitHub上，就发布成功了，后续的博文编辑工作就很轻松了。&lt;/p&gt;
 
@@ -339,7 +335,7 @@ gem ‘github-pages’ &lt;/p&gt;
 
 &lt;p&gt;如上图所示，页面显然有点朴素。没有关系，我们先将博客创建出来，再使用基于&lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll&lt;/a&gt; 模板的一些主题，就可以渲染界面。我的博客用的主题是&lt;a href=&quot;https://github.com/poole/hyde&quot;&gt;Hyde&lt;/a&gt;。&lt;/p&gt;
 
-&lt;p&gt;至此，我们已经成功使用&lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt;搭建了个人博客（通过&lt;strong&gt;User or organization site&lt;/strong&gt;方式）。至于如何使用Jekyll模板编写，并使用主题来渲染博客，以及绑定自己的域名等等，在我的另一篇博客中&lt;a href=&quot;http://&quot;&gt;《使用Jekyll渲染GitHub Pages个人博客》&lt;/a&gt;将会介绍。&lt;/p&gt;
+&lt;p&gt;至此，我们已经成功使用&lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt;搭建了个人博客（通过&lt;strong&gt;User or organization site&lt;/strong&gt;方式）。至于如何使用Jekyll模板编写，并使用主题来渲染博客，以及绑定自己的域名等等，在我的另一篇博客中&lt;a href=&quot;http://unclechen.github.io/2015/01/31/%E4%BD%BF%E7%94%A8Jekyll%E6%B8%B2%E6%9F%93GitHub%20Pages%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/&quot;&gt;《使用Jekyll渲染GitHub Pages个人博客》&lt;/a&gt;将会介绍。&lt;/p&gt;
 
 &lt;p&gt;下面介绍的是另外一种使用GitHub Pages中的&lt;strong&gt;Project site&lt;/strong&gt;建立博客的方法，有兴趣或者需要建立多个博客站点的朋友可以看一看。&lt;/p&gt;
 

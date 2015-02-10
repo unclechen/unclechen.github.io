@@ -31,7 +31,7 @@
  */
 
 html {
-  font-family: "Lato", "PT Sans", Helvetica, Arial, sans-serif;
+  font-family: "Fira Sans", Roboto, Helvetica, Arial, sans-serif;
 }
 @media (min-width: 48em) {
   html {
