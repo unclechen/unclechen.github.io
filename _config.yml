@@ -8,7 +8,7 @@ relative_permalinks: true
 
 # Setup
 title:            Uncle Chen
-description:      'Welcome to my blog, hope you enjoy these pages.'
+description:      'This is my personal blog and any views expressed here are mine. Wish we can make something different.  ---I can do all the things.'
 url:              http://unclechen.github.io
 baseurl:          /
 logo:             /content/images/me.jpg
