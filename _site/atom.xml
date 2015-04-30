@@ -4,13 +4,36 @@
  <title>Uncle Chen</title>
  <link href="http://unclechen.github.io/atom.xml" rel="self"/>
  <link href="http://unclechen.github.io/"/>
- <updated>2015-02-11T14:00:37+08:00</updated>
+ <updated>2015-04-30T18:04:43+08:00</updated>
  <id>http://unclechen.github.io</id>
  <author>
    <name>Chen Xihong</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>使用前端开发利器Fiddler调试手机程序</title>
+   <link href="http://unclechen.github.io/2015/04/30/%E4%BD%BF%E7%94%A8%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%88%A9%E5%99%A8Fiddler%E8%B0%83%E8%AF%95%E6%89%8B%E6%9C%BA%E7%A8%8B%E5%BA%8F/"/>
+   <updated>2015-04-30T00:00:00+08:00</updated>
+   <id>http://unclechen.github.io/2015/04/30/使用前端开发利器Fiddler调试手机程序</id>
+   <content type="html">&lt;p&gt;&lt;a href=&quot;http://www.telerik.com/fiddler&quot;&gt;Fiddler&lt;/a&gt;是一个非常简单的web前端调试工具，它能记录客户端和服务器的http和https所有请求和响应，允许监视、设置断点，甚至修改输入输出数据。与其他的抓包工具例如wireshark、firebug等不同，Fiddler可以允许你在调试CGI接口时，修改返回的数据，也就是可以&lt;strong&gt;构造请求&lt;/strong&gt;和&lt;strong&gt;模拟响应&lt;/strong&gt;。此外，Fiddler还可以支持模拟低速网络（如手机网络）过滤请求等等，安装了&lt;strong&gt;Willow&lt;/strong&gt;插件以后你还可以轻松实现修改Host等操作。可惜的是目前Fiddler只支持Windows，没办法，毕竟是基于&lt;code&gt;.net框架&lt;/code&gt;开发的嘛。&lt;/p&gt;
+
+&lt;h1 id=&quot;fiddler&quot;&gt;1. Fiddler的安装和配置&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;下载安装：从官网下载Fiddler，现在的版本应该是Fiddler4：&lt;a href=&quot;http://www.telerik.com/download/fiddler&quot;&gt;http://www.telerik.com/download/fiddler&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：由于Fiddler4是基于&lt;code&gt;.net框架&lt;/code&gt;的，所以需要在自己的电脑上先安装&lt;code&gt;.NetFrameWork&lt;/code&gt;，安装好了以后，就可以下载Fiddler4进行安装了。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;配置：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;[下班了占个坑]&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>使用Jekyll渲染GitHub Pages个人博客</title>

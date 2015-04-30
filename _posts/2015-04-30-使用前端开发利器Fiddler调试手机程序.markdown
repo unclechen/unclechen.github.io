@@ -1,0 +1,17 @@
+---
+layout: post
+title: 使用前端开发利器Fiddler调试手机程序
+---
+
+
+[Fiddler](http://www.telerik.com/fiddler)是一个非常简单的web前端调试工具，它能记录客户端和服务器的http和https所有请求和响应，允许监视、设置断点，甚至修改输入输出数据。与其他的抓包工具例如wireshark、firebug等不同，Fiddler可以允许你在调试CGI接口时，修改返回的数据，也就是可以**构造请求**和**模拟响应**。此外，Fiddler还可以支持模拟低速网络（如手机网络）过滤请求等等，安装了**Willow**插件以后你还可以轻松实现修改Host等操作。可惜的是目前Fiddler只支持Windows，没办法，毕竟是基于`.net框架`开发的嘛。
+
+# 1. Fiddler的安装和配置
+
+* 下载安装：从官网下载Fiddler，现在的版本应该是Fiddler4：[http://www.telerik.com/download/fiddler](http://www.telerik.com/download/fiddler)。
+
+**注意**：由于Fiddler4是基于`.net框架`的，所以需要在自己的电脑上先安装`.NetFrameWork`，安装好了以后，就可以下载Fiddler4进行安装了。
+
+* 配置：
+
+[下班了占个坑]
