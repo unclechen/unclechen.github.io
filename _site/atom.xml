@@ -4,7 +4,7 @@
  <title>Uncle Chen</title>
  <link href="http://unclechen.github.io/atom.xml" rel="self"/>
  <link href="http://unclechen.github.io/"/>
- <updated>2015-04-30T18:04:43+08:00</updated>
+ <updated>2015-05-04T15:12:44+08:00</updated>
  <id>http://unclechen.github.io</id>
  <author>
    <name>Chen Xihong</name>
@@ -17,7 +17,9 @@
    <link href="http://unclechen.github.io/2015/04/30/%E4%BD%BF%E7%94%A8%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%88%A9%E5%99%A8Fiddler%E8%B0%83%E8%AF%95%E6%89%8B%E6%9C%BA%E7%A8%8B%E5%BA%8F/"/>
    <updated>2015-04-30T00:00:00+08:00</updated>
    <id>http://unclechen.github.io/2015/04/30/使用前端开发利器Fiddler调试手机程序</id>
-   <content type="html">&lt;p&gt;&lt;a href=&quot;http://www.telerik.com/fiddler&quot;&gt;Fiddler&lt;/a&gt;是一个非常简单的web前端调试工具，它能记录客户端和服务器的http和https所有请求和响应，允许监视、设置断点，甚至修改输入输出数据。与其他的抓包工具例如wireshark、firebug等不同，Fiddler可以允许你在调试CGI接口时，修改返回的数据，也就是可以&lt;strong&gt;构造请求&lt;/strong&gt;和&lt;strong&gt;模拟响应&lt;/strong&gt;。此外，Fiddler还可以支持模拟低速网络（如手机网络）过滤请求等等，安装了&lt;strong&gt;Willow&lt;/strong&gt;插件以后你还可以轻松实现修改Host等操作。可惜的是目前Fiddler只支持Windows，没办法，毕竟是基于&lt;code&gt;.net框架&lt;/code&gt;开发的嘛。&lt;/p&gt;
+   <content type="html">&lt;p&gt;&lt;a href=&quot;http://www.telerik.com/fiddler&quot;&gt;Fiddler&lt;/a&gt;是一个非常好用的web前端调试工具，它能记录客户端和服务器的http和https所有请求和响应，允许监视、设置断点，修改输入输出数据。与其他的抓包工具，例如wireshark、firebug等不同，Fiddler可以允许你在调试CGI接口时，修改返回的数据，也就是可以&lt;strong&gt;构造请求&lt;/strong&gt;和&lt;strong&gt;模拟响应&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;此外，Fiddler还可以支持模拟低速网络（如手机网络）过滤请求等等，安装了&lt;strong&gt;Willow&lt;/strong&gt;插件以后你还可以轻松实现修改Host等操作。可惜的是目前Fiddler只支持Windows系统，没办法，毕竟是基于&lt;code&gt;.net框架&lt;/code&gt;开发的嘛。&lt;/p&gt;
 
 &lt;h1 id=&quot;fiddler&quot;&gt;1. Fiddler的安装和配置&lt;/h1&gt;
 
@@ -28,10 +30,77 @@
 &lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：由于Fiddler4是基于&lt;code&gt;.net框架&lt;/code&gt;的，所以需要在自己的电脑上先安装&lt;code&gt;.NetFrameWork&lt;/code&gt;，安装好了以后，就可以下载Fiddler4进行安装了。&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;配置：&lt;/li&gt;
+  &lt;li&gt;配置：打开将Fiddler，在菜单中选择&lt;code&gt;Tools-&amp;gt;Fiddler Options&lt;/code&gt;，如下图所示把Fiddler设为全局的监听，再把浏览器或者软件的的http proxy设置为&lt;code&gt;127.0.0.1&lt;/code&gt;，端口设为&lt;code&gt;8888&lt;/code&gt;，这样就可以用Fiddler抓取本地所有的流量包了。&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;[下班了占个坑]&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/content/images/fiddlerSetup.png&quot; alt=&quot;fiddler setup&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;2. 抓取手机数据包&lt;/h1&gt;
+
+&lt;p&gt;抓取手机数据包和抓去电脑上的数据包一样，只需要将手机的代理设置为Fiddler。&lt;/p&gt;
+
+&lt;p&gt;具体操作：让手机连接的wifi和你安装Fiddler的电脑处于同一网段，然后在手机的wifi设置中，选择高级选项，设置代理，指向你电脑的ip，端口设置为8888即可。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/fiddlerWifiSetup.png&quot; alt=&quot;fiddler Wifi Setup&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如上图所示，我电脑的ip是&lt;code&gt;10.4.66.135&lt;/code&gt;，于是在手机连上wifi以后，勾选&lt;strong&gt;&lt;code&gt;高级选项&lt;/code&gt;&lt;/strong&gt;，&lt;strong&gt;代理&lt;/strong&gt;选择&lt;strong&gt;&lt;code&gt;手动&lt;/code&gt;&lt;/strong&gt;，&lt;strong&gt;代理服务器主机名&lt;/strong&gt;输入&lt;strong&gt;&lt;code&gt;10.4.66.135&lt;/code&gt;&lt;/strong&gt;，&lt;strong&gt;代理服务器端口&lt;/strong&gt;输入&lt;strong&gt;&lt;code&gt;8888&lt;/code&gt;&lt;/strong&gt;，点击保存即可。&lt;/p&gt;
+
+&lt;p&gt;配置好以后，手机上所有网络请求和响应都会走Fiddler代理，这样就是可以分析手机的网络流量了。我们在手机上打开一个大家熟悉的地址&lt;code&gt;www.baidu.com&lt;/code&gt;，可以看到抓取的数据流量包了，Fiddler的工具栏看起来很复杂，如下图所示，稍微熟悉一下之后就会发现其实很简单。左侧界面是数据包按照时间顺序的列表，右边是对应每一个包的解析，我们可以看到详细的http header头文件以及表单、json数据等等。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/fiddlerBaidu.png&quot; alt=&quot;fiddler baidu&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;response&quot;&gt;3. 修改网络响应response&lt;/h1&gt;
+
+&lt;p&gt;有的时候我们调试程序的时候，需要服务器返回新格式的数据，或者有时候发现原来的服务器上的某个js/css文件有问题，需要修改。如果这时我们要求同事帮忙修改文件，重新发布的话，将会非常麻烦，也可能会影响到现有的线上环境。对大公司来说，这不仅效率低下，而且一不小心就可能酿成大事故。所以通常的做法是在测试环境进行修改，然后等测试通过以后，再部署到线上环境中去。&lt;/p&gt;
+
+&lt;p&gt;但是有了Fiddler之后，我们可以直接在本地客户端进行调试了。通过Fiddler修改HTTP数据的特性，替换服务器发给我们的回包，等本地客户端调试通过以后再确认发布。说了一堆没用的，我们直接进入实战。&lt;/p&gt;
+
+&lt;p&gt;使用Fiddler修改网络响应包有两种操作：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;使用&lt;strong&gt;AutoResponder&lt;/strong&gt;对回包进行重定向&lt;/li&gt;
+  &lt;li&gt;使用&lt;strong&gt;Willow&lt;/strong&gt;插件管理重定向规则&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这两种操作方法是一样的，都是对服务器返回的数据包（下面简称&lt;strong&gt;回包&lt;/strong&gt;）进行规则的设置，使得回包被替换成我们指定的文件。不过Willow插件用起来比较方便，所以我们一般都会安装Willow插件。&lt;/p&gt;
+
+&lt;p&gt;现在我们以Willow插件为例介绍这个非常好用的回包替换功能，我这里安装的是1.4版的Willow，支持Fiddler4.0版本。安装了Willow插件的Fiddler会在右侧的网络数据解析界面上多出一个Willow菜单，如下图所示。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/fiddlerWillow.png&quot; alt=&quot;fiddler willow&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;从图上看出，Willow的图标是一个小树，当回包重定向功能开启时，这颗小树会变成&lt;strong&gt;绿色&lt;/strong&gt;，普通状态下小树是&lt;strong&gt;灰色&lt;/strong&gt;的。&lt;/p&gt;
+
+&lt;p&gt;在下面的列表中，&lt;code&gt;Fiddler&lt;/code&gt;、&lt;code&gt;Temp1&lt;/code&gt;、&lt;code&gt;unclenought&lt;/code&gt;等都是一个一个的&lt;code&gt;Willow project&lt;/code&gt;，这些&lt;code&gt;project&lt;/code&gt;对应的是一组一组的规则，在Willow菜单内右键可以选择&lt;code&gt;Add Project&lt;/code&gt;、&lt;code&gt;Edit Project&lt;/code&gt;以及&lt;code&gt;Add Rule&lt;/code&gt;等等。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/fiddlerWillowMenus.png&quot; alt=&quot;fiddler willow menus&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;其中我们最常用就是&lt;code&gt;Add Rule&lt;/code&gt;功能了，通过这个我们可以设置一些规则，将回包进行重定向。右键选择&lt;code&gt;Add Rule&lt;/code&gt;以后，我们在&lt;code&gt;Match&lt;/code&gt;栏填写&lt;strong&gt;正则表达式&lt;/strong&gt;来匹配网络请求，&lt;code&gt;Action&lt;/code&gt;栏选择我们本地的一个文件来替换&lt;code&gt;match&lt;/code&gt;栏对应的请求的回包,这里我选择了自己写的一个&lt;code&gt;hello fiddler.html&lt;/code&gt;测试文件。记住，规则保存好了以后，&lt;strong&gt;必须勾选Willow菜单左上角的小勾&lt;/strong&gt;，使得回包替换功能开启，确保Willow小树的图标变成了&lt;strong&gt;绿色&lt;/strong&gt;的！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/fiddlerWillowRule.png&quot; alt=&quot;fiddler willow rule&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;hello fiddler.html&lt;/code&gt;文件的代码如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;lang=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;zh-CN&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;utf-8&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;hello fiddler&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;viewport&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;width=device-width, initial-scale=1.0&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+    
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+    hello fiddler
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;此时我们在打开手机浏览器输入&lt;code&gt;m.baidu.com&lt;/code&gt;以后，不会再看到正常的百度首页，而是本地文件的&lt;code&gt;hello fiddler.html&lt;/code&gt;测试页面了。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/content/images/helloFiddler.png&quot; alt=&quot;hello fiddler&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;再回到Fiddler左侧的流量包界面，我们可以看到命中的数据包被标注为&lt;strong&gt;&lt;code&gt;黄色&lt;/code&gt;&lt;/strong&gt;了。因此我们判断自己定义的规则是否生效，可以看看数据包是不是被标为黄色了。此外由于，Fiddler回包替换的规则支持正则表达式，所以有时写的规则不一定是完全正确的，大家要多检查下rule中设置规则。&lt;/p&gt;
+
+&lt;p&gt;此外Fiddler还支持修改Host的功能，通过Willow插件可以一键修改，方法也是在Willow菜单下，右键点选一个project，选择Add Host，填写需要替换domain和ip地址即可。关于Fiddler的基本使用就介绍这些，至于断点调试等等，以后有机会再补充！&lt;/p&gt;
+
 </content>
  </entry>
  
