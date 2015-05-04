@@ -14,7 +14,7 @@ title: 使用前端开发利器Fiddler调试手机程序
 
 **注意**：由于Fiddler4是基于`.net框架`的，所以需要在自己的电脑上先安装`.NetFrameWork`，安装好了以后，就可以下载Fiddler4进行安装了。
 
-* 配置：打开将Fiddler，在菜单中选择`Tools->Fiddler Options`，如下图所示把Fiddler设为全局的监听，再把浏览器或者软件的的http proxy设置为`127.0.0.1`，端口设为`8888`，这样就可以用Fiddler抓取本地所有的流量包了。
+* 配置：打开将Fiddler，在菜单中选择`Tools->Fiddler Options`，如下图所示把Fiddler设为全局的监听，再把浏览器或者软件的的http proxy设置为`127.0.0.1`，端口设为`8888`。选择ok后，关闭Fiddler并重新打开Fiddler，就可以用Fiddler抓取本地所有的流量了。
 
 ![fiddler setup](/content/images/fiddlerSetup.png)
 
@@ -45,17 +45,17 @@ title: 使用前端开发利器Fiddler调试手机程序
 
 这两种操作方法是一样的，都是对服务器返回的数据包（下面简称**回包**）进行规则的设置，使得回包被替换成我们指定的文件。不过Willow插件用起来比较方便，所以我们一般都会安装Willow插件。
 
-现在我们以Willow插件为例介绍这个非常好用的回包替换功能，我这里安装的是1.4版的Willow，支持Fiddler4.0版本。安装了Willow插件的Fiddler会在右侧的网络数据解析界面上多出一个Willow菜单，如下图所示。
+现在我们以Willow插件为例介绍这个非常好用的回包替换功能，我这里安装的是1.4版的Willow，支持Fiddler4.0版本。安装了Willow插件的Fiddler，在右侧的网络数据解析界面上会多出一个Willow标签菜单，如下图所示。
 
 ![fiddler willow](/content/images/fiddlerWillow.png)
 
 从图上看出，Willow的图标是一个小树，当回包重定向功能开启时，这颗小树会变成**绿色**，普通状态下小树是**灰色**的。
 
-在下面的列表中，`Fiddler`、`Temp1`、`unclenought`等都是一个一个的`Willow project`，这些`project`对应的是一组一组的规则，在Willow菜单内右键可以选择`Add Project`、`Edit Project`以及`Add Rule`等等。
+在下面的列表中，**Fiddler**、**Temp 1**、**unclenought**等都是一个一个的`Willow project`，这些`project`对应的是一组一组的规则，这里我们添加一个`unclenought`的project。在Willow菜单内右键可以选择**Add Project**、**Edit Project**以及**Add Rule**等等。
 
 ![fiddler willow menus](/content/images/fiddlerWillowMenus.png)
 
-其中我们最常用就是`Add Rule`功能了，通过这个我们可以设置一些规则，将回包进行重定向。右键选择`Add Rule`以后，我们在`Match`栏填写**正则表达式**来匹配网络请求，`Action`栏选择我们本地的一个文件来替换`match`栏对应的请求的回包,这里我选择了自己写的一个`hello fiddler.html`测试文件。记住，规则保存好了以后，**必须勾选Willow菜单左上角的小勾**，使得回包替换功能开启，确保Willow小树的图标变成了**绿色**的！
+其中我们最常用就是**Add Rule**功能了，通过这个我们可以设置一些规则，将回包进行重定向。右键选择**Add Rule**以后，我们在**Match**栏填写**正则表达式**来匹配网络请求，**Action**栏选择我们本地的一个文件来替换**match**栏对应的请求的回包,这里我选择了自己写的一个`hello fiddler.html`测试文件。记住，规则保存好了以后，**必须勾选Willow菜单左上角的小勾**，使得回包替换功能开启，确保Willow小树的图标变成了**绿色**的！
 
 ![fiddler willow rule](/content/images/fiddlerWillowRule.png)
 
@@ -80,8 +80,6 @@ title: 使用前端开发利器Fiddler调试手机程序
 
 ![hello fiddler](/content/images/helloFiddler.png)
 
-再回到Fiddler左侧的流量包界面，我们可以看到命中的数据包被标注为**`黄色`**了。因此我们判断自己定义的规则是否生效，可以看看数据包是不是被标为黄色了。此外由于，Fiddler回包替换的规则支持正则表达式，所以有时写的规则不一定是完全正确的，大家要多检查下rule中设置规则。
+再回到Fiddler左侧的流量包界面，我们可以看到命中的数据包被标注为**`黄色`**了。因此我们判断自己定义的规则是否生效，可以看看数据包是不是被标为**黄色**了。此外由于，Fiddler回包替换的规则支持正则表达式，所以有时写的规则不一定是完全正确的，大家要多检查下rule中设置规则。
 
-此外Fiddler还支持修改Host的功能，通过Willow插件可以一键修改，方法也是在Willow菜单下，右键点选一个project，选择Add Host，填写需要替换domain和ip地址即可。关于Fiddler的基本使用就介绍这些，至于断点调试等等，以后有机会再补充！
-
-
+此外Fiddler还支持修改**Host**的功能，通过Willow插件可以一键修改，方法也是在Willow菜单下，右键点选一个project，选择**Add Host**，填写需要替换**domain**和**ip**地址即可。关于Fiddler的基本使用就介绍这些，至于断点调试等等，以后有机会再补充！

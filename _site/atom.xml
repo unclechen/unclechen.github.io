@@ -4,7 +4,7 @@
  <title>Uncle Chen</title>
  <link href="http://unclechen.github.io/atom.xml" rel="self"/>
  <link href="http://unclechen.github.io/"/>
- <updated>2015-05-04T15:12:44+08:00</updated>
+ <updated>2015-05-04T15:32:53+08:00</updated>
  <id>http://unclechen.github.io</id>
  <author>
    <name>Chen Xihong</name>
@@ -30,7 +30,7 @@
 &lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：由于Fiddler4是基于&lt;code&gt;.net框架&lt;/code&gt;的，所以需要在自己的电脑上先安装&lt;code&gt;.NetFrameWork&lt;/code&gt;，安装好了以后，就可以下载Fiddler4进行安装了。&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;配置：打开将Fiddler，在菜单中选择&lt;code&gt;Tools-&amp;gt;Fiddler Options&lt;/code&gt;，如下图所示把Fiddler设为全局的监听，再把浏览器或者软件的的http proxy设置为&lt;code&gt;127.0.0.1&lt;/code&gt;，端口设为&lt;code&gt;8888&lt;/code&gt;，这样就可以用Fiddler抓取本地所有的流量包了。&lt;/li&gt;
+  &lt;li&gt;配置：打开将Fiddler，在菜单中选择&lt;code&gt;Tools-&amp;gt;Fiddler Options&lt;/code&gt;，如下图所示把Fiddler设为全局的监听，再把浏览器或者软件的的http proxy设置为&lt;code&gt;127.0.0.1&lt;/code&gt;，端口设为&lt;code&gt;8888&lt;/code&gt;。选择ok后，关闭Fiddler并重新打开Fiddler，就可以用Fiddler抓取本地所有的流量了。&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;img src=&quot;/content/images/fiddlerSetup.png&quot; alt=&quot;fiddler setup&quot; /&gt;&lt;/p&gt;
@@ -64,17 +64,17 @@
 
 &lt;p&gt;这两种操作方法是一样的，都是对服务器返回的数据包（下面简称&lt;strong&gt;回包&lt;/strong&gt;）进行规则的设置，使得回包被替换成我们指定的文件。不过Willow插件用起来比较方便，所以我们一般都会安装Willow插件。&lt;/p&gt;
 
-&lt;p&gt;现在我们以Willow插件为例介绍这个非常好用的回包替换功能，我这里安装的是1.4版的Willow，支持Fiddler4.0版本。安装了Willow插件的Fiddler会在右侧的网络数据解析界面上多出一个Willow菜单，如下图所示。&lt;/p&gt;
+&lt;p&gt;现在我们以Willow插件为例介绍这个非常好用的回包替换功能，我这里安装的是1.4版的Willow，支持Fiddler4.0版本。安装了Willow插件的Fiddler，在右侧的网络数据解析界面上会多出一个Willow标签菜单，如下图所示。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/content/images/fiddlerWillow.png&quot; alt=&quot;fiddler willow&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;从图上看出，Willow的图标是一个小树，当回包重定向功能开启时，这颗小树会变成&lt;strong&gt;绿色&lt;/strong&gt;，普通状态下小树是&lt;strong&gt;灰色&lt;/strong&gt;的。&lt;/p&gt;
 
-&lt;p&gt;在下面的列表中，&lt;code&gt;Fiddler&lt;/code&gt;、&lt;code&gt;Temp1&lt;/code&gt;、&lt;code&gt;unclenought&lt;/code&gt;等都是一个一个的&lt;code&gt;Willow project&lt;/code&gt;，这些&lt;code&gt;project&lt;/code&gt;对应的是一组一组的规则，在Willow菜单内右键可以选择&lt;code&gt;Add Project&lt;/code&gt;、&lt;code&gt;Edit Project&lt;/code&gt;以及&lt;code&gt;Add Rule&lt;/code&gt;等等。&lt;/p&gt;
+&lt;p&gt;在下面的列表中，&lt;strong&gt;Fiddler&lt;/strong&gt;、&lt;strong&gt;Temp 1&lt;/strong&gt;、&lt;strong&gt;unclenought&lt;/strong&gt;等都是一个一个的&lt;code&gt;Willow project&lt;/code&gt;，这些&lt;code&gt;project&lt;/code&gt;对应的是一组一组的规则，这里我们添加一个&lt;code&gt;unclenought&lt;/code&gt;的project。在Willow菜单内右键可以选择&lt;strong&gt;Add Project&lt;/strong&gt;、&lt;strong&gt;Edit Project&lt;/strong&gt;以及&lt;strong&gt;Add Rule&lt;/strong&gt;等等。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/content/images/fiddlerWillowMenus.png&quot; alt=&quot;fiddler willow menus&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;其中我们最常用就是&lt;code&gt;Add Rule&lt;/code&gt;功能了，通过这个我们可以设置一些规则，将回包进行重定向。右键选择&lt;code&gt;Add Rule&lt;/code&gt;以后，我们在&lt;code&gt;Match&lt;/code&gt;栏填写&lt;strong&gt;正则表达式&lt;/strong&gt;来匹配网络请求，&lt;code&gt;Action&lt;/code&gt;栏选择我们本地的一个文件来替换&lt;code&gt;match&lt;/code&gt;栏对应的请求的回包,这里我选择了自己写的一个&lt;code&gt;hello fiddler.html&lt;/code&gt;测试文件。记住，规则保存好了以后，&lt;strong&gt;必须勾选Willow菜单左上角的小勾&lt;/strong&gt;，使得回包替换功能开启，确保Willow小树的图标变成了&lt;strong&gt;绿色&lt;/strong&gt;的！&lt;/p&gt;
+&lt;p&gt;其中我们最常用就是&lt;strong&gt;Add Rule&lt;/strong&gt;功能了，通过这个我们可以设置一些规则，将回包进行重定向。右键选择&lt;strong&gt;Add Rule&lt;/strong&gt;以后，我们在&lt;strong&gt;Match&lt;/strong&gt;栏填写&lt;strong&gt;正则表达式&lt;/strong&gt;来匹配网络请求，&lt;strong&gt;Action&lt;/strong&gt;栏选择我们本地的一个文件来替换&lt;strong&gt;match&lt;/strong&gt;栏对应的请求的回包,这里我选择了自己写的一个&lt;code&gt;hello fiddler.html&lt;/code&gt;测试文件。记住，规则保存好了以后，&lt;strong&gt;必须勾选Willow菜单左上角的小勾&lt;/strong&gt;，使得回包替换功能开启，确保Willow小树的图标变成了&lt;strong&gt;绿色&lt;/strong&gt;的！&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/content/images/fiddlerWillowRule.png&quot; alt=&quot;fiddler willow rule&quot; /&gt;&lt;/p&gt;
 
@@ -97,10 +97,9 @@
 
 &lt;p&gt;&lt;img src=&quot;/content/images/helloFiddler.png&quot; alt=&quot;hello fiddler&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;再回到Fiddler左侧的流量包界面，我们可以看到命中的数据包被标注为&lt;strong&gt;&lt;code&gt;黄色&lt;/code&gt;&lt;/strong&gt;了。因此我们判断自己定义的规则是否生效，可以看看数据包是不是被标为黄色了。此外由于，Fiddler回包替换的规则支持正则表达式，所以有时写的规则不一定是完全正确的，大家要多检查下rule中设置规则。&lt;/p&gt;
+&lt;p&gt;再回到Fiddler左侧的流量包界面，我们可以看到命中的数据包被标注为&lt;strong&gt;&lt;code&gt;黄色&lt;/code&gt;&lt;/strong&gt;了。因此我们判断自己定义的规则是否生效，可以看看数据包是不是被标为&lt;strong&gt;黄色&lt;/strong&gt;了。此外由于，Fiddler回包替换的规则支持正则表达式，所以有时写的规则不一定是完全正确的，大家要多检查下rule中设置规则。&lt;/p&gt;
 
-&lt;p&gt;此外Fiddler还支持修改Host的功能，通过Willow插件可以一键修改，方法也是在Willow菜单下，右键点选一个project，选择Add Host，填写需要替换domain和ip地址即可。关于Fiddler的基本使用就介绍这些，至于断点调试等等，以后有机会再补充！&lt;/p&gt;
-
+&lt;p&gt;此外Fiddler还支持修改&lt;strong&gt;Host&lt;/strong&gt;的功能，通过Willow插件可以一键修改，方法也是在Willow菜单下，右键点选一个project，选择&lt;strong&gt;Add Host&lt;/strong&gt;，填写需要替换&lt;strong&gt;domain&lt;/strong&gt;和&lt;strong&gt;ip&lt;/strong&gt;地址即可。关于Fiddler的基本使用就介绍这些，至于断点调试等等，以后有机会再补充！&lt;/p&gt;
 </content>
  </entry>
  
