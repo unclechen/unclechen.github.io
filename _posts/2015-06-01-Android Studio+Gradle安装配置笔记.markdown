@@ -77,7 +77,23 @@ cover_image: '/content/images/cover/helloAndroidStudioAndGradle.png'
 
 ## 1.2 Android Studio项目结构
 
-Android Studio的项目结构和Eclipse下有很大不同，相当于一个工作空间下面只有一个项目的概念。。。。
+
+Android Studio的项目结构和Eclipse下有很大不同，首先最不一样的地方是：一个窗口下只能有一个项目，类似于一个工作空间下面只有一个项目的概念。
+
+新建了一个Test项目以后，我们可以看到AS项目的结构如下所示。
+
+![hello Structure](/content/images/helloStructure.png)
+
+这是一个**Android视图**下的AS项目结构，你可以在目录下看到`app`和`gradle`两个大分类。在`app`下有我们熟悉的`manifest`，`res`，还有一个`java`文件夹，这个`java`文件夹里面就存放着java的源代码和Application的源代码，它们各自又是按照包名组织起来的。`gradle`文件夹包含了项目的gradle脚本和gradle配置文件，其中包含了两个重要的gradle脚本文件，一个是`build.gradle(Project: TestApplication)`，这个脚本代表着整个项目的gradle脚本，其中具体的语法见另外一篇博客《占个坑》。另外一个是`build.gradle(Module: app)`，这个脚本是app的gradle脚本。
+
+除了 **Android视图**下的AS结构以外，还有一种新的视图结构 **project视图** 下的AS结构，如下图所示。
+
+![hello Structure](/content/images/helloStructure2.png)
+
+这种视图下的结构和Eclipse下的结构有几分相似。在这个视图下很容看到module app目录下和project目录下分别有一个gradle脚本文件，这两个文件对于编译、打包都非常重要。
+
+关于Project和Module的概念，可以这么理解。Project类似一个workspace，因此一个Project可以包含多个Module，例如我们可以把引用的library作为一个Module放到里面来。关于Project和Module的gradle脚本，我们可以参考谷歌官方的[New Build System](http://tools.android.com/tech-docs/new-build-system)用户手册，后续我也会有一篇[gradle的总结]()出来。
+
 
 
 ## 1.3 国内Android SDK升级方法
