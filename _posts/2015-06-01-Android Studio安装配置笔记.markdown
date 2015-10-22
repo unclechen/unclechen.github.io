@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Android Studio+Gradle安装配置笔记
+title: Android Studio安装配置笔记
 cover_image: '/content/images/cover/helloAndroidStudioAndGradle.png'
 ---
 
@@ -20,7 +20,7 @@ cover_image: '/content/images/cover/helloAndroidStudioAndGradle.png'
 安装完成后，打开Android Studio的时候可能常常会卡在启动界面 **“Fetching android sdk component information”** 上，这是因为AS启动时会去获取SDK组件信息，然而我们现在还没有去给Android Studio的SDK组件配置代理，因为可能会非常慢，甚至没有速度。
 
 **解决办法是->** 进入刚安装的Android Studio目录，打开`bin`文件夹，找到`idea.properties`文件，用文本编辑器打开。在文件末尾添加一行：
-> disable.android.first.run=true
+> disable.android.first.run =true
 
 ，保存。然后在任务管理器中关闭Android Studio，重新启动即可。
 
@@ -151,19 +151,13 @@ Ctrl+Shift+Alt+N 查找类中的方法或变量
 
 Alt+Shift+C 对比最近修改的代码
 
-Shift+F6  重构-重命名
+Shift+F6  Refactor下的Rename
 
-Ctrl+Shift+先上键
-
-Ctrl+X 删除行
+Ctrl+Y 删除行
 
 Ctrl+D 复制行
 
 Ctrl+/ 或 Ctrl+Shift+/  注释（// 或者 ）
-
-Ctrl+J  自动代码
-
-Ctrl+E 最近打开的文件
 
 Ctrl+H 显示类结构图
 
@@ -183,11 +177,9 @@ Ctrl+Shift+Up/Down 代码向上/下移动。
 
 F2 或Shift+F2 高亮错误或警告快速定位
 
-代码标签输入完成后，按Tab，生成代码。
-
 选中文本，按Ctrl+Shift+F7 ，高亮显示所有该文本，按Esc高亮消失。
 
-Ctrl+W 选中代码，连续按会有其他效果
+Ctrl+W 选中代码，连续按会扩大选中的代码块
 
 选中文本，按Alt+F3 ，逐个往下查找相同文本，并高亮显示。
 
@@ -195,53 +187,20 @@ Ctrl+Up/Down 光标跳转到第一行或最后一行下
 
 Ctrl+B 快速打开光标处的类或方法 
 
-***
 
-最常用快捷键
+## 1.6 个人使用AS的一些体验
 
-1.Ctrl＋E，可以显示最近编辑的文件列表
+### 1、Android Studio是官方的IDE，集成了开发Android应用和SDK所需要的所有组件。例如，集成命令行工具，logcat支持更多的操作，支持录屏，截屏等功能。
 
-2.Shift＋Click可以关闭文件
+### 2、AS使用gradle作为打包脚本，兼容Maven、Ant。其打包脚本的Groovy语法简洁，直接支持Java，与xml形式的Ant脚本相比，可读性更强（xml是给机器读的，不是给人阅读的）。gradle添加依赖也更加方便，直接在dependencies中添加一个compile即可。
 
-3.Ctrl＋[或]可以跳到大括号的开头结尾
+### 3、AS的“单Project下包含多个Module”结构，对于多模块（一个Module相当于一个Eclipse中的project）开发有非常好的优势，如果你是做sdk开发的，可以直接按照“library + sample”的形式，从开发library（sdk），打包library，调试demo到最后发布sdk + demo都非常方便。
 
-4.Ctrl＋Shift＋Backspace可以跳转到上次编辑的地方
+### 4、目前有很多开源项目和sdk都是通过aar的形式发布到Maven和jcenter，迁移到AS以后，可以在将来需要的时候将自己的sdk发布到Maven、jcenter。https://github.com/novoda/bintray-release
 
-5.Ctrl＋F12，可以显示当前文件的结构
+### 5、编辑代码方面：模糊匹配非常强大，对Android和Java的语法检查也更加严谨（查找类的实现，支持弹窗中直接查看，代码之间的引用检查），自带代码分析工具，生成的report可以很清楚地看出代码中有哪里可能存在问题。
 
-6.Ctrl＋F7可以查询当前元素在当前文件中的引用，然后按F3可以选择
-
-7.Ctrl＋N，可以快速打开类
-
-8.Ctrl＋Shift＋N，可以快速打开文件
-
-9.Alt＋Q可以看到当前方法的声明
-
-10.Ctrl＋W可以选择单词继而语句继而行继而函数
-
-11.Alt＋F1可以将正在编辑的元素在各个面板中定位
-
-12.Ctrl＋P，可以显示参数信息
-
-13.Ctrl＋Shift＋Insert可以选择剪贴板内容并插入
-
-14.Alt＋Insert可以生成构造器/Getter/Setter等
-
-15.Ctrl＋Alt＋V 可以引入变量。例如把括号内的SQL赋成一个变量
-
-16.Ctrl＋Alt＋T可以把代码包在一块内，例如try/catch
-
-17.Alt＋Up and Alt＋Down可在方法间快速移动
-
-***
-
-下面占个坑先。。
-
-# 2. Gradle插件自动化多渠道打包实践
-
-## 2.1 Gradle安装配置
-
-## 2.2 使用Gradle自动化多渠道打包
+### 6、AS有很多好用的插件，并且随着官方对AS的不断改进和支持，在这上面开发插件的人也越来越多，有很多好用的插件可以方便配置进来，这些插件不支持Eclipse（ADT插件已经停止更新）。
 
 
-今年的开发者大会上我比较关注的还是Android在系统上的一些改进，以及Material Design的一些最新实践。当我打开IO大会官网看到他们用polymer写的网页时，感觉还是非常不错的。
+今年的开发者大会上我比较关注的还是Android在系统上的一些改进，以及Material Design的一些最新实践。当我打开IO大会官网看到他们用polymer写的网页时，感觉还是非常不错的。虽然我是一个比较极端的人，但是我看待Native App VS Web的问题上没有那么绝对，学技术的可以多积累点动手实践的经验，业务需要的时候再深挖。

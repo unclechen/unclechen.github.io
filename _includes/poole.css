@@ -84,7 +84,7 @@ a:focus {
 
 /* Headings */
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Fjalla One", "Roboto Condensed", Roboto, sans-serif;
+  font-family: "Raleway", "Roboto Condensed", Roboto, sans-serif;
   margin-top: .8rem;
   margin-bottom: .6rem;
   font-weight: normal;
@@ -155,12 +155,12 @@ abbr[title] {
 
 /* Code */
 pre {
-  font-family: "Fira Mono", Menlo, Monaco, "Courier New", monospace;
+  font-family: "Roboto Mono", Menlo, Monaco, "Courier New", monospace;
   overflow: auto;
   padding: 1em 2.5%;
 }
 code {
-  font-family: "Fira Mono", Menlo, Monaco, "Courier New", monospace;
+  font-family: "Roboto Mono", Menlo, Monaco, "Courier New", monospace;
   padding: .25em .5em;
   font-size: 90%;
   color: #bf616a;

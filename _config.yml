@@ -8,14 +8,15 @@ relative_permalinks: true
 
 # Setup
 title:            Uncle Chen
-description:      'This is my personal blog and any views expressed here are mine. Wish we can make something different.  ---I can do all the things.'
+description:      '吃下恶魔果实，我就能变成超级赛亚人'
 url:              http://unclechen.github.io
 baseurl:          /
 logo:             /content/images/me.jpg
 
 author:
-  name:           'Chen Xihong'
+  name:           'Uncle Chen'
   url:            https://github.com/unclechen
+  email: 		  noughtchen2015@gmail.com
 
 paginate:         5
 
@@ -26,8 +27,6 @@ github:
 
 gems:
   - jekyll-sitemap
-
-twitter: '@unclechen'
 
 kramdown:
   # Enable GitHub Flavored Markdown (fenced code blocks)
