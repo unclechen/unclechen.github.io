@@ -190,17 +190,19 @@ Ctrl+B 快速打开光标处的类或方法
 
 ## 1.6 个人使用AS的一些体验
 
-### 1、Android Studio是官方的IDE，集成了开发Android应用和SDK所需要的所有组件。例如，集成命令行工具，logcat支持更多的操作，支持录屏，截屏等功能。
+- 1、Android Studio是官方的IDE，集成了开发Android应用和SDK所需要的所有组件。例如，集成命令行工具，logcat支持更多的操作，支持录屏，截屏等功能。
 
-### 2、AS使用gradle作为打包脚本，兼容Maven、Ant。其打包脚本的Groovy语法简洁，直接支持Java，与xml形式的Ant脚本相比，可读性更强（xml是给机器读的，不是给人阅读的）。gradle添加依赖也更加方便，直接在dependencies中添加一个compile即可。
+- 2、AS使用gradle作为打包脚本，兼容Maven、Ant。其打包脚本的Groovy语法简洁，直接支持Java，与xml形式的Ant脚本相比，可读性更强（xml是给机器读的，不是给人阅读的）。gradle添加依赖也更加方便，直接在dependencies中添加一个compile即可。
 
-### 3、AS的“单Project下包含多个Module”结构，对于多模块（一个Module相当于一个Eclipse中的project）开发有非常好的优势，如果你是做sdk开发的，可以直接按照“library + sample”的形式，从开发library（sdk），打包library，调试demo到最后发布sdk + demo都非常方便。
+- 3、AS的“单Project下包含多个Module”结构，对于多模块（一个Module相当于一个Eclipse中的project）开发有非常好的优势，如果你是做sdk开发的，可以直接按照“library + sample”的形式，从开发library（sdk），打包library，调试demo到最后发布sdk + demo都非常方便。
 
-### 4、目前有很多开源项目和sdk都是通过aar的形式发布到Maven和jcenter，迁移到AS以后，可以在将来需要的时候将自己的sdk发布到Maven、jcenter。https://github.com/novoda/bintray-release
+- 4、目前有很多开源项目和sdk都是通过aar的形式发布到Maven和jcenter，迁移到AS以后，可以在将来需要的时候将自己的sdk发布到Maven、jcenter。https://github.com/novoda/bintray-release
 
-### 5、编辑代码方面：模糊匹配非常强大，对Android和Java的语法检查也更加严谨（查找类的实现，支持弹窗中直接查看，代码之间的引用检查），自带代码分析工具，生成的report可以很清楚地看出代码中有哪里可能存在问题。
+- 5、编辑代码方面：模糊匹配非常强大，对Android和Java的语法检查也更加严谨（查找类的实现，支持弹窗中直接查看，代码之间的引用检查），自带代码分析工具，生成的report可以很清楚地看出代码中有哪里可能存在问题。
 
-### 6、AS有很多好用的插件，并且随着官方对AS的不断改进和支持，在这上面开发插件的人也越来越多，有很多好用的插件可以方便配置进来，这些插件不支持Eclipse（ADT插件已经停止更新）。
+- 6、AS有很多好用的插件，并且随着官方对AS的不断改进和支持，在这上面开发插件的人也越来越多，有很多好用的插件可以方便配置进来，这些插件不支持Eclipse（ADT插件已经停止更新）。
 
+
+***
 
 今年的开发者大会上我比较关注的还是Android在系统上的一些改进，以及Material Design的一些最新实践。当我打开IO大会官网看到他们用polymer写的网页时，感觉还是非常不错的。虽然我是一个比较极端的人，但是我看待Native App VS Web的问题上没有那么绝对，学技术的可以多积累点动手实践的经验，业务需要的时候再深挖。
