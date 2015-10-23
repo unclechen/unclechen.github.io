@@ -162,7 +162,7 @@ dependencies {
 </manifest>
 {% endhighlight %}
 
-### 2. 修改app Module的build.gradle脚本，在`android`闭包中添加 **`productFlavors`** 属性，配置替换占位符的渠道标识。
+### 2. 修改app目录下的build.gradle脚本，在`android`闭包中添加 **`productFlavors`** 属性，配置替换占位符的渠道标识。
 
 {% highlight xml %}
 apply plugin: 'com.android.application'
@@ -275,7 +275,7 @@ android {
 
 ## versionCode版本号自增实现步骤
 
-### 1.在app目录下新建一个文本类型的文件 `version.properties`，在文件中添加：
+### 1. 在app目录下新建一个文本类型的文件 `version.properties`，在文件中添加：
 
 {% highlight xml %}
 build.number=1
@@ -283,7 +283,7 @@ build.number=1
 
 这里简单提一下 **properties** ，在gradle脚本中，我们可以定义各种 **`name=value`** ，然后通过读取属性的方式load进来，在脚本中使用。
 
-### 2.在app目录的build.gradle文件中，定义一个getVersionCode方法。
+### 2. 在app目录的build.gradle文件中，定义一个getVersionCode方法。
 
 {% highlight xml %}
 def getVersionCode() {
@@ -302,19 +302,28 @@ def getVersionCode() {
 {% endhighlight %}
 
 
-### 3.修改build.gradle中的defaultConfig闭包，将versionCode的属性赋值改为通过getVersionCode方法获取。
+### 3. 修改build.gradle中的defaultConfig闭包，将versionCode的属性赋值改为通过getVersionCode方法获取。
 
 {% highlight xml %}
-defaultConfig {
+android {
+	...
+
+	def currentVersionCode = getVersionCode()
+
+    defaultConfig {
         applicationId "com.nought.hellogradle"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode getVersionCode()
+        versionCode currentVersionCode
         versionName "1.0"
     }
+
+	...
+
+}
 {% endhighlight %}
 
-### 4.再定义一个updateVersionCode方法。
+### 4. 再定义一个updateVersionCode方法。
 
 {% highlight xml %}
 def updateVersionCode() {
@@ -342,7 +351,7 @@ def updateVersionCode() {
 
 可以看到这个方法中，首先获取了本地build任务中所有的任务名字，前面说过build任务实际上是个钩子，里面会去依赖很多其他的任务，例如`assemble`、`assembleRelease`及其驼峰式缩写`aR`。这里我们约定为只要执行过`assemble`任务，就将`versionCode`加1。当然你可以根据需要改成其他的条件。
 
-### 5.给assembleRelease任务依赖，使得release版本构建成功后，versionCode增加1，并写入`version.properties`文件。
+### 5. 给assembleRelease任务依赖，使得release版本构建成功后，versionCode增加1，并写入`version.properties`文件。
 
 {% highlight xml %}
 assembleRelease {}.doLast {
@@ -350,7 +359,7 @@ assembleRelease {}.doLast {
 }
 {% endhighlight %}
 
-### 6.打开Android Studio自带的命令行，运行`cd app`进入app目录，接着运行 `gradle assembleRelease`。
+### 6. 打开Android Studio自带的命令行，运行`cd app`进入app目录，接着运行 `gradle assembleRelease`。
 
 **记得一定要进入`app`目录以后，再build。** 当打包成功以后，versionCode增加了1，并保存在`version.properties`文件中。打开文件看下，果然变成了2，gradle还在第一行添加了修改时间。
 
