@@ -110,7 +110,7 @@ dependencies {
 
 # 多渠道打包实践
 
-多渠道指的是你的应用程序可以发布到不同的应用市场，被不同的用户从各个市场下载以后，你可以监测到每一个用户安装的这个应用程序是来自哪个市场的。实现的原理有很多，主要是通过一个标志位来区分不同的渠道包。比较常见的友盟移动统计提供的sdk，它通过让开发者在AndroidManifest.xml文件的 **`application`** 标签里指定一个 **<meta-data>** ，代码如下。
+多渠道指的是你的应用程序可以发布到不同的应用市场，被不同的用户从各个市场下载以后，你可以监测到每一个用户安装的这个应用程序是来自哪个市场的。实现的原理有很多，主要是通过一个标志位来区分不同的渠道包。比较常见的友盟移动统计提供的sdk，它通过让开发者在AndroidManifest.xml文件的 **`application`** 标签里指定一个 **<meta-data>** ，然后Umeng SDK会读取这个标签中value传到Umeng的后台，这样就可以让开发者监测到自己的应用程序渠道分布情况了。
 
 {% highlight xml %}
 <meta-data android:name="UMENG_CHANNEL" android:value="${UMENG_CHANNEL}"></meta-data>
@@ -118,7 +118,7 @@ dependencies {
 
 其实<meta-data>元素可以作为子元素，被包含在`activity`、`application`、`service`和`receiver`标签中，但是不同位置下的`meta-data`读取方法不一样，现在以`application`为例实践。
 
-## 友盟多渠道打包实践步骤
+## 多渠道打包实现步骤
 
 - 1. 在AndroidManifest.xml的`application`标签下定义UMENG_CHANNEL占位符。
 
