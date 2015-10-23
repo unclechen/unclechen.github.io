@@ -85,9 +85,9 @@ android {
 
 接着看android闭包，里面首先定义了我们这个Module使用的**compileSdkVersion**和**buildToolsVersion**，这两个属性大家肯定知道，一个是用来编译代码的sdk版本，一个是用来打包apk的build-tools版本。
 
-再看里面的defaultConfig，又定义了几个属性。依次有**applicationId**，代表着你的包名，以前我们都是在AndroidManifest.xml文件中通过`package="com.nought.hellogradle"`指定应用程序的包名，现在我们可以在gradle打包脚本中指定它，后面你会发现我们结合buildTypes和flavor，还可以动态的改变它，有点神奇了吧！ **minSdkVersion** 指的是你的应用程序兼容的最低Android系统版本； **targetSdkVersion** 指的是你的应用程序希望运行的Android系统版本；**versionCode** 是你的代码构建编号，一般我们每打一次包就将它增加1；**versionName** 则是你对外发布时，用户看到的应用程序版本号，一般我们都用“点分三个数字”来命名，例如`1.0.0`。
+再看里面的defaultConfig，又定义了几个属性。依次有**applicationId**，代表着你的包名，以前我们都是在AndroidManifest.xml文件中通过`package="com.nought.hellogradle"`指定应用程序的包名，现在我们可以在gradle打包脚本中指定它，后面你会发现我们结合 **buildTypes** 和 **productFlavors** ，还可以动态的改变它，有点神奇了吧！ **minSdkVersion** 指的是你的应用程序兼容的最低Android系统版本； **targetSdkVersion** 指的是你的应用程序希望运行的Android系统版本；**versionCode** 是你的代码构建编号，一般我们每打一次包就将它增加1；**versionName** 则是你对外发布时，用户看到的应用程序版本号，一般我们都用“点分三个数字”来命名，例如`1.0.0`。
 
-接着看下buildTypes，这里面默认只定义了 **release** type，其实还可以定 **debug** type。在release和debug两个type中，可以分别配置不同的选项，例如目前的release中配置了混淆文件，`minifyEnabled false`指的是不混淆代码，下面这行 `proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'` 指定的是你的混淆配置文件。这里就不详细介绍了，马上我们就会看一下多渠道打包，实践一下大家就清楚了。
+接着看下 **buildTypes** ，这里面默认只定义了 **release** 类型，其实还可以定 **debug** 类型以及你自己定义的例如 **internal** 国内类型、**external** 国外类型等等。以前在每一个type中，可以分别配置不同的选项，例如可以 **配置不同的包名、是否混淆** 等等，目前的默认release类型中配置了混淆文件，`minifyEnabled false`指的是不混淆代码，下面这行 `proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'` 指定的是你的混淆配置文件。这里就不详细介绍了，马上我们就会看一下多渠道打包，实践一下大家就清楚了。
 
 {% highlight xml %}
 dependencies {
@@ -98,17 +98,137 @@ dependencies {
 }
 {% endhighlight %}
 
-最后，我们看dependencies闭包，这里指的是我们的工程依赖的库，以往在Eclipse中开发，我们常常通过jar包，以及添加library的形式来添加依赖，现在方便了，在gradle脚本里，一行代码通通搞定！真是简单啊！dependencies闭包下，有几种基本的语法。1：`compile fileTree(dir: 'libs', include: ['*.jar'])`,指的是依赖libs下面所有的jar包，你还可以指定具体的每一个jar包，而不是采用这个通配符匹配的方式，例如`compile files('libs/文件名.jar')`；2：`compile 'com.android.support:appcompat-v7:22.2.1'`，这种语法是通过包名：工程名：版本号的形式来依赖的，3：`testCompile 'junit:junit:4.12'`，指的是测试时才会用到的依赖，这里一看就知道是指做单元测试时依赖junit。
+最后，我们看dependencies闭包，这里指的是我们的工程依赖的库，以往在Eclipse中开发，我们常常通过jar包，以及添加library的形式来添加依赖，现在方便了，在gradle脚本里，一行代码通通搞定！真是简单啊！dependencies闭包下，有几种基本的语法。
 
-好了，上面介绍了Android Studio默认生成的基本的Gradle打包脚本的结构。下面我们在实践中学习一下怎么根据自己各种需求来实现自动化的打包。
+- 1：`compile fileTree(dir: 'libs', include: ['*.jar'])`,指的是依赖libs下面所有的jar包，你还可以指定具体的每一个jar包，而不是采用`*.jar`通配符匹配的方式，例如`compile files('libs/文件名.jar')`；
+
+- 2：`compile 'com.android.support:appcompat-v7:22.2.1'`，这种语法是通过包名：工程名：版本号的形式来依赖的，
+
+- 3：`testCompile 'junit:junit:4.12'`，指的是测试时才会用到的依赖，这里一看就知道是指做单元测试时依赖junit。
+
+好了，上面介绍了Android Studio默认生成的基本的Gradle打包脚本的结构。下面我们在实践中学习，怎么修改这个脚本，来实现自己的各种需求，例如多渠道自动化打包等等。
 
 # 多渠道打包实践
 
-占坑。。回家接着写。。
+多渠道指的是你的应用程序可以发布到不同的应用市场，被不同的用户从各个市场下载以后，你可以监测到每一个用户安装的这个应用程序是来自哪个市场的。实现的原理有很多，主要是通过一个标志位来区分不同的渠道包。比较常见的友盟移动统计提供的sdk，它通过让开发者在AndroidManifest.xml文件的 **`application`** 标签里指定一个 **<meta-data>** ，代码如下。
+
+{% highlight xml %}
+<meta-data android:name="UMENG_CHANNEL" android:value="${UMENG_CHANNEL}"></meta-data>
+{% endhighlight %}
+
+其实<meta-data>元素可以作为子元素，被包含在`activity`、`application`、`service`和`receiver`标签中，但是不同位置下的`meta-data`读取方法不一样，现在以`application`为例实践。
+
+## 友盟多渠道打包实践步骤
+
+- 1. 在AndroidManifest.xml的`application`标签下定义UMENG_CHANNEL占位符。
+
+{% highlight xml %}
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.nought.hellogradle" >
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme" >
+
+        <meta-data android:name="UMENG_CHANNEL" android:value="${UMENG_CHANNEL}"></meta-data>
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+{% endhighlight %}
+
+- 2. 修改app Module的build.gradle脚本，在`android`闭包中添加 **`productFlavors`** 属性，配置替换占位符的渠道标识。
+
+{% highlight xml %}
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "com.nought.hellogradle"
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+        GooglePlay {
+            manifestPlaceholders = [UMENG_CHANNEL: "GooglePlay"]
+        }
+        Baidu {
+            manifestPlaceholders = [UMENG_CHANNEL: "Baidu"]
+        }
+        Wandoujia {
+            manifestPlaceholders = [UMENG_CHANNEL: "Wandoujia"]
+        }
+        Xiaomi {
+            manifestPlaceholders = [UMENG_CHANNEL: "Xiaomi"]
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:design:22.2.1'
+}
+
+{% endhighlight %}
+
+- 3. 打开Android Studio自带的命令行工具，运行`gradle build`命令，就可以在 **`app/build/outputs/apk/`** 目录下看到生成渠道包apk文件。注意：输出的apk文件是在app Module下的build目录中，不是工程根目录下的build目录。
+
+![hello AS](/content/images/apk-outputs.png)
+
+我们可以看到在 **`app/build/outputs/apk/`** 中，生成的带有渠道标识的apk文件有12个，这时因为 **buildTypes** 与 **productFlavors** 两两组合，2*4=8，Android Studio默认必须有 **release** 和 **debug** 这两种Type。此外，由于buildTypes中还可以定义 **`zipAlignEnabled true`** ，意思是混淆后的zip优化，该值默认为true，因此每个渠道还多了一个 **`app-渠道标识-debug-unaligned.apk`** 文件。
+
+### 小结：
+
+运行`gradle build`命令时，终端里会显示当前正在执行的task，里面有很多我们熟悉的任务，例如dex、javaCompile这些。前面我们说过，gradle脚本会以钩子的形式，执行一系列的tasks，最终构建出我们所需要的程序安装包。感兴趣的同学可以执行一下 **`gradle tasks`** 命令，这个命令可以查看当前工程下所有的tasks，后面我也将结合这些tasks，实践一下jar包的构建。
+ 
+![hello AS](/content/images/open-terminal.png)
+
+### PS：渠道包修改包名
+ 
+如果你想修改不同的渠道包的包名，可以在你的 **productFlavors** 指定不同的 **applicationId ** 即可。在build.gradle文件中，输入的时候你就发现自动补全已经提示你，还有很多其他的属性可以配置了，感兴趣的同学不妨试试。
+
+### PPS：渠道包改应用名称
+
+如果你还想给不同的渠道指定不同的应用名字，例如想要在Xiaomi市场上叫做 **“HelloGradle-小米专供版”** , 那么你可以新建 `app/src/Xiaomi/res/values/strings.xml` 的文件，里面填写 `<string name="app_name">HelloGradle-小米专供版</string>`，这样打包出来的小米渠道包，应用程序的名称就改变成**“HelloGradle-小米专供版”** 了。
+
+### PPPS：单独打包某一个渠道
+
+运行 **`gradle build`** 会一次性打包出所有的渠道包，花费的时间还是很长的。如果只想打一个渠道的渠道包话应该怎么做？以百度为例，可以在命令行中执行  **`gradle assembleBaidu`** ，我是怎么找到 `assembleBaidu` 这个任务名字的？前面提到过的，运行 `gradle tasks`，你就会发现所有的tasks列表，找到build类的tasks，就看到了！其实Android Studio里面，这些全部都有界面操作的，大家看下代码编辑窗口的右边栏，是不是有一个Gradle的按钮，点击一下展开它，然后点击面板左上角的刷新按钮，就可以将所有的tasks列出来了，和执行命令行的效果是一样的。定制化打包的需求还有很多，同学们可以自己尝试尝试，记得分享出来给大家啊！
+
+![hello AS](/content/images/aB.png)
 
 # 版本号管理实践
 
-占坑。。
+版本号这个东西，在我出来实习的时候都还没什么感觉，直到不久前有一个需求，和后台的同事合作一起实现一个新特性。客户端这边要求，只能在某一个版本以上，后台才能返回特定的数据，而旧版本没有解析这些数据的功能。结果后台的同事喷了客户端同学一顿，说客户端这边的版本号命名非常混乱，没法按照这个客户端的版本号来定逻辑，老板们也会拍掉这个方案。。。所以呢，我觉得科学地管理好版本号，还是非常重要的！
+
+占坑
 
 
 
