@@ -126,7 +126,7 @@ dependencies {
 
 ### 思路2：一次打包，动态替换渠道标识符
 
-在[美团的技术博客](http://tech.meituan.com/mt-apk-packaging.html)上还分享过 **另外一种实现思路** ：就是在打包完一个apk之后，再拆包替换掉其中一个用来标识渠道市场的文件。这种思路和官方的`buildTypes + productFlavor`方式有所不同。因为这种思路只需要执行一次打包任务，剩下的操作是拆开apk（实际上也是一种zip包），替换文件。可想而知这种速度比较快，如果你有很多个渠道包要打的话，这种思路能提高很多速度，据说100个渠道包大概只要2分钟。而普通的`buildTypes + productFlavor`方式，我打了4个渠道包也花费了几十秒。可见如果有很多渠道包要出，建议采用美团的这种思路。
+在[美团的技术博客](http://tech.meituan.com/mt-apk-packaging.html)上还分享过 **另外一种实现思路** ：就是在打包完apk之后，再拆包替换掉其中一个文件，或者替换文件中的标识符，实现不同渠道市场的打包。因为apk实际上也是一种zip文件，里面有Android定义的一些文件组织结构，比如可以在assert目录下塞一个文件，命名为version之类的，再动态改变其中的内容。这种思路和官方的`buildTypes + productFlavor`方式有所不同。因为这种思路只需要执行一次打包任务，剩下的操作是拆开apk，替换文件。可想而知这种速度比较快，如果你有很多个渠道包要打的话，这种思路能提高很多速度，据说100个渠道包大概只要2分钟。而普通的`buildTypes + productFlavor`方式，我打了4个渠道包也花费了几十秒。可见如果有很多渠道包要出，建议采用美团的这种思路。
 
 
 ## 多渠道打包实现步骤
@@ -237,10 +237,217 @@ dependencies {
 
 # 版本号管理实践
 
-版本号这个东西，在我出来实习的时候都还没什么感觉，直到不久前有一个需求，和后台的同事合作一起实现一个新特性。客户端这边要求，只能在某一个版本以上，后台才能返回特定的数据，而旧版本没有解析这些数据的功能。结果后台的同事喷了客户端同学一顿，说客户端这边的版本号命名非常混乱，没法按照这个客户端的版本号来定逻辑，老板们也会拍掉这个方案。。。所以呢，我觉得科学地管理好版本号，还是非常重要的！
+版本号管理，在实际的业务中有很重要的作用，因为有的时候我们需要在做新版本特性的时候对旧版本做一些兼容处理，即使旧版本不能享受新版本功能，但是也不能影响到旧版本上已有功能的稳定运行。例如，新版本的应用程序支持视频播放，而旧版本的应用无法支持，那么可以在后台做控制，只针对新版本的应用返回视频数据，而旧版本不需要返回视频数据。
 
-为了简单起见，这里先把上面的多渠道打包脚本改回原来默认。一般版本号都会用 **三个数字加两个点** 分开，例如 **`1.0.0`** 这样的形式。三个数字分别表示为
+一般版本号都会用 **`major.minor.patch`** 表示，例如 **`1.0.0`** 这样的形式。第一个数字major表示主版本号，第二个数字minor表示副版本号，第三个数字patch表示小版本号或者叫补丁号。当然也不一定要强制用三个数字来表示，直接用  **`major.minor`** 也是可以的，但是一旦你的应用程序版本号按照一个规则进行管理后，如果后台有逻辑依赖这个版本号，那么就不应该随意进行修改，一定要保持一致。
+
+做Android开发的同学都熟悉 **versionCode** 和 **versionName** 这两个与版本管理相关的属性。以前用Eclipse开发项目时，都是在 `AndroidManifest.xml`文件中定义，如下所示。
+
+{% highlight xml %}
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.nought.hellogradle"
+    android:versionCode="1"
+    android:versionName="1.0" >
+{% endhighlight %}
+
+但是在Android Studio中，这两个属性已经被放在Module下的`build.gradle`中，一般是在`android`闭包的`defaultConfig`中，如下所示。
+
+{% highlight xml %}
+android {
+	...
+
+    defaultConfig {
+        applicationId "com.nought.hellogradle"
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+
+	...
+
+}
+{% endhighlight %}
+
+正是由于放到了gradle脚本中，而 **gradle脚本中可以写groovy代码和java代码** ，使得动态改变这两个属性变得更加方便了。关于 **versionCode** ，是一个整数，每build一次工程，我们都会将它增加1，因此可见应用程序的`versionCode`越大，其版本越新。而 **versionName** 是一个字符串，通常我们用这个来告诉用户，他们正在使用的应用程序版本名是多少，至于这个`versionName`每次打包怎么增加，就由你的自己来定义了，但是请记住，遵循这个规则不要改变，否则它就没有什么意义了。
+
+下面介绍一种版本号管理的思路，还是以前面的工程为例，这里为了简便，我把多渠道打包的代码注释掉了，先实现版本号自增。
+
+## versionCode版本号自增实现步骤
+
+### 1.在app目录下新建一个文本类型的文件 `version.properties`，在文件中添加：
+
+{% highlight xml %}
+build.number=1
+{% endhighlight %}
+
+这里简单提一下 **properties** ，在gradle脚本中，我们可以定义各种 **`name=value`** ，然后通过读取属性的方式load进来，在脚本中使用。
+
+### 2.在app目录的build.gradle文件中，定义一个getVersionCode方法。
+
+{% highlight xml %}
+def getVersionCode() {
+    def versionFile = file('version.properties')
+
+    if (versionFile.exists()) {
+        def Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionFile))
+        def versionCode = versionProps['build.number'].toInteger()
+        println('Current version code is ' + versionCode.toString())
+        return versionCode
+    } else {
+        throw new GradleException("Could not find version.properties!")
+    }
+}
+{% endhighlight %}
 
 
+### 3.修改build.gradle中的defaultConfig闭包，将versionCode的属性赋值改为通过getVersionCode方法获取。
+
+{% highlight xml %}
+defaultConfig {
+        applicationId "com.nought.hellogradle"
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode getVersionCode()
+        versionName "1.0"
+    }
+{% endhighlight %}
+
+### 4.再定义一个updateVersionCode方法。
+
+{% highlight xml %}
+def updateVersionCode() {
+    def runTasks = gradle.startParameter.taskNames
+
+    if (!('assemble' in runTasks || 'assembleRelease' in runTasks || 'aR' in runTasks)) {
+        return
+    }
+
+    def File versionFile = file('version.properties')
+
+    if (versionFile.exists()) {
+        def Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionFile))
+        def currentVersionCode = versionProps['build.number'].toInteger()
+        currentVersionCode++
+        versionProps['build.number'] = currentVersionCode.toString()
+        versionProps.store(versionFile.newWriter(), null)
+        println('Updated version code to ' + currentVersionCode.toString())
+    } else {
+        throw new GradleException("Could not find version.properties!")
+    }
+}
+{% endhighlight %}
+
+可以看到这个方法中，首先获取了本地build任务中所有的任务名字，前面说过build任务实际上是个钩子，里面会去依赖很多其他的任务，例如`assemble`、`assembleRelease`及其驼峰式缩写`aR`。这里我们约定为只要执行过`assemble`任务，就将`versionCode`加1。当然你可以根据需要改成其他的条件。
+
+### 5.给assembleRelease任务依赖，使得release版本构建成功后，versionCode增加1，并写入`version.properties`文件。
+
+{% highlight xml %}
+assembleRelease {}.doLast {
+    updateVersionCode()
+}
+{% endhighlight %}
+
+### 6.打开Android Studio自带的命令行，运行`cd app`进入app目录，接着运行 `gradle assembleRelease`。
+
+**记得一定要进入`app`目录以后，再build。** 当打包成功以后，versionCode增加了1，并保存在`version.properties`文件中。打开文件看下，果然变成了2，gradle还在第一行添加了修改时间。
+
+{% highlight xml %}
+#Fri Oct 23 17:34:28 CST 2015
+build.number=2
+{% endhighlight %}
+
+### 小结：
+
+说了很多，直接把完整的build.gradle脚本贴出来吧。
+
+{% highlight xml %}
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "23.0.1"
+
+    def currentVersionCode = getVersionCode()
+
+    defaultConfig {
+        applicationId "com.nought.hellogradle"
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode currentVersionCode
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:design:22.2.1'
+}
+
+assembleRelease {}.doLast {
+    updateVersionCode()
+}
+
+def getVersionCode() {
+    def versionFile = file('version.properties')
+
+    if (versionFile.exists()) {
+        def Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionFile))
+        def versionCode = versionProps['build.number'].toInteger()
+        println('Current version code is ' + versionCode.toString())
+        return versionCode
+    } else {
+        throw new GradleException("Could not find version.properties!")
+    }
+}
+
+def updateVersionCode() {
+    def runTasks = gradle.startParameter.taskNames
+
+    if (!('assemble' in runTasks || 'assembleRelease' in runTasks || 'aR' in runTasks)) {
+        return
+    }
+
+    def File versionFile = file('version.properties')
+
+    if (versionFile.exists()) {
+        def Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionFile))
+        def currentVersionCode = versionProps['build.number'].toInteger()
+        currentVersionCode++
+        versionProps['build.number'] = currentVersionCode.toString()
+        versionProps.store(versionFile.newWriter(), null)
+        println('Updated version code to ' + currentVersionCode.toString())
+    } else {
+        throw new GradleException("Could not find version.properties!")
+    }
+}
+
+{% endhighlight %}
+
+如果想验证的话，我们可以在代码里读取一下应用程序的`versionCode`，并显示出来，这里就不演示了哈。其实我这里只是演示了一下gradle中实现一个小需求的方式，大家还可以根据需要写出各种各样的脚本。例如我工作中会将versionCode替换到代码里的某一个常量，实现方式是通过gradle脚本读取java源码文件，并通过正则表达式替换的。Gradle是用Groovy语言写的，兼容Java语法，因此我觉得特别适合Android程序员，大家也看到了上面定义的两个方法，实际上和Java语言差别不大，大家多参考一下官方的教程就会了。
+
+## versionName怎么实现自增？
+
+前面我们在`app`模块的目录下添加了一个`version.properties`文件，里面以`name=value`的形式定义了`build.number=1`，那么我们也可以添加两行`version.major=1`，`version.minor=0`，然后在gradle脚本中以属性的方式读取，语法和前面读取`build.number`是一样的，至于major和minor号怎么增加，每个人有自己的约定规则，我这里就不演示了。
+
+## PS：现成的版本号管理插件
+
+后来我发现github上还有很多现成的插件可以用，里面已经内置了丰富的版本号管理功能。例如[packer](https://github.com/mcxiaoke/gradle-packer-plugin)插件，这个插件默认可以为我们实现版本号自增，apk输出文件按照版本号命名等等，感兴趣的同学也可以去看一下。
+
+实际上使用Gradle有非常好扩展性，前面说了它只是一个容器，真正实现功能的是插件，而插件里实现功能的是一个一个的任务Task。我们可以自己写一些Gradle Task，并进一步封装成Gradle Plugin，apply到自己项目中。
+
+下面我还会介绍一下如何使用Gradle打包jar包，而不是apk文件，并在打包时实现关闭Log开关，打包完成后恢复Log开关。
 
 
