@@ -110,7 +110,7 @@ dependencies {
 
 # 多渠道打包实践
 
-多渠道指的是你的应用程序可以发布到不同的应用市场，被不同的用户从各个市场下载以后，你可以监测到每一个用户安装的这个应用程序是来自哪个市场的。实现的原理有很多，主要是通过一个标志位来区分不同的渠道包。比较常见的友盟移动统计提供的sdk，它通过让开发者在AndroidManifest.xml文件的 **`application`** 标签里指定一个 **<meta-data>** ，然后Umeng SDK会读取这个标签中value传到Umeng的后台，这样就可以让开发者监测到自己的应用程序渠道分布情况了。
+多渠道指的是你的应用程序可以发布到不同的应用市场，被不同的用户从各个市场下载以后，你可以监测到每一个用户安装的这个应用程序是来自哪个市场的。实现的方法有很多，主要是通过一个标志位来区分不同的渠道包。比较常见的友盟移动统计提供的sdk，它通过让开发者在AndroidManifest.xml文件的 **`application`** 标签里指定一个 **meta-data** ，然后Umeng SDK会读取这个标签中value传到Umeng的后台，这样就可以让开发者监测到自己的应用程序渠道分布情况了。
 
 {% highlight xml %}
 <meta-data android:name="UMENG_CHANNEL" android:value="${UMENG_CHANNEL}"></meta-data>
@@ -120,7 +120,7 @@ dependencies {
 
 ## 多渠道打包实现步骤
 
-- 1. 在AndroidManifest.xml的`application`标签下定义UMENG_CHANNEL占位符。
+- 1.在AndroidManifest.xml的`application`标签下定义UMENG_CHANNEL占位符。
 
 {% highlight xml %}
 <?xml version="1.0" encoding="utf-8"?>
@@ -151,7 +151,7 @@ dependencies {
 </manifest>
 {% endhighlight %}
 
-- 2. 修改app Module的build.gradle脚本，在`android`闭包中添加 **`productFlavors`** 属性，配置替换占位符的渠道标识。
+- 2.修改app Module的build.gradle脚本，在`android`闭包中添加 **`productFlavors`** 属性，配置替换占位符的渠道标识。
 
 {% highlight xml %}
 apply plugin: 'com.android.application'
@@ -198,7 +198,7 @@ dependencies {
 
 {% endhighlight %}
 
-- 3. 打开Android Studio自带的命令行工具，运行`gradle build`命令，就可以在 **`app/build/outputs/apk/`** 目录下看到生成渠道包apk文件。注意：输出的apk文件是在app Module下的build目录中，不是工程根目录下的build目录。
+- 3.打开Android Studio自带的命令行工具，运行`gradle build`命令，就可以在 **`app/build/outputs/apk/`** 目录下看到生成渠道包apk文件。注意：输出的apk文件是在app Module下的build目录中，不是工程根目录下的build目录。
 
 ![hello AS](/content/images/apk-outputs.png)
 
