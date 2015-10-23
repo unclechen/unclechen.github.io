@@ -116,11 +116,11 @@ Android Studio的项目结构和Eclipse下有很大不同，首先最不一样�
 
 导入Eclipse的项目后，AS会在项目的目录文件夹下生成一个`import-summary.txt`，这里面有导入过程的一些问题，导入进来的项目可能不一定立刻就能build，但是通过看导入报告，我们可以将有问题的地方一一修复，最后成功迁移到AS上来。相信我，我一开始的时候也是非常痛苦的，花了很多时间以后最终也就摸索出来了。StackOverflow真的是个好东西啊。
 
-## PS:Eclipse项目迁移到Android Studio后代码、资源文件的结构该怎么管理？
+## 1.5 Eclipse项目迁移到Android Studio后代码、资源文件的结构该怎么管理？
 
 有两种方案：两种方案的区别就是文件结构应该如何配置。
 
-### 直接按照Android Studio标准的结构配置
+### 方案1：直接按照Android Studio标准的结构配置
 
 在`build.gradle(Module: app)`中的android闭包中，添加 **sourceSets** 属性，并按照下面配置来写。
 
@@ -137,7 +137,7 @@ sourceSets {
     }
 {% endhighlight %}
 
-### 不改变Eclipse原有结构，使用Android Studio + Gradle来开发。
+### 方案2：不改变Eclipse原有结构，使用Android Studio + Gradle来开发。
 
 在`build.gradle(Module: app)`中的android闭包中，添加 **sourceSets** 属性，按照下面的配置来写。
 
@@ -156,7 +156,7 @@ sourceSets {
 
 可以看到，不改变Eclipse工程结构的关键就在于，在 **sourceSets** 中，按照原来的目录结构配置源代码、资源文件的路径，在Eclipse工程结构中，AndroidManifest.xml文件，libs目录，assert目录、都是和src目录同级的。而Android Studio默认的工程结构中，这几个目录都是`src/main/`中。分清楚了这一点，其实两种结构没啥影响，怎么来都行。
 
-## 1.5 快捷键
+## 1.6 常用快捷键
 
 以下摘自[Android Studio中文论坛](http://android-studio.org/)
 
@@ -227,7 +227,7 @@ Ctrl+Up/Down 光标跳转到第一行或最后一行下
 Ctrl+B 快速打开光标处的类或方法 
 
 
-## 1.6 个人使用AS的一些体验
+## PS ： 个人使用AS的一些体验
 
 - 1、Android Studio是官方的IDE，集成了开发Android应用和SDK所需要的所有组件。例如，集成命令行工具，logcat支持更多的操作，支持录屏，截屏等功能。
 
