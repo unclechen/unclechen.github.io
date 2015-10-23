@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Android Studio Gradle打包实践之多渠道+版本号管理
+title: Android Studio Gradle实践之多渠道自动化打包+版本号管理
 ---
 
 上次介绍了[Android Studio的安装、配置和基本使用](http://unclechen.github.io/2015/06/01/Android%20Studio%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E7%AC%94%E8%AE%B0/)。这次讲一下Android Studio用到的打包工具Gradle。[Gradle](http://gradle.org/)是一种构建项目的框架，兼容Maven、Ant，为Java项目提供了很多插件去实现打包功能。废话不多说，下面直接进入实战。当我写这篇博客的时候，Android Studio的版本已经更新到了**1.4**，比上一篇博客的版本又更新了。
