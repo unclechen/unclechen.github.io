@@ -459,6 +459,8 @@ def updateVersionCode() {
 
 实际上使用Gradle有非常好扩展性，前面说了它只是一个容器，真正实现功能的是插件，而插件里实现功能的是一个一个的任务Task。我们可以自己写一些Gradle Task，并进一步封装成Gradle Plugin，apply到自己项目中。
 
-下面我还会介绍一下如何使用Gradle打包jar包，而不是apk文件，并在打包时实现关闭Log开关，打包完成后恢复Log开关。
+下面我还会介绍一下如何使用[Gradle打包jar包+Log开关自动关闭](http://unclechen.github.io/2015/10/25/Gradle%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%89%93%E5%8C%85jar+Log%E5%BC%80%E5%85%B3%E8%87%AA%E5%8A%A8%E5%85%B3%E9%97%AD/)，而不是apk文件，并在打包时实现关闭Log开关，打包完成后恢复Log开关。
+
+最后奉上这篇博客和下一篇博客的示例工程代码，链接[https://github.com/unclechen/HelloGradle](https://github.com/unclechen/HelloGradle)。
 
 
