@@ -142,7 +142,7 @@ gradle jarMyLib
 
 另外大家可能会说，既然都自己自定义Jar任务，为啥不把`compileJava`任务也自定义了，其实也是可以的，这样等于完全不用依赖Android Gradle插件的默认任务了。但有的时候，假设我们的代码中要把aidl打进来，依赖默认的`compileReleaseJavaWithJavac`任务会把aidl生成的class文件也包含在里面，非常方便。如果自己去写JavaCompile任务的话，首先还要把aidl文件生成java文件，再来compile它，会有一点点麻烦。咱们做sdk开发的，不需要打那么多渠道包，直接依赖默认的`compileReleaseJavaWithJavac`其实多花个1-2s不是什么大问题。
 
-## 混淆自定义的jar包
+## PPPS：混淆自定义的jar包
 
 刚才忘了提，混淆也是比较常见的一个需求，假设我们不是打包apk，在buildTypes闭包里面也没有给release类型的任务设置``为混淆。那么我们还可以自己定义一个混淆任务，话不多说，直接上代码：
 
@@ -173,7 +173,9 @@ gradle proguardMyLib
 
 ![Decompile my-pro-lib](/content/images/my-pro-lib.png)
 
-有同学就会说了，这个混淆的后的jar包和原来的jar包没啥区别啊... ...没错，因为我们这个类里面只调用了一句Log API，这个API又是来自于android.jar的，我们在混淆的时候使用libraryjars(android.jar)保证了这个包里面的东西不会被混淆，所以这个示例里面看起来是没有什么变化的。如果你的HelloLib Module写的很复杂，里面代码有很多的话，混淆以后是有明显变化的，大家可以自己体验一下。
+有同学就会说了，这个混淆的后的jar包和原来的jar包没啥区别啊... ...没错，因为我们这个类里面只调用了一句Log API，这个API又是来自于android.jar的，我们在混淆的时候使用libraryjars(android.jar)保证了这个包里面的东西不会被混淆，所以这个示例里面看起来是没有什么变化的。如果你的HelloLib Module写的很复杂，里面代码有很多的话，混淆以后是有明显变化的，自定义打包jar文件就到这里结束了，大家可以自己体验一下。
+
+***
 
 # Gradle自动关闭Log开关
 
@@ -190,7 +192,7 @@ gradle proguardMyLib
 ```
 buildTypes {
         release {
-        	// 不显示log
+            // 不显示log
             buildConfigField "boolean", "ENABLE_DEBUG", "false"
             ...
         }

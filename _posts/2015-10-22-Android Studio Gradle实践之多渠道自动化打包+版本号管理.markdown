@@ -122,7 +122,7 @@ dependencies {
 <meta-data android:name="UMENG_CHANNEL" android:value="${UMENG_CHANNEL}"></meta-data>
 {% endhighlight %}
 
-其实<meta-data>元素可以作为子元素，被包含在`activity`、`application`、`service`和`receiver`标签中，但是不同位置下的`meta-data`读取方法不一样，现在以`application`中放置占位符为例实践。
+其实`meta-data`元素可以作为子元素，被包含在 `activity`,`application`,`service`和`receiver`标签中，但是不同位置下的 `meta-data` 读取方法不一样，我们这里就以在`application`中放置占位符为例。
 
 ### 思路2：一次打包，动态替换渠道标识符
 
@@ -234,6 +234,8 @@ dependencies {
 运行 **`gradle build`** 会一次性打包出所有的渠道包，花费的时间还是很长的。如果只想打一个渠道的渠道包话应该怎么做？以百度为例，可以在命令行中执行  **`gradle assembleBaidu`** ，我是怎么找到 `assembleBaidu` 这个任务名字的？前面提到过的，运行 `gradle tasks`，你就会发现所有的tasks列表，找到build类的tasks，就看到了！其实Android Studio里面，这些全部都有界面操作的，大家看下代码编辑窗口的右边栏，是不是有一个Gradle的按钮，点击一下展开它，然后点击面板左上角的刷新按钮，就可以将所有的tasks列出来了，和执行命令行的效果是一样的。定制化打包的需求还有很多，同学们可以自己尝试尝试，记得分享出来给大家啊！
 
 ![hello AS](/content/images/aB.png)
+
+***
 
 # 版本号管理实践
 
