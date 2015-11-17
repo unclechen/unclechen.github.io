@@ -40,7 +40,7 @@ C:\Users\noughtchen>
 ```
 那就说明gradle是OK的。
 
-* Groovy SDK（可选）：这个类似于JDK，因为Gradle插件使用Groovy语言编写，所以我们也可以安装Groovy SDK。这里是官方的[安装教程](http://www.groovy-lang.org/install.html#_installation_on_windows)，非常简单。分为三步：
+* Groovy SDK（可跳过）：这个类似于JDK，因为Gradle插件使用Groovy语言编写，所以我们也可以安装Groovy SDK。这里是官方的[安装教程](http://www.groovy-lang.org/install.html#_installation_on_windows)，非常简单。分为三步：
 	* 下载一个[Binary Release](http://www.groovy-lang.org/install.html#download-groovy)版的zip包，解压到你本地的一个目录下，例如我本地是`D:\mydev\groovy-2.4.5`。
 	* 添加名为`GROOVY_HOME`的环境变量，它的值为刚才的目录`D:\mydev\groovy-2.4.5`。
 	* 然后将`GROOVY_HOME/bin`添加到系统的环境变量`Path`里，添加的值为`%GROOVY_HOME%\bin`。
@@ -354,6 +354,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.3.0'
+		// 自定义的插件以 groupId:name:版本号 的方式引用，这个name来自插件工程下的hello-world-plugin.properties文件名
         classpath 'com.nought.gradle.plugin:hello-gradle-plugin:1.0.0'
     }
 }
