@@ -151,11 +151,11 @@ So，新建一个名为`HelloPluginExtension`的类，表明这是`HelloPlugin`�
 package com.nought.gradle.plugin
 
 class HelloPluginExtension {
-    String javaSrcDir
-    String classesOutDir
+    String javaSrcDir // java源码的目录
+    String classesOutDir // 编译输出的class文件目录
 
-    String outputFileDir
-    String outputFileName
+    String outputFileDir // 输出的jar包目录
+    String outputFileName // 输出的jar包文件名
 
     String androidJarDir
     String javaBase
@@ -165,13 +165,15 @@ class HelloPluginExtension {
 }
 
 ```
-很显然，其实你可输入任何Java语言中的变量类型。
+很显然，其实你可输入任何Java语言中的变量类型。这些属性在apply我们的插件时，都可以在build.gradle脚本中传入。
 
 ## 5.在Plugin中增加自定义的task
 
-刚才定义了Extension里面的一些属性，自定义的Gradle Plugin框架就基本是这样了，当然你要是写一个 **helloworld**，那就不要来写插件了。接下来我们要在`HelloPlugin`中用到这个属性，并增加一些实现了不同功能的tasks。
+刚才定义了Extension里面的一些属性，自定义Gradle Plugin的框架就基本是这样了，当然你要是只写一个 **helloworld** demo尝尝口味，那就没必要干下面的事情了。
 
-本例子中，我们在自定义的插件中，编译Java源代码，并把生成的class文件打包成jar，再根据需求决定是不是混淆它。直接上代码：
+接下来我们要在`HelloPlugin`中用到这个属性，并增加一些实现了不同功能的tasks。
+
+本例子中，我们自定义的插件可以编译Java源代码，并把生成的class文件打包成jar，再根据需求决定是不是混淆它。下面直接上代码：
 
 ```
 package com.nought.gradle.plugin
