@@ -36,7 +36,7 @@ title: Android WebView调用JS
 ## 方法小结
 
 ### Java调用JS的代码
-其实比较简单，就是通过`WebView.loadUrl("javascript:javaCallJS()")`loadUrl的形式。这里啰嗦一句，从Android4.4开始，由于chromium内核对安全性检查更加严格，所以并不是传入的所有JS代码，都能够通过loadUrl来执行它。详情可以看一下这里[https://code.google.com/p/android/issues/detail?id=69969](https://code.google.com/p/android/issues/detail?id=69969)，简单来说就是4.4以上的WebView在loadUrl时会给我们的参数做一个escape，因此参数就变了，很有可能变得JS不认识，无法执行了。所以这时候需要用到`WebView.#evaluateJavascript(java.lang.String, android.webkit.ValueCallback<java.lang.String>)`这个方法。后面我再详细举个例子来说明这个问题。
+其实比较简单，就是通过`WebView.loadUrl("javascript:javaCallJS()")`loadUrl的形式。这里啰嗦一句，从Android4.4开始，由于chromium内核对安全性检查更加严格，所以并不是传入的所有JS代码，都能够通过loadUrl来执行它。详情可以看一下这里[https://code.google.com/p/android/issues/detail?id=69969](https://code.google.com/p/android/issues/detail?id=69969)，简单来说就是4.4以上的WebView在loadUrl时会给我们的参数做一个escape，因此参数就变了，很有可能变得JS不认识，无法执行了。所以这时候需要用到`WebView.evaluateJavascript(java.lang.String, android.webkit.ValueCallback<java.lang.String>)`这个方法。后面我再详细举个例子来说明这个问题。
 
 ### JS调用Java的方法1：**addJavascriptInterface**
 这种方法是比较简单的。在WebView官方的文档里面有介绍如何结合WebView来进行WebApp的开发[http://developer.android.com/intl/zh-cn/guide/webapps/webview.html#AddingWebView](http://developer.android.com/intl/zh-cn/guide/webapps/webview.html#AddingWebView)。
@@ -204,7 +204,7 @@ Github上面也有不少开源的 **WebView&JSBridge** 。我随便搜了一下�
 
 # 从4.4开始WebView执行JS的一个坑
 
-loadUrl也是可行的，但是调用的JS代码必须是单行的。所以稍微复杂一点的js脚本就要用evaluateJavaScript来执行。
+待补充。。。前面说到4.4开始有些JS代码得用evaluateJavascript来执行。blabla。。
 
 
 
