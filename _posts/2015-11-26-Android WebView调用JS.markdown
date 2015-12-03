@@ -202,9 +202,23 @@ private TextViewChanger mTextChanger = new TextViewChanger() {
 
 Github上面也有不少开源的 **WebView&JSBridge** 。我随便搜了一下，就看到了这个[https://github.com/pedant/safe-java-js-webview-bridge](https://github.com/pedant/safe-java-js-webview-bridge)，实现的思路貌似是差不多的。另外iOS也有不少类似的框架，[https://github.com/marcuswestin/WebViewJavascriptBridge](https://github.com/marcuswestin/WebViewJavascriptBridge)这个项目有4000+的star，可见iOS上面的WebApp需求还是非常多的，因为它不像Android一样可以用DexClassLoader去做热更新，通过WebApp的形式来动态更新App对iOS的意义非常大。
 
-# 从4.4开始WebView执行JS的一个坑
+# 遇到的坑
+
+## 1.HTML5的LocalStorage
+
+Local Storage是h5里面常用到的一个缓存，如果加载的页面中用js去调用Local Storage的话，很容易出现`"Uncaught TypeError: Cannot read property 'getItem' of null", source: http://xxx.js`，原因就是没有开启WebView的h5缓存功能。于是上stackoverflow上搜了一下，加上下面这句：
+
+```
+mWebView..getSettings().setDomStorageEnabled(true);
+```
+
+就好了。
 
 待补充。。。前面说到4.4开始有些JS代码得用evaluateJavascript来执行。blabla。。
+
+# PS
+
+手头看到了篇WebView文章，[Android 4.4 中 WebView 使用注意事项](https://github.com/cundong/blog/blob/master/Android%204.4%20%E4%B8%AD%20WebView%20%E4%BD%BF%E7%94%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9.md)，可参考参考。
 
 
 
