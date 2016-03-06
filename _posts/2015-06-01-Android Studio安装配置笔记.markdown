@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Android Studio安装配置笔记
+date: '2015-06-01'
 cover_image: '/content/images/cover/helloAndroidStudioAndGradle.png'
 ---
 

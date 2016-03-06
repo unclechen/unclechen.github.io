@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 使用GitHub Pages搭建博客
+date: '2015-01-14'
 cover_image: '/content/images/cover/cover-create-git-pages.png'
 ---
 

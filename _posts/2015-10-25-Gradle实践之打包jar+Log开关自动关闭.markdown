@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Gradle实践之自定义打包jar+Log开关自动关闭
+date: '2015-10-25'
 ---
 
 上一篇博客介绍了[Gradle实践之多渠道自动化打包+版本号管理](http://unclechen.github.io/2015/10/22/Android%20Studio%20Gradle实践之多渠道自动化打包+版本号管理/)。由于我在公司里主要是做SDK开发的，这次我想介绍一下如何使用Gradle打出自己想要的jar包，并根据需要混淆、发布jar包。然后再介绍一下如何在打包的时候将自定义的Log输出工具关闭。

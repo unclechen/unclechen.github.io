@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 自定义Android Gradle插件
+date: '2015-11-17'
 ---
 
 上一篇博客介绍到[Gradle实践之自定义打包jar+Log开关自动关闭](http://unclechen.github.io/2015/10/25/Gradle%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%89%93%E5%8C%85jar+Log%E5%BC%80%E5%85%B3%E8%87%AA%E5%8A%A8%E5%85%B3%E9%97%AD/)。可以自己定义打包的jar已经不错了，但是还是不够爽，怎么办？自己写一个Plugin！会用轮子，也要会造轮子是不是，我们经常使用到的`com.android.library`和`com.android.application`都是Google给我们提供的Gradle插件，里面已经实现了大部分App开发者所需要的功能。Github上面也已经有很多gradle插件，但是如果我们是程序猿，我们总是可以有需求是人家的Plugin无法满足的，那好吧，我们自己写个插件。

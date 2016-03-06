@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 使用前端开发利器Fiddler调试手机程序
+date: '2015-04-30'
 cover_image: '/content/images/cover/helloFiddler.jpg'
 ---
 

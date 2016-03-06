@@ -1,5 +1,6 @@
 ---
 layout: post
+date: '2015-10-22'
 title: Android Studio Gradle实践之多渠道自动化打包+版本号管理
 ---
 

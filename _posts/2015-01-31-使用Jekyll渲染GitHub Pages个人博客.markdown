@@ -1,5 +1,6 @@
 ---
 layout: post
+date: '2015-01-31'
 title: 使用Jekyll渲染GitHub Pages个人博客
 ---
 

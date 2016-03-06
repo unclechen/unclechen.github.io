@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Android WebView调用JS
+date: '2015-11-26'
 ---
 
 个人认为Android的WebView一直是一个比较难搞的东西，因为它需要和很多的Web开发打交道，如果以前没接触过Web相关的开发就会觉得有些不爽，但是现在越来越多的应用都是Hybrid的模式，HTML5定稿一年多，感觉也挺火，这也是以做内容为主的App非常需要的技术，所以还得多学学。
