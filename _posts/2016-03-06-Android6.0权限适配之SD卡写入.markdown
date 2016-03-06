@@ -4,7 +4,7 @@ title: Android6.0权限适配之WRITE_EXTERNAL_STORAGE（SD卡写入）
 date: '2016-03-06'
 ---
 
-前一篇博客中介绍了[Android6.0权限适配简介](http://unclechen.github.io/2016/03/05/Android6.0权限适配简介/)，最近遇到这么一个情况，就是一个App以前都是在SD卡根目录直接新建了一个`XXX/image/`目录，来保存图片缓存的，但是如果适配到Android6.0，我们就需要弹出对话框给用户，来申请`WRITE_EXTERNAL_STORAGE`权限，如果仅仅是缓存图片为了提高加载速度，对于一个小白用户来讲，好像并不是什么值得让他授权的理由。。。
+前一篇博客中介绍了[Android6.0运行时权限简介](http://unclechen.github.io/2016/03/05/Android6.0运行时权限简介/)，最近遇到这么一个情况，就是一个App以前都是在SD卡根目录直接新建了一个`XXX/image/`目录，来保存图片缓存的，但是如果适配到Android6.0，我们就需要弹出对话框给用户，来申请`WRITE_EXTERNAL_STORAGE`权限，如果仅仅是缓存图片为了提高加载速度，对于一个小白用户来讲，好像并不是什么值得让他授权的理由。。。
 
 下面记录一下我是怎么处理的，其实这次处理也不能叫做Android6.0权限适配了，不过对于`WRITE_EXTERNAL_STORAGE`这个权限而言，的确有一些需要注意的地方（坑）使我们以前没有关心的。
 
@@ -85,7 +85,7 @@ android {
 
 但是前面我们说过，通过`Context.getExternalCacheDir()`接口获取应用扩展存储目录时，只有在`API >= 19`时才不需要申请权限。也就是说如果是上面这种兼容到`API 14`的应用，还是需要在`AndroidManifest.xml`中注册`WRITE_EXTERNAL_STORAGE`权限的。
 
-前一篇博客[Android6.0权限适配简介](http://unclechen.github.io/2016/03/05/Android6.0权限适配简介/)知道，如果在`AndroidManifest.xml`文件里注册过`WRITE_EXTERNAL_STORAGE`，当App运行在一台6.0的设备时，即使你的App全程都没有调用`requestPermissons`来申请权限，用户还是可以在**Android6.0系统上** 进入`设置->应用->你的App->权限`里面，取消`存储空间`这一个权限。记住是运行在**6.0系统的机器**上，这是关键，因为低于6.0的系统根本没有这个设置。
+前一篇博客[Android6.0运行时权限简介](http://unclechen.github.io/2016/03/05/Android6.0运行时权限简介/)知道，如果在`AndroidManifest.xml`文件里注册过`WRITE_EXTERNAL_STORAGE`，当App运行在一台6.0的设备时，即使你的App全程都没有调用`requestPermissons`来申请权限，用户还是可以在**Android6.0系统上** 进入`设置->应用->你的App->权限`里面，取消`存储空间`这一个权限。记住是运行在**6.0系统的机器**上，这是关键，因为低于6.0的系统根本没有这个设置。
 
 如下图所示，只要在manifest里面注册了，就可以动态取消之！
 

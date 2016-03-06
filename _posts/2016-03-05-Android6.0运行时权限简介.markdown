@@ -1,12 +1,12 @@
 ---
 layout: post
-title: Android6.0权限适配简介
+title: Android6.0运行时权限简介
 date: '2016-03-05'
 ---
 
 Android6.0发布距离现在快1年了，虽然它市场占有率仍在龟速上升中，但还是有一些App开发者已经在打包应用时将`targetSDKVersion`设置到了`23`，也就是说把App适配到了Android6.0。以前调用Android系统中需要声明权限的API时，只需要在`AndroidManifest.xml`文件中一次性列出来。但是如果在`build.gradle`文件里将`targetSDKVersion`设为`23`以后，除了在`AndroidManifest.xml`声明，我们还需要根据App运行时所在的手机的系统版本，在调用权限之前向用户申请授权，并在用户允许以后，才可以安全的调用对应的API。
 
-简单举个例子，我的App有一个地理位置读取的功能，需要`ACCESS_COARSE_LOCATION`（粗略的地理位置信息）权限，如果Apk是以`targetSDKVersion=22`的方式进行打包的，那么在安装时用户将不得授权我的App这个权限，否则他将无法安装这个应用；如果是以`targetSDKVersion=23`的形式打包的，而且用户使用的手机是Android6.0的系统，那么在安装时我的App是没有默认获得读取地址位置权限的，我们需要调用系统提供的`requestPermissions`接口来申请权限。这时候你可能会说那我还设置`targetSDKVersion=23`干嘛？还不如直接用`22`打包得了。。
+简单举个例子，我的App有一个地理位置读取的功能，需要`ACCESS_COARSE_LOCATION`（粗略的地理位置信息）权限，如果Apk是以`targetSDKVersion=22`的方式进行打包的，那么在安装时用户将不得授权我的App这个权限，否则他将无法安装这个应用；如果是以`targetSDKVersion=23`的形式打包的，而且用户使用的手机是Android6.0的系统，那么在安装时我的App是没有获得读取地理位置权限的，我们需要调用系统提供的`requestPermissions`接口来申请权限。这时候你可能会说那我还设置`targetSDKVersion=23`干嘛？还不如直接用`22`打包得了。。
 
 不要高兴得太早，下面我们会说理由。因为只要用户使用的是6.0系统的手机，他是可以在安装完成以后，在手机的设置界面取消一些`dangerous`权限的。
 
