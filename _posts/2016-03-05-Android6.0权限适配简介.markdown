@@ -10,6 +10,8 @@ Android6.0发布距离现在快1年了，虽然它市场占有率仍在龟速上
 
 不要高兴得太早，下面我们会说理由。因为只要用户使用的是6.0系统的手机，他是可以在安装完成以后，在手机的设置界面取消一些`dangerous`权限的。
 
+下图就是6.0系统上权限管理的界面。
+
 ![app-cancel-perm](/content/images/app-cancel-perm.png)
 
 # targetSDKVersion和compileSDKVersion的作用
@@ -31,7 +33,7 @@ android {
 
 ```
 
-- targetSDKVersion：简单来说就代表着你的App能够适配的系统版本，意味着你的App在这个版本的手机上做了充分的**向前**兼容性处理和实际测试。其实我们写代码时都是经常干这么一件事，就是`if(Build.VERSION.SDK_INT >= 23) { ... }`，这就是兼容性处理最典型的一个例子。如果你的target设置得越高，其实调用系统提供的API时，所得到的处理也是不一样的，甚至有些新的API是只有新的系统才有的，例如前一篇博客里用到WebView的`setWebContentsDebuggingEnabled(true)`方法，这是Android4.4以后才可以用的一个API。
+- targetSDKVersion：简单来说就代表着你的App能够适配的系统版本，意味着你的App在这个版本的手机上做了充分的**前向**兼容性处理和实际测试。其实我们写代码时都是经常干这么一件事，就是`if(Build.VERSION.SDK_INT >= 23) { ... }`，这就是兼容性处理最典型的一个例子。如果你的target设置得越高，其实调用系统提供的API时，所得到的处理也是不一样的，甚至有些新的API是只有新的系统才有的，例如前一篇博客里用到WebView的`setWebContentsDebuggingEnabled(boolean))`方法，这是Android4.4以后才可以用的一个API。
 
 - compileSdkVersion：是你SDK的版本号，也就是你在编程时引用的`android.jar`的版本。一般都会和targetSDKVersion相等，或者比targetSDKVersion高。
 
@@ -62,7 +64,7 @@ android {
 
 # 如何在运行时申请权限 & 官方的权限分级列表
 
-- 关于如何适配到6.0的权限系统，网上有非常多的例子，我觉得看了这篇文章基本上就OK了，推荐一下：[things-you-need-to-know-about-android-m-permission](http://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition)
+- 关于如何适配到6.0的权限系统，网上有非常多的例子，我觉得看了这篇文章基本上就OK了，因为网上很多貌似都翻译自这篇文章，强力推荐一下：[things-you-need-to-know-about-android-m-permission](http://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition)
 
 - Google官方的RuntimePermissions介绍：[runtime-permissions](https://developer.android.com/preview/features/runtime-permissions.html)
 
@@ -74,7 +76,7 @@ android {
 
 # 举个栗子（坑）：WRITE_EXTERNAL_STORGE的Android6.0适配问题
 
-见下篇博客[Android6.0权限适配之WRITE_EXTERNAL_STORAGE（SD卡写入）](http://)
+见下篇博客[Android6.0权限适配之WRITE_EXTERNAL_STORAGE（SD卡写入）](http://unclechen.github.io/2016/03/06/Android6.0权限适配之SD卡写入/)
 
 
 
