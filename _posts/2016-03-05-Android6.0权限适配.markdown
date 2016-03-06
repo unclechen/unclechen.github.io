@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Android6.0权限适配简介
+date: '2016-03-05'
 ---
 
 Android6.0发布距离现在快1年了，虽然它市场占有率仍在龟速上升中，但还是有一些App开发者已经在打包应用时将`targetSDKVersion`设置到了`23`，也就是说把App适配到了Android6.0。以前调用Android系统中需要声明权限的API时，只需要在`AndroidManifest.xml`文件中一次性列出来。但是如果在`build.gradle`文件里将`targetSDKVersion`设为`23`以后，除了在`AndroidManifest.xml`声明，我们还需要根据App运行时所在的手机的系统版本，在调用权限之前向用户申请授权，并在用户允许以后，才可以安全的调用对应的API。

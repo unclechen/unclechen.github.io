@@ -4,11 +4,10 @@ highlighter:      pygments
 
 # Permalinks
 permalink:        pretty
-relative_permalinks: true
 
 # Setup
 title:            Uncle Chen
-description:      '吃下恶魔果实，我就能变成超级赛亚人'
+description:      '吃下恶魔果实，我就能变成超级赛亚人.'
 url:              http://unclechen.github.io
 baseurl:          /
 logo:             /content/images/me.jpg
@@ -18,7 +17,7 @@ author:
   url:            https://github.com/unclechen
   email: 		  noughtchen2015@gmail.com
 
-paginate:         7
+paginate:         5
 
 disqus_shortname: unclechen
 
