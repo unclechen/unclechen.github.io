@@ -68,6 +68,8 @@ android {
 
 - Google官方的RuntimePermissions介绍：[runtime-permissions](https://developer.android.com/preview/features/runtime-permissions.html)
 
+- Google官方的dangerous权限及分组：[permissions: normal-dangerous](https://developer.android.com/intl/zh-cn/guide/topics/security/permissions.html#normal-dangerous)
+
 - 开源社区-权限适配组件：伟大的开源社区已经有轮子了，可以学习一下！
 	- [PermissionHelper](https://github.com/k0shk0sh/PermissionHelper)
 	- [PermissionsDispatcher](https://github.com/hotchemi/PermissionsDispatcher)
