@@ -69,7 +69,7 @@ cover_image: '/content/images/cover/android-n.png'
 
 - 2.新建一个虚拟机。在Android Studio中打开`Tool-Android-AVD Manager`，点击`Create Virtual Device`，选择一个设备（建议选择Nexus 5X, Nexus 6P, Nexus 9其中一个）。然后选择下一步，需要注意一点的是，虚拟机只支持x86的Android N系统镜像。好了，你可以一直点击下一步知道这个新的虚拟机创建完成，然后启动它吧。为了获得最佳的体验，建议安装`Android Studio 2.1 Preview`，因为Android Studio2.0开始，虚拟机的速度得到了几十倍的提升。
 
-> 注意: If you're currently using Android Studio 2.0 Beta, there's a known issue that prevents you from creating AVDs with the N Preview system images, so you currently need to use the Android Studio 2.1 preview to create AVDs.
+> 注意: 如果你现在使用的是Android Studio 2.0 Beta, 它有个已知的bug，是无法用Android N Preview的镜像来创建虚拟机的, 所以你需要安装Android Studio 2.1 preview 来新建虚拟机。
 
 > For more information about creating virtual devices, see [Managing Virtual Devices](http://developer.android.com/tools/devices/index.html).
 
