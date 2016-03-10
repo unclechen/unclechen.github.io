@@ -12,7 +12,7 @@ cover_image: '/content/images/cover/android-n.png'
 - 使用模拟器
 
 # 1.真机安装
-简单方便，[Android Beta Program官网](https://www.google.com/android/beta?pli=1)官网注册你的设备，然后。我是把手机插在电脑上的，登录我的Google账号以后，就检测出我的设备了，然后再点击下图中的`ENROLL DEVICE`（由于我已经点击过了，所以现在显示的是`UNENROLL DEVICE`），手机秒秒地就收到官方的推送！爽就一个字，点击进入下载，850.6M。
+简单方便，[Android Beta Program](https://www.google.com/android/beta?pli=1)官网注册你的设备，然后。我是把手机插在电脑上的，登录我的Google账号以后，就检测出我的设备了，然后再点击下图中的`ENROLL DEVICE`（由于我已经点击过了，所以现在显示的是`UNENROLL DEVICE`），手机秒秒地就收到官方的推送！爽就一个字，点击进入下载，850.6M。
 
 ![enroll-device](/content/images/enroll-device.png)
 
