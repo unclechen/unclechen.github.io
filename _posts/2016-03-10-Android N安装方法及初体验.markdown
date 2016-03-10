@@ -19,7 +19,7 @@ cover_image: '/content/images/cover/android-n.png'
 下载完成后直接重启安装，大概需要5分钟。然后我手机上哪些应用喜欢自己后台一顿乱跑的就全部暴露出来了，可能是因为适配的原因很多应用都开始各种崩溃。首先是猎豹清理大师，接着是虾米音乐啊，淘宝啊，这些的，甚至有的SDK都开始不停地弹出对话框和Toast，“阿里百川XXXX”，真的是要哭了，我连关闭弹窗时间都来不及啊。。。。
 
 # 2.下载系统镜像，线刷
-其实我觉得有设备的同学，通过OTA是最好的。但是如果你没有翻墙的梯子，那可能就只能线刷了。下载地址在[这里](http://developer.android.com/intl/zh-cn/preview/download.html#device-preview)。
+其实我觉得有设备的同学，通过OTA是最好的。但是如果你没有翻墙的梯子，那可能就只能线刷了。下载地址在[这里](http://developer.android.com/intl/zh-cn/preview/download.html#device-preview)。如果有好心搬运到墙内，大家才可以下载。。
 
 支持的机型为：
 
@@ -31,7 +31,7 @@ cover_image: '/content/images/cover/android-n.png'
 
 **获取途径有两种：**
 
-- 编译好的(Android Open Source Project)[https://source.android.com/]
+- 编译好的[Android Open Source Project](https://source.android.com/)
 - Android SDK下面的`platform-tools/`目录，记得打开你的`SDK Manager`下载最新的Android SDK Platform-tools，具体版本可以看看**模拟器**部分。
 
 下载好了`Fastboot`工具以后，把它添加到系统的环境变量，这样下面我们要用的`flash-all`脚本才能在命令行中找到它。例如我的`fastboot`在`/Users/noughtchen/Library/Android/sdk/platform-tools/fastboot`下。
