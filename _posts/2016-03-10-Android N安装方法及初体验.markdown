@@ -27,7 +27,9 @@ cover_image: '/content/images/cover/android-n.png'
 
 下面开始刷机，官方的步骤在这里[Factory Images for Nexus Devices](https://developers.google.com/android/nexus/images#instructions)。
 
-首先下载最新的`Fastboot`工具，获取途径有两种：
+## 2.1首先下载最新的`Fastboot`工具
+
+**获取途径有两种：**
 
 - 编译好的(Android Open Source Project)[https://source.android.com/]
 - Android SDK下面的`platform-tools/`目录，记得打开你的`SDK Manager`下载最新的Android SDK Platform-tools，具体版本可以看看**模拟器**部分。
@@ -36,9 +38,9 @@ cover_image: '/content/images/cover/android-n.png'
 
 > 注意：刷机会删除掉手机上已有的所有用户数据，请备份好自己个人数据如手机上的照片。
 
-由于需要unlock bootloader来刷机，请先确保`开发者选项`中的`OEM unlocking`是选中状态。
+**由于需要unlock bootloader来刷机，请先确保`开发者选项`中的`OEM unlocking`是选中状态。**
 
-下面正式进入刷机：
+## 2.2下面正式进入刷机
 
 - 1.下载合适的系统镜像，下载列表在[这里](http://developer.android.com/intl/zh-cn/preview/download.html#device-preview)。然后解压到你的硬盘上。
 - 2.使用USB把手机连接到电脑上。
@@ -56,7 +58,7 @@ cover_image: '/content/images/cover/android-n.png'
 
 在一些设备上，Lock bootloader也会删除数据。如果你想要再次刷机，那么就得按照上面的步骤重新再fastboot启动设备，然后unlock bootloader。 
 
-刷机有风险，操作需谨慎。建议动手能力比较强的同学可以试试，我也只是把官网的步骤翻译解释了一下，手机变砖了不要来找我。。。
+**刷机有风险，操作需谨慎!!!**建议动手能力比较强的同学可以试试，我也只是把官网的步骤翻译解释了一下，手机变砖了不要来找我。。。
 
 # 3.模拟器
 这个简单，低成本，无风险。。其实我觉得没有设备的同学，通过这个也是可以体验一下。
