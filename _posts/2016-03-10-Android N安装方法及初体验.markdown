@@ -2,6 +2,7 @@
 layout: post
 title: Android N安装方法及初体验
 date: '2016-03-10'
+cover_image: '/content/images/cover/android-n.png'
 ---
 
 今天早上一睁眼，手机上就收到几条Android N的新闻，瞅了一眼发现手里的Nexus6可以安装beta版，于是迫不及待的开始看怎么安装了。直接看[官网](http://developer.android.com/intl/zh-cn/preview/download.html#device-preview)，一共三种安装方式：
@@ -11,13 +12,21 @@ date: '2016-03-10'
 - 使用模拟器
 
 # 1.真机安装
-简单方便，[Android Beta Program官网](https://www.google.com/android/beta?pli=1)官网注册你的设备，然后。我是把手机插在电脑上的，然后点击下图中的`ENROLL DEVICE`（由于我已经点击过了，所以现在显示的是`UNENROLL DEVICE`），手机秒秒地就收到官方的推送！爽就一个字，点击进入下载，850.6M。
+简单方便，[Android Beta Program官网](https://www.google.com/android/beta?pli=1)官网注册你的设备，然后。我是把手机插在电脑上的，登录我的Google账号以后，就检测出我的设备了，然后再点击下图中的`ENROLL DEVICE`（由于我已经点击过了，所以现在显示的是`UNENROLL DEVICE`），手机秒秒地就收到官方的推送！爽就一个字，点击进入下载，850.6M。
 
-![enroll-device](content/image/enroll-device.png)
+![enroll-device](/content/images/enroll-device.png)
 
-下载完成后直接重启安装，大概需要5分钟。
+下载完成后直接重启安装，大概需要5分钟。然后我手机上哪些应用喜欢自己后台一顿乱跑的就全部暴露出来了，首先是猎豹清理大师，接着是虾米音乐啊，淘宝啊，这些的，甚至有的SDK都开始不停地弹出Toast，“阿里百川XXXX”，真的是要哭了，关闭弹窗时间都来不及啊。。。。
 
-# 2.占坑
+# 2.下载系统镜像，线刷
+其实我觉得有设备的同学，通过OTA是最好的。但是如果你没有翻墙的梯子，那可能就只能线刷了。
+
+# 3.模拟器
+其实我觉得没有设备的同学，通过这个也是可以体验一下的。
+
+# 4.上手体验
+
+不说别的，今天发现一个一个特别好的Android网站[DROIDLIFE](http://www.droid-life.com)，推荐给大家，这里面有Android相关的新闻视频等等，非常的棒。今天他们已经出了一个视频，介绍了Android 7.0的新特性了，例如设置菜单、通知栏、分屏等等，iOS去年就出了画中画特性，但是只能在iPad上用，Android 7.0在手机上也支持应用分屏的哟，赶紧体验一下吧。[heres-everything-new-in-android-n-developer-preview](http://www.droid-life.com/2016/03/09/heres-everything-new-in-android-n-developer-preview/)
 
 
 
