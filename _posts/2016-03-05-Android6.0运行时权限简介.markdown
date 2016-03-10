@@ -74,6 +74,7 @@ android {
 	- [PermissionHelper](https://github.com/k0shk0sh/PermissionHelper)
 	- [PermissionsDispatcher](https://github.com/hotchemi/PermissionsDispatcher)
 	- [PermissionGen](https://github.com/lovedise/PermissionGen)
+	- [TedPermission](https://github.com/ParkSangGwon/TedPermission):不用自己调用checkSelfPermission(), requestPermissions(),然后再处理回调onRequestPermissionsResult(), onActivityResult()。只要一行代码，设置一个listener就可以监听授权的结果，使用起来非常简单。内部实现采用的是类似event bus的otto实现的。
 
 
 # 举个栗子（坑）：WRITE_EXTERNAL_STORGE的Android6.0适配问题
