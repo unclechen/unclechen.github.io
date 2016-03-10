@@ -1,0 +1,30 @@
+---
+layout: post
+title: Android N安装方法及初体验
+date: '2016-03-10'
+---
+
+今天早上一睁眼，手机上就收到几条Android N的新闻，瞅了一眼发现手里的Nexus6可以安装beta版，于是迫不及待的开始看怎么安装了。直接看[官网](http://developer.android.com/intl/zh-cn/preview/download.html#device-preview)，一共三种安装方式：
+
+- 在真机上直接安装，通过OTA的方式升级
+- 在真机上用Android N的系统镜像安装
+- 使用模拟器
+
+# 1.真机安装
+简单方便，[Android Beta Program官网](https://www.google.com/android/beta?pli=1)官网注册你的设备，然后。我是把手机插在电脑上的，然后点击下图中的`ENROLL DEVICE`（由于我已经点击过了，所以现在显示的是`UNENROLL DEVICE`），手机秒秒地就收到官方的推送！爽就一个字，点击进入下载，850.6M。
+
+![enroll-device](content/image/enroll-device.png)
+
+下载完成后直接重启安装，大概需要5分钟。
+
+# 2.占坑
+
+
+
+
+
+
+
+
+
+
