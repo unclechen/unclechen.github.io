@@ -5,11 +5,13 @@ date: '2016-03-12'
 cover_image: '/content/images/cover/muti-screen.png'
 ---
 
-上手了Android N Preview，第一件不能错过的就是App分屏的支持。现在原生系统可以支持横屏时让两个App并排或者竖屏时上下排放了，其实早先在国内部分厂商以及鹅厂的微信App就已经支持在大尺寸手机上进行分屏浏览了。此外在Android TV上，原生系统也可以支持App实现画中画，例如用户可以一边看视频一边操作其他的应用。其实以前就有视频播放器，如MoboPlayer就已经实现了按下Home键回到首页时以迷你播放器的形式进行播放。这种体验非常棒，我猜测一般是使用WindowManager来添加悬浮播放器界面的。
+上手了Android N Preview，第一个不能错过的新特性就是App分屏的支持。Android7.0原生系统就可以支持两个App横屏并排或者竖屏上下摆放了。第二个新特性就是在Android TV上，原生系统也可以支持App实现画中画，用户可以一边看视频一边操作其他的应用。
 
-下面是我参考[官方的文档](http://developer.android.com/intl/zh-cn/preview/features/multi-window.html#running)进行的实践。
+其实早先在国内部分厂商以及鹅厂的微信App就已经支持在大尺寸手机上进行分屏浏览。也有一些视频播放器，如MoboPlayer就已经实现了按下Home键回到首页时以迷你播放器的形式进行播放。这种体验非常棒，我猜测一般是通过WindowManager来添加悬浮播放器界面的。但是这次是原生系统增加了对这种特性的支持，相信我们会有更多理由为用户的体验做出更多新的尝试。
 
-**官方说法**
+下面介绍一下我参考[multi-window-support](http://developer.android.com/intl/zh-cn/preview/features/multi-window.html#running)对App分屏模式进行的实践。
+
+首先引用一下官方的说法：
 
 > 如果你使用Android N Preview SDK来构建你的App，你可以给添加App一些分屏浏览的配置。例如设置Activity的最小尺寸，也可以禁止自己的App进入分屏模式，保证你的App只能在全屏模式下展示。
 
@@ -50,7 +52,7 @@ Android N允许用户一次在屏幕中使用两个App，例如将屏幕一分�
 
 这两个App对于用户都是**始终可见**的，当它们处于`paused`状态时，也将比那些后台的处于**不可见的**App得到更高系统优先级。假如我一直按`back`返回，当这两个其中的一个App的task返回栈已经为空时，那么系统的`back`按钮将响应屏幕上的另外一个App。这就是对上面那段话的实践和解释。
 
-那么这种`可见的pause`的状态将带来什么影响呢？官方说法是：
+那么这种`可见的pause`的状态将带来什么影响呢？引用下官方说法是：
 
 > 注意：在分屏模式中，一个App可以在对用户可见的状态下进入`paused`状态，这与以往是不同的。所以你的App在处理业务时，也应该知道自己什么时候应该真正的`暂停`。例如一个视频播放器，如果进入了分屏模式，就不应该在`onPaused()`回调中暂停视频播放，而应该在`onStop()`回调中才暂停视频，然后在`onStart`回调中恢复视频播放。关于如果知道自己进入了分屏模式，在`Android N`的Activity API中，增加了一个`void onMultiWindowChanged(boolean inMultiWindow)`回调，所以我们可以在这个回调知道自己是不是进入了分屏模式。
 
@@ -139,6 +141,9 @@ android {
 
 下一篇[Android N App分屏模式完全解析（下）](http://unclechen.github.io/2016/03/13/Android-N-App分屏模式完全解析-下篇/)将介绍一下分屏模式下运行的App将有哪些行为回调以及应该怎么处理等。
 
+---
+
+ps：封面图片来自于谷歌官网
 
 
 
