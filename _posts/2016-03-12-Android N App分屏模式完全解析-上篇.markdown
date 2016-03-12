@@ -29,6 +29,7 @@ Android N允许用户一次在屏幕中使用两个App，例如将屏幕一分�
 
 1. 点击右下角的方块，进入任务管理器，长按一个App的标题栏，将其拖入屏幕的高亮区域，这个App金进入了分屏模式。然后在任务管理器中选择另一个App，单击它使得这个App也进入分屏模式。
 2. 打开一个App，然后长按右下角的方块，此时已经打开的这个App将进入分屏模式。然后在屏幕上的任务管理器中选择另外一个App，单击它使得这个App也进入分屏模式。
+3. 最新发现：下拉通知栏，长按右上角的设置图标，将开启隐藏设置功能`“系统界面调谐器”`，进入设置界面，最下方有系统界面调谐器选项，进入后选择`“Other”->“启用分屏上滑手势”`，就可以从任务管理器上上滑进入分屏模式了。具体操作是`当一个App已经处于全屏模式时，用手指从右下角的小方块向上滑动`。这个设置将来在正式版可能有变化，所以还是不要太依赖。
 
 用户还可以在这两个App之间拖动数据，例如将一个App的Activity上的文件拖动到另外一个App的Activity中去。具体的实现下面会介绍，谷歌官方也有[拖拽相关的教程](http://developer.android.com/intl/zh-cn/guide/topics/ui/drag-drop.html)。
 
@@ -36,23 +37,24 @@ Android N允许用户一次在屏幕中使用两个App，例如将屏幕一分�
 
 首先要说明的一点是，分屏模式不会改变原有Activity的声明周期。
 
-> 在分屏模式下，用户最近操作过的处于活动状态的Activity将被系统视为`topmost`。而其他的Activity都属于`paused`状态，即使它是一个对用户可见的Activity。但是这些可见的处于`paused`状态的Activity将比那些不可见的处于`paused`状态的Activity得到更高优先级的响应。当用户在一个可见的`paused`状态的Activity上操作时，它将得到恢复`resumed`状态，并被系统视为`topmost`。而之前那个那个处于`topmpst`的Activity将变成`paused`状态。
+官方说法是：
+> 在分屏模式下，用户最近操作、激活过的Activity将被系统视为`topmost`。而其他的Activity都属于`paused`状态，即使它是一个对用户可见的Activity。但是这些可见的处于`paused`状态的Activity将比那些不可见的处于`paused`状态的Activity得到更高优先级的响应。当用户在一个可见的`paused`状态的Activity上操作时，它将得到恢复`resumed`状态，并被系统视为`topmost`。而之前那个那个处于`topmpst`的Activity将变成`paused`状态。
 
 怎么理解这段话，看下图：
 
 ![two-app](/content/images/two-apps.png)
 
-这里我打开了两个App，上面的是一个Gmail App，下面这个是一个Demo App（[ApkParser](http://)是个开源应用，能够解析Apk，后面会用到它）。现在这两个App都是进入了`分屏模式`，我们还可以拖动中间这条白线来调整两个App占用的大小。
+其实就是说处于分屏模式下的两个Ap各自处于生命周期的什么状态。上图中我打开了两个App，上面的是一个Gmail App，下面这个是一个Demo App（[ApkParser](http://)先感谢作者的分享~）是个开源应用，能够解析Apk，后面会用到它）。现在这两个App都是进入了`分屏模式`，我们还可以拖动中间这条白线来调整两个App占用的大小。
 
-我点击了Gmail，浏览了一封邮件，那么此时Gmail就被系统视为`topmost`状态，它是处于`resumed`状态的，而下面的ApkPaserDemo虽然对用户可见，但是**它仍然是处于`paused`状态**的。此时要是我再点击了系统的`back`按钮返回，响应的是上面的**Gmail**（因为它被视为topmost）。接着我点击了下面的**ApkParser**，那么它将从`paused`状态变成`resume`状态。而上面的Gmail将会进入`paused`状态。
+我点击了Gmail，浏览了一封邮件，那么此时**Gmail**就被系统视为`topmost`状态，它是处于`resumed`状态的，而下面的**ApkPaserDemo**虽然对用户可见，但是**它仍然是处于`paused`状态**的。接着我点击了系统的`back`按钮返回，响应的是上面的**Gmail**（因为它被视为topmost）。然后我又点击了下面的**ApkParserDemo**，那么它将从`paused`状态变成`resumed`状态。而上面的**Gmail**将会进入`paused`状态。
 
-这两个App对于用户都是始终可见的，当它们处于`paused`状态时，也将比那些后台的App得到更高系统优先级。假如我一直按`back`返回，当这两个其中的一个App的task返回栈已经为空时，那么系统的`back`按钮将响应屏幕上的另外一个App。这就是对上面那段话的实践和解释。
+这两个App对于用户都是**始终可见**的，当它们处于`paused`状态时，也将比那些后台的处于**不可见的**App得到更高系统优先级。假如我一直按`back`返回，当这两个其中的一个App的task返回栈已经为空时，那么系统的`back`按钮将响应屏幕上的另外一个App。这就是对上面那段话的实践和解释。
 
 那么这种`可见的pause`的状态将带来什么影响呢？官方说法是：
 
-> 注意：在分屏模式中，一个App可以在对用户可见的状态下进入`paused`状态，这与以往是不同的。所以你的App在处理业务时，也应该知道自己什么时候应该真正的`暂停`。例如一个视频播放器，如果进入了分屏模式，就不应该在`onPaused`回调中暂停视频播放，而应该在`onStop`回调中才暂停视频，然后在`onStart`回调中恢复视频播放。关于如果知道自己进入了分屏模式，在`Android N`的Activity API中，增加了一个`void onMultiWindowChanged(boolean inMultiWindow)`回调，所以我们可以在这个回调知道自己是不是进入了分屏模式。
+> 注意：在分屏模式中，一个App可以在对用户可见的状态下进入`paused`状态，这与以往是不同的。所以你的App在处理业务时，也应该知道自己什么时候应该真正的`暂停`。例如一个视频播放器，如果进入了分屏模式，就不应该在`onPaused()`回调中暂停视频播放，而应该在`onStop()`回调中才暂停视频，然后在`onStart`回调中恢复视频播放。关于如果知道自己进入了分屏模式，在`Android N`的Activity API中，增加了一个`void onMultiWindowChanged(boolean inMultiWindow)`回调，所以我们可以在这个回调知道自己是不是进入了分屏模式。
 
-当App进入分屏模式后，将会触发Activity的`onConfigurationChanged()`，这与以前我们在处理App从`横竖屏切换`时的方法一样，不同于的是这里是宽/高都有所改变，而`横竖屏切换`是宽高互换。至于如何处理，可以参考官方文档[处理运行时变更](http://developer.android.com/intl/zh-cn/guide/topics/resources/runtime-changes.html)。我们最好处理好运行时状态的改变，否则我们的App将被重新创建，即重新以新的宽高尺寸`onCreate`一遍。
+当App进入分屏模式后，将会触发Activity的`onConfigurationChanged()`，这与以前我们在处理App从`横竖屏切换`时的方法一样，不同于的是这里是宽/高都有所改变，而`横竖屏切换`是宽高互换。至于如何处理，可以参考官方文档[处理运行时变更](http://developer.android.com/intl/zh-cn/guide/topics/resources/runtime-changes.html)。我们最好处理好运行时状态的改变，否则我们的App将被重新创建，即重新以新的宽高尺寸`onCreate()`一遍。
 
 如果用户重新调整窗口的大小，系统在**必要的时候**也会触发`onConfigurationChanged()`。如果App的尺寸处于被拖动中还没有完全绘制完成时，系统将暂时用主题中的`windowBackground`属性来填充这些区域。
 
@@ -86,9 +88,9 @@ android {
 
 如果这个属性被设为`false`，那么你的App将无法进入分屏模式，如果你在打开这个App时，长按右下角的小方块，App将仍然处于全屏模式，系统会弹出Toast提示你无法进入分屏模式。这个属性在你**target**到`Android N`后，`android:resizeableActivity`的默认值就是`true`。
 
-> 注意：假如你**没有适配到Android N**（`target < Android N`），打包App时的`compileSDKVersion < Android N`，你的App也是可以支持分屏的！！！！原因在于：如果你的App**没有** 设置 **`仅允许Activity竖屏/横屏`**，即没有设置类型**`android:screenOrientation="XXX"`属性**时，运行Android N系统的设备还是可以会将你的App认为**分屏的！！**但是这时候系统是不保证运行时的稳定性的，在进入分屏模式时，系统也会弹出Toast来提示你说明这个风险。
+> 注意：假如你**没有适配到Android N**（`target < Android N`），打包App时的`compileSDKVersion < Android N`，你的App也是可以支持分屏的！！！！原因在于：如果你的App**没有** 设置 **`仅允许Activity竖屏/横屏`**，即没有设置类型**`android:screenOrientation="XXX"`属性**时，运行Android N系统的设备还是 **可以** 将你的App **分屏！！** 但是这时候系统是不保证运行时的稳定性的，在进入分屏模式时，系统首先也会弹出Toast来提示你说明这个风险。
 
-所以其实我们在视频里看到那么多系统自带的App都是可以分屏浏览，原因就在于此。这些App其实也并没有全部适配到Android N。我不是骗你，不信你用`ApkParser`打开前面分屏过Gmail App的xml文件看看！
+所以其实我们在视频里看到那么多系统自带的App都是可以分屏浏览，原因就在于此。**这些App其实也并没有全部适配到Android N**。我不是骗你，不信你用`ApkParser`打开前面分屏过Gmail App的xml文件看看！
 
 ![Gmail-xml](/content/images/gmail-xml.png)
 
@@ -135,7 +137,7 @@ android {
         </activity>
 ```
 
-下一篇[Android N App分屏完全解析（下）先占个坑](http://)将介绍一下分屏模式下运行的App将有哪些行为回调以及应该怎么处理等。
+下一篇[Android N App分屏模式完全解析（下）先占个坑](http://)将介绍一下分屏模式下运行的App将有哪些行为回调以及应该怎么处理等。
 
 
 
