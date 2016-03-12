@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Android N App分屏完全解析（上）
+title: Android N App分屏模式完全解析（上）
 date: '2016-03-12'
 cover_image: '/content/images/cover/muti-screen.png'
 ---
