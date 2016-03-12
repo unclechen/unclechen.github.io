@@ -44,7 +44,7 @@ Android N允许用户一次在屏幕中使用两个App，例如将屏幕一分�
 
 ![two-app](/content/images/two-apps.png)
 
-其实就是说处于分屏模式下的两个Ap各自处于生命周期的什么状态。上图中我打开了两个App，上面的是一个Gmail App，下面这个是一个Demo App（[ApkParser](http://)先感谢作者的分享~）是个开源应用，能够解析Apk，后面会用到它）。现在这两个App都是进入了`分屏模式`，我们还可以拖动中间这条白线来调整两个App占用的大小。
+其实就是说处于分屏模式下的两个Ap各自处于生命周期的什么状态。上图中我打开了两个App，上面的是一个Gmail App，下面这个是一个Demo App（[ApkParser](https://github.com/jaredrummler/APKParser)先感谢作者的分享~）是个开源应用，能够解析Apk，后面会用到它）。现在这两个App都是进入了`分屏模式`，我们还可以拖动中间这条白线来调整两个App占用的大小。
 
 我点击了Gmail，浏览了一封邮件，那么此时**Gmail**就被系统视为`topmost`状态，它是处于`resumed`状态的，而下面的**ApkPaserDemo**虽然对用户可见，但是**它仍然是处于`paused`状态**的。接着我点击了系统的`back`按钮返回，响应的是上面的**Gmail**（因为它被视为topmost）。然后我又点击了下面的**ApkParserDemo**，那么它将从`paused`状态变成`resumed`状态。而上面的**Gmail**将会进入`paused`状态。
 
@@ -137,7 +137,7 @@ android {
         </activity>
 ```
 
-下一篇[Android N App分屏模式完全解析（下）先占个坑](http://)将介绍一下分屏模式下运行的App将有哪些行为回调以及应该怎么处理等。
+下一篇[Android N App分屏模式完全解析（下）](http://unclechen.github.io/2016/03/13/Android-N-App分屏模式完全解析-下篇/)将介绍一下分屏模式下运行的App将有哪些行为回调以及应该怎么处理等。
 
 
 
