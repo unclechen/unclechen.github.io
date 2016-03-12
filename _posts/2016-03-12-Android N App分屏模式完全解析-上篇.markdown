@@ -54,15 +54,15 @@ Android N允许用户一次在屏幕中使用两个App，例如将屏幕一分�
 
 那么这种`可见的pause`的状态将带来什么影响呢？引用下官方说法是：
 
-> 注意：在分屏模式中，一个App可以在对用户可见的状态下进入`paused`状态，这与以往是不同的。所以你的App在处理业务时，也应该知道自己什么时候应该真正的`暂停`。例如一个视频播放器，如果进入了分屏模式，就不应该在`onPaused()`回调中暂停视频播放，而应该在`onStop()`回调中才暂停视频，然后在`onStart`回调中恢复视频播放。关于如果知道自己进入了分屏模式，在`Android N`的Activity API中，增加了一个`void onMultiWindowChanged(boolean inMultiWindow)`回调，所以我们可以在这个回调知道自己是不是进入了分屏模式。
+> 在分屏模式中，一个App可以在对用户可见的状态下进入`paused`状态，所以你的App在处理业务时，应该知道自己什么时候应该真正的`暂停`。例如一个视频播放器，如果进入了分屏模式，就不应该在`onPaused()`回调中暂停视频播放，而应该在`onStop()`回调中才暂停视频，然后在`onStart`回调中恢复视频播放。关于如果知道自己进入了分屏模式，在`Android N`的Activity类中，增加了一个`void onMultiWindowChanged(boolean inMultiWindow)`回调，所以我们可以在这个回调知道App是不是进入了分屏模式。
 
-当App进入分屏模式后，将会触发Activity的`onConfigurationChanged()`，这与以前我们在处理App从`横竖屏切换`时的方法一样，不同于的是这里是宽/高都有所改变，而`横竖屏切换`是宽高互换。至于如何处理，可以参考官方文档[处理运行时变更](http://developer.android.com/intl/zh-cn/guide/topics/resources/runtime-changes.html)。我们最好处理好运行时状态的改变，否则我们的App将被重新创建，即重新以新的宽高尺寸`onCreate()`一遍。
+当App进入分屏模式后，将会触发Activity的`onConfigurationChanged()`，这与以前我们在处理App从`横竖屏切换`时的方法一样，不同于的是这里是宽/高有所改变，而`横竖屏切换`是宽高互换。至于如何处理，可以参考官方文档[处理运行时变更](http://developer.android.com/intl/zh-cn/guide/topics/resources/runtime-changes.html)。我们最好处理好这种运行时状态的改变，否则我们的Activity将被重新创建，即以新的宽高尺寸重新`onCreate()`一遍。
 
-如果用户重新调整窗口的大小，系统在**必要的时候**也会触发`onConfigurationChanged()`。如果App的尺寸处于被拖动中还没有完全绘制完成时，系统将暂时用主题中的`windowBackground`属性来填充这些区域。
+注意，如果用户重新调整窗口的大小，系统在**必要的时候**也可能触发`onConfigurationChanged()`。当App的窗口被用户拖动，其尺寸改变后界面的还没有绘制完成时，系统将用App主题中的`windowBackground`属性指定的背景来暂时填充这些区域。
 
 # 如何设置App的分屏模式
 
-说了一堆分屏的操作方法、生命周期，那么作为开发者，怎样才能让App进入`分屏`模式呢？
+说了一堆分屏的操作方法、生命周期，那么作为开发者，怎样才能让App进入`分屏`模式呢？有下面这几个属性。
 
 ## android:resizeableActivity
 
