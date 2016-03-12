@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Android N安装方法及初体验
+title: Android N安装方法及上手体验
 date: '2016-03-10'
 cover_image: '/content/images/cover/android-n.png'
 ---
