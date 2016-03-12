@@ -35,7 +35,7 @@ Android N允许用户一次在屏幕中使用两个App，例如将屏幕一分�
 
 # 分屏模式的生命周期
 
-首先要说明的一点是，分屏模式没有改变原有Activity的生命周期。
+首先要说明的一点是，分屏模式没有改变Activity的生命周期。
 
 官方说法是：
 > 在分屏模式下，用户最近操作、激活过的Activity将被系统视为`topmost`。而其他的Activity都属于`paused`状态，即使它是一个对用户可见的Activity。但是这些可见的处于`paused`状态的Activity将比那些不可见的处于`paused`状态的Activity得到更高优先级的响应。当用户在一个可见的`paused`状态的Activity上操作时，它将得到恢复`resumed`状态，并被系统视为`topmost`。而之前那个那个处于`topmpst`的Activity将变成`paused`状态。
