@@ -90,7 +90,7 @@ android {
 
 如果这个属性被设为`false`，那么你的App将无法进入分屏模式，如果你在打开这个App时，长按右下角的小方块，App将仍然处于全屏模式，系统会弹出Toast提示你无法进入分屏模式。这个属性在你**target**到`Android N`后，`android:resizeableActivity`的默认值就是`true`。
 
-> 注意：假如你**没有适配到Android N**（`target < Android N`），打包App时的`compileSDKVersion < Android N`，你的App也是可以支持分屏的！！！！原因在于：如果你的App**没有** 设置 **`仅允许Activity竖屏/横屏`**，即没有设置类型**`android:screenOrientation="XXX"`属性**时，运行Android N系统的设备还是 **可以** 将你的App **分屏！！** 但是这时候系统是不保证运行时的稳定性的，在进入分屏模式时，系统首先也会弹出Toast来提示你说明这个风险。
+> 注意：假如你**没有适配到Android N**（`targetSDKVersion < Android N`），打包App时的`compileSDKVersion < Android N`，你的App也是可以支持分屏的！！！！原因在于：如果你的App**没有** 设置 **`仅允许Activity竖屏/横屏`**，即没有设置类型**`android:screenOrientation="XXX"`属性**时，运行Android N系统的设备还是 **可以** 将你的App **分屏！！** 但是这时候系统是不保证运行时的稳定性的，在进入分屏模式时，系统首先也会弹出Toast来提示你说明这个风险。
 
 所以其实我们在视频里看到那么多系统自带的App都是可以分屏浏览，原因就在于此。**这些App其实也并没有全部适配到Android N**。我不是骗你，不信你用`ApkParser`打开前面分屏过Gmail App的xml文件看看！
 
