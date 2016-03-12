@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Android N App分屏模式完全解析（上）
-date: '2016-03-12'
+date: '2016-03-12 00:00:00'
 cover_image: '/content/images/cover/muti-screen.png'
 ---
 
@@ -139,7 +139,7 @@ android {
         </activity>
 ```
 
-下一篇[Android N App分屏模式完全解析（下）](http://unclechen.github.io/2016/03/13/Android-N-App分屏模式完全解析-下篇/)将介绍一下分屏模式下运行的App将有哪些行为回调以及应该怎么处理等。
+下一篇[Android N App分屏模式完全解析（下）](http://unclechen.github.io/2016/03/12/Android-N-App分屏模式完全解析-下篇/)将介绍一下分屏模式下运行的App将有哪些行为回调以及应该怎么处理等。
 
 ---
 
