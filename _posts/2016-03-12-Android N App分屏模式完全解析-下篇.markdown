@@ -61,19 +61,112 @@ Android N中新增了一些方法来支持App的分屏模式。同时在分屏�
 
 ## 支持拖拽
 
-在[上一篇](http://unclechen.github.io/2016/03/12/Android-N-App分屏模式完全解析-上篇/)博客里也提到过，现在我们可以实现在两个分屏模式的App之间拖动内容了。Android N Preview SDK中，`View`已经增加支持App之间拖动的API。具体的类和方法，可以参考[N Preview SDK Reference](http://developer.android.com/preview/setup-sdk.html#docs-dl)
+在[上一篇](http://unclechen.github.io/2016/03/12/Android-N-App分屏模式完全解析-上篇/)博客里也提到过，现在我们可以实现在两个分屏模式的Activity之间拖动内容了。Android N Preview SDK中，`View`已经增加支持Activity之间拖动的API。具体的类和方法，可以参考[N Preview SDK Reference](http://developer.android.com/preview/setup-sdk.html#docs-dl)，主要用到下面几个新的接口：
 
-- android.view.DropPermissions：允许App接收拖拽的权限的token。
-- View.startDragAndDrop()：[View.startDrag()](http://developer.android.com/intl/zh-cn/reference/android/view/View.html#startDrag(android.content.ClipData,%20android.view.View.DragShadowBuilder,%20java.lang.Object,%20int)) 的替代方法，需要传递`View.DRAG_FLAG_GLOBAL`来实现跨Activity拖拽。如果需要将URI的权限传递给接收方Activity，请根据需要设置`View.DRAG_FLAG_GLOBAL_URI_READ`或者`View.DRAG_FLAG_GLOBAL_URI_WRITE`。
+- View.startDragAndDrop()：[View.startDrag()](http://developer.android.com/intl/zh-cn/reference/android/view/View.html#startDrag(android.content.ClipData,%20android.view.View.DragShadowBuilder,%20java.lang.Object,%20int)) 的替代方法，需要传递`View.DRAG_FLAG_GLOBAL`来实现跨Activity拖拽。如果需要将URI权限传递给接收方Activity，还可以根据需要设置`View.DRAG_FLAG_GLOBAL_URI_READ`或者`View.DRAG_FLAG_GLOBAL_URI_WRITE`。
 - View.cancelDragAndDrop()：由拖拽的发起方调用，取消当前进行中的拖拽。
-- View.updateDragShadow()：有拖拽的发起方调用，可以给当前进行的拖拽设置阴影。
-- Activity.requestDropPermissions()：通过传递[DragEvent](http://developer.android.com/reference/android/view/DragEvent.html)中的[ClipData](http://developer.android.com/reference/android/content/ClipData.html)来请求内容URI的权限。
+- View.updateDragShadow()：由拖拽的发起方调用，可以给当前进行的拖拽设置阴影。
+- android.view.DropPermissions：接收方App所得到的权限列表。
+- Activity.requestDropPermissions()：传递URI权限时，需要调用这个方法。传递的内容存储在[DragEvent](http://developer.android.com/reference/android/view/DragEvent.html)中的[ClipData](http://developer.android.com/reference/android/content/ClipData.html)里。返回值为前面的`android.view.DropPermissions`。
 
-下面是我自己写的一个demo，实现了在分屏模式下，从一个App拖拽一个ImageView到另外一个App。
+下面是我自己写的一个demo，实现了在分屏模式下，把一个Activity中ImageView中保存的内容到另外一个Activity中进行显示。实际应用中，可以还可以传递图片的url或者Bitmap对象。
+
+![drag-drop](/content/images/drag-drop.png)
+
+上图是一个最基本的例子，实现了把MainActivity中的图片保存的内容，拖拽到SecondActivity中。实现步骤如下：
+
+在MainActivity中，发起拖拽。
 
 ```
-to be completed
+// 1.首先我们在分屏模式下，打开自己App中的SecondActivity
+findViewById(R.id.launch_second_activity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+        
+// 2.然后我们在MainActivity中发出拖拽事件
+imageView = (ImageView) findViewById(R.id.img);
+        /** 拖拽的发送方Activity和ImageView */
+        imageView.setTag("I'm a ImageView from MainActivity");
+        imageView.setOnTouchListener(new View.OnTouchListener() {
+
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    /** 构造一个ClipData，将需要传递的数据放在里面 */
+                    ClipData.Item item = new ClipData.Item((CharSequence) view.getTag());
+                    String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
+                    ClipData dragData = new ClipData(view.getTag().toString(), mimeTypes, item);
+                    View.DragShadowBuilder shadow = new View.DragShadowBuilder(imageView);
+                    /** startDragAndDrop是Android N SDK中的新方法，替代了以前的startDrag，flag需要设置为DRAG_FLAG_GLOBAL */
+                    view.startDragAndDrop(dragData, shadow, null, View.DRAG_FLAG_GLOBAL);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
 ```
+
+在`SecondActivity`中，接收这个拖拽的结果，在`ACTION_DROP`事件中，把结果显示出来。
+
+```
+dropedText = (TextView) findViewById(R.id.text_drop);
+        dropedText.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View view, DragEvent dragEvent) {
+                switch (dragEvent.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        Log.d(TAG, "Action is DragEvent.ACTION_DRAG_STARTED");
+                        break;
+
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        Log.d(TAG, "Action is DragEvent.ACTION_DRAG_ENTERED");
+                        break;
+
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        Log.d(TAG, "Action is DragEvent.ACTION_DRAG_EXITED");
+                        break;
+
+                    case DragEvent.ACTION_DRAG_LOCATION:
+                        break;
+
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        Log.d(TAG, "Action is DragEvent.ACTION_DRAG_ENDED");
+                        break;
+
+                    case DragEvent.ACTION_DROP:
+                        Log.d(TAG, "ACTION_DROP event");
+                        /** 3.在这里显示接收到的结果 */
+                        dropedText.setText(dragEvent.getClipData().getItemAt(0).getText());
+                        break;
+
+                    default:
+                        break;
+                }
+
+                return true;
+            }
+        });
+```
+这里实现的关键在新增加的`startDragAndDrop`方法，看下官方的API文档：
+
+![start-drag](/content/images/start-drag.png)
+
+清楚地提到了，`发出的DragEvent能够被所有可见的View对象接收到`，所以在分屏模式下，SecondActivity可以监听View的onDrag事件，于是我们监听它！
+
+接着，我们看下`DragEvent.ACTION_DROP`事件发生的条件：
+
+![drop-event](/content/images/drop-event.png)
+
+当被拖拽的View的阴影进入到接收方View的坐标区域，如果此时用户松手，那么接收方View就可以接收到这个Drop事件。一目了然，我们通过拖拽ImageView到图上的灰色区域，松手，便可以触发`DragEvent.ACTION_DROP`，把数据传到SecondActivity中了。
+
+其实还有更复杂的一些情况，需要调用`requestDropPermissions`，后续我再进一步实践一下。
+
+这个demo的地址在[这里](https://github.com/unclechen/AndroidN-DragAndDropDemo)，先分享出来，后面我再接着完善它。
 
 # 在分屏模式下测试你的App
 
@@ -125,9 +218,9 @@ to be completed
 
 以上就是参考Google最新的[multi-window](http://developer.android.com/intl/zh-cn/preview/features/multi-window.html)进行的实践，总结下，我认为有3点比较重要：
 
-1. 如何让自己的App/Activity顺利的进入和退出分屏模式，这里的顺利主要是指功能、性能正常。
-2. 如何在分屏模式下打开新的Activity。
-3. 如何实现跨App/Activity的拖拽功能。
+1. 如何让自己的App/Activity顺利的进入和退出分屏模式，可以参考[处理运行时改变](http://developer.android.com/intl/zh-cn/guide/topics/resources/runtime-changes.html)这一章。
+2. 如何在分屏模式下打开新的Activity，可以参考Google官方的[MultiWindow Playground Sample](https://github.com/googlesamples/android-MultiWindowPlayground)。
+3. 如何实现跨App/Activity的拖拽功能，可以参考[Drag and Drop](http://developer.android.com/intl/zh-cn/guide/topics/ui/drag-drop.html)这一章。
 
 关于App分屏模式的学习就到这里了，欢迎大家一起交流。我们还发挥更多的想象力，比如是否可以利用跨应用拖拽实现更方便操作，更好的用户体验。
 

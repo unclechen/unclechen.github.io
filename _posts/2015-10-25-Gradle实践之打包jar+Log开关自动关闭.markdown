@@ -135,15 +135,35 @@ gradle jarMyLib
 
 这里是一种基本的自定义示例，如果还需要有别的需求，可以参考Gradle官方的DSL，里面介绍了各种Task接收的参数和使用方法。大家可以自行发挥实现自己想要的效果。
 
-## PS：为何要依赖默认的build任务
+## PS 0：如何将依赖的第三方库也打包进来
+
+有一次我在Android开源群里，一个朋友问到“如果除了自己写的类，还想把第三方的OkHttp包打进来怎么办？”。其实这个问题很好解决，Gradle的`Jar`任务是可配置多个`from`来源的，所以我们只需要在上面的代码里添加一行:
+
+```
+task jarMyLib(type: Jar, dependsOn: ['build']) {
+    archiveName = 'my-lib.jar'
+    from('build/intermediates/classes/release')
+    from(project.zipTree("libs/xxx-x.x.x.jar")) // 添加这一行
+    destinationDir = file('build/libs')
+    exclude('com/nought/hellolib/BuildConfig.class')
+    exclude('com/nought/hellolib/BuildConfig\$*.class')
+    exclude('**/R.class')
+    exclude('**/R\$*.class')
+    include('com/nought/hellolib/*.class')
+    include('com/xxx/*.class') // 同时记得加上第三方的package
+```
+
+看上面的加了注释的两行，这样就可以把第三放依赖的jar包添加进来了。
+
+## PS 1：为何要依赖默认的build任务
 
 前面我们自定义`jarMyLib`的时候，都依赖了`build`任务，因为这个任务可以帮我们把所有的java源代码编译成class文件，实际上build任务自己又依赖了很多其他的任务来实现打包。如果你想实现更快速的打包，运行一下`gradle tasks`或者在Android Studio中点击右边的Gradle按钮弹出任务列表的面板，就会看到还有一个`compileReleaseJavaWithJavac`，看名字就知道这个任务是编译所有的release type的java源文件，因为我们可以把上面的代码改为dependsOn这个任务即可，改为`task jarMyLib(type: Jar, dependsOn: ['compileReleaseJavaWithJavac'])`。但是记住了，一定要看清楚自己的gradle插件版本，我这个Android Gradle插件的版本是`com.android.tools.build:gradle:1.3.0`，而`com.android.tools.build:gradle:1.2.3`插件版本中对应的这个Compile任务的名字是叫做`compileReleaseJava`，大家记得不要写错了。
 
-## PPS：为何不直接自定义compileJava任务
+## PS 2：为何不直接自定义compileJava任务
 
 另外大家可能会说，既然都自己自定义Jar任务，为啥不把`compileJava`任务也自定义了，其实也是可以的，这样等于完全不用依赖Android Gradle插件的默认任务了。但有的时候，假设我们的代码中要把aidl打进来，依赖默认的`compileReleaseJavaWithJavac`任务会把aidl生成的class文件也包含在里面，非常方便。如果自己去写JavaCompile任务的话，首先还要把aidl文件生成java文件，再来compile它，会有一点点麻烦。咱们做sdk开发的，不需要打那么多渠道包，直接依赖默认的`compileReleaseJavaWithJavac`其实多花个1-2s不是什么大问题。
 
-## PPPS：混淆自定义的jar包
+## PS 3：混淆自定义的jar包
 
 刚才忘了提，混淆也是比较常见的一个需求，假设我们不是打包apk，在buildTypes闭包里面也没有给release类型的任务设置``为混淆。那么我们还可以自己定义一个混淆任务，话不多说，直接上代码：
 
