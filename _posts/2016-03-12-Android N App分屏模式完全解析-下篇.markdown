@@ -21,11 +21,13 @@ Android N中新增了一些方法来支持App的分屏模式。同时在分屏�
 
 最新的[Android N SDK](http://developer.android.com/preview/setup-sdk.html#docs-dl)中，`Activity`类中增加了下面的方法。
 
-- boolean inMultiWindow()：返回值为boolean，调用此方法可以知道App是否处于分屏模式。
-- boolean inPictureInPicture()：返回值为boolean，调用次方可以知道App是否处于画中画模式。
+- inMultiWindow()：返回值为boolean，调用此方法可以知道App是否处于分屏模式。
+- inPictureInPicture()：返回值为boolean，调用此方法可以知道App是否处于画中画模式。
+
 > 注意：`画中画模式`其实是一个**特殊的**`分屏模式`，如果`mActivity.inPictureInPicture()`返回`true`，那么`mActivity.inMultiWindow()`一定也是返回`true`。
-- void onMultiWindowChanged(boolean inMultiWindow)：当Activity进入或者退出分屏模式时，系统会回调这个方法来通知开发者。回调的参数`inMultiWindow`为boolean类型，如果`inMultiWindow`为true，表示Activity进入分屏模式；如果`inMultiWindow`为false，表示退出分屏模式。
-- void onPictureInPictureChanged(boolean inPictureInPicture)：当Activity进入画中画模式时，系统会回调这个方法。回调参数`inPictureInPicture`为`true`时，表示进入了画中画模式；`inPictureInPicture`为`false`时，表示退出了画中画模式。
+
+- onMultiWindowChanged(boolean inMultiWindow)：当Activity进入或者退出分屏模式时，系统会回调这个方法来通知开发者。回调的参数`inMultiWindow`为boolean类型，如果`inMultiWindow`为true，表示Activity进入分屏模式；如果`inMultiWindow`为false，表示退出分屏模式。
+- onPictureInPictureChanged(boolean inPictureInPicture)：当Activity进入画中画模式时，系统会回调这个方法。回调参数`inPictureInPicture`为`true`时，表示进入了画中画模式；`inPictureInPicture`为`false`时，表示退出了画中画模式。
 
 `Fragment`类中，同样增加了以上支持分屏模式的方法，例如`Fragment.inMultiWindow()`。
 
@@ -47,6 +49,8 @@ Android N中新增了一些方法来支持App的分屏模式。同时在分屏�
 此时，给新打开的Activity，设置`                intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_NEW_TASK);
 `才会有效果。
 
+![two-acts](/content/images/two-acts.png)
+
 建议参考官方的Sample：[MultiWindow Playground Sample](https://github.com/googlesamples/android-MultiWindowPlayground)
 
 那么为何还需要添加`FLAG_ACTIVITY_NEW_TASK`？看一下官方解释：
@@ -59,8 +63,8 @@ Android N中新增了一些方法来支持App的分屏模式。同时在分屏�
 
 在[上一篇](http://unclechen.github.io/2016/03/12/Android-N-App分屏模式完全解析-上篇/)博客里也提到过，现在我们可以实现在两个分屏模式的App之间拖动内容了。Android N Preview SDK中，`View`已经增加支持App之间拖动的API。具体的类和方法，可以参考[N Preview SDK Reference](http://developer.android.com/preview/setup-sdk.html#docs-dl)
 
-- android.view.DropPermissions：允许App接收拖拽的权限。
-- View.startDragAndDrop()：[View.startDrag()](http://developer.android.com/reference/android/view/View.html#startDrag(android.content.ClipData,%20android.view.View.DragShadowBuilder,%20java.lang.Object,%20int)的替代方法，需要传递`View.DRAG_FLAG_GLOBAL`来实现跨Activity拖拽。如果需要将URI的权限传递给接收方Activity，请根据需要设置`View.DRAG_FLAG_GLOBAL_URI_READ`或者`View.DRAG_FLAG_GLOBAL_URI_WRITE`。
+- android.view.DropPermissions：允许App接收拖拽的权限的token。
+- View.startDragAndDrop()：[View.startDrag()](http://developer.android.com/intl/zh-cn/reference/android/view/View.html#startDrag(android.content.ClipData,%20android.view.View.DragShadowBuilder,%20java.lang.Object,%20int)) 的替代方法，需要传递`View.DRAG_FLAG_GLOBAL`来实现跨Activity拖拽。如果需要将URI的权限传递给接收方Activity，请根据需要设置`View.DRAG_FLAG_GLOBAL_URI_READ`或者`View.DRAG_FLAG_GLOBAL_URI_WRITE`。
 - View.cancelDragAndDrop()：由拖拽的发起方调用，取消当前进行中的拖拽。
 - View.updateDragShadow()：有拖拽的发起方调用，可以给当前进行的拖拽设置阴影。
 - Activity.requestDropPermissions()：通过传递[DragEvent](http://developer.android.com/reference/android/view/DragEvent.html)中的[ClipData](http://developer.android.com/reference/android/content/ClipData.html)来请求内容URI的权限。
