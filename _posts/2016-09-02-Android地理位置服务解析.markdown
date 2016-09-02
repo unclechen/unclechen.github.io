@@ -6,29 +6,40 @@ date: '2016-09-02'
 
 # 手机设备有哪几种定位方式
 
-- 1.GPS：基于卫星发射的信号，可以推算出手机到每颗卫星的距离，根据卫星的位置，推测出手机的位置。
+## GPS
+
+基于卫星发射的信号，可以推算出手机到每颗卫星的距离，根据卫星的位置，推测出手机的位置。
 
 这是一张简单的GPS定位原理图，需要一点数学知识，先不讨论这个细节，需要的同学看[这里](http://baike.baidu.com/view/193655.htm)。
 
-<img src="http://ww3.sinaimg.cn/large/65e4f1e6gw1f7f2nsap36j20wg0rawha.jpg" width = "480" height = "440" alt="GPS定位原理图" align=center />
+![gps定位原理图](http://ww1.sinaimg.cn/large/65e4f1e6gw1f7fbixzcaxj20dw0bo750.jpg)
 
-现在卫星信号全球都覆盖了，手机一般都有GPS芯片，因此可以实现定位。GPS方式准确度是最高的，走卫星通道，不需要联网就可以要使用。但是它的缺点也非常明显：1.比较耗电; 2.绝大部分用户默认不开启GPS模块，也不会长时间开着; 3.从GPS模块启动到获取第一次定位数据，可能需要**比较长的时间**; 4.**只能在户外使用**，当有遮挡物干扰时，几乎无法使用，如城市大楼密集的地方。
+现在卫星信号全球都覆盖了，手机一般都有GPS芯片，因此可以实现定位。GPS方式准确度是最高的，走卫星通道，不需要联网就可以要使用。但是它的缺点也非常明显：
+
+- 1.比较耗电; 
+- 2.绝大部分用户默认不开启GPS模块，也不会长时间开着; 
+- 3.从GPS模块启动到获取第一次定位数据，可能需要**比较长的时间**; 
+- 4.**只能在户外使用**，当有遮挡物干扰时，几乎无法使用，如城市大楼密集的地方。
 
 
-- 2.WiFi：通过获取当前所连接的WiFi热点的一些信息，然后访问定位服务以获得经纬度坐标。
+## WiFi
+
+通过获取当前所连接的WiFi热点的一些信息，然后访问定位服务以获得经纬度坐标。
 
 这是一张简单的WiFi定位原理图。
 
-<img src="http://ww2.sinaimg.cn/large/65e4f1e6gw1f7f2z0wb6tj20h00cowf1.jpg" width = "480" height = "380" alt="WiFi定位原理图" align=center />
+![WiFi定位原理图](http://ww3.sinaimg.cn/large/65e4f1e6gw1f7fbjjbmesj20b408a0t0.jpg)
 
 因为WiFi热点一般都是固定位置，所以只要能知道手机连接的WiFi热点的位置，也就可以推算出手机的位置。而且由于手机一般连接的WiFi不会太远，所以其实精确度也不会太差。也不会像GPS那样需要耗时比较久才能获得位置信息。
 
 
-- 3.Cell-ID：采集到手机所连接的基站ID号(cellid)和其它的一些信息(MNC，MCC，LAC等)，然后通过网络访问定位服务，获取并返回对应的经纬度坐标。
+## Cell-ID
+
+采集到手机所连接的基站ID号(cellid)和其它的一些信息(MNC，MCC，LAC等)，然后通过网络访问定位服务，获取并返回对应的经纬度坐标。
 
 这是一张简单的基站定位原理图。
 
-<img src="http://ww2.sinaimg.cn/large/65e4f1e6gw1f7f2lmvrd1j20la0mg760.jpg" width = "400" height = "420" alt="基站定位原理图" align=center />
+![基站定位原理](http://ww2.sinaimg.cn/large/65e4f1e6gw1f7fbjts47yj20b40bqq3o.jpg)
 
 现在各大运营商的基站已经覆盖了全国大部分地区，每个基站的ID号是全球唯一的，只要有手机信号，就能接收到周围基站的信号。基站定位的精确度不如GPS，但优点是能够在室内用，只要网络通畅就行。
 
@@ -38,19 +49,26 @@ date: '2016-09-02'
 
 # Android系统上如何获取地理位置
 
-- 方法1：Google Play Service提供的API：这个不多说，因为国内不可用！！！
-    - 需要的同学可以自己爬梯子看下用法，比较简单：[https://developer.android.com/google/play-services/location.html](https://developer.android.com/google/play-services/location.html)
+## 方法1：Google Play Service提供的API
 
-- 方法2：系统提供的原生API：主要就是系统的`android.location`中提供的两个类
-    - **LocationManager：**和大多数系统提供的**SystemService**一样是单例，通过`locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);`来获取。
-    - **LocationListener：**非常典型的观察者模式，需要监听地理位置的时候，创建一个**Listener**，实现LocationListener中的几个回调方法。把Listener传给LocationManager，当地理位置变化的时候就会回调`onLocationChanged(Location location)`发出通知。
-    - 官方指导：[https://developer.android.com/guide/topics/location/strategies.html](https://developer.android.com/guide/topics/location/strategies.html)
+这个不多说，因为国内不可用！！！ 
 
-- 方法3：使用百度、高德之类的地图SDK。这简直就是大招了，各家都有自己的数据库，比起系统提供的API强太多了。这个这次也不说，各家的接入文档写的很清楚。
+需要的同学可以自己爬梯子看下用法，比较简单：[https://developer.android.com/google/play-services/location.html](https://developer.android.com/google/play-services/location.html)
 
-下面介绍一下我对使用原生API的理解，毕竟不是所有场景都需要用到大招级别的sdk，有的情况我们需要自己实现定位服务。
+## 方法2：系统提供的原生API：主要就是系统的`android.location`中提供的两个类。
+
+- **LocationManager：**和大多数系统提供的**SystemService**一样是单例，通过`locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);`来获取。
+- **LocationListener：**非常典型的观察者模式，需要监听地理位置的时候，创建一个**Listener**，实现LocationListener中的几个回调方法。把Listener传给LocationManager，当地理位置变化的时候就会回调`onLocationChanged(Location location)`发出通知。
+- 官方指导：[https://developer.android.com/guide/topics/location/strategies.html](https://developer.android.com/guide/topics/location/strategies.html)
+
+## 方法3：使用百度、高德之类的地图SDK。
+
+这简直就是大招了，各家都有自己的数据库，比起系统提供的API强太多了。这个这次也不说，各家的接入文档写的很清楚。
+
 
 # 使用原生API采集地理位置的方法
+
+下面介绍一下我对使用原生API的理解，毕竟不是所有场景都需要用到大招级别的sdk，有的情况我们需要自己实现定位服务。
 
 ## 1.首先需要了解**PROVIDER**
 
@@ -71,13 +89,14 @@ date: '2016-09-02'
 ![地理位置设置截图](http://ww1.sinaimg.cn/large/65e4f1e6gw1f7f47p124kj20rs0m376v.jpg)
 
 以原生系统为例，需要采集地理位置时，需要：
+
 - 打开通知栏的GPS开关
 - 进入`设置->位置信息->模式`，打开开关。然后我们可以看到，这里有3类模式：
     - 高精确度：使用GPS、WLAN、蓝牙或者移动网络确定位置
     - 节电：使用WLAN、蓝牙或者移动网络确定位置
     - 仅限设备：使用GPS确定位置
 
-PS：我发现小米手机上，即使你把通知栏里面地理位置开关关闭了，进入系统的设置界面，还是可以看到地理位置是开启的，默认选择的是`节电`模式。而原生系统你只要在通知栏关闭了开关，就无法使用定位服务了。这里感觉国内厂商在细节上可能会有一些不同的实现。
+**PS：**我发现小米手机上，即使你把通知栏里面地理位置开关关闭了，进入系统的设置界面，还是可以看到地理位置是开启的，默认选择的是`节电`模式。而原生系统你只要在通知栏关闭了开关，就无法使用定位服务了。这里感觉国内厂商在细节上可能会有一些不同的实现。
 
 ## 3.给你的App注册权限
 
@@ -130,6 +149,7 @@ locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, l
 但是实战中一定要尽量去优化，虽然获取地理位置只能是异步的，但是仍然不建议一直不停地监听地理位置的变化。
 
 谷歌官方也给出了一个采集地理位置的思路，非常值得我们来参考。思路的基本步骤如下：
+
 - 启动应用。
 - 当用户进入到应用中需要使用地理位置场景时，选择一个合适的Provider，开始监听地理位置的变化。
 - 获取系统中缓存的上次的地理位置`LastKnownLocation`，保存到当前地理位置变量`currentLocation`中作为备选值，当拿到新的地理位置后，对比两者，选择最优的那个继续保存它。
@@ -152,7 +172,7 @@ locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, l
 
 下面介绍我的想法：
 
-- 第1点：如何选择一个最好的provider？
+#### 第1点：如何选择一个最好的provider？
 
 这需要看你的需求。系统中也提供了一些方法来帮我们选择，可以设定一个条件`Criteria`，指定帅选最符合条件的地理位置提供者，根据Cirteria指定的条件，设备会自动选择哪种location provider。
 
@@ -181,7 +201,7 @@ String rovider  = mLocationManager.getBestProvider(criteria,true);
 总之，一共就3个provider，其实对于大部分开发者，选来选去就是`gps` or `network`。
 
 
-- 第2点，什么时候开始，什么时候结束？
+#### 第2点，什么时候开始，什么时候结束？
 
 我认为最好开启了监听器后，要尽可能早地结束它。也就是不要调用了`requestLocationUpdates(provider, minTime, minDistance, listener)`让位置服务开始工作后，很长时间都不去`removeUpdates(listener)`来停止服务。
 
@@ -193,7 +213,7 @@ String rovider  = mLocationManager.getBestProvider(criteria,true);
 
 所以我的建议是，当你调用**requestLocationUpdates**后，还应该是设置一个定时器，比如30s。当30s时间到了之后，就**removeUpdate**，不再监听地理位置了，转而使用备选的LastKnownLocation。当下次需要使用地理位置时，再重新注册监听器，监听30s，然后就移除监听器。如果对实时性要求高，我们可以在用户进入App中某个需要定位服务的场景之前，采用这个方法获取一次地理位置，把它保存下来。
 
-- 第3点，如何比较两个Location，选出更好的那个？
+#### 第3点，如何比较两个Location，选出更好的那个？
 
 谷歌也给出了代码示例，先看一下。
 
@@ -257,6 +277,7 @@ private boolean isSameProvider(String provider1, String provider2) {
 ```
 
 这段代码的策略是：
+
 - 1.先看更新时间：设定一个时间范围，2分钟。
     - 如果新的Location比旧的Location获取时间更新，且超过2分钟，那么认为新的Location更好。
     - 如果新的Location比旧的Location获取时间更老，且超过2分钟，那么认为新的Location不够好。
@@ -271,6 +292,29 @@ private boolean isSameProvider(String provider1, String provider2) {
 这段代码是一个参考，我们实际开发中可以更具需要去定义自己的**Better Location**策略。
 
 另外，从API>=17开始，Location类还增加了一个`getElapsedRealtimeNanos`方法（获取从系统启动后走过的时间），这是为了解决`getTime`方法（获取UTC时间）不够精确，容易产生误差的问题。这个方法在比较两个Location时将更加可靠。
+
+#### 第4点，怎么获取LastknownPostion，怎么使用？
+
+相信有了第3点，应该知道怎么选择**Better Location**。至于获取LastKnownLocation直接看代码。
+
+```
+Location gpsLocation = null;
+Location networkLocation = null;
+
+if (context.checkCallingOrSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+    gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+}
+
+if (context.checkCallingOrSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+    networkLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+}
+
+// 下面可以比较一下哪个更好...
+Location currentLocation = gpsLocation;
+if (isBetterLocation(currentLocation, networkLocation)){
+    currentLocation = networkLocation;
+}
+```
 
 # 总结一下
 
