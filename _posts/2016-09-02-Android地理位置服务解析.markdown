@@ -144,6 +144,8 @@ LocationListener locationListener = new LocationListener() {
 // 第4个参数：你的监听器
 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 ```
+
+
 ### 4.2如何优化
 
 但是实战中一定要尽量去优化，虽然获取地理位置只能是异步的，但是仍然不建议一直不停地监听地理位置的变化。
@@ -159,6 +161,7 @@ locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, l
 谷歌还给出了这个方案的一个timeline图示。
 
 ![A timeline representing the window in which an application listens for location updates](http://ww1.sinaimg.cn/large/65e4f1e6gw1f7f4svf6zsj20mj064ab0.jpg)
+
 
 ### 4.3关键问题
 
