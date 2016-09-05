@@ -48,7 +48,7 @@ body {
 }
 
 html {
-  font-family: Georgia, "STHeiti", "SimHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Microsoft YaHei", "STHeiti", "SimHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 1.5;
 }
@@ -84,7 +84,7 @@ a:focus {
 
 /* Headings */
 h1, h2, h3, h4, h5, h6 {
-  font-family: Georgia, "STHeiti", "SimHei", "Raleway", "Roboto Condensed", Roboto, sans-serif;
+  font-family: "Microsoft YaHei", "STHeiti", "SimHei", "Raleway", "Roboto Condensed", Roboto, sans-serif;
   margin-top: .8rem;
   margin-bottom: .6rem;
   font-weight: normal;
@@ -198,7 +198,7 @@ pre code {
 
 /* Gist via GitHub Pages */
 .gist .gist-file {
-  font-family: Menlo, Monaco, "Courier New", monospace !important;
+  font-family: Monaco, Soure Code Pro, Consolas, Menlo, Monaco, "Courier New", monospace !important;
 }
 .gist .markdown-body {
   padding: 15px;

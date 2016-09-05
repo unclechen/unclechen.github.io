@@ -31,7 +31,7 @@
  */
 
 html {
-  font-family: "Karla", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "Microsoft YaHei", "STHeiti", "SimHei", Roboto, Helvetica, Arial, sans-serif;
 }
 @media (min-width: 48em) {
   html {
