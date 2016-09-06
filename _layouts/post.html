@@ -12,6 +12,12 @@ layout: default
   {{ content }}
 </div>
 
+<hr>
+<div class="copyright">
+<p><strong>原创文章，转载请注明出处：转载自</strong><a href='{{ site.url }}'>UncleChen's Blog</a>，作者：<a href='{{ site.about }}'>UncleChen</a></p>
+<p>本文链接地址：<a href="{{ site.url }}{{ page.url }}">{{ page.title }}</a></p>
+</div>
+
 <section class="post-comments">
   <!-- 多说评论框 start -->
   <div class="ds-thread" data-thread-key="{{ page.id }}" data-title="{{ page.title }}" data-url="{{ site.url }}{{ page.url }}"></div>

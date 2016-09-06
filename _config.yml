@@ -11,6 +11,7 @@ description:      '吃下恶魔果实，我就能变成超级赛亚人.'
 url:              http://unclechen.github.io
 baseurl:          /
 logo:             /content/images/me.jpg
+about:            /about
 
 author:
   name:           'Uncle Chen'
