@@ -159,7 +159,9 @@ top_view（200x200dp，也在父ViewGroup居中，因此可以完全盖住bottom
 
 即使把top_view从xml里面删掉，我们得到visibility和rect也是一样的。
 
-所以`getGlobalVisibleRect`方法并不是万能的，因为它只能检查View和他们的ParentView之间的位置进而判它断是不是可见。
+所以`getGlobalVisibleRect`方法并不是万能的，因为它只能检查View和他们的ParentView之间的位置进而判它断是不是在屏幕中可见。
+
+> PS：有一次我还想到个奇葩思路，那就是把这个View的兄弟View找出来，也拿出它的GlobalVisibleRect，然后对比兄弟View和这个View的GlobalVisibleRect，看是不是有重合的地方。但是这也只能表明屏幕这一块区域内有两个View，还是无法判断到底是谁遮挡住了谁。
 
 ## 4 View.getLocalVisibleRect
 
@@ -172,11 +174,13 @@ Rect localRect = new Rect();
 boolean localVisibility = bottom.getLocalVisibleRect(localRect);
 ```
 
-得到的结果是：** localVisibility=true，localRect的左上角(left, top)和右下角(right, bottom)为(0, 0)和(350, 350)**。
+得到的local坐标结果是：**localVisibility=true，localRect的左上角(left, top)和右下角(right, bottom)为(0, 0)和(350, 350)**。
 
 而global坐标的结果是：**visibility=true，rect的左上角为(545, 1161)，右下角为(895,1511)。**
 
 **看下getLocalVisibleRect的源码**，原来就是先获取View的offset point（相对屏幕或者ParentView的偏移坐标），然后再去调用getGlobalVisibleRect(Rect r, Point globalOffset)方法来获取可见区域，最后再把得到的GlobalVisibleRect和Offset坐标做一个加减法，转换坐标系原点。
+
+**所以只要这个View的左上角在屏幕中，它的LocalVisibleRect的左上角坐标就一定是(0,0)，如果View的右下角在屏幕中，它的LocalVisibleRect右下角坐标就一定是(view.getWidth(), view.getHeight())。**
 
 ```
 public final boolean getLocalVisibleRect(Rect r) {
@@ -196,6 +200,9 @@ public final boolean getLocalVisibleRect(Rect r) {
 PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 boolean isScreenOn = pm.isScreenOn();
 boolean isInteractive = pm.isInteractive();
+// 可能有些版本上面isScreenOn方法隐藏了或者是deprecated了，可以尝试反射调用它，但是要记得用的时候catch异常
+Method isScreenOnMethod = pm.getClass().getMethod("isScreenOn");
+boolean isScreenOn = (Boolean) isScreenOnMethod.invoke(pm);
 ```
 
 这里不深究解锁和屏幕是否熄灭的实现方法了，检查View的可见性虽然和屏幕的状态看起来没有直接关系，但是在做检查前先对屏幕的状态做一个检查也是很有必要的，如果屏幕都已经关闭了，那这个View当然是对用户不可见的。
@@ -214,10 +221,16 @@ mScrollView.getViewTreeObserver().addOnScrollChangedListener(
 
           @Override
           public void onScrollChanged() {
+            // 可以先判断ScrollView中的mView是不是在屏幕中可见
+            Rect scrollBounds = new Rect();
+            mScrollView.getHitRect(scrollBounds);
+            if (!mView.getLocalVisibleRect(scrollBounds)) {
+                return;
+            }
+            
+            // 再用封装好的工具类检查可见性是否大于50%
             if (VisibilityCheckUtil.check(mView)) {
-                // start to do something
-            } else {
-                // stop doing something
+                // do something
             }
           }
         });
@@ -246,7 +259,7 @@ mListView.setOnScrollListener(new OnScrollListener() {
 
         int first = mListView.getFirstVisiblePosition();
         int last = mListView.getLastVisiblePosition();
-        // 满足3个条件
+        // 满足3个条件：先判断ListView中的mView是不是在可见范围中，再判断是不是大于50%面积可见
         if (10 >= first && 10 <= last && VisibilityCheckUtil.check(mView)) {
             // do something
         }
@@ -281,7 +294,7 @@ mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
 ```
 
-实际的开发中肯定会遇到更多的场景，我们都要先分析界面的特点，再结合前面提到的几个方法，更有效地检查View的可见性。
+实际的开发中肯定会遇到更多的场景，我们都要先分析界面的特点，再结合前面提到的几个方法，更有效地检查View的可见性。这里最后再给大家推荐一个开源的项目——[VideoPlayerManager](https://github.com/danylovolokh/VideoPlayerManager)，里面就用到`getLocalVisibleRect`来检测View的可见面积，进而控制在ListView和RecyclerView中哪一个Item应该显示什么内容。
 
 # 四、小结
 
