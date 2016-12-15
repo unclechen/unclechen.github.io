@@ -36,8 +36,6 @@ date: '2016-12-11'
 
 ```
 sudo easy_install beautifulsoup4
-easy_install lxml
-easy_install html5lib
 ```
 
 - 安装selenium
@@ -167,7 +165,7 @@ driver.quit()
 
 这里只是简单记录一次稍微复杂点的网页爬取的实现思路，关于selenium和beatifulsoup，还有很多的用法，我还没仔细看过。下面是一些参考资料，以后有机会还要多学习一下。
 
-- [Python爬虫利器二之Beautiful Soup的用法](http://cuiqingcai.com/1319.html)
+- [Python爬虫利器二之Beautiful Soup的用法](http://cuiqingcai.com/1319.html)：介绍了安装bs的方法，以及不同的parser，如html5、xml有什么区别。
 - [Beautiful Soup 4.4.0 文档](http://beautifulsoup.readthedocs.io/zh_CN/latest/)：其实bs支持不同语言，这次写python就是因为代码少，但是安装依赖确实是麻烦。
 - [selenium官网](http://www.seleniumhq.org/)：selenium其实有官方的IDE，也支持不同的语言。
 
