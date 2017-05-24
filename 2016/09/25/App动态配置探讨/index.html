@@ -1,0 +1,774 @@
+<!doctype html>
+
+
+
+
+<html class="theme-next pisces" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="客户端,服务器,动态化," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="一、背景App开发中一个比较常见的问题就是动态化，有时我们会需要程序的某一个逻辑可以动态改变而不需要发版本让用户重新安装。例如，App中的某个WebView有一个url白名单，我们希望它可以动态改变。这是个常见的需求，现在无论是技术面上还是产品上大家都在讲一个动态化，所以一波接一波出了各种插件化，甚至是ReactNative、weex、微信小程序等等这些轮子。 但是在实际中需要考虑到很多的业务特点">
+<meta name="keywords" content="客户端,服务器,动态化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="App动态配置探讨">
+<meta property="og:url" content="http://unclechen.github.io/2016/09/25/App动态配置探讨/index.html">
+<meta property="og:site_name" content="UncleChen的博客">
+<meta property="og:description" content="一、背景App开发中一个比较常见的问题就是动态化，有时我们会需要程序的某一个逻辑可以动态改变而不需要发版本让用户重新安装。例如，App中的某个WebView有一个url白名单，我们希望它可以动态改变。这是个常见的需求，现在无论是技术面上还是产品上大家都在讲一个动态化，所以一波接一波出了各种插件化，甚至是ReactNative、weex、微信小程序等等这些轮子。 但是在实际中需要考虑到很多的业务特点">
+<meta property="og:updated_time" content="2017-05-22T12:41:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="App动态配置探讨">
+<meta name="twitter:description" content="一、背景App开发中一个比较常见的问题就是动态化，有时我们会需要程序的某一个逻辑可以动态改变而不需要发版本让用户重新安装。例如，App中的某个WebView有一个url白名单，我们希望它可以动态改变。这是个常见的需求，现在无论是技术面上还是产品上大家都在讲一个动态化，所以一波接一波出了各种插件化，甚至是ReactNative、weex、微信小程序等等这些轮子。 但是在实际中需要考虑到很多的业务特点">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://unclechen.github.io/2016/09/25/App动态配置探讨/"/>
+
+
+
+
+
+  <title>App动态配置探讨 | UncleChen的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UncleChen的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/09/25/App动态配置探讨/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">App动态配置探讨</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-25T08:00:00+08:00">
+                2016-09-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>App开发中一个比较常见的问题就是动态化，有时我们会需要程序的某一个逻辑可以动态改变而不需要发版本让用户重新安装。例如，App中的某个WebView有一个url白名单，我们希望它可以动态改变。这是个常见的需求，现在无论是技术面上还是产品上大家都在讲一个动态化，所以一波接一波出了各种插件化，甚至是ReactNative、weex、微信小程序等等这些轮子。</p>
+<p>但是在实际中需要考虑到很多的业务特点，使得我们在<strong>统一化</strong>和<strong>个性化</strong>的时候比较难以选择，半年前天猫的技术博客就出了这篇文章–<a href="http://pingguohe.net/2016/03/18/config-center.html" target="_blank" rel="external">动态调整的基础 —— 配置中心</a>，里面介绍了阿里的团队在这方面的实践经验。今天我以一个遇到的实际需求为例，总结下我的想法。</p>
+<a id="more"></a>
+<h1 id="二、需求-amp-目标：设计一个动态配置中心"><a href="#二、需求-amp-目标：设计一个动态配置中心" class="headerlink" title="二、需求&amp;目标：设计一个动态配置中心"></a>二、需求&amp;目标：设计一个动态配置中心</h1><ul>
+<li><p><strong>需求：</strong>支持不同业务、不同平台、不同版本（一般是版本的范围），按需动态下发配置。这里业务可以是不同的App、也可以是同一个App里面不同的模块，或者不同的SDK。</p>
+</li>
+<li><p><strong>目标：</strong>业务方（App开发者）可以自助到配置中心添加新的配置项或者修改以前的配置，按需下发到客户端。</p>
+</li>
+</ul>
+<h2 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h2><p>这里参考天猫动态配置的设计，我的动态配置中心也有下面两个的<strong>数据模型：</strong></p>
+<ul>
+<li>1.配置的数据结构</li>
+</ul>
+<p>这是客户端希望拿到的下发配置信息，这里我的需求就是一个<strong>key-value</strong>形式的json字符串，value里面是客户端可以自己解析出来使用的结构即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&quot;base_setting&quot;: &#123;</div><div class="line">        &quot;key_1&quot;: &quot;value_1&quot;,</div><div class="line">        &quot;key_2&quot;: &quot;value_2&quot;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>2.元信息（meta-info）：<strong>业务(bizType) -&gt; 平台(platform) -&gt; 版本(version)</strong></li>
+</ul>
+<p>元信息代表着按需选择配置的条件。例如，对于同一个配置项<code>key_1</code>，对于业务1，它的值是0，对于业务2，它的值是1。或者对于配置项<code>key_2</code>，不会下发给业务1，只下发给业务2。这两类情况都应该能够在配置中心实现配置。</p>
+<p>此外，<strong>业务-&gt;平台-&gt;版本</strong>，这三个<strong>元信息之间的优先级顺序关系一定要明确</strong>，例如，业务1下面可以有iOS、Android两个平台；iOS下面又可以有1.0.0、2.0.0等多个版本。因此我认为版本的配置优先级要高于平台，平台的配置优先级要高于业务。</p>
+<h1 id="三、数据关系的设计"><a href="#三、数据关系的设计" class="headerlink" title="三、数据关系的设计"></a>三、数据关系的设计</h1><p>数据关系如何设计，取决于两点：</p>
+<ul>
+<li><strong>1.每一项配置是如何生成的？</strong></li>
+</ul>
+<p>（1）当用户添加一个新的配置时，需要添加它的<strong>key（下发的key）、defaultValue（默认值）、name（语义上可读配置名称）</strong>。</p>
+<p>（2）然后根据需要，按照<strong>业务 -&gt; 平台 -&gt; 版本</strong>的顺序，逐级地选择这个配置支持的元信息。每一步选择时都需要设定一个单独的value。这里可以不用每一级元信息都要选择，只要选择到了第一级的<strong>业务</strong>，客户端就已经可以拿到这个配置了，如果需要更加细粒度的控制配置的value，才需要选择第二级的<strong>平台</strong>和<strong>版本</strong>。</p>
+<p>（3）把这个配置，和它对应的业务、平台、版本这三个元信息关系，以及各个元信息下面的value都存储下来。所以配置是直接关联着业务、平台、版本这3个元信息的。</p>
+<p>（4）存储业务、平台、版本之间的对应关系，这样才可以明确在逐级选择配置时，每一级都有哪些元信息。这里我实际中存储的是版本范围信息和平台的关系，如<code>bizA | Android | 1.0.0-2.0.0</code>、<code>bizA | iOS | 1.0.0 - 2.0.0</code>。其实在创建每一级元信息的setting-value之前，就应该建立好了这个关系。</p>
+<ul>
+<li><strong>2.对于每一个请求，配置中心是如何处理、最后得到属于这个请求的配置？</strong></li>
+</ul>
+<p>当配置中心的Server接收到一个请求时：</p>
+<p>（1）提取出元信息：业务(bizType)、平台(platform)、版本(version)</p>
+<p>（2）根据业务、平台、版本找到和它关联的所有配置项。</p>
+<blockquote>
+<p>结合一个实例理解上面的两点：假设有2种业务，2个平台，2个版本范围，那么元信息的各种组合最多就是8种，所以每一个配置项的取值最多就是8种，我们可以选择不给某一种元信息下发这个配置，或者下发它独立的配置值。</p>
+</blockquote>
+<h1 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h1><p>在设计过程中，其实就是要解决：配置结构长什么样，需要哪些元信息，元信息之间的关系是什么样的，怎么保存元信息之间的关系。这里我的需求比较简单，想到的方案也可能不是很好。实际中可能还有更多元信息，例如如果含有渠道ID，我们还可能加一个app_setting来覆盖base_setting。希望可以见到更多关于这方面的讨论和分享。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/客户端/" rel="tag"># 客户端</a>
+          
+            <a href="/tags/服务器/" rel="tag"># 服务器</a>
+          
+            <a href="/tags/动态化/" rel="tag"># 动态化</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/07/Android反编译技术总结/" rel="next" title="Android反编译技术总结">
+                <i class="fa fa-chevron-left"></i> Android反编译技术总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/17/Android View的可见性检查方法-上篇/" rel="prev" title="Android View的可见性检查方法（上）">
+                Android View的可见性检查方法（上） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="unclechen" />
+          <p class="site-author-name" itemprop="name">unclechen</p>
+           
+              <p class="site-description motion-element" itemprop="description">吃下恶魔果实，我就能变成超级赛亚人！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、背景"><span class="nav-number">1.</span> <span class="nav-text">一、背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、需求-amp-目标：设计一个动态配置中心"><span class="nav-number">2.</span> <span class="nav-text">二、需求&目标：设计一个动态配置中心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据模型"><span class="nav-number">2.1.</span> <span class="nav-text">数据模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、数据关系的设计"><span class="nav-number">3.</span> <span class="nav-text">三、数据关系的设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、总结"><span class="nav-number">4.</span> <span class="nav-text">四、总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">unclechen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

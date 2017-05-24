@@ -91,7 +91,7 @@
 <meta name="description" content="吃下恶魔果实，我就能变成超级赛亚人！">
 <meta property="og:type" content="website">
 <meta property="og:title" content="UncleChen的博客">
-<meta property="og:url" content="http://unclechen.github.io/index.html">
+<meta property="og:url" content="http://unclechen.github.io/page/3/index.html">
 <meta property="og:site_name" content="UncleChen的博客">
 <meta property="og:description" content="吃下恶魔果实，我就能变成超级赛亚人！">
 <meta name="twitter:card" content="summary">
@@ -124,7 +124,7 @@
 
 
 
-  <link rel="canonical" href="http://unclechen.github.io/"/>
+  <link rel="canonical" href="http://unclechen.github.io/page/3/"/>
 
 
 
@@ -272,7 +272,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2017/05/13/WebView缓存原理分析和应用/">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/03/05/Android6.0运行时权限简介/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="unclechen">
@@ -291,7 +291,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/05/13/WebView缓存原理分析和应用/" itemprop="url">WebView缓存原理分析和应用</a></h1>
+                <a class="post-title-link" href="/2016/03/05/Android6.0运行时权限简介/" itemprop="url">Android6.0运行时权限简介</a></h1>
         
 
         <div class="post-meta">
@@ -303,8 +303,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-13T08:00:00+08:00">
-                2017-05-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-05T08:00:00+08:00">
+                2016-03-05
               </time>
             
 
@@ -361,11 +361,10 @@
 
       
         
-          <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>现在的App开发，或多或少都会用到Hybrid模式，到了WebView这边，经常会加载一些js文件（例如和WebView用来Native通信的bridge.js），而这些js文件不会经常发生变化，所以我们希望js在WebView里面加载一次之后，如果js没有发生变化，下次就不用再发起网络请求去加载，从而减少流量和资源的占用。那么有什么方式可以达到这个目的呢？先得从WebView的缓存原理入手。</p>
-<h1 id="二、WebView的缓存类型"><a href="#二、WebView的缓存类型" class="headerlink" title="二、WebView的缓存类型"></a>二、WebView的缓存类型</h1><p>WebView主要包括两类缓存，<strong>一类是浏览器自带的网页数据缓存</strong>，这是所有的浏览器都支持的、由HTTP协议定义的缓存；<strong>另一类是H5缓存</strong>，这是由web页面的开发者设置的，H5缓存主要包括了App Cache、DOM Storage、Local Storage、Web SQL Database 存储机制等，这里我们主要介绍App Cache来缓存js文件。</p>
+          <p>Android6.0发布距离现在快1年了，虽然它市场占有率仍在龟速上升中，但还是有一些App开发者已经在打包应用时将<code>targetSDKVersion</code>设置到了<code>23</code>，也就是说把App适配到了Android6.0。以前调用Android系统中需要声明权限的API时，只需要在<code>AndroidManifest.xml</code>文件中一次性列出来。但是如果在<code>build.gradle</code>文件里将<code>targetSDKVersion</code>设为<code>23</code>以后，除了在<code>AndroidManifest.xml</code>声明，我们还需要根据App运行时所在的手机的系统版本，在调用权限之前向用户申请授权，并在用户允许以后，才可以安全的调用对应的API。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/05/13/WebView缓存原理分析和应用/#more" rel="contents">
+            <a class="btn" href="/2016/03/05/Android6.0运行时权限简介/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -411,7 +410,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/12/11/python利用beautifulsoup+selenium自动翻页抓取网页内容/">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2015/11/26/Android WebView调用JS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="unclechen">
@@ -430,7 +429,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/12/11/python利用beautifulsoup+selenium自动翻页抓取网页内容/" itemprop="url">python利用beautifulsoup+selenium自动翻页抓取网页内容</a></h1>
+                <a class="post-title-link" href="/2015/11/26/Android WebView调用JS/" itemprop="url">Android WebView调用JS</a></h1>
         
 
         <div class="post-meta">
@@ -442,8 +441,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-11T08:00:00+08:00">
-                2016-12-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-26T08:00:00+08:00">
+                2015-11-26
               </time>
             
 
@@ -500,10 +499,12 @@
 
       
         
-          <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>记录一次周末在家速成的爬虫实现之旅。受人之托，想要把这个页面<a href="http://baike.baidu.com/starrank?fr=lemmaxianhua" target="_blank" rel="external">http://baike.baidu.com/starrank?fr=lemmaxianhua</a>的明星排行榜爬取下来。用chrome打开一看，其实就1000条记录。然后“右键菜单”-&gt;“检查”，看下网页的结构，也不是特别复杂。所以我目测只要用<strong>python</strong>自带的<code>urllib2</code>库打开网页，获取html代码，再交给<code>BeautifulSoup</code>库解析html代码，应该就可以快速搞定。</p>
+          <p>个人认为Android的WebView一直是一个比较难搞的东西，因为它需要和很多的Web开发打交道，如果以前没接触过Web相关的开发就会觉得有些不爽，但是现在越来越多的应用都是Hybrid的模式，HTML5定稿一年多，感觉也挺火，这也是以做内容为主的App非常需要的技术，所以还得多学学。</p>
+<p>从Android4.4开始，WebView底层的实现从原来的Webkit变成了chromium，从而实现了对HTML5更好的支持，并且也和Chrome浏览器的一些特征越来越像。接触过WebView开发应该对<code>WebView.setWebContentsDebuggingEnabled(true)</code>不会陌生，正是从4.4开始的改变才使得WebView的调试变得更加方便。</p>
+<p>只是用来展示一个网页内容还好，如果要通过WebView执行JS脚本来和Native代码做一些通信，就要小心可能会踩到各种坑了。例如onclick事件没用，用onTap又会触发两次，4.4以上只能用loadUrl的方法执行一行js代码，还有可能会被转码，API17以上需要给Java方法添加注解，API17以下又要换一种方法保证安全性等等。在这里记录一下我自己的学习心得和踩过的坑。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/12/11/python利用beautifulsoup+selenium自动翻页抓取网页内容/#more" rel="contents">
+            <a class="btn" href="/2015/11/26/Android WebView调用JS/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -549,7 +550,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/11/08/利用属性动画在Android4.x上实现Android L的元素转场动画效果/">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2015/11/17/自定义Android Gradle插件/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="unclechen">
@@ -568,7 +569,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/11/08/利用属性动画在Android4.x上实现Android L的元素转场动画效果/" itemprop="url">利用属性动画在Android4.x上实现Android L的元素转场动画效果（shared elements transition）</a></h1>
+                <a class="post-title-link" href="/2015/11/17/自定义Android Gradle插件/" itemprop="url">自定义Android Gradle插件</a></h1>
         
 
         <div class="post-meta">
@@ -580,8 +581,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-08T08:00:00+08:00">
-                2016-11-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-17T08:00:00+08:00">
+                2015-11-17
               </time>
             
 
@@ -638,13 +639,10 @@
 
       
         
-          <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>随着谷歌推出的MaterialDesign不断被各种实践，最近我也碰到这么一个需求，就是要求实现一个图片的转场效果。在第一个界面上，图片被点击后，会渐渐地滑动到第二个界面中去。</p>
-<p>其实仔细观察一下Google相册也有用到这种效果，大概的效果图是这样的：</p>
-<p><img src="http://ww2.sinaimg.cn/large/801b780agw1f9kunqk6sqg20b40jre86.gif" alt="transition-ui-demo"></p>
-<p>按照我的理解，这种效果要是直接把View拿出来复用就可以。但是经过学习（国内外各种大神的博客）和实践发现，里面有不少可以思考的地方。</p>
+          <p>上一篇博客介绍到<a href="http://unclechen.github.io/2015/10/25/Gradle%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%89%93%E5%8C%85jar+Log%E5%BC%80%E5%85%B3%E8%87%AA%E5%8A%A8%E5%85%B3%E9%97%AD/">Gradle实践之自定义打包jar+Log开关自动关闭</a>。可以自己定义打包的jar已经不错了，但是还是不够爽，怎么办？自己写一个Plugin！会用轮子，也要会造轮子是不是，我们经常使用到的<code>com.android.library</code>和<code>com.android.application</code>都是Google给我们提供的Gradle插件，里面已经实现了大部分App开发者所需要的功能。Github上面也已经有很多gradle插件，但是如果我们是程序猿，我们总是可以有需求是人家的Plugin无法满足的，那好吧，我们自己写个插件。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/11/08/利用属性动画在Android4.x上实现Android L的元素转场动画效果/#more" rel="contents">
+            <a class="btn" href="/2015/11/17/自定义Android Gradle插件/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -690,7 +688,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/10/17/Android View的可见性检查方法-上篇/">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2015/10/25/Gradle实践之打包jar+Log开关自动关闭/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="unclechen">
@@ -709,7 +707,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/10/17/Android View的可见性检查方法-上篇/" itemprop="url">Android View的可见性检查方法（上）</a></h1>
+                <a class="post-title-link" href="/2015/10/25/Gradle实践之打包jar+Log开关自动关闭/" itemprop="url">Gradle实践之自定义打包jar+Log开关自动关闭</a></h1>
         
 
         <div class="post-meta">
@@ -721,8 +719,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-17T08:00:00+08:00">
-                2016-10-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-10-25T08:00:00+08:00">
+                2015-10-25
               </time>
             
 
@@ -779,10 +777,10 @@
 
       
         
-          <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>在Android开发中有时候会遇到需要检查一个View是不是对用户可见，比如在消息流中，根据ImageView是否在屏幕中出现了再决定加载它，或者当视频滑入屏幕被用户可见时才播放、滑出屏幕就自动停止播放等等。乍一看好像都是在ListView、RecyclerView、ScrollView这些组件里面比较需要做这件事，今天总结一下我在实际开发中是怎么处理View可见性检查的。</p>
+          <p>上一篇博客介绍了<a href="http://unclechen.github.io/2015/10/22/Android%20Studio%20Gradle实践之多渠道自动化打包+版本号管理/">Gradle实践之多渠道自动化打包+版本号管理</a>。由于我在公司里主要是做SDK开发的，这次我想介绍一下如何使用Gradle打出自己想要的jar包，并根据需要混淆、发布jar包。然后再介绍一下如何在打包的时候将自定义的Log输出工具关闭。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/10/17/Android View的可见性检查方法-上篇/#more" rel="contents">
+            <a class="btn" href="/2015/10/25/Gradle实践之打包jar+Log开关自动关闭/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -828,7 +826,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/09/25/App动态配置探讨/">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2015/10/22/Android Studio Gradle实践之多渠道自动化打包+版本号管理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="unclechen">
@@ -847,7 +845,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/09/25/App动态配置探讨/" itemprop="url">App动态配置探讨</a></h1>
+                <a class="post-title-link" href="/2015/10/22/Android Studio Gradle实践之多渠道自动化打包+版本号管理/" itemprop="url">Android Studio Gradle实践之多渠道自动化打包+版本号管理</a></h1>
         
 
         <div class="post-meta">
@@ -859,8 +857,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-25T08:00:00+08:00">
-                2016-09-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-10-22T08:00:00+08:00">
+                2015-10-22
               </time>
             
 
@@ -917,11 +915,10 @@
 
       
         
-          <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>App开发中一个比较常见的问题就是动态化，有时我们会需要程序的某一个逻辑可以动态改变而不需要发版本让用户重新安装。例如，App中的某个WebView有一个url白名单，我们希望它可以动态改变。这是个常见的需求，现在无论是技术面上还是产品上大家都在讲一个动态化，所以一波接一波出了各种插件化，甚至是ReactNative、weex、微信小程序等等这些轮子。</p>
-<p>但是在实际中需要考虑到很多的业务特点，使得我们在<strong>统一化</strong>和<strong>个性化</strong>的时候比较难以选择，半年前天猫的技术博客就出了这篇文章–<a href="http://pingguohe.net/2016/03/18/config-center.html" target="_blank" rel="external">动态调整的基础 —— 配置中心</a>，里面介绍了阿里的团队在这方面的实践经验。今天我以一个遇到的实际需求为例，总结下我的想法。</p>
+          <p>上次介绍了<a href="http://unclechen.github.io/2015/06/01/Android%20Studio%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E7%AC%94%E8%AE%B0/">Android Studio的安装、配置和基本使用</a>。这次讲一下Android Studio用到的打包工具Gradle。<a href="http://gradle.org/" target="_blank" rel="external">Gradle</a>是一种构建项目的框架，兼容Maven、Ant，为Java项目提供了很多插件去实现打包功能。废话不多说，下面直接进入实战。当我写这篇博客的时候，Android Studio的版本已经更新到了<strong>1.4</strong>，比上一篇博客的版本又更新了。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/09/25/App动态配置探讨/#more" rel="contents">
+            <a class="btn" href="/2015/10/22/Android Studio Gradle实践之多渠道自动化打包+版本号管理/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -967,7 +964,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/09/07/Android反编译技术总结/">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2015/06/01/Android Studio安装配置笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="unclechen">
@@ -986,7 +983,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/09/07/Android反编译技术总结/" itemprop="url">Android反编译技术总结</a></h1>
+                <a class="post-title-link" href="/2015/06/01/Android Studio安装配置笔记/" itemprop="url">Android Studio安装配置笔记</a></h1>
         
 
         <div class="post-meta">
@@ -998,8 +995,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-07T08:00:00+08:00">
-                2016-09-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-06-01T08:00:00+08:00">
+                2015-06-01
               </time>
             
 
@@ -1056,19 +1053,10 @@
 
       
         
-          <h1 id="一、Apk反编译工具及其使用方法"><a href="#一、Apk反编译工具及其使用方法" class="headerlink" title="一、Apk反编译工具及其使用方法"></a>一、Apk反编译工具及其使用方法</h1><h2 id="1-原理"><a href="#1-原理" class="headerlink" title="1.原理"></a>1.原理</h2><p>学习反编译之前，建议先学习一下Apk打包的过程，明白打包完成后的Apk里面都有什么文件，各种文件都是怎么生成的。</p>
-<p>这里有两篇AndroidWeekly中推荐过的好文章：</p>
-<ul>
-<li><p><a href="http://mp.weixin.qq.com/s?__biz=MzI0NjIzNDkwOA==&amp;mid=2247483789&amp;idx=1&amp;sn=6aed8c7907d5bd9c8a5e7f2c2dcdac2e&amp;scene=1&amp;srcid=0831CCuRJsbJNuz1WxU6uUsI#wechat_redirect" target="_blank" rel="external">浅析 Android 打包流程</a></p>
-</li>
-<li><p><a href="http://mp.weixin.qq.com/s?__biz=MzI1NjEwMTM4OA==&amp;mid=2651232113&amp;idx=1&amp;sn=02f413999ab0865e23d272e69b9e6196&amp;scene=1&amp;srcid=0831gT4p6M0NFG5HTTeRHTUC#wechat_redirect" target="_blank" rel="external">Android构建过程分析</a></p>
-</li>
-</ul>
-<p>Apk技术也有非常多的技术可以学习，主要都是围绕着如何减小体积，如何提高打包速度展开，这里先不多说了。下面是一张基本的Apk文件结构图。</p>
-<p><img src="http://ww2.sinaimg.cn/large/65e4f1e6gw1f7l2d6e4z5j20a80a0jrw.jpg" alt="APK文件结构"></p>
+          <p>2015年5月29号凌晨，第一次翻墙看了谷歌开发者大会的直播，还特意跑到车库咖啡和一堆GDG开发者一起看的直播。现场来了一些Android、Google开发大牛，介绍了他们对于最新的Android、Google技术的体验。加上谷歌官方宣布了1.3beta版本的<a href="https://developer.android.com/sdk/index.html" target="_blank" rel="external">Android Studio</a>已经支持NDK开发，这样一来貌似Eclipse在Android开发方面的最后一个独有优势也已经失去。我想如果不是公司项目需要，我已经可以把AS作为我的Android主打开发环境了。另外据说1.3开始，gradle脚本的速度也会得到优化，因此希望在AS这个官方的平台上能够有更多优化的体验。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/09/07/Android反编译技术总结/#more" rel="contents">
+            <a class="btn" href="/2015/06/01/Android Studio安装配置笔记/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1109,7 +1097,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 

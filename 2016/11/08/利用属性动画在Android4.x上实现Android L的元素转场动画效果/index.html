@@ -1,0 +1,868 @@
+<!doctype html>
+
+
+
+
+<html class="theme-next pisces" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,动画," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="一、背景随着谷歌推出的MaterialDesign不断被各种实践，最近我也碰到这么一个需求，就是要求实现一个图片的转场效果。在第一个界面上，图片被点击后，会渐渐地滑动到第二个界面中去。 其实仔细观察一下Google相册也有用到这种效果，大概的效果图是这样的：  按照我的理解，这种效果要是直接把View拿出来复用就可以。但是经过学习（国内外各种大神的博客）和实践发现，里面有不少可以思考的地方。">
+<meta name="keywords" content="Android,动画">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用属性动画在Android4.x上实现Android L的元素转场动画效果（shared elements transition）">
+<meta property="og:url" content="http://unclechen.github.io/2016/11/08/利用属性动画在Android4.x上实现Android L的元素转场动画效果/index.html">
+<meta property="og:site_name" content="UncleChen的博客">
+<meta property="og:description" content="一、背景随着谷歌推出的MaterialDesign不断被各种实践，最近我也碰到这么一个需求，就是要求实现一个图片的转场效果。在第一个界面上，图片被点击后，会渐渐地滑动到第二个界面中去。 其实仔细观察一下Google相册也有用到这种效果，大概的效果图是这样的：  按照我的理解，这种效果要是直接把View拿出来复用就可以。但是经过学习（国内外各种大神的博客）和实践发现，里面有不少可以思考的地方。">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/801b780agw1f9kunqk6sqg20b40jre86.gif">
+<meta property="og:updated_time" content="2017-05-22T12:43:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用属性动画在Android4.x上实现Android L的元素转场动画效果（shared elements transition）">
+<meta name="twitter:description" content="一、背景随着谷歌推出的MaterialDesign不断被各种实践，最近我也碰到这么一个需求，就是要求实现一个图片的转场效果。在第一个界面上，图片被点击后，会渐渐地滑动到第二个界面中去。 其实仔细观察一下Google相册也有用到这种效果，大概的效果图是这样的：  按照我的理解，这种效果要是直接把View拿出来复用就可以。但是经过学习（国内外各种大神的博客）和实践发现，里面有不少可以思考的地方。">
+<meta name="twitter:image" content="http://ww2.sinaimg.cn/large/801b780agw1f9kunqk6sqg20b40jre86.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://unclechen.github.io/2016/11/08/利用属性动画在Android4.x上实现Android L的元素转场动画效果/"/>
+
+
+
+
+
+  <title>利用属性动画在Android4.x上实现Android L的元素转场动画效果（shared elements transition） | UncleChen的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UncleChen的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/11/08/利用属性动画在Android4.x上实现Android L的元素转场动画效果/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">利用属性动画在Android4.x上实现Android L的元素转场动画效果（shared elements transition）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-08T08:00:00+08:00">
+                2016-11-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>随着谷歌推出的MaterialDesign不断被各种实践，最近我也碰到这么一个需求，就是要求实现一个图片的转场效果。在第一个界面上，图片被点击后，会渐渐地滑动到第二个界面中去。</p>
+<p>其实仔细观察一下Google相册也有用到这种效果，大概的效果图是这样的：</p>
+<p><img src="http://ww2.sinaimg.cn/large/801b780agw1f9kunqk6sqg20b40jre86.gif" alt="transition-ui-demo"></p>
+<p>按照我的理解，这种效果要是直接把View拿出来复用就可以。但是经过学习（国内外各种大神的博客）和实践发现，里面有不少可以思考的地方。</p>
+<a id="more"></a>
+<p>根据官方介绍的<a href="https://developer.android.com/training/material/animations.html#Transitions" target="_blank" rel="external">Transitions</a>，在Android 5.0以后，可以使用<strong>shared elements transition</strong>来实现这个效果，非常方便。但是我们的App一般还需要向下兼容到4.x，所以在4.x上得想其它的办法实现。</p>
+<p>下面我以上图的ImageView转场动画为例子，介绍一下是怎么实现这个效果的。（代码都在<a href="https://github.com/unclechen/ActivityTransitionDemo" target="_blank" rel="external">这里</a>）</p>
+<blockquote>
+<p>注意：为了说明转场效果实现的核心内容，一些无关的东西都用了最简单的实现。</p>
+</blockquote>
+<h1 id="二、实现思路"><a href="#二、实现思路" class="headerlink" title="二、实现思路"></a>二、实现思路</h1><h2 id="1-入场"><a href="#1-入场" class="headerlink" title="1.入场"></a>1.入场</h2><ul>
+<li>（1）保存第一个Activity中ImageView（我们叫它originImageView）的位置信息、宽、高，然后把这些信息传给第二个Activity。</li>
+<li>（2）去掉Activity默认的转场动画。</li>
+<li>（3）进入第二个Activity之后，拿到第一个Activity传过来的ImageView的位置、宽、高信息，并在第二个Activity动态添加一个一模一样的ImageView（我叫它sourceImageView）。</li>
+<li>（4）在第二个Activity中，找到最终的ImageView（我叫它targetImageView），并取出它最终所在的位置。</li>
+<li>（5）对比sourceImageView和targetImageView的位置、大小等等各种<strong>属性</strong>的区别，然后使用属性动画将sourceImageView变换成targetImageView。</li>
+<li>（6）当动画结束时，显示出targetImageView，隐藏sourceImageView。</li>
+</ul>
+<blockquote>
+<p>注意：这里当动画结束时，我们需要将sourceImageView的LayoutParams改成和targetImageView的LayoutParams一模一样，用于退出时做转场动画使用。<br>其实退场效果和入场效果是完全相反的步骤。</p>
+</blockquote>
+<h2 id="2-退场"><a href="#2-退场" class="headerlink" title="2.退场"></a>2.退场</h2><ul>
+<li>（1）将之前隐藏的sourceImageView显示出来，隐藏targetImageView。</li>
+<li>（2）通过属性动画将sourceImageView从当前的位置和宽、高大小，变换到刚进入第二个Activity时的状态。（这里的动画代码几乎一样，只是把开始值和结束值调换了位置）</li>
+<li>（3）动画结束时，关闭第二个Activity，去掉Activity的转场动画。</li>
+</ul>
+<p>上面就是实现思路，其实很好理解。实现这个思路的重点，就在于属性动画的应用了。也就是上面提到的<strong>入场的第5步</strong>和<strong>退场的第2步</strong>，这里面用到的属性动画代码见下一章。</p>
+<h1 id="三、实现代码"><a href="#三、实现代码" class="headerlink" title="三、实现代码"></a>三、实现代码</h1><h2 id="1-入场-1"><a href="#1-入场-1" class="headerlink" title="1.入场"></a>1.入场</h2><h3 id="（1）先复原出sourceImageView"><a href="#（1）先复原出sourceImageView" class="headerlink" title="（1）先复原出sourceImageView"></a>（1）先复原出sourceImageView</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">// 创建一个和第一个界面一模一样的ImageView，作为这个界面的sourceImageView</div><div class="line">private void initSourceImageView() &#123;</div><div class="line">    // 先动态创建出这个sourceImageView，把它添加到第二个界面的ContentView中。</div><div class="line">    FrameLayout contentView = (FrameLayout) getWindow().getDecorView().findViewById(android.R.id.content);</div><div class="line">    mSourceImageView = new ImageView(this);</div><div class="line">    contentView.addView(mSourceImageView);</div><div class="line"></div><div class="line">    // 读取第一个界面传过来的信息</div><div class="line">    Bundle bundle = getIntent().getExtras();</div><div class="line">    mRect = (Rect) getIntent().getParcelableExtra(IMAGE_ORIGIN_RECT);</div><div class="line">    ImageView.ScaleType scaleType = (ImageView.ScaleType) bundle.getSerializable(IMAGE_SCALE_TYPE);</div><div class="line">    mResId = bundle.getInt(IMAGE_RES_ID);</div><div class="line"></div><div class="line">    // 设置为和第一个界面一样的图片</div><div class="line">    mSourceImageView.setImageResource(mResId);</div><div class="line">    mTargetImageView.setImageResource(mResId);</div><div class="line"></div><div class="line">    // 设为和原来一样的裁剪模式</div><div class="line">    mSourceImageView.setScaleType(scaleType);</div><div class="line"></div><div class="line">    // 设置为和原来一样的位置</div><div class="line">    FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mSourceImageView.getLayoutParams();</div><div class="line">    layoutParams.width = mRect.width();</div><div class="line">    layoutParams.height = mRect.height();</div><div class="line">    layoutParams.setMargins(mRect.left, mRect.top, 0, 0);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="（2）找到targetImageView的位置和宽高"><a href="#（2）找到targetImageView的位置和宽高" class="headerlink" title="（2）找到targetImageView的位置和宽高"></a>（2）找到targetImageView的位置和宽高</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">private void initImageEnterAnimation() &#123;</div><div class="line">    mTargetImageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() &#123;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public boolean onPreDraw() &#123;</div><div class="line">            // 第一帧被绘制时，TargetImageView已经具有了实际的尺寸和位置，这是就应该开始播放动画。</div><div class="line">            final int[] finalLocationOnTheScreen = new int[2];</div><div class="line">            mTargetImageView.getLocationOnScreen(finalLocationOnTheScreen);</div><div class="line">            mTargetLeft = finalLocationOnTheScreen[0];</div><div class="line">            mTargetTop = finalLocationOnTheScreen[1];</div><div class="line">            mTargetWidth = mTargetImageView.getWidth();</div><div class="line">            mTargetHeight = mTargetImageView.getHeight();</div><div class="line">            playEnteringAnimation(mTargetLeft, mTargetTop, mTargetWidth, mTargetHeight);</div><div class="line">            mTargetImageView.getViewTreeObserver().removeOnPreDrawListener(this);</div><div class="line">            return true;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="（3）播放入场动画"><a href="#（3）播放入场动画" class="headerlink" title="（3）播放入场动画"></a>（3）播放入场动画</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div></pre></td><td class="code"><pre><div class="line">// 属性动画走起，将sourceImageView变换到targetImageView</div><div class="line">private void playEnteringAnimation(final int left, final int top, final int width, final int height) &#123;</div><div class="line">    // 1.改变ImageView的位置、宽高</div><div class="line">    PropertyValuesHolder propertyLeft = PropertyValuesHolder.ofInt(&quot;left&quot;, mSourceImageView.getLeft(), left);</div><div class="line">    PropertyValuesHolder propertyTop = PropertyValuesHolder.ofInt(&quot;top&quot;, mSourceImageView.getTop(), top);</div><div class="line">    PropertyValuesHolder propertyRight = PropertyValuesHolder.ofInt(&quot;right&quot;, mSourceImageView.getRight(), left + width);</div><div class="line">    PropertyValuesHolder propertyBottom = PropertyValuesHolder.ofInt(&quot;bottom&quot;, mSourceImageView.getBottom(), top + height);</div><div class="line"></div><div class="line">    ObjectAnimator positionAnimator = ObjectAnimator.ofPropertyValuesHolder(mSourceImageView,</div><div class="line">            propertyLeft, propertyTop, propertyRight, propertyBottom);</div><div class="line">    positionAnimator.addListener(new Animator.AnimatorListener() &#123;</div><div class="line">        @Override</div><div class="line">        public void onAnimationStart(Animator animation) &#123;</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onAnimationEnd(Animator animation) &#123;</div><div class="line">            // 为了退出动画，需要把sourceImageView的LayoutParams改成targetImageView</div><div class="line">            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mSourceImageView.getLayoutParams();</div><div class="line">            layoutParams.height = height;</div><div class="line">            layoutParams.width = width;</div><div class="line">            layoutParams.setMargins(left, top, 0, 0);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onAnimationCancel(Animator animation) &#123;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onAnimationRepeat(Animator animation) &#123;</div><div class="line"></div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    // 2.ImageView的矩阵动画</div><div class="line">    Matrix initMatrix = getImageMatrix(mSourceImageView);</div><div class="line">    initMatrix.getValues(mInitImageMatrixValues);</div><div class="line">    final Matrix endMatrix = getImageMatrix(mTargetImageView);</div><div class="line">    mSourceImageView.setScaleType(ImageView.ScaleType.MATRIX);</div><div class="line">    // ofObject()用法：传入自定义Property和Evaluator的用法</div><div class="line">    ObjectAnimator matrixAnimator = ObjectAnimator.ofObject(mSourceImageView, ANIMATED_TRANSFORM_PROPERTY, new MatrixEvaluator(), initMatrix, endMatrix);</div><div class="line"></div><div class="line">    // 3.顺便加个渐变动画</div><div class="line">    ObjectAnimator fadeInAnimator = ObjectAnimator.ofFloat(mContainer, &quot;alpha&quot;, 0.0f, 1.0f);</div><div class="line"></div><div class="line">    // 4.一起播放上面的动画</div><div class="line">    mEnteringAnimation = new AnimatorSet();</div><div class="line">    mEnteringAnimation.setDuration(IMAGE_TRANSLATION_DURATION);</div><div class="line">    mEnteringAnimation.setInterpolator(DEFAULT_INTERPOLATOR);</div><div class="line">    mEnteringAnimation.addListener(new Animator.AnimatorListener() &#123;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onAnimationCancel(Animator animation) &#123;</div><div class="line">            mEnteringAnimation = null;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onAnimationRepeat(Animator animation) &#123;</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onAnimationStart(Animator animation) &#123;</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onAnimationEnd(Animator animation) &#123;</div><div class="line">            if (mEnteringAnimation != null) &#123;</div><div class="line">                mEnteringAnimation = null;</div><div class="line">                mTargetImageView.setVisibility(View.VISIBLE);</div><div class="line">                mSourceImageView.setVisibility(View.INVISIBLE);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    mEnteringAnimation.playTogether(positionAnimator, matrixAnimator, fadeInAnimator);</div><div class="line">    mEnteringAnimation.start();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="（4）2个关键的入场动画的说明"><a href="#（4）2个关键的入场动画的说明" class="headerlink" title="（4）2个关键的入场动画的说明"></a>（4）2个关键的入场动画的说明</h3><p>在（3）中，用到下面两个关键的动画：</p>
+<ul>
+<li><p>ObjectAnimator - positionAnimator：改变sourceImageView的top、left、right、bottom属性，动画的起始值就是sourceImageView的这4个属性，结束值就是targetImageView的这4个属性。</p>
+</li>
+<li><p>ObjectAnimator - matrixAnimator：通过改变sourceImageView的Matrix，来改变其中显示的图片（drawable）的Bounds，从而使ImageView呈现出渐变效果。</p>
+</li>
+</ul>
+<p>介绍这两个关键动画的实现细节之前，需要具备属性动画的基础知识。如果不熟悉的话，建议先看下这几篇博客，里面详细地介绍了属性动画的各种用法。</p>
+<ul>
+<li><p><a href="http://blog.csdn.net/harvic880925/article/details/50525521" target="_blank" rel="external">ValueAnimator基本使用</a></p>
+</li>
+<li><p><a href="http://blog.csdn.net/harvic880925/article/details/50546884" target="_blank" rel="external">ValueAnimator高级进阶（一）</a></p>
+</li>
+<li><p><a href="http://blog.csdn.net/harvic880925/article/details/50549385" target="_blank" rel="external">ValueAnimator高级进阶（二）</a></p>
+</li>
+<li><p><a href="http://blog.csdn.net/harvic880925/article/details/50598322" target="_blank" rel="external">ObjectAnimator基本使用</a></p>
+</li>
+<li><p><a href="http://blog.csdn.net/harvic880925/article/details/50752838" target="_blank" rel="external">PropertyValuesHolder与Keyframe</a></p>
+</li>
+<li><p><a href="http://blog.csdn.net/harvic880925/article/details/50759059" target="_blank" rel="external">联合动画的代码实现</a></p>
+</li>
+</ul>
+<hr>
+<p>下面介绍这两个关键的动画实现</p>
+<h4 style="color:#ff0000">关键动画之 ObjectAnimator - positionAnimator 实现：改变ImageView的位置和大小</h4>
+
+<p>我们知道，设置一个动画，就要给它设置起始值和结束值。所以我们的positionAnimator就需要设置sourceImageView的left、top、right、bottom这4个属性起始值和结束值。在动画执行的过程中，就可以渐渐地改变sourceImageView的这4个属性了。</p>
+<p>下面这行代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PropertyValuesHolder propertyLeft = PropertyValuesHolder.ofInt(&quot;left&quot;, mSourceImageView.getLeft(), left);</div></pre></td></tr></table></figure>
+<p>用<strong>PropertyValuesHolder</strong>可以给sourceImageView的left属性设置了起始值、结束值。</p>
+<p>对于left属性，起始值就是sourceImageView的left值，我们已经从第一个Activity传过来了。<br>而left属性的结束值，我们可以从targetImageView的left属性值。<br>其他的top、right、bottom属性也是一样的道理。</p>
+<blockquote>
+<p>需要需要特别注意的一点就是targetImageView的宽高获取方法，我们都知道获取一个View的宽高必须要等它绘制完了，而<strong>targetImageView不会在setContentView之后立刻绘制完成</strong>。<br>因此我们需要监听targetImageView的绘制状态，也就是监听<strong>ViewTreeObserver</strong>的各种回调，这里我们要监听的是<strong>OnPreDrawListener</strong>。<br>关于ViewTreeObserver，可以参考<a href="http://souly.cn/%E6%8A%80%E6%9C%AF%E5%8D%9A%E6%96%87/2015/11/16/viewTreeObserver%E8%A7%A3%E6%9E%90/" target="_blank" rel="external">《Viewtreeobserver解析》</a>这篇文章学习一下。</p>
+</blockquote>
+<h4 style="color:#ff0000">关键动画之ObjectAnimator - matrixAnimator实现：使ImageView展示的图片呈现渐变效果</h4>
+
+<p>这里的数值计算比positionAnimator要复杂一点。</p>
+<p>首先我们要<strong>自定义一个计算器MatrixEvaluator</strong>，它的作用是返回动画执行过程中的Matrix，然后再使用这个Matrix去改变sourceImageView的Matrix属性。</p>
+<p>这个自定义计算器evaluate方法非常简单，就是根据起始Matrix（startMatrix）和结束Matrix（endMatrix）之间的差值diff，然后乘以当前<strong>加速器</strong>返回的动画的<strong>数值</strong>进度即可得到当前实时的Matrix值。</p>
+<p>下面看它的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">class MatrixEvaluator implements TypeEvaluator&lt;Matrix&gt; &#123;</div><div class="line"></div><div class="line">        public static TypeEvaluator&lt;Matrix&gt; NULL_MATRIX_EVALUATOR = new TypeEvaluator&lt;Matrix&gt;() &#123;</div><div class="line">            @Override</div><div class="line">            public Matrix evaluate(float fraction, Matrix startValue, Matrix endValue) &#123;</div><div class="line">                return null;</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line"></div><div class="line">        float[] mTempStartValues = new float[9];</div><div class="line">        float[] mTempEndValues = new float[9];</div><div class="line">        Matrix mTempMatrix = new Matrix();</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public Matrix evaluate(float fraction, Matrix startValue, Matrix endValue) &#123;</div><div class="line">            startValue.getValues(mTempStartValues);</div><div class="line">            endValue.getValues(mTempEndValues);</div><div class="line">            for (int i = 0; i &lt; 9; i++) &#123;</div><div class="line">                float diff = mTempEndValues[i] - mTempStartValues[i];</div><div class="line">                // fraction是加速器中的返回值，表示当前动画的“数值”进度。我们用的是Android SDK中提供的AccelerateDecelerateInterpolator。</div><div class="line">                mTempEndValues[i] = mTempStartValues[i] + (fraction * diff); </div><div class="line">            &#125;</div><div class="line">            mTempMatrix.setValues(mTempEndValues);</div><div class="line"></div><div class="line">            return mTempMatrix;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>有了这个计算器，得到动画执行过程中的Matrix值，怎么动态地赋给sourceImageView呢？</p>
+<p>我们知道，在普通的<code>ObjectAnimator#ofFloat(Object target, String propertyName, float... values)</code>方法中，当Evaluator接收到最后一个可变长参数values后，可以得到起始值和结束值后。然后在<strong>evaluate</strong>方法中计算出动画执行过程的应该赋予的属性的值，然后调用目标对象（这里就是我们的ImageView）的setter方法把这个值赋给目标对象。</p>
+<blockquote>
+<p>例如这句代码，<code>ObjectAnimator fadeInAnimator = ObjectAnimator.ofFloat(mContainer, &quot;alpha&quot;, 0.0f, 1.0f);</code>其实就是在计算出了动画过程中每一个时刻的alpha值，然后再调用mContainer的setAlpha(float alpha)方法去改变mContainer的透明度。</p>
+</blockquote>
+<p>但是要改变sourceImageView的Matrix值，我们需要调用<strong>ImageView#animateTransform()</strong>这个方法，这个方法在Android SDK中属于隐藏API，其代码片段所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">// ImageView#animateTransform()源代码</div><div class="line">/** @hide */</div><div class="line">public void animateTransform(Matrix matrix) &#123;</div><div class="line">        if (mDrawable == null) &#123;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">        if (matrix == null) &#123;</div><div class="line">            mDrawable.setBounds(0, 0, getWidth(), getHeight());</div><div class="line">        &#125; else &#123;</div><div class="line">            mDrawable.setBounds(0, 0, mDrawableWidth, mDrawableHeight);</div><div class="line">            if (mDrawMatrix == null) &#123;</div><div class="line">                mDrawMatrix = new Matrix();</div><div class="line">            &#125;</div><div class="line">            mDrawMatrix.set(matrix);</div><div class="line">        &#125;</div><div class="line">        invalidate();</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>而且这个方法的名字也不叫<strong>setXXX</strong>，所以我们没法调用像<code>ofFloat</code>这样的方法去改变sourceImageView的Matrix。</p>
+<p>这时候需要采用自定义Property，并且实现它的<strong>set</strong>方法，自定义Property代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">private static final Property&lt;ImageView, Matrix&gt; ANIMATED_TRANSFORM_PROPERTY = new Property&lt;ImageView, Matrix&gt;(Matrix.class, &quot;animatedTransform&quot;) &#123;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void set(ImageView imageView, Matrix matrix) &#123;</div><div class="line">            // 这里模仿了SDK源码中ImageView#animateTransform的实现</div><div class="line">            Drawable drawable = imageView.getDrawable();</div><div class="line">            if (drawable == null) &#123;</div><div class="line">                return;</div><div class="line">            &#125;</div><div class="line">            if (matrix == null) &#123;</div><div class="line">                drawable.setBounds(0, 0, imageView.getWidth(), imageView.getHeight());</div><div class="line">            &#125; else &#123;</div><div class="line">                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());</div><div class="line">                Matrix drawMatrix = imageView.getImageMatrix();</div><div class="line">                if (drawMatrix == null) &#123;</div><div class="line">                    drawMatrix = new Matrix();</div><div class="line">                    imageView.setImageMatrix(drawMatrix);</div><div class="line">                &#125;</div><div class="line">                imageView.setImageMatrix(matrix);</div><div class="line">            &#125;</div><div class="line">            imageView.invalidate();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public Matrix get(ImageView object) &#123;</div><div class="line">            return null;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div></pre></td></tr></table></figure>
+<p>自定义一个Property必须要实现里面的get方法，但是在我们的这里例子中，get方法不会被调用。</p>
+<p>因为在属性动画中，只有当你传入的可变长参数values（也就是起始值、中间值1、中间值2. … 结束值）长度为1，也就是说你只传了一个值的时候，才会对我们的target调用getter方法去获取初始值。所以这里我们是不需要getter方法的。</p>
+<p>自定义Property完成后，通过<code>ObjectAnimator#ofObject(T target, Property&lt;T, V&gt; property, TypeEvaluator&lt;V&gt; evaluator, V... values)</code> 方法，就可以把计算器计算出的动画执行过程中的Matrix值，通过自定义Property中的set方法，赋给当前的目标对象，即sourceImageView！从而使得sourceImageView呈现出渐变效果。</p>
+<blockquote>
+<p>这里的实现是来自这位大神的博客<a href="https://medium.com/@v.danylo/implementing-imageview-transition-between-activities-for-pre-lollipop-devices-8b24bc387a2a#.7c6qxvf59" target="_blank" rel="external">Implementing ImageView transition between activities for pre-Lollipop devices</a>。<br>我们首先感谢这位大神的分享！这位大神在文中也提到，用动画来实现图片的渐进式改变，起实来自于我们Android SDK中的隐藏API——<strong>ImageView#animateTransform</strong>。</p>
+</blockquote>
+<h2 id="2-退场-1"><a href="#2-退场-1" class="headerlink" title="2.退场"></a>2.退场</h2><p>退场动画完全是入场动画的逆操作，直接看代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">// 图片退出的转场动画：完全是和之前相反的过程</div><div class="line">private void playExitAnimations(int sourceImageViewLeft, int sourceImageViewTop, int sourceImageViewWidth, int sourceImageViewHeight, float[] imageMatrixValues) &#123;</div><div class="line">    mSourceImageView.setVisibility(View.VISIBLE);</div><div class="line">    mTargetImageView.setVisibility(View.INVISIBLE);</div><div class="line"></div><div class="line">    // 改变SourceView的位置、宽高属性。这里每个属性的起始值和结束值和入场时刚好相反。</div><div class="line">    int[] locationOnScreen = new int[2];</div><div class="line">    mSourceImageView.getLocationOnScreen(locationOnScreen);</div><div class="line">    PropertyValuesHolder propertyLeft = PropertyValuesHolder.ofInt(&quot;left&quot;, locationOnScreen[0], sourceImageViewLeft);</div><div class="line">    PropertyValuesHolder propertyTop = PropertyValuesHolder.ofInt(&quot;top&quot;, locationOnScreen[1], sourceImageViewTop);</div><div class="line">    PropertyValuesHolder propertyRight = PropertyValuesHolder.ofInt(&quot;right&quot;, locationOnScreen[0] + mSourceImageView.getWidth(), sourceImageViewLeft + sourceImageViewWidth);</div><div class="line">    PropertyValuesHolder propertyBottom = PropertyValuesHolder.ofInt(&quot;bottom&quot;, mSourceImageView.getBottom(), sourceImageViewTop + sourceImageViewHeight);</div><div class="line">    ObjectAnimator positionAnimator = ObjectAnimator.ofPropertyValuesHolder(mSourceImageView, propertyLeft, propertyTop, propertyRight, propertyBottom);</div><div class="line"></div><div class="line">    // ImageView的矩阵动画</div><div class="line">    Matrix initialMatrix = getImageMatrix(mSourceImageView);</div><div class="line"></div><div class="line">    Matrix endMatrix = new Matrix();</div><div class="line">    endMatrix.setValues(imageMatrixValues);</div><div class="line">    mSourceImageView.setScaleType(ImageView.ScaleType.MATRIX);</div><div class="line">    // 这里Matrix的起始值和结束值和入场时也刚好相反。</div><div class="line">    ObjectAnimator matrixAnimator = ObjectAnimator.ofObject(mSourceImageView, ANIMATED_TRANSFORM_PROPERTY, new MatrixEvaluator(), initialMatrix, endMatrix);</div><div class="line"></div><div class="line">    // 渐变动画</div><div class="line">    ObjectAnimator fadeInAnimator = ObjectAnimator.ofFloat(mContainer, &quot;alpha&quot;, 1.0f, 0.0f);</div><div class="line"></div><div class="line">    mExitingAnimation = new AnimatorSet();</div><div class="line">    mExitingAnimation.setDuration(IMAGE_TRANSLATION_DURATION);</div><div class="line">    mExitingAnimation.setInterpolator(new AccelerateInterpolator());</div><div class="line">    mExitingAnimation.addListener(new Animator.AnimatorListener() &#123;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onAnimationStart(Animator animation) &#123;</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onAnimationEnd(Animator animation) &#123;</div><div class="line">            if (mExitingAnimation != null) &#123;</div><div class="line">                mExitingAnimation = null;</div><div class="line">            &#125;</div><div class="line">            // 关闭第二个界面</div><div class="line">            Activity activity = (Activity) mSourceImageView.getContext();</div><div class="line">            activity.finish();</div><div class="line">            activity.overridePendingTransition(0, 0); // 同样去掉默认的转场动画</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onAnimationCancel(Animator animation) &#123;</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void onAnimationRepeat(Animator animation) &#123;</div><div class="line"></div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    mExitingAnimation.playTogether(positionAnimator, matrixAnimator, fadeInAnimator);</div><div class="line">    mExitingAnimation.start();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="四、涉及到的知识点"><a href="#四、涉及到的知识点" class="headerlink" title="四、涉及到的知识点"></a>四、涉及到的知识点</h1><p>我认为实现demo里面的效果需要了解下面的知识点，如果不熟悉的话，建议先看一下上一章推荐的属性动画讲解的几篇博客。</p>
+<h2 id="1-ImageView的ScaleType"><a href="#1-ImageView的ScaleType" class="headerlink" title="1.ImageView的ScaleType"></a>1.ImageView的ScaleType</h2><p>不管将ScaleType设为多少，bitmap始终都是一个。如果在Android Studio打开debug模式来查看bitmap实际的图片，用一个ImageView去展示一张图片，不管你怎么改变ScaleType，其实里面的图片对象都是一样的。</p>
+<h2 id="2-属性动画之插值器-Interpolator"><a href="#2-属性动画之插值器-Interpolator" class="headerlink" title="2.属性动画之插值器 - Interpolator"></a>2.属性动画之插值器 - Interpolator</h2><p>控制动画数值进度的转换器，我们给动画是指一个duration之后，插值器负责把动画的<strong>自然</strong>进度转成<strong>数值</strong>进度。自然进度就是指随着时间匀速增长的值。</p>
+<p>所有的插值器都实现了<strong>TimeInterpolator接口里面的public float getInterpolation(float input)</strong>方法，input就是随时间流逝的自然进度，在这个方法中根据实际需求，用input计算出实际数字，作为数值进度返回。</p>
+<h2 id="3-属性动画之计算器-TypeEvaluator"><a href="#3-属性动画之计算器-TypeEvaluator" class="headerlink" title="3.属性动画之计算器 - TypeEvaluator"></a>3.属性动画之计算器 - TypeEvaluator</h2><p>计算器就是计算动画执行过程中，目标对象的某个属性的数值。</p>
+<p>TypeEvaluator接口中有一个<strong>public T evaluate(float fraction, T startValue, T endValue)</strong>方法，fraction就是插值器返回的数值进度，而startValue就是对象的某一个属性的起始值，endValue是这个属性的结束值。</p>
+<p>这里利用的是泛型编程，我们可以把属性的起始、结束值看成一个Type。传入自己定义的任何Type后，在evaluate方法中，计算出当前应该改变<strong>对象</strong>的<strong>属性</strong>的具体Type值。再调用这个对象的setter方法，将Type值赋给这个对象。</p>
+<p>很多时候，我们不会像这个demo中自定义Property，然后把它set给一个系统封装好的ImageView。我们很可能会有一个自定义的CustomView，然后在这个CustomView中提供一个setXXX方法。这样也可以在自定义的计算器中实现CustomView的属性动态改变。</p>
+<h2 id="4-属性动画之中的ObjectAnimator和ValueAnimator的区别"><a href="#4-属性动画之中的ObjectAnimator和ValueAnimator的区别" class="headerlink" title="4.属性动画之中的ObjectAnimator和ValueAnimator的区别"></a>4.属性动画之中的ObjectAnimator和ValueAnimator的区别</h2><p>ObjectAnimator是ValueAnimator的子类，ValueAnimator只负责计算动画过程中，目标对象（一般是一个View或者其他UI元素）属性的值，但是需要我们自己监听动画的update状态，再把监听到的值set给目标对象的属性。</p>
+<p>ObjectAnimator除了可以计算动画过程中的属性值外，还可以调用目标对象的setter方法，改变这个属性的值。所以它的功能比ValueAnimator要强大。</p>
+<h2 id="4-属性动画之PropertyValuesHolder用法"><a href="#4-属性动画之PropertyValuesHolder用法" class="headerlink" title="4.属性动画之PropertyValuesHolder用法"></a>4.属性动画之PropertyValuesHolder用法</h2><p>一般直接使用<code>ObjectAnimator ofFloat(Object target, String propertyName, float... values)</code>只能改变目标对象的一个属性值。</p>
+<p>如果我们想要改一个目标对象的的多个属性时，可以先使用<code>PropertyValuesHolder ofInt(String propertyName, int... values)</code>创建PropertyValuesHolder。</p>
+<p>然后再用<code>ObjectAnimator ofPropertyValuesHolder(Object target, PropertyValuesHolder... values)</code>创建出改变多个属性的属性动画对象ObjectAnimator。</p>
+<h2 id="5-如何向ContentView中动态添加View"><a href="#5-如何向ContentView中动态添加View" class="headerlink" title="5.如何向ContentView中动态添加View"></a>5.如何向ContentView中动态添加View</h2><p>首先要从当前的Activity中获得根视图：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">getWindow().getDecorView().findViewById(android.R.id.content);</div></pre></td></tr></table></figure>
+<p>这是个FrameLayout，然后我们就可以用java代码动态向它里面添加sourceImageView了。</p>
+<p>关于DecorView再多说两句，它是Activity界面的根View，继承自FrameLayout。在它里面又是一个LinearLayout，在这个LinearLayout里面又包含了<strong>id为@android:id/title_container</strong>的标题栏，和一个<strong>id为@android:id/content</strong>的ContentView，结构大概是下面这个样子的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- DecorView</div><div class="line">    - LinearLayout</div><div class="line">        - ...</div><div class="line">        - FrameLayout：android:id/title_container</div><div class="line">        - FrameLayout：@android:id/content</div></pre></td></tr></table></figure>
+<p>当我们在onCreate方法中调用Activity#setContentView()时，会把我们自己写的布局添加到这个ContentView中去。</p>
+<h1 id="五、Android-5-0上的实现方法"><a href="#五、Android-5-0上的实现方法" class="headerlink" title="五、Android 5.0上的实现方法"></a>五、Android 5.0上的实现方法</h1><p>下面是在Android 5.0以上一种示例，非常简单，只需要几行代码就可实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">// 第一个Activity，利用ActivityOptions创建SceneTransitionAnimation</div><div class="line">private void transitionOnAndroidL() &#123;</div><div class="line">    // 把需要共享的元素-ImageView，传给第二个界面</div><div class="line">    Intent intent = new Intent(MainActivity.this, DetailActivityLollipop.class);</div><div class="line">    // 一定要传入shareElementName</div><div class="line">    String shareElementName = &quot;sharedImageView&quot;;</div><div class="line">    ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(this, mImageView, shareElementName);</div><div class="line">    getWindow().setSharedElementEnterTransition(new ChangeImageTransform(this, null));</div><div class="line">    intent.putExtra(DetailActivityLollipop.SHARED_ELEMENT_KEY, shareElementName);</div><div class="line">    intent.putExtra(DetailActivityLollipop.IMAGE_RES_ID, mImageResId);</div><div class="line">    // 打开它</div><div class="line">    startActivity(intent, activityOptions.toBundle());</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 第二个Activity，取出shareElementName，再调用ViewCompat#setTransitionName</div><div class="line">private void initImageEnterTransition() &#123;</div><div class="line">    imageView.setVisibility(View.VISIBLE);</div><div class="line">    String imageTransitionName = getIntent().getStringExtra(SHARED_ELEMENT_KEY);</div><div class="line">    ViewCompat.setTransitionName(imageView, imageTransitionName);</div><div class="line"></div><div class="line">    View mainContainer = findViewById(R.id.activityContanierDetail);</div><div class="line">    mainContainer.setAlpha(1.0f);</div><div class="line">    int resId = getIntent().getExtras().getInt(IMAGE_RES_ID);</div><div class="line">    imageView.setImageResource(resId);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>官方介绍的<a href="https://developer.android.com/training/material/animations.html#Transitions" target="_blank" rel="external">Transitions</a>中用xml也可以实现。另外，还有多个元素的转场动画效果，这里就不详细说了，如果有需要，也可以参考下这篇文章——<a href="https://guides.codepath.com/android/Shared-Element-Activity-Transition" target="_blank" rel="external">Shared Element Activity Transition</a>。</p>
+<h1 id="六、其他实现方法"><a href="#六、其他实现方法" class="headerlink" title="六、其他实现方法"></a>六、其他实现方法</h1><p>在我的demo中只演示了核心的View转场实现，没有和其他的稍微复杂一些的需求相结合。网上还有很多关于这种效果实现的分享，也有应用到一些更复杂场景，下面推荐出来一起多多学习。</p>
+<p>文章推荐：</p>
+<ul>
+<li><p><a href="http://wl9739.github.io/2016/10/16/Android-%E4%B8%AD%E7%9A%84%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%E5%8F%8A%E5%85%BC%E5%AE%B9%E5%A4%84%E7%90%86/" target="_blank" rel="external">Android中的转场动画及兼容处理</a></p>
+</li>
+<li><p><a href="http://www.jianshu.com/p/340c938e9f32" target="_blank" rel="external">Android共享元素转场动画兼容实践</a></p>
+</li>
+<li><p><a href="http://immortalz.me/859.html" target="_blank" rel="external">两步实现类似格瓦拉的转场动画</a></p>
+</li>
+<li><p><a href="https://guides.codepath.com/android/Shared-Element-Activity-Transition" target="_blank" rel="external">Shared Element Activity Transition</a>：详细介绍了5.0以上的各种共享元素转场效果。</p>
+</li>
+</ul>
+<p>开源Library推荐：</p>
+<ul>
+<li><p><a href="https://github.com/takahirom/PreLollipopTransition" target="_blank" rel="external">PreLollipopTransition</a></p>
+</li>
+<li><p><a href="https://github.com/vikramkakkar/ImageTransition" target="_blank" rel="external">ImageTransition</a></p>
+</li>
+<li><p><a href="https://github.com/alexvasilkov/GestureViews" target="_blank" rel="external">GestureViews</a>：手势操作库，其demo本身就实现了一个类似的转场的动画效果。</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/动画/" rel="tag"># 动画</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/17/Android View的可见性检查方法-上篇/" rel="next" title="Android View的可见性检查方法（上）">
+                <i class="fa fa-chevron-left"></i> Android View的可见性检查方法（上）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/11/python利用beautifulsoup+selenium自动翻页抓取网页内容/" rel="prev" title="python利用beautifulsoup+selenium自动翻页抓取网页内容">
+                python利用beautifulsoup+selenium自动翻页抓取网页内容 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="unclechen" />
+          <p class="site-author-name" itemprop="name">unclechen</p>
+           
+              <p class="site-description motion-element" itemprop="description">吃下恶魔果实，我就能变成超级赛亚人！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、背景"><span class="nav-number">1.</span> <span class="nav-text">一、背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、实现思路"><span class="nav-number">2.</span> <span class="nav-text">二、实现思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-入场"><span class="nav-number">2.1.</span> <span class="nav-text">1.入场</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-退场"><span class="nav-number">2.2.</span> <span class="nav-text">2.退场</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、实现代码"><span class="nav-number">3.</span> <span class="nav-text">三、实现代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-入场-1"><span class="nav-number">3.1.</span> <span class="nav-text">1.入场</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#（1）先复原出sourceImageView"><span class="nav-number">3.1.1.</span> <span class="nav-text">（1）先复原出sourceImageView</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#（2）找到targetImageView的位置和宽高"><span class="nav-number">3.1.2.</span> <span class="nav-text">（2）找到targetImageView的位置和宽高</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#（3）播放入场动画"><span class="nav-number">3.1.3.</span> <span class="nav-text">（3）播放入场动画</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#（4）2个关键的入场动画的说明"><span class="nav-number">3.1.4.</span> <span class="nav-text">（4）2个关键的入场动画的说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.4.1.</span> <span class="nav-text">关键动画之 ObjectAnimator - positionAnimator 实现：改变ImageView的位置和大小</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.4.2.</span> <span class="nav-text">关键动画之ObjectAnimator - matrixAnimator实现：使ImageView展示的图片呈现渐变效果</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-退场-1"><span class="nav-number">3.2.</span> <span class="nav-text">2.退场</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、涉及到的知识点"><span class="nav-number">4.</span> <span class="nav-text">四、涉及到的知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-ImageView的ScaleType"><span class="nav-number">4.1.</span> <span class="nav-text">1.ImageView的ScaleType</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-属性动画之插值器-Interpolator"><span class="nav-number">4.2.</span> <span class="nav-text">2.属性动画之插值器 - Interpolator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-属性动画之计算器-TypeEvaluator"><span class="nav-number">4.3.</span> <span class="nav-text">3.属性动画之计算器 - TypeEvaluator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-属性动画之中的ObjectAnimator和ValueAnimator的区别"><span class="nav-number">4.4.</span> <span class="nav-text">4.属性动画之中的ObjectAnimator和ValueAnimator的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-属性动画之PropertyValuesHolder用法"><span class="nav-number">4.5.</span> <span class="nav-text">4.属性动画之PropertyValuesHolder用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-如何向ContentView中动态添加View"><span class="nav-number">4.6.</span> <span class="nav-text">5.如何向ContentView中动态添加View</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、Android-5-0上的实现方法"><span class="nav-number">5.</span> <span class="nav-text">五、Android 5.0上的实现方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#六、其他实现方法"><span class="nav-number">6.</span> <span class="nav-text">六、其他实现方法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">unclechen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

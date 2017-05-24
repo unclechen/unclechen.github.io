@@ -1,0 +1,835 @@
+<!doctype html>
+
+
+
+
+<html class="theme-next pisces" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,适配,Android7.x," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="在上篇中，介绍了什么是App分屏模式，以及如何设置我们的App来进入分屏模式。这次我们看一下，作为开发者，我们应该如何让自己的App进入分屏模式，当App进入分屏模式时，我们注意哪些问题。 简单地说，我认为除了保证分屏时App功能、性能正常以外，我们需要重点学习 如何在分屏模式下打开新的Activity 以及 如何实现跨App/Activity的拖拽功能。">
+<meta name="keywords" content="Android,适配,Android7.x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android N App分屏模式完全解析（下）">
+<meta property="og:url" content="http://unclechen.github.io/2016/03/12/Android N App分屏模式完全解析-下篇/index.html">
+<meta property="og:site_name" content="UncleChen的博客">
+<meta property="og:description" content="在上篇中，介绍了什么是App分屏模式，以及如何设置我们的App来进入分屏模式。这次我们看一下，作为开发者，我们应该如何让自己的App进入分屏模式，当App进入分屏模式时，我们注意哪些问题。 简单地说，我认为除了保证分屏时App功能、性能正常以外，我们需要重点学习 如何在分屏模式下打开新的Activity 以及 如何实现跨App/Activity的拖拽功能。">
+<meta property="og:image" content="http://unclechen.github.io/content/images/two-acts.png">
+<meta property="og:image" content="http://unclechen.github.io/content/images/drag-drop.png">
+<meta property="og:image" content="http://unclechen.github.io/content/images/start-drag.png">
+<meta property="og:image" content="http://unclechen.github.io/content/images/drop-event.png">
+<meta property="og:updated_time" content="2017-05-22T12:37:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android N App分屏模式完全解析（下）">
+<meta name="twitter:description" content="在上篇中，介绍了什么是App分屏模式，以及如何设置我们的App来进入分屏模式。这次我们看一下，作为开发者，我们应该如何让自己的App进入分屏模式，当App进入分屏模式时，我们注意哪些问题。 简单地说，我认为除了保证分屏时App功能、性能正常以外，我们需要重点学习 如何在分屏模式下打开新的Activity 以及 如何实现跨App/Activity的拖拽功能。">
+<meta name="twitter:image" content="http://unclechen.github.io/content/images/two-acts.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://unclechen.github.io/2016/03/12/Android N App分屏模式完全解析-下篇/"/>
+
+
+
+
+
+  <title>Android N App分屏模式完全解析（下） | UncleChen的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UncleChen的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/03/12/Android N App分屏模式完全解析-下篇/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android N App分屏模式完全解析（下）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-12T10:00:00+08:00">
+                2016-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在<a href="http://unclechen.github.io/2016/03/12/Android-N-App分屏模式完全解析-上篇/">上篇</a>中，介绍了什么是App分屏模式，以及如何设置我们的App来进入分屏模式。这次我们看一下，作为开发者，我们应该如何让自己的App进入分屏模式，当App进入分屏模式时，我们注意哪些问题。</p>
+<p>简单地说，我认为除了保证分屏时App功能、性能正常以外，我们需要重点学习 <strong><em>如何在分屏模式下打开新的Activity</em></strong> 以及 <strong><em>如何实现跨App/Activity的拖拽功能</em></strong>。</p>
+<a id="more"></a>
+<h1 id="用分屏模式运行你的App"><a href="#用分屏模式运行你的App" class="headerlink" title="用分屏模式运行你的App"></a>用分屏模式运行你的App</h1><p>Android N中新增了一些方法来支持App的分屏模式。同时在分屏模式下，也禁用了App一些特性。</p>
+<h2 id="分屏模式下被禁用的特性"><a href="#分屏模式下被禁用的特性" class="headerlink" title="分屏模式下被禁用的特性"></a>分屏模式下被禁用的特性</h2><ul>
+<li>自定义<a href="http://developer.android.com/training/system-ui/index.html" target="_blank" rel="external">系统UI</a>，例如分屏模式下无法隐藏系统的状态栏。</li>
+<li>无法根据屏幕方向来旋转App的界面，也就是说<code>android:screenOrientation</code>属性会被系统忽略。</li>
+</ul>
+<h2 id="分屏模式的通知回调、查询App是否处于分屏状态"><a href="#分屏模式的通知回调、查询App是否处于分屏状态" class="headerlink" title="分屏模式的通知回调、查询App是否处于分屏状态"></a>分屏模式的通知回调、查询App是否处于分屏状态</h2><p>最新的<a href="http://developer.android.com/preview/setup-sdk.html#docs-dl" target="_blank" rel="external">Android N SDK</a>中，<code>Activity</code>类中增加了下面的方法。</p>
+<ul>
+<li>inMultiWindow()：返回值为boolean，调用此方法可以知道App是否处于分屏模式。</li>
+<li>inPictureInPicture()：返回值为boolean，调用此方法可以知道App是否处于画中画模式。</li>
+</ul>
+<blockquote>
+<p>注意：<code>画中画模式</code>其实是一个<strong>特殊的</strong><code>分屏模式</code>，如果<code>mActivity.inPictureInPicture()</code>返回<code>true</code>，那么<code>mActivity.inMultiWindow()</code>一定也是返回<code>true</code>。</p>
+</blockquote>
+<ul>
+<li>onMultiWindowChanged(boolean inMultiWindow)：当Activity进入或者退出分屏模式时，系统会回调这个方法来通知开发者。回调的参数<code>inMultiWindow</code>为boolean类型，如果<code>inMultiWindow</code>为true，表示Activity进入分屏模式；如果<code>inMultiWindow</code>为false，表示退出分屏模式。</li>
+<li>onPictureInPictureChanged(boolean inPictureInPicture)：当Activity进入画中画模式时，系统会回调这个方法。回调参数<code>inPictureInPicture</code>为<code>true</code>时，表示进入了画中画模式；<code>inPictureInPicture</code>为<code>false</code>时，表示退出了画中画模式。</li>
+</ul>
+<p><code>Fragment</code>类中，同样增加了以上支持分屏模式的方法，例如<code>Fragment.inMultiWindow()</code>。</p>
+<h2 id="如何进入画中画模式"><a href="#如何进入画中画模式" class="headerlink" title="如何进入画中画模式"></a>如何进入画中画模式</h2><p>调用<code>Activity</code>类的<code>enterPictureInPicture()</code>方法，可以使得我们的App进入画中画模式。如果运行的设备不支持画中画模式，调用这个方法将不会有任何效果。更多画中画模式的资料，请参考<a href="http://developer.android.com/intl/zh-cn/preview/features/picture-in-picture.html" target="_blank" rel="external">picture-in-picture</a>。</p>
+<h2 id="在分屏模式下打开新的Activity"><a href="#在分屏模式下打开新的Activity" class="headerlink" title="在分屏模式下打开新的Activity"></a>在分屏模式下打开新的Activity</h2><p>当你打开一个新的Activity时，只需要给Intent添加<code>Intent.FLAG_ACTIVITY_LAUNCH_TO_ADJACENT</code>，系统将<strong><em>尝试</em></strong>将它设置为与当前的Activity共同以分屏的模式显示在屏幕上。</p>
+<p><strong>注意：</strong>这里只是尝试，但这不一定是100%生效的，前一篇博客里也说过，假如新打开的Activity的<code>android:resizeableActivity</code>属性设置为<code>false</code>，就会禁止分屏浏览这个Activity。所以系统只是尝试去以分屏模式打开一个新的Activity，如果条件不满足，将不会生效！此外，我实际用<code>Android N Preview SDK</code>实践的时候发现这个<code>FLAG</code>实际得值是<code>FLAG_ACTIVITY_LAUNCH_ADJACENT</code>，并非是<code>FLAG_ACTIVITY_LAUNCH_TO_ADJACENT</code>。</p>
+<p>当满足下面的条件，系统会让这两个Activity进入分屏模式：</p>
+<ul>
+<li>当前Activity已经进入到分屏模式。</li>
+<li>新打开的Activity支持分屏浏览（即<strong>android:resizeableActivity=true</strong>）。</li>
+</ul>
+<p>此时，给新打开的Activity，设置<code>intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_NEW_TASK);</code>才会有效果。</p>
+<p><img src="/content/images/two-acts.png" alt="two-acts"></p>
+<p>建议参考官方的Sample：<a href="https://github.com/googlesamples/android-MultiWindowPlayground" target="_blank" rel="external">MultiWindow Playground Sample</a></p>
+<p>那么为何还需要添加<code>FLAG_ACTIVITY_NEW_TASK</code>？看一下官方解释：</p>
+<blockquote>
+<p>注意：在同一个Activity返回栈中，打开一个新的Activity时，这个Activity将会继承上一个Activity所有和<code>分屏模式</code>有关的属性。如果你想要在一个独立的窗口以分屏模式打开一个新的Activity，那么必须新建一个Activity返回栈。</p>
+</blockquote>
+<p>此外，如果你的设备支持<code>自由模式</code>（官方名字叫<strong>freeform</strong>，暂且就这么翻译它，其实我认为这算也是一种尺寸更自由的分屏模式，上一篇博客里提到过如果设备厂商支持用户可以自由改变Activity的尺寸，那么就相当于支持<code>自由模式</code>，这将比普通的分屏模式更加自由），打开一个Activity时，还可通过<code>ActivityOptions.setLaunchBounds()</code>来指定新的Activity的尺寸和在屏幕中的位置。同样，这个方法也需要你的Activity已经处于分屏模式时，调用它才会生效。</p>
+<h2 id="支持拖拽"><a href="#支持拖拽" class="headerlink" title="支持拖拽"></a>支持拖拽</h2><p>在<a href="http://unclechen.github.io/2016/03/12/Android-N-App分屏模式完全解析-上篇/">上一篇</a>博客里也提到过，现在我们可以实现在两个分屏模式的Activity之间拖动内容了。Android N Preview SDK中，<code>View</code>已经增加支持Activity之间拖动的API。具体的类和方法，可以参考<a href="http://developer.android.com/preview/setup-sdk.html#docs-dl" target="_blank" rel="external">N Preview SDK Reference</a>，主要用到下面几个新的接口：</p>
+<ul>
+<li>View.startDragAndDrop()：<a href="http://developer.android.com/intl/zh-cn/reference/android/view/View.html#startDrag(android.content.ClipData,%20android.view.View.DragShadowBuilder,%20java.lang.Object,%20int" target="_blank" rel="external">View.startDrag()</a>) 的替代方法，需要传递<code>View.DRAG_FLAG_GLOBAL</code>来实现跨Activity拖拽。如果需要将URI权限传递给接收方Activity，还可以根据需要设置<code>View.DRAG_FLAG_GLOBAL_URI_READ</code>或者<code>View.DRAG_FLAG_GLOBAL_URI_WRITE</code>。</li>
+<li>View.cancelDragAndDrop()：由拖拽的发起方调用，取消当前进行中的拖拽。</li>
+<li>View.updateDragShadow()：由拖拽的发起方调用，可以给当前进行的拖拽设置阴影。</li>
+<li>android.view.DropPermissions：接收方App所得到的权限列表。</li>
+<li>Activity.requestDropPermissions()：传递URI权限时，需要调用这个方法。传递的内容存储在<a href="http://developer.android.com/reference/android/view/DragEvent.html" target="_blank" rel="external">DragEvent</a>中的<a href="http://developer.android.com/reference/android/content/ClipData.html" target="_blank" rel="external">ClipData</a>里。返回值为前面的<code>android.view.DropPermissions</code>。</li>
+</ul>
+<p>下面是我自己写的一个demo，实现了在分屏模式下，把一个Activity中ImageView中保存的内容到另外一个Activity中进行显示。实际应用中，可以还可以传递图片的url或者Bitmap对象。</p>
+<p><img src="/content/images/drag-drop.png" alt="drag-drop"></p>
+<p>上图是一个最基本的例子，实现了把MainActivity中的图片保存的内容，拖拽到SecondActivity中。实现步骤如下：</p>
+<p>在MainActivity中，发起拖拽。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">// 1.首先我们在分屏模式下，打开自己App中的SecondActivity</div><div class="line">findViewById(R.id.launch_second_activity).setOnClickListener(new View.OnClickListener() &#123;</div><div class="line">            @Override</div><div class="line">            public void onClick(View view) &#123;</div><div class="line">                Intent intent = new Intent(MainActivity.this, SecondActivity.class);</div><div class="line">                intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_NEW_TASK);</div><div class="line">                startActivity(intent);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">        </div><div class="line">// 2.然后我们在MainActivity中发出拖拽事件</div><div class="line">imageView = (ImageView) findViewById(R.id.img);</div><div class="line">        /** 拖拽的发送方Activity和ImageView */</div><div class="line">        imageView.setTag(&quot;I&apos;m a ImageView from MainActivity&quot;);</div><div class="line">        imageView.setOnTouchListener(new View.OnTouchListener() &#123;</div><div class="line"></div><div class="line">            public boolean onTouch(View view, MotionEvent motionEvent) &#123;</div><div class="line">                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) &#123;</div><div class="line">                    /** 构造一个ClipData，将需要传递的数据放在里面 */</div><div class="line">                    ClipData.Item item = new ClipData.Item((CharSequence) view.getTag());</div><div class="line">                    String[] mimeTypes = &#123;ClipDescription.MIMETYPE_TEXT_PLAIN&#125;;</div><div class="line">                    ClipData dragData = new ClipData(view.getTag().toString(), mimeTypes, item);</div><div class="line">                    View.DragShadowBuilder shadow = new View.DragShadowBuilder(imageView);</div><div class="line">                    /** startDragAndDrop是Android N SDK中的新方法，替代了以前的startDrag，flag需要设置为DRAG_FLAG_GLOBAL */</div><div class="line">                    view.startDragAndDrop(dragData, shadow, null, View.DRAG_FLAG_GLOBAL);</div><div class="line">                    return true;</div><div class="line">                &#125; else &#123;</div><div class="line">                    return false;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
+<p>在<code>SecondActivity</code>中，接收这个拖拽的结果，在<code>ACTION_DROP</code>事件中，把结果显示出来。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">dropedText = (TextView) findViewById(R.id.text_drop);</div><div class="line">        dropedText.setOnDragListener(new View.OnDragListener() &#123;</div><div class="line">            @Override</div><div class="line">            public boolean onDrag(View view, DragEvent dragEvent) &#123;</div><div class="line">                switch (dragEvent.getAction()) &#123;</div><div class="line">                    case DragEvent.ACTION_DRAG_STARTED:</div><div class="line">                        Log.d(TAG, &quot;Action is DragEvent.ACTION_DRAG_STARTED&quot;);</div><div class="line">                        break;</div><div class="line"></div><div class="line">                    case DragEvent.ACTION_DRAG_ENTERED:</div><div class="line">                        Log.d(TAG, &quot;Action is DragEvent.ACTION_DRAG_ENTERED&quot;);</div><div class="line">                        break;</div><div class="line"></div><div class="line">                    case DragEvent.ACTION_DRAG_EXITED:</div><div class="line">                        Log.d(TAG, &quot;Action is DragEvent.ACTION_DRAG_EXITED&quot;);</div><div class="line">                        break;</div><div class="line"></div><div class="line">                    case DragEvent.ACTION_DRAG_LOCATION:</div><div class="line">                        break;</div><div class="line"></div><div class="line">                    case DragEvent.ACTION_DRAG_ENDED:</div><div class="line">                        Log.d(TAG, &quot;Action is DragEvent.ACTION_DRAG_ENDED&quot;);</div><div class="line">                        break;</div><div class="line"></div><div class="line">                    case DragEvent.ACTION_DROP:</div><div class="line">                        Log.d(TAG, &quot;ACTION_DROP event&quot;);</div><div class="line">                        /** 3.在这里显示接收到的结果 */</div><div class="line">                        dropedText.setText(dragEvent.getClipData().getItemAt(0).getText());</div><div class="line">                        break;</div><div class="line"></div><div class="line">                    default:</div><div class="line">                        break;</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                return true;</div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
+<p>这里实现的关键在新增加的<code>startDragAndDrop</code>方法，看下官方的API文档：</p>
+<p><img src="/content/images/start-drag.png" alt="start-drag"></p>
+<p>清楚地提到了，<code>发出的DragEvent能够被所有可见的View对象接收到</code>，所以在分屏模式下，SecondActivity可以监听View的onDrag事件，于是我们监听它！</p>
+<p>接着，我们看下<code>DragEvent.ACTION_DROP</code>事件发生的条件：</p>
+<p><img src="/content/images/drop-event.png" alt="drop-event"></p>
+<p>当被拖拽的View的阴影进入到接收方View的坐标区域，如果此时用户松手，那么接收方View就可以接收到这个Drop事件。一目了然，我们通过拖拽ImageView到图上的灰色区域，松手，便可以触发<code>DragEvent.ACTION_DROP</code>，把数据传到SecondActivity中了。</p>
+<p>其实还有更复杂的一些情况，需要调用<code>requestDropPermissions</code>，后续我再进一步实践一下。</p>
+<p>这个demo的地址在<a href="https://github.com/unclechen/AndroidN-DragAndDropDemo" target="_blank" rel="external">这里</a>，先分享出来，后面我再接着完善它。</p>
+<h1 id="在分屏模式下测试你的App"><a href="#在分屏模式下测试你的App" class="headerlink" title="在分屏模式下测试你的App"></a>在分屏模式下测试你的App</h1><p>无论你是否将自己的App适配到了Android N，或者是支持分屏模式，都应该找个Android N的设备，来测试一下自己的App在分屏模式下会变成什么样。</p>
+<h2 id="设置你的测试设备"><a href="#设置你的测试设备" class="headerlink" title="设置你的测试设备"></a>设置你的测试设备</h2><p>如果你有一台运行Android N的设备，它是默认支持分屏模式的。</p>
+<h2 id="如果你的App不是用Android-N-Preview-SDK打包的"><a href="#如果你的App不是用Android-N-Preview-SDK打包的" class="headerlink" title="如果你的App不是用Android N Preview SDK打包的"></a>如果你的App不是用Android N Preview SDK打包的</h2><p>如果你的App是用<code>低于Android N Preview SDK</code>打包的，且你的Activity支持<code>横竖屏切换</code>。那么当用户在尝试使用分屏模式时，系统会强制将你的App进入分屏模式。（我在第一篇博客里提到过这个，Android N Preview的介绍视频中，很多Google家的App都可以进入分屏模式，但是打开它们的xml一看，其实<code>targetSDKVersion = 23</code>）</p>
+<p>因此，如果你的App/Activity支持横竖屏切换，那么你应该尝试一下让自己的App分屏，看看当系统强制改变你的App尺寸时，用户是否还可以接受这种体验。如果你的App/Activity不支持横竖屏切换，那么你可以确认一下，看看当尝试进入分屏时，你的App是不是仍然能够保持全屏模式。</p>
+<h2 id="如果你给App设置了支持分屏模式"><a href="#如果你给App设置了支持分屏模式" class="headerlink" title="如果你给App设置了支持分屏模式"></a>如果你给App设置了支持分屏模式</h2><p>如果你使用了<code>Android N Preview SDK</code>来开发自己的App，那么应该按照下面的要点检查一下自己的App。</p>
+<ul>
+<li>启动App，长按系统导航栏右下角的小方块（Google官方把这个叫做<strong>Overview Button</strong>），确保你的App可以进入分屏模式，且尺寸改变后仍然能正常工作。</li>
+<li>启动任务管理器（即单击右下角的小方块），然后长按你App的标题栏，将它拖动到屏幕上的高亮区域。确保你的App可以进入分屏模式，且尺寸改变后仍然能正常工作。</li>
+</ul>
+<p>这两点在<a href="http://unclechen.github.io/2016/03/12/Android-N-App分屏模式完全解析-上篇/">上一篇博客</a>中介绍过，让自己的App进入分屏模式有三种方法。第三种方法，就是在打开自己的App时，用手指从右下角的小方块向上滑动，这样也可以使得正在浏览的App进入分屏模式。这种方法目前属于实验性功能，正式版不一定保留。</p>
+<ul>
+<li>当你的App进入分屏后，通过拖动两个App中间的分栏上面的小白线，从而改变App的尺寸，观察App中各个UI元素是否正常显示。</li>
+<li>如果你给自己的App/Activity设置了<strong>最小尺寸</strong>，可以尝试在改变App尺寸时，低于这个最小尺寸，观察App是不是会回到设定好的最小尺寸。</li>
+<li>在进行上面几项测试时，请同时验证自己的App功能和性能是否正常，并注意一下自己的App在更新UI时是否花费了太长的时间。</li>
+</ul>
+<p>这几项测试，其实主要强调的是，我们的App可以顺利的进入/退出分屏模式，且改变App的尺寸时，UI依然可以也非常顺滑。</p>
+<p>这里我想多说一句，如果进入了分屏模式，要注意下App弹出的对话框，因为屏幕被两个App分成两块之后，对话框也是可以弹出两个的。这时对话框上的UI元素可能就会变得比较小了，如果我们的代码是写死的大小，例如对话框是一个WebView，就需要特别注意了，搞不好显示出来就缺了一块了，这里需要我们做好适配。</p>
+<h3 id="测试清单"><a href="#测试清单" class="headerlink" title="测试清单"></a>测试清单</h3><p>关于功能、性能方面测试，还可以按照下面的操作来进行。</p>
+<ul>
+<li>让App进入，再退出分屏模式，确保此时App功能正常。</li>
+<li>让App进入分屏模式，激活屏幕上的另外一个App，让自己的App进入<code>可见、paused</code>状态。举了例子来讲，如果你的App是一个视频播放器，那么当用户点击了屏幕上另外一个App时，你的App不应该停止播放视频，即使此时你的Activity/Fragment已经接到了<code>onPaused()</code>回调。</li>
+<li>让App进入分屏模式，拖动分栏上的小白线，改变App的尺寸。请在竖屏（两个App一上一下布局）和横屏（两个App一左一右布局）模式下分别进行改变尺寸的操作。确保App不会崩溃，各项功能正常，且UI的刷新没有花费太多时间。</li>
+<li>在短时间内、多次、迅速地改变App尺寸，确保App没有崩溃，且没有发生内存泄露。关于内存使用方面的更详细注意事项，请参考<a href="http://developer.android.com/tools/debugging/debugging-memory.html" target="_blank" rel="external">Investigating Your RAM Usage</a>。</li>
+<li>在不同的窗口设置的情况下，正常使用App，确保App功能正常，文字仍然可读，其他的UI元素也没有变得太小，用户仍然可以舒适地操作App。</li>
+</ul>
+<p>这几项测试，其实主要是说当App在分屏模式下运行时，仍然可以保持性能的稳定，不会Crash也不会OOM。</p>
+<h2 id="如果你给App设置了禁止分屏模式"><a href="#如果你给App设置了禁止分屏模式" class="headerlink" title="如果你给App设置了禁止分屏模式"></a>如果你给App设置了禁止分屏模式</h2><p>如果你给App/Activity设置了<code>android:resizableActivity=&quot;false&quot;</code>，你应该试试当用户在Android N的设备上，尝试分屏浏览你的App时，它是否仍然能保持全屏模式。</p>
+<p>以上就是参考Google最新的<a href="http://developer.android.com/intl/zh-cn/preview/features/multi-window.html" target="_blank" rel="external">multi-window</a>进行的实践，总结下，我认为有3点比较重要：</p>
+<ol>
+<li>如何让自己的App/Activity顺利的进入和退出分屏模式，可以参考<a href="http://developer.android.com/intl/zh-cn/guide/topics/resources/runtime-changes.html" target="_blank" rel="external">处理运行时改变</a>这一章。</li>
+<li>如何在分屏模式下打开新的Activity，可以参考Google官方的<a href="https://github.com/googlesamples/android-MultiWindowPlayground" target="_blank" rel="external">MultiWindow Playground Sample</a>。</li>
+<li>如何实现跨App/Activity的拖拽功能，可以参考<a href="http://developer.android.com/intl/zh-cn/guide/topics/ui/drag-drop.html" target="_blank" rel="external">Drag and Drop</a>这一章。</li>
+</ol>
+<p>关于App分屏模式的学习就到这里了，欢迎大家一起交流。我们还发挥更多的想象力，比如是否可以利用跨应用拖拽实现更方便操作，更好的用户体验。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/适配/" rel="tag"># 适配</a>
+          
+            <a href="/tags/Android7-x/" rel="tag"># Android7.x</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/12/Android N App分屏模式完全解析-上篇/" rel="next" title="Android N App分屏模式完全解析（上）">
+                <i class="fa fa-chevron-left"></i> Android N App分屏模式完全解析（上）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/21/不写代码实现px转换成dp/" rel="prev" title="不写代码，快速实现px转换成dp">
+                不写代码，快速实现px转换成dp <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="unclechen" />
+          <p class="site-author-name" itemprop="name">unclechen</p>
+           
+              <p class="site-description motion-element" itemprop="description">吃下恶魔果实，我就能变成超级赛亚人！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#用分屏模式运行你的App"><span class="nav-number">1.</span> <span class="nav-text">用分屏模式运行你的App</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分屏模式下被禁用的特性"><span class="nav-number">1.1.</span> <span class="nav-text">分屏模式下被禁用的特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分屏模式的通知回调、查询App是否处于分屏状态"><span class="nav-number">1.2.</span> <span class="nav-text">分屏模式的通知回调、查询App是否处于分屏状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何进入画中画模式"><span class="nav-number">1.3.</span> <span class="nav-text">如何进入画中画模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在分屏模式下打开新的Activity"><span class="nav-number">1.4.</span> <span class="nav-text">在分屏模式下打开新的Activity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#支持拖拽"><span class="nav-number">1.5.</span> <span class="nav-text">支持拖拽</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在分屏模式下测试你的App"><span class="nav-number">2.</span> <span class="nav-text">在分屏模式下测试你的App</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#设置你的测试设备"><span class="nav-number">2.1.</span> <span class="nav-text">设置你的测试设备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果你的App不是用Android-N-Preview-SDK打包的"><span class="nav-number">2.2.</span> <span class="nav-text">如果你的App不是用Android N Preview SDK打包的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果你给App设置了支持分屏模式"><span class="nav-number">2.3.</span> <span class="nav-text">如果你给App设置了支持分屏模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#测试清单"><span class="nav-number">2.3.1.</span> <span class="nav-text">测试清单</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果你给App设置了禁止分屏模式"><span class="nav-number">2.4.</span> <span class="nav-text">如果你给App设置了禁止分屏模式</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">unclechen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

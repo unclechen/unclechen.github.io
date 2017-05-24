@@ -1,0 +1,779 @@
+<!doctype html>
+
+
+
+
+<html class="theme-next pisces" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="python,爬虫," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="一、背景记录一次周末在家速成的爬虫实现之旅。受人之托，想要把这个页面http://baike.baidu.com/starrank?fr=lemmaxianhua的明星排行榜爬取下来。用chrome打开一看，其实就1000条记录。然后“右键菜单”-&amp;gt;“检查”，看下网页的结构，也不是特别复杂。所以我目测只要用python自带的urllib2库打开网页，获取html代码，再交给Beautiful">
+<meta name="keywords" content="python,爬虫">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python利用beautifulsoup+selenium自动翻页抓取网页内容">
+<meta property="og:url" content="http://unclechen.github.io/2016/12/11/python利用beautifulsoup+selenium自动翻页抓取网页内容/index.html">
+<meta property="og:site_name" content="UncleChen的博客">
+<meta property="og:description" content="一、背景记录一次周末在家速成的爬虫实现之旅。受人之托，想要把这个页面http://baike.baidu.com/starrank?fr=lemmaxianhua的明星排行榜爬取下来。用chrome打开一看，其实就1000条记录。然后“右键菜单”-&amp;gt;“检查”，看下网页的结构，也不是特别复杂。所以我目测只要用python自带的urllib2库打开网页，获取html代码，再交给Beautiful">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006y8lVagw1famy31l1mvj30go0gjwh6.jpg">
+<meta property="og:updated_time" content="2017-05-22T12:44:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python利用beautifulsoup+selenium自动翻页抓取网页内容">
+<meta name="twitter:description" content="一、背景记录一次周末在家速成的爬虫实现之旅。受人之托，想要把这个页面http://baike.baidu.com/starrank?fr=lemmaxianhua的明星排行榜爬取下来。用chrome打开一看，其实就1000条记录。然后“右键菜单”-&amp;gt;“检查”，看下网页的结构，也不是特别复杂。所以我目测只要用python自带的urllib2库打开网页，获取html代码，再交给Beautiful">
+<meta name="twitter:image" content="http://ww3.sinaimg.cn/large/006y8lVagw1famy31l1mvj30go0gjwh6.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://unclechen.github.io/2016/12/11/python利用beautifulsoup+selenium自动翻页抓取网页内容/"/>
+
+
+
+
+
+  <title>python利用beautifulsoup+selenium自动翻页抓取网页内容 | UncleChen的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UncleChen的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/12/11/python利用beautifulsoup+selenium自动翻页抓取网页内容/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python利用beautifulsoup+selenium自动翻页抓取网页内容</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-11T08:00:00+08:00">
+                2016-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>记录一次周末在家速成的爬虫实现之旅。受人之托，想要把这个页面<a href="http://baike.baidu.com/starrank?fr=lemmaxianhua" target="_blank" rel="external">http://baike.baidu.com/starrank?fr=lemmaxianhua</a>的明星排行榜爬取下来。用chrome打开一看，其实就1000条记录。然后“右键菜单”-&gt;“检查”，看下网页的结构，也不是特别复杂。所以我目测只要用<strong>python</strong>自带的<code>urllib2</code>库打开网页，获取html代码，再交给<code>BeautifulSoup</code>库解析html代码，应该就可以快速搞定。</p>
+<a id="more"></a>
+<p><img src="http://ww3.sinaimg.cn/large/006y8lVagw1famy31l1mvj30go0gjwh6.jpg" alt="webpage"></p>
+<p>但仔细一看，<strong>点击下一页，网页的url没有任何变化</strong>，只是用js去加载了新的数据，然后动态地改变了table里面的数据。这可和本菜菜以前爬的页面可不一样，所以这次要想办法<strong>模拟翻页，然后重新读取新的html代码，再去解析</strong>。</p>
+<p>实现翻页可以有两种办法，<strong>第一种是分析js的实现来模拟翻页。</strong>翻页操作实际上js向后台发出了请求，这里肯定是带着跳转的目的页码请求了后台，然后拿到新数据后重新渲染了html的表格部分。这种方法会更加高效，但难度也会更大一些。因为如果你已经能够模拟请求了，那其实相当于你连人家的服务器接口都已经知道了，那么进一步分析下响应就可以拿到结果了，这甚至不需要再去分析html代码了是不是？<strong>第二种比较简单暴力，也是我这里用的方法，那就是模拟点击网页中的下一页按钮，然后重新读取html代码来解析。</strong></p>
+<h1 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h1><p>在前面已经说了，这里把思路流程化：</p>
+<ul>
+<li>1.打开网页</li>
+<li>2.读取当前页面的html代码，解析列表里面的明星名字</li>
+<li>3.<strong><em>模拟</em></strong>点击“下一页”</li>
+<li>4.重复第2步的工作，直到页面里没有“下一页”的按钮</li>
+</ul>
+<p>在这里打开网页和读取网页的html代码，是通过<code>selenium</code>实现的；<br>解析html代码，是通过<code>beautifulsoup</code>实现的。</p>
+<h1 id="三、实现"><a href="#三、实现" class="headerlink" title="三、实现"></a>三、实现</h1><h2 id="1-准备工作，安装依赖库"><a href="#1-准备工作，安装依赖库" class="headerlink" title="1.准备工作，安装依赖库"></a>1.准备工作，安装依赖库</h2><ul>
+<li>安装beautifulsoup</li>
+</ul>
+<p>在下用的是mac，所以直接easy_install命令行安装。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo easy_install beautifulsoup4</div></pre></td></tr></table></figure>
+<ul>
+<li>安装selenium</li>
+</ul>
+<p>还是用easy_install命令装。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo easy_install selenium</div></pre></td></tr></table></figure>
+<blockquote>
+<p>这里selenium版本已经到了3.0.2，想要用这个版本的selenium去打开一个网页，需要用到对应的driver。于是下面我还需要安装一个driver。</p>
+</blockquote>
+<ul>
+<li>安装chromedirver</li>
+</ul>
+<p>我这里用的是homebrew安装的chromediver，安装完成后<strong>大家记得找到chromediver的安装目录</strong>，我们在下面去写代码的时候会用到的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install chromedirver</div></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：mac下有很多软件管理包，除了我的安装方法，用<code>pip</code>之类的去安装，或者直接去官网下载安装程序，都是可以的。但是一定要安装上面的3个程序才行。这里我突然有个想法，要是python也有像gradle一样的构建管理工具多好，讲真，今天我安装这几个依赖的library花的时间比写代码还多呢。。</p>
+</blockquote>
+<h2 id="2-分析网页"><a href="#2-分析网页" class="headerlink" title="2.分析网页"></a>2.分析网页</h2><p>简单贴一段我要爬的网页的部分html代码，里面我用//写了点注释：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"tables-container"</span> <span class="attr">style</span>=<span class="string">"height: 1417px"</span>&gt;</span></div><div class="line">// 本周排行榜，这是我要抓的内容</div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ranking-table cur"</span> <span class="attr">data-cat</span>=<span class="string">"thisWeek"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">table</span>&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">thead</span>&gt;</span></div><div class="line">             <span class="tag">&lt;<span class="name">tr</span>&gt;</span></div><div class="line">                 <span class="tag">&lt;<span class="name">th</span> <span class="attr">style</span>=<span class="string">"padding-left: 30px; width: 101px"</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"http://baike.bdimg.com/static/wiki-activity/starRanking/resource/img/trophy-blue_05c0f47.png"</span>&gt;</span>&amp;nbsp;&amp;nbsp;&amp;nbsp;排名<span class="tag">&lt;/<span class="name">th</span>&gt;</span></div><div class="line">                 <span class="tag">&lt;<span class="name">th</span> <span class="attr">style</span>=<span class="string">"padding-left: 115px; width: 226px"</span>&gt;</span>明星<span class="tag">&lt;/<span class="name">th</span>&gt;</span></div><div class="line">                 <span class="tag">&lt;<span class="name">th</span> <span class="attr">style</span>=<span class="string">"padding-left: 50px; width: 175px"</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"http://baike.bdimg.com/static/wiki-activity/starRanking/resource/img/flower-blue_31b8b3b.png"</span>&gt;</span>&amp;nbsp;&amp;nbsp;&amp;nbsp;鲜花数<span class="tag">&lt;/<span class="name">th</span>&gt;</span></div><div class="line">                 <span class="tag">&lt;<span class="name">th</span> <span class="attr">style</span>=<span class="string">"padding-left: 80px; width: 154px"</span>&gt;</span>TOP粉丝<span class="tag">&lt;/<span class="name">th</span>&gt;</span></div><div class="line">             <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></div><div class="line">         <span class="tag">&lt;/<span class="name">thead</span>&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">tbody</span> <span class="attr">class</span>=<span class="string">"list-container"</span>&gt;</span>                           </div><div class="line">             <span class="tag">&lt;<span class="name">tr</span>&gt;</span></div><div class="line">                 <span class="tag">&lt;<span class="name">td</span> <span class="attr">class</span>=<span class="string">"star-index star-index-0"</span>&gt;</span><span class="tag">&lt;<span class="name">i</span>&gt;</span>1<span class="tag">&lt;/<span class="name">i</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">                 // 这个td标签，star-name的css class是我要抓的内容</div><div class="line">                 <span class="tag">&lt;<span class="name">td</span> <span class="attr">class</span>=<span class="string">"star-name"</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"/subview/3938672/10939278.htm"</span> <span class="attr">target</span>=<span class="string">"_blank"</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"https://imgsa.baidu.com/baike/whcrop%3D100%2C100/sign=b5ae35ac11d8bc3ec65d5088edfb9b2f/8d5494eef01f3a29f4da55589125bc315c607c12.jpg"</span>&gt;</span>王俊凯<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">                 <span class="tag">&lt;<span class="name">td</span> <span class="attr">class</span>=<span class="string">"star-score"</span>&gt;</span></div><div class="line">                     <span class="tag">&lt;<span class="name">span</span>&gt;</span>1790892<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">                     <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:;"</span> <span class="attr">class</span>=<span class="string">"star-score-sendFlower"</span> <span class="attr">data-lemmaid</span>=<span class="string">"75850"</span>&gt;</span>送花<span class="tag">&lt;<span class="name">i</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">                 <span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">                     <span class="tag">&lt;<span class="name">td</span> <span class="attr">class</span>=<span class="string">"star-fans"</span>&gt;</span></div><div class="line">                     <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">i</span>&gt;</span>1<span class="tag">&lt;/<span class="name">i</span>&gt;</span>183*****630<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">                     <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">i</span>&gt;</span>2<span class="tag">&lt;/<span class="name">i</span>&gt;</span>185*****759<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">                     <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">i</span>&gt;</span>3<span class="tag">&lt;/<span class="name">i</span>&gt;</span>wx526298988<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">                 <span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">             <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></div><div class="line">             ...此处省略巨量代码...</div><div class="line">         <span class="tag">&lt;/<span class="name">tbody</span>&gt;</span></div><div class="line">     <span class="tag">&lt;/<span class="name">table</span>&gt;</span></div><div class="line">// 这里是本周排行榜分页的html代码，可以看到一页20个明星，共有50页</div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ranking-pager wgt_horPager wgt_horPager_tpl_noEllipsis"</span> <span class="attr">nslog</span>=<span class="string">"area"</span> <span class="attr">nslog-type</span>=<span class="string">"20100105"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:;"</span> <span class="attr">class</span>=<span class="string">"pTag first disabled"</span>&gt;</span>首页<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"separator disabled"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:;"</span> <span class="attr">class</span>=<span class="string">"pTag prev disabled"</span>&gt;</span><span class="tag">&lt;<span class="name">em</span>&gt;</span>&amp;lt;<span class="tag">&lt;/<span class="name">em</span>&gt;</span>上一页<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"separator disabled"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:;"</span> <span class="attr">class</span>=<span class="string">"pTag cur"</span>&gt;</span>1<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:;"</span> <span class="attr">class</span>=<span class="string">"pTag"</span> <span class="attr">p-index</span>=<span class="string">"2"</span>&gt;</span>2<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:;"</span> <span class="attr">class</span>=<span class="string">"pTag"</span> <span class="attr">p-index</span>=<span class="string">"3"</span>&gt;</span>3<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:;"</span> <span class="attr">class</span>=<span class="string">"pTag"</span> <span class="attr">p-index</span>=<span class="string">"4"</span>&gt;</span>4<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:;"</span> <span class="attr">class</span>=<span class="string">"pTag"</span> <span class="attr">p-index</span>=<span class="string">"5"</span>&gt;</span>5<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"separator"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    // 这里就是要模拟点击的下一页按钮</div><div class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:;"</span> <span class="attr">class</span>=<span class="string">"pTag next"</span> <span class="attr">p-index</span>=<span class="string">"2"</span>&gt;</span>下一页<span class="tag">&lt;<span class="name">em</span>&gt;</span>&amp;gt;<span class="tag">&lt;/<span class="name">em</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"separator"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:;"</span> <span class="attr">class</span>=<span class="string">"pTag last"</span> <span class="attr">p-index</span>=<span class="string">"50"</span>&gt;</span>尾页<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">// 下面开始就是“上周排行榜”，html结构和上面完全类似</div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ranking-table"</span> <span class="attr">data-cat</span>=<span class="string">"lastWeek"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">table</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></div><div class="line">...此处再次省略巨量代码...</div></pre></td></tr></table></figure>
+<h2 id="3-完整代码"><a href="#3-完整代码" class="headerlink" title="3.完整代码"></a>3.完整代码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">import sys</div><div class="line">import urllib2</div><div class="line">import time</div><div class="line">from bs4 import BeautifulSoup</div><div class="line">from selenium import webdriver</div><div class="line"></div><div class="line">reload(sys)</div><div class="line">sys.setdefaultencoding(&apos;utf8&apos;) # 设置编码</div><div class="line"></div><div class="line">url = &apos;http://baike.baidu.com/starrank?fr=lemmaxianhua&apos;</div><div class="line"></div><div class="line"></div><div class="line">driver = webdriver.Chrome(&apos;/usr/local/Cellar/chromedriver/2.20/bin/chromedriver&apos;) # 创建一个driver用于打开网页，记得找到brew安装的chromedriver的位置，在创建driver的时候指定这个位置</div><div class="line">driver.get(url) # 打开网页</div><div class="line"></div><div class="line">name_counter = 1</div><div class="line">page = 0;</div><div class="line">while page &lt; 50: # 共50页，这里是手工指定的</div><div class="line">	soup = BeautifulSoup(driver.page_source, &quot;html.parser&quot;)</div><div class="line">	current_names = soup.select(&apos;div.ranking-table&apos;) # 选择器用ranking-table css class，可以取出包含本周、上周的两个table的div标签</div><div class="line">	for current_name_list in current_names:</div><div class="line">		# print current_name_list[&apos;data-cat&apos;]</div><div class="line">		if current_name_list[&apos;data-cat&apos;] == &apos;thisWeek&apos;: # 这次我只想抓取本周，如果想抓上周，改一下这里为lastWeek即可</div><div class="line">			names = current_name_list.select(&apos;td.star-name &gt; a&apos;) # beautifulsoup选择器语法</div><div class="line">			counter = 0;</div><div class="line">			for star_name in names:</div><div class="line">				counter = counter + 1;</div><div class="line">				print star_name.text # 明星的名字是a标签里面的文本，虽然a标签下面除了文本还有一个与文本同级别的img标签，但是.text输出的只是文本而已</div><div class="line">				name_counter = name_counter + 1;</div><div class="line">	driver.find_element_by_xpath(&quot;//a[contains(text(),&apos;下一页&apos;)]&quot;).click() # selenium的xpath用法，找到包含“下一页”的a标签去点击</div><div class="line">	page = page + 1</div><div class="line">	time.sleep(2) # 睡2秒让网页加载完再去读它的html代码</div><div class="line"></div><div class="line">print name_counter # 共爬取得明星的名字数量</div><div class="line">driver.quit()</div></pre></td></tr></table></figure>
+<h1 id="四、小结"><a href="#四、小结" class="headerlink" title="四、小结"></a>四、小结</h1><p>这里只是简单记录一次稍微复杂点的网页爬取的实现思路，关于selenium和beatifulsoup，还有很多的用法，我还没仔细看过。下面是一些参考资料，以后有机会还要多学习一下。</p>
+<ul>
+<li><a href="http://cuiqingcai.com/1319.html" target="_blank" rel="external">Python爬虫利器二之Beautiful Soup的用法</a>：介绍了安装bs的方法，以及不同的parser，如html5、xml有什么区别。</li>
+<li><a href="http://beautifulsoup.readthedocs.io/zh_CN/latest/" target="_blank" rel="external">Beautiful Soup 4.4.0 文档</a>：其实bs支持不同语言，这次写python就是因为代码少，但是安装依赖确实是麻烦。</li>
+<li><a href="http://www.seleniumhq.org/" target="_blank" rel="external">selenium官网</a>：selenium其实有官方的IDE，也支持不同的语言。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/爬虫/" rel="tag"># 爬虫</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/08/利用属性动画在Android4.x上实现Android L的元素转场动画效果/" rel="next" title="利用属性动画在Android4.x上实现Android L的元素转场动画效果（shared elements transition）">
+                <i class="fa fa-chevron-left"></i> 利用属性动画在Android4.x上实现Android L的元素转场动画效果（shared elements transition）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/13/WebView缓存原理分析和应用/" rel="prev" title="WebView缓存原理分析和应用">
+                WebView缓存原理分析和应用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="unclechen" />
+          <p class="site-author-name" itemprop="name">unclechen</p>
+           
+              <p class="site-description motion-element" itemprop="description">吃下恶魔果实，我就能变成超级赛亚人！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、背景"><span class="nav-number">1.</span> <span class="nav-text">一、背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、思路"><span class="nav-number">2.</span> <span class="nav-text">二、思路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、实现"><span class="nav-number">3.</span> <span class="nav-text">三、实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-准备工作，安装依赖库"><span class="nav-number">3.1.</span> <span class="nav-text">1.准备工作，安装依赖库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-分析网页"><span class="nav-number">3.2.</span> <span class="nav-text">2.分析网页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-完整代码"><span class="nav-number">3.3.</span> <span class="nav-text">3.完整代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、小结"><span class="nav-number">4.</span> <span class="nav-text">四、小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">unclechen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

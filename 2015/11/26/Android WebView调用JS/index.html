@@ -1,0 +1,788 @@
+<!doctype html>
+
+
+
+
+<html class="theme-next pisces" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,WebView," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="个人认为Android的WebView一直是一个比较难搞的东西，因为它需要和很多的Web开发打交道，如果以前没接触过Web相关的开发就会觉得有些不爽，但是现在越来越多的应用都是Hybrid的模式，HTML5定稿一年多，感觉也挺火，这也是以做内容为主的App非常需要的技术，所以还得多学学。 从Android4.4开始，WebView底层的实现从原来的Webkit变成了chromium，从而实现了对H">
+<meta name="keywords" content="Android,WebView">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android WebView调用JS">
+<meta property="og:url" content="http://unclechen.github.io/2015/11/26/Android WebView调用JS/index.html">
+<meta property="og:site_name" content="UncleChen的博客">
+<meta property="og:description" content="个人认为Android的WebView一直是一个比较难搞的东西，因为它需要和很多的Web开发打交道，如果以前没接触过Web相关的开发就会觉得有些不爽，但是现在越来越多的应用都是Hybrid的模式，HTML5定稿一年多，感觉也挺火，这也是以做内容为主的App非常需要的技术，所以还得多学学。 从Android4.4开始，WebView底层的实现从原来的Webkit变成了chromium，从而实现了对H">
+<meta property="og:image" content="http://unclechen.github.io/content/images/hello-webview-js-demo.png">
+<meta property="og:updated_time" content="2017-05-22T10:24:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android WebView调用JS">
+<meta name="twitter:description" content="个人认为Android的WebView一直是一个比较难搞的东西，因为它需要和很多的Web开发打交道，如果以前没接触过Web相关的开发就会觉得有些不爽，但是现在越来越多的应用都是Hybrid的模式，HTML5定稿一年多，感觉也挺火，这也是以做内容为主的App非常需要的技术，所以还得多学学。 从Android4.4开始，WebView底层的实现从原来的Webkit变成了chromium，从而实现了对H">
+<meta name="twitter:image" content="http://unclechen.github.io/content/images/hello-webview-js-demo.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://unclechen.github.io/2015/11/26/Android WebView调用JS/"/>
+
+
+
+
+
+  <title>Android WebView调用JS | UncleChen的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UncleChen的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2015/11/26/Android WebView调用JS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android WebView调用JS</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-26T08:00:00+08:00">
+                2015-11-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>个人认为Android的WebView一直是一个比较难搞的东西，因为它需要和很多的Web开发打交道，如果以前没接触过Web相关的开发就会觉得有些不爽，但是现在越来越多的应用都是Hybrid的模式，HTML5定稿一年多，感觉也挺火，这也是以做内容为主的App非常需要的技术，所以还得多学学。</p>
+<p>从Android4.4开始，WebView底层的实现从原来的Webkit变成了chromium，从而实现了对HTML5更好的支持，并且也和Chrome浏览器的一些特征越来越像。接触过WebView开发应该对<code>WebView.setWebContentsDebuggingEnabled(true)</code>不会陌生，正是从4.4开始的改变才使得WebView的调试变得更加方便。</p>
+<p>只是用来展示一个网页内容还好，如果要通过WebView执行JS脚本来和Native代码做一些通信，就要小心可能会踩到各种坑了。例如onclick事件没用，用onTap又会触发两次，4.4以上只能用loadUrl的方法执行一行js代码，还有可能会被转码，API17以上需要给Java方法添加注解，API17以下又要换一种方法保证安全性等等。在这里记录一下我自己的学习心得和踩过的坑。</p>
+<a id="more"></a>
+<h1 id="Java与JS互相调用"><a href="#Java与JS互相调用" class="headerlink" title="Java与JS互相调用"></a>Java与JS互相调用</h1><p>在Android开发里面，我们说的WebView与JS互相调用，通常就是指用Java写的Native代码与JS的互相调用。所以下面我都会说Java调用JS，JS调用Java。而不是说WebView调用JS，JS调用WebView了。</p>
+<h2 id="1-Java调用JS"><a href="#1-Java调用JS" class="headerlink" title="1.Java调用JS"></a>1.Java调用JS</h2><ul>
+<li>首先在JS中定义好即将提供给Native的方法<code>function javaCallJS()</code></li>
+<li>然后在Java代码里，通过<code>WebView.loadUrl(&quot;javascript:javaCallJS()&quot;);</code>就可以调用JS的方法了。</li>
+</ul>
+<h2 id="2-JS调用Java"><a href="#2-JS调用Java" class="headerlink" title="2.JS调用Java"></a>2.JS调用Java</h2><h3 id="方法1-addJavascriptInterface："><a href="#方法1-addJavascriptInterface：" class="headerlink" title="方法1:addJavascriptInterface："></a>方法1:addJavascriptInterface：</h3><ul>
+<li>首先在Java里定义一个类<code>WebAppInterface</code>，然后在Java中通过<code>WebView.addJavascriptInterface(new WebAppInterface(), &quot;Android&quot;);</code>就可以在JS中创建这个类的实例<code>Android</code>对象了</li>
+<li>然后在JS中可以直接使用<code>Android</code>对象和它的方法，这样就实现了JS调用Java。</li>
+</ul>
+<h3 id="方法2-iframe-CustomWebViewClient："><a href="#方法2-iframe-CustomWebViewClient：" class="headerlink" title="方法2:iframe + CustomWebViewClient："></a>方法2:iframe + CustomWebViewClient：</h3><ul>
+<li>在JS代码动态添加一个iframe，将其src属性设置为JS需要传给Java的参数（例如<code>bridge://uncle.nought.com?arg=xxx</code>）。</li>
+<li>在Java代码中，定义一个<code>CustomWebViewClient extends WebViewClient</code>，然后<code>mWebView.setWebViewClient(new CustomWebViewClient())</code>。</li>
+<li>在Java代码中的<code>CustomWebViewClient</code>中，重写<code>shouldOverrideUrlLoading(WebView view, String url)</code>方法，自己处理<code>url</code>参数，并<code>return true</code>。</li>
+<li>这时JS代码就可以把参数通过url传递给Java，Java拿到参数去执行相应的工作了。如果JS需要返回值，那么通过Java调用JS代码的形式把返回值返回给JS。</li>
+</ul>
+<h2 id="方法小结"><a href="#方法小结" class="headerlink" title="方法小结"></a>方法小结</h2><h3 id="Java调用JS的代码"><a href="#Java调用JS的代码" class="headerlink" title="Java调用JS的代码"></a>Java调用JS的代码</h3><p>其实比较简单，就是通过<code>WebView.loadUrl(&quot;javascript:javaCallJS()&quot;)</code>loadUrl的形式。这里啰嗦一句，从Android4.4开始，由于chromium内核对安全性检查更加严格，所以并不是传入的所有JS代码，都能够通过loadUrl来执行它。详情可以看一下这里<a href="https://code.google.com/p/android/issues/detail?id=69969" target="_blank" rel="external">https://code.google.com/p/android/issues/detail?id=69969</a>，简单来说就是4.4以上的WebView在loadUrl时会给我们的参数做一个escape，因此参数就变了，很有可能变得JS不认识，无法执行了。所以这时候需要用到<code>WebView.evaluateJavascript(java.lang.String, android.webkit.ValueCallback&lt;java.lang.String&gt;)</code>这个方法。后面我再详细举个例子来说明这个问题。</p>
+<h3 id="JS调用Java的方法1：addJavascriptInterface"><a href="#JS调用Java的方法1：addJavascriptInterface" class="headerlink" title="JS调用Java的方法1：addJavascriptInterface"></a>JS调用Java的方法1：<strong>addJavascriptInterface</strong></h3><p>这种方法是比较简单的。在WebView官方的文档里面有介绍如何结合WebView来进行WebApp的开发<a href="http://developer.android.com/intl/zh-cn/guide/webapps/webview.html#AddingWebView" target="_blank" rel="external">http://developer.android.com/intl/zh-cn/guide/webapps/webview.html#AddingWebView</a>。</p>
+<p>这里要再特别严肃地啰嗦一句！由于4.2（API&lt;17）版本之前的WebView，在执行<code>WebView.addJavascriptInterface(Object obj, String interfaceName)</code>时存在一个漏洞，该漏洞的原因是在向JS中注入一个Java对象的时候，并没有对注册的这个Java类的方法调用做限制。导致JS代码里面可以利用发射机制，调用未注册的其他Java类。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">// Java里面注册了injectedObj对象以后</div><div class="line">mWebView.addJavascriptInterface(this, &quot;injectedObj&quot;);</div><div class="line"></div><div class="line">// JS中可以去反射调用短信程序来进行恶意扣费</div><div class="line">&lt;script&gt;</div><div class="line">	var objSmsManager = injectedObj.getClass().forName(&quot;android.telephony.SmsManager&quot;).getMethod(&quot;getDefault&quot;,null).invoke(null,null);</div><div class="line">	objSmsManager.sendTextMessage(&quot;10086&quot;,null,&quot;this message is sent by JS when webview is loading&quot;, null, null);</div><div class="line">&lt;/script&gt;</div><div class="line"></div><div class="line">// 这段摘自http://jaq.alibaba.com/blog.htm?id=48</div></pre></td></tr></table></figure>
+<p>可想而知，要是一个 <strong>健康</strong> 的网页被挂马之后，嵌入了这样的JS脚本，那么用户的手机来访问这个页面的时候就完蛋了，有兴趣的同学可以研究一下乌云的这个介绍<a href="http://drops.wooyun.org/papers/548" target="_blank" rel="external">http://drops.wooyun.org/papers/548</a>。Android4.2以后，修复了这个漏洞，但是要求我们在执行<code>WebView.addJavascriptInterface(Object obj, String interfaceName)</code>时，这个Object里面需要暴露给JS调用的方法，都需要加上注解<code>@JavascriptInterface</code>。</p>
+<p>那么4.2以下的系统该怎么办？？用下面的方法吧！</p>
+<h3 id="JS调用Java的方法2：-iframe-WebViewClient"><a href="#JS调用Java的方法2：-iframe-WebViewClient" class="headerlink" title="JS调用Java的方法2： iframe + WebViewClient"></a>JS调用Java的方法2： <strong>iframe + WebViewClient</strong></h3><p>这是一种比较Trick的方式。js在执行的过程中去给整个dom添加一个iframe，并将这个iframe设置为<code>display:none</code>。然后通过这个iframe去load一个url，触发WebViewClient的shouldOverrideUrlLoading()，然后在这里面，我们可以决定如何处理JS传递过来的参数。由于这个url我们是自己来解析和处理的，不打算交给WebView去直接load，所以我们其实可以自己定义一个协议，例如<code>bridge://uncle.nought.com?arg1=x&amp;arg2=y</code>。然后在WebView的WebViewClient里面拿到这个<code>nought://</code>开头的url后，我们自己写Java代码处理arg等参数。</p>
+<p>说到这里，我们首先要了解一下WebViewClient，它决定了我们的WebView加载一条Url时的行为。如果你自定义一个CustomWebViewClient继承自WebViewClient，并重写里面的shouldOverrideUrlLoading()方法，然后把CustomWebViewClient的一个实例set给了你的WebView。那么就可以在shouldOverrideUrlLoading方法中将WebView里面本来将要load的url拦截下来，并决定是否由开发者自己的Java代码处理它。那么怎么才能自行处理这个url，而不是让WebView去自动load呢？我们看看官方文档<a href="http://developer.android.com/intl/zh-cn/guide/webapps/webview.html" target="_blank" rel="external">http://developer.android.com/intl/zh-cn/guide/webapps/webview.html</a>，总得来说是下面这样的：</p>
+<ul>
+<li>CustomWebViewClient的shouldOverrideUrlLoading返回true，表示由Java处理url，WebView不用管。</li>
+<li>CustomWebViewClient的shouldOverrideUrlLoading返回false，表示Java不管这个url，由WebView自己处理url（一般还会再添加一行代码<code>webView.loadUrl(url)</code>）。</li>
+</ul>
+<p>可能你还会觉得白白添加iframe进来不好吧，那么不加也是可以的。只要你能让当前WebView去加载一个url就可以了，所以这样<code>window.location.href=&#39;bridge://uncle.nought.com?arg=xxx&#39;</code>都是可以的！并没有任何问题！</p>
+<h1 id="Java和JS互相调用实践"><a href="#Java和JS互相调用实践" class="headerlink" title="Java和JS互相调用实践"></a>Java和JS互相调用实践</h1><p>先上个图，在这个demo里面，左边是一个WebView，右边是一个TextView。然后实现点击左边Web页面的按钮，传递参数给Java，并在TextView里面显示出来。点击右边的按钮，传递参数给JS，并在WebView里面显示出来。</p>
+<p><img src="/content/images/hello-webview-js-demo.png" alt="hello-webview-js-demo"></p>
+<p>上面提到了两种JS调用Java的方法，所以在左边的WebView里面也设置两个按钮来演示这两种不同的方法。</p>
+<h2 id="1-Java调用JS-1"><a href="#1-Java调用JS-1" class="headerlink" title="1.Java调用JS"></a>1.Java调用JS</h2><h3 id="第一步：提供JS给Java调用的方法"><a href="#第一步：提供JS给Java调用的方法" class="headerlink" title="第一步：提供JS给Java调用的方法"></a>第一步：提供JS给Java调用的方法</h3><p>首先在我们的assets目录下放一个<code>hello.html</code>文件，方便WebView去加载。然后在JS代码添加一个给Java调用的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;script type=&quot;text/javascript&quot;&gt;</div><div class="line">	// JS提供给Java调用的方法</div><div class="line">	function javaCallJS(arg) &#123;</div><div class="line">		document.getElementById(&quot;hello&quot;).innerHTML += (&quot;&lt;br/&gt;&quot; + arg);</div><div class="line">	&#125;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<h3 id="第二步：在Java代码中调用"><a href="#第二步：在Java代码中调用" class="headerlink" title="第二步：在Java代码中调用"></a>第二步：在Java代码中调用</h3><p>非常简单，直接在Java代码里调用刚才的JS Function。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">mBtnJavaCallJs.setOnClickListener(new View.OnClickListener() &#123;</div><div class="line">            @Override</div><div class="line">            public void onClick(View v) &#123;</div><div class="line">                /**</div><div class="line">                 * 注意参数的传递需要符合JS的语法，用单引号或者反斜杠转义</div><div class="line">                 */</div><div class="line">                String js = &quot;javascript:javaCallJS(\&quot;Java called JS.\&quot;)&quot;;</div><div class="line">                mWebView.loadUrl(js);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
+<p>这样就实现了Java在WebView里面打印了“Java called JS.”。</p>
+<h2 id="JS调用Java"><a href="#JS调用Java" class="headerlink" title="JS调用Java"></a>JS调用Java</h2><p>由于 <strong>addJavascriptInterface</strong> 的方法比较简单，大家可以直接看看代码示例。下面介绍一下第二种方法：</p>
+<h3 id="第一步：JS里面添加一个iframe来触发loadUrl"><a href="#第一步：JS里面添加一个iframe来触发loadUrl" class="headerlink" title="第一步：JS里面添加一个iframe来触发loadUrl"></a>第一步：JS里面添加一个iframe来触发loadUrl</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;script type=&quot;text/javascript&quot;&gt;</div><div class="line">	// JS提供给Java调用的方法</div><div class="line">	function javaCallJS(arg) &#123;</div><div class="line">		document.getElementById(&quot;hello&quot;).innerHTML += (&quot;&lt;br/&gt;&quot; + arg);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/* </div><div class="line">	 *  JS通过创建一个不可见的iframe来调用Java</div><div class="line">	 */</div><div class="line">	function jsCallJavaByIframe(arg) &#123;</div><div class="line">		//创建iframe</div><div class="line">		var iframe = document.createElement(&apos;iframe&apos;);</div><div class="line">		iframe.id = &quot;hello-iframe&quot;</div><div class="line">		iframe.style.display = &apos;none&apos;;</div><div class="line">		iframe.src = &quot;bridge://uncle.nought.com?arg=&quot; + arg; // 把iframe的src设为要传递给Java的参数</div><div class="line">		document.body.appendChild(iframe);</div><div class="line">	&#125;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<h3 id="第二步：自定义一个WebViewClient"><a href="#第二步：自定义一个WebViewClient" class="headerlink" title="第二步：自定义一个WebViewClient"></a>第二步：自定义一个WebViewClient</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">public class HelloWebViewClient extends WebViewClient &#123;</div><div class="line">    private static final String TAG = HelloWebViewClient.class.getSimpleName();</div><div class="line">    private static final String PREFIX = &quot;bridge://uncle.nought.com&quot;;</div><div class="line">    private static final Pattern ARG_PATTERN = Pattern.compile(PREFIX + &quot;\\?arg=(.*)&quot;);</div><div class="line"></div><div class="line">    private MainActivity.TextViewChanger mTextViewChanger;</div><div class="line"></div><div class="line">    public HelloWebViewClient(MainActivity.TextViewChanger textViewChanger) &#123;</div><div class="line">        mTextViewChanger = textViewChanger;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public boolean shouldOverrideUrlLoading(WebView view, String url) &#123;</div><div class="line">        Log.d(TAG, &quot;Get params from JS: &quot; + url);</div><div class="line">        parseJSParams(url);</div><div class="line">        return true;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private void parseJSParams(String url) &#123;</div><div class="line">        // 解析自定义参数</div><div class="line">        if (url.startsWith(PREFIX)) &#123;</div><div class="line">            Matcher matcher = ARG_PATTERN.matcher(url);</div><div class="line">            if (matcher.matches()) &#123;</div><div class="line">                mTextViewChanger.changeText(matcher.group(1));</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="第三步：异步刷新UI"><a href="#第三步：异步刷新UI" class="headerlink" title="第三步：异步刷新UI"></a>第三步：异步刷新UI</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">private TextViewChanger mTextChanger = new TextViewChanger() &#123;</div><div class="line">        @Override</div><div class="line">        public void changeText(final String arg) &#123;</div><div class="line">            /**</div><div class="line">             * 官方说明文档：</div><div class="line">             * Note: The object that is bound to your JavaScript runs in another thread and not in the thread</div><div class="line">             * in which it was constructed.</div><div class="line">             *</div><div class="line">             * mWebAppInterface虽然是在UI线程创建的，但是bind到JS以后就是在另一条线程中运行的，因此刷新UI的时候需要注意</div><div class="line">             */</div><div class="line">            runOnUiThread(new Runnable() &#123;</div><div class="line">                @Override</div><div class="line">                public void run() &#123;</div><div class="line">                    if (mTextView != null) &#123;</div><div class="line">                        mTextView.append(&quot;\n&quot; + arg);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;;</div></pre></td></tr></table></figure>
+<p>最后奉上<a href="https://github.com/unclechen/HelloWebViewJS" target="_blank" rel="external">完整代码</a>。</p>
+<p>这里只是一个demo示例，在生产环境里面，我们肯定是需要针对自己的项目定制一个Java和JS通信的 <strong>bridge</strong> 框架，传递参数的时候也可以用JSON处理，对url的协议解析也应该做一个检查。</p>
+<p>Github上面也有不少开源的 <strong>WebView&amp;JSBridge</strong> 。我随便搜了一下，就看到了这个<a href="https://github.com/pedant/safe-java-js-webview-bridge" target="_blank" rel="external">https://github.com/pedant/safe-java-js-webview-bridge</a>，实现的思路貌似是差不多的。另外iOS也有不少类似的框架，<a href="https://github.com/marcuswestin/WebViewJavascriptBridge" target="_blank" rel="external">https://github.com/marcuswestin/WebViewJavascriptBridge</a>这个项目有4000+的star，可见iOS上面的WebApp需求还是非常多的，因为它不像Android一样可以用DexClassLoader去做热更新，通过WebApp的形式来动态更新App对iOS的意义非常大。</p>
+<h1 id="遇到的坑"><a href="#遇到的坑" class="headerlink" title="遇到的坑"></a>遇到的坑</h1><h2 id="1-HTML5的LocalStorage"><a href="#1-HTML5的LocalStorage" class="headerlink" title="1.HTML5的LocalStorage"></a>1.HTML5的LocalStorage</h2><p>Local Storage是h5里面常用到的一个缓存，如果加载的页面中用js去调用Local Storage的话，很容易出现<code>&quot;Uncaught TypeError: Cannot read property &#39;getItem&#39; of null&quot;, source: http://xxx.js</code>，原因就是没有开启WebView的h5缓存功能。于是上stackoverflow上搜了一下，加上下面这句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mWebView..getSettings().setDomStorageEnabled(true);</div></pre></td></tr></table></figure>
+<p>就好了。</p>
+<p>待补充。。。前面说到4.4开始有些JS代码得用evaluateJavascript来执行。blabla。。</p>
+<h1 id="PS"><a href="#PS" class="headerlink" title="PS"></a>PS</h1><p>手头看到了篇WebView文章，<a href="https://github.com/cundong/blog/blob/master/Android%204.4%20%E4%B8%AD%20WebView%20%E4%BD%BF%E7%94%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9.md" target="_blank" rel="external">Android 4.4 中 WebView 使用注意事项</a>，可参考参考。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/WebView/" rel="tag"># WebView</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/17/自定义Android Gradle插件/" rel="next" title="自定义Android Gradle插件">
+                <i class="fa fa-chevron-left"></i> 自定义Android Gradle插件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/05/Android6.0运行时权限简介/" rel="prev" title="Android6.0运行时权限简介">
+                Android6.0运行时权限简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="unclechen" />
+          <p class="site-author-name" itemprop="name">unclechen</p>
+           
+              <p class="site-description motion-element" itemprop="description">吃下恶魔果实，我就能变成超级赛亚人！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java与JS互相调用"><span class="nav-number">1.</span> <span class="nav-text">Java与JS互相调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Java调用JS"><span class="nav-number">1.1.</span> <span class="nav-text">1.Java调用JS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-JS调用Java"><span class="nav-number">1.2.</span> <span class="nav-text">2.JS调用Java</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法1-addJavascriptInterface："><span class="nav-number">1.2.1.</span> <span class="nav-text">方法1:addJavascriptInterface：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法2-iframe-CustomWebViewClient："><span class="nav-number">1.2.2.</span> <span class="nav-text">方法2:iframe + CustomWebViewClient：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法小结"><span class="nav-number">1.3.</span> <span class="nav-text">方法小结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java调用JS的代码"><span class="nav-number">1.3.1.</span> <span class="nav-text">Java调用JS的代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JS调用Java的方法1：addJavascriptInterface"><span class="nav-number">1.3.2.</span> <span class="nav-text">JS调用Java的方法1：addJavascriptInterface</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JS调用Java的方法2：-iframe-WebViewClient"><span class="nav-number">1.3.3.</span> <span class="nav-text">JS调用Java的方法2： iframe + WebViewClient</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java和JS互相调用实践"><span class="nav-number">2.</span> <span class="nav-text">Java和JS互相调用实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Java调用JS-1"><span class="nav-number">2.1.</span> <span class="nav-text">1.Java调用JS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步：提供JS给Java调用的方法"><span class="nav-number">2.1.1.</span> <span class="nav-text">第一步：提供JS给Java调用的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步：在Java代码中调用"><span class="nav-number">2.1.2.</span> <span class="nav-text">第二步：在Java代码中调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JS调用Java"><span class="nav-number">2.2.</span> <span class="nav-text">JS调用Java</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步：JS里面添加一个iframe来触发loadUrl"><span class="nav-number">2.2.1.</span> <span class="nav-text">第一步：JS里面添加一个iframe来触发loadUrl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步：自定义一个WebViewClient"><span class="nav-number">2.2.2.</span> <span class="nav-text">第二步：自定义一个WebViewClient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三步：异步刷新UI"><span class="nav-number">2.2.3.</span> <span class="nav-text">第三步：异步刷新UI</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#遇到的坑"><span class="nav-number">3.</span> <span class="nav-text">遇到的坑</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-HTML5的LocalStorage"><span class="nav-number">3.1.</span> <span class="nav-text">1.HTML5的LocalStorage</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PS"><span class="nav-number">4.</span> <span class="nav-text">PS</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">unclechen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
