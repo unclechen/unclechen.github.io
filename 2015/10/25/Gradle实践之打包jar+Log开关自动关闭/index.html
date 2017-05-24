@@ -129,11 +129,11 @@
       author: '博主'
     },
     algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
+      applicationID: '9GQE7B6UON',
+      apiKey: '1b6c2bb25ddee8d24221b1df179afbde',
+      indexName: 'UncleChenBlog',
       hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+      labels: {"input_placeholder":"输入关键词进行搜索","hits_empty":"找不到关于“${query}”的文章","hits_stats":"找到 ${hits} 篇文章，耗时 ${time} ms"}
     }
   };
 </script>
@@ -269,9 +269,47 @@
       
 
       
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
   
 </nav>
 
@@ -360,6 +398,16 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/10/25/Gradle实践之打包jar+Log开关自动关闭/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/25/Gradle实践之打包jar+Log开关自动关闭/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -465,6 +513,25 @@
       
     </div>
 
+    <div>    
+    
+    
+    <ul class="post-copyright">
+    <li class="post-copyright-author">
+    <strong>本文作者：</strong>unclechen
+    </li>
+    <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="/2015/10/25/Gradle实践之打包jar+Log开关自动关闭/" title="Gradle实践之自定义打包jar+Log开关自动关闭">2015/10/25/Gradle实践之打包jar+Log开关自动关闭/</a>
+    </li>
+    <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本文采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a>进行许可。转载请注明出处！
+    </li>
+    </ul>
+    
+    </div>
+
     <div>
       
         
@@ -542,6 +609,10 @@
 
           
   <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/10/25/Gradle实践之打包jar+Log开关自动关闭/"
+           data-title="Gradle实践之自定义打包jar+Log开关自动关闭" data-url="http://unclechen.github.io/2015/10/25/Gradle实践之打包jar+Log开关自动关闭/">
+      </div>
     
   </div>
 
@@ -654,6 +725,12 @@
 
         
         
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
 
         
         
@@ -673,7 +750,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#用Gradle打包出jar文件"><span class="nav-number">1.</span> <span class="nav-text">用Gradle打包出jar文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方案1：拷贝默认生成的jar包"><span class="nav-number">1.1.</span> <span class="nav-text">方案1：拷贝默认生成的jar包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方案2：自定义Jar任务打包jar文件"><span class="nav-number">1.2.</span> <span class="nav-text">方案2：自定义Jar任务打包jar文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PS-0：如何将依赖的第三方库也打包进来"><span class="nav-number">1.3.</span> <span class="nav-text">PS 0：如何将依赖的第三方库也打包进来</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PS-1：为何要依赖默认的build任务"><span class="nav-number">1.4.</span> <span class="nav-text">PS 1：为何要依赖默认的build任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PS-2：为何不直接自定义compileJava任务"><span class="nav-number">1.5.</span> <span class="nav-text">PS 2：为何不直接自定义compileJava任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PS-3：混淆自定义的jar包"><span class="nav-number">1.6.</span> <span class="nav-text">PS 3：混淆自定义的jar包</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Gradle自动关闭Log开关"><span class="nav-number">2.</span> <span class="nav-text">Gradle自动关闭Log开关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方案1：通过BuildConfig类来关闭"><span class="nav-number">2.1.</span> <span class="nav-text">方案1：通过BuildConfig类来关闭</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方案2：自定义Log开关"><span class="nav-number">2.2.</span> <span class="nav-text">方案2：自定义Log开关</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#用Gradle打包出jar文件"><span class="nav-text">用Gradle打包出jar文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方案1：拷贝默认生成的jar包"><span class="nav-text">方案1：拷贝默认生成的jar包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方案2：自定义Jar任务打包jar文件"><span class="nav-text">方案2：自定义Jar任务打包jar文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PS-0：如何将依赖的第三方库也打包进来"><span class="nav-text">PS 0：如何将依赖的第三方库也打包进来</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PS-1：为何要依赖默认的build任务"><span class="nav-text">PS 1：为何要依赖默认的build任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PS-2：为何不直接自定义compileJava任务"><span class="nav-text">PS 2：为何不直接自定义compileJava任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PS-3：混淆自定义的jar包"><span class="nav-text">PS 3：混淆自定义的jar包</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Gradle自动关闭Log开关"><span class="nav-text">Gradle自动关闭Log开关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方案1：通过BuildConfig类来关闭"><span class="nav-text">方案1：通过BuildConfig类来关闭</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方案2：自定义Log开关"><span class="nav-text">方案2：自定义Log开关</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -813,40 +890,61 @@
 
   
 
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"unclechen.duoshuo.com"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   
 
 
 
 
-	
-
-
-
-
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
 
   
-
-
-
-
-
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
   
 
-
-
-
-
-  
-
-
-
-
-
-
-  
-
-
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
 
 
 
