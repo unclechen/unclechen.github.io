@@ -2,8 +2,10 @@
 
 
 
+  
 
-<html class="theme-next pisces" lang="zh-Hans">
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -78,6 +80,8 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="UncleChen的博客" type="application/atom+xml" />
+
 
 
 
@@ -119,7 +123,7 @@
     scheme: 'Pisces',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
-    motion: false,
+    motion: true,
     duoshuo: {
       userId: '0',
       author: '博主'
@@ -152,6 +156,16 @@
 
 
 
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c7b0eb7b32d0e8723fcb885bc9778590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
 
 
@@ -224,16 +238,6 @@
         </li>
       
         
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
@@ -250,6 +254,16 @@
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
             标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
           </a>
         </li>
       
@@ -377,20 +391,20 @@
 <p>这时你会发现，我们的HelloGradle工程里，有了两个Module，一个是application类型的Module，一个是library类型的Module。</p>
 <p><img src="/content/images/two-modules.png" alt="Two module"></p>
 <p>它们的区别可以在各自的<code>build.gradle</code>文件中一目了然。因为application module的build.gradle中引入的是<code>com.android.application</code>插件来打包，而library module的build.gradle中引入的是<code>com.android.library</code>插件进行打包。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apply plugin: &apos;com.android.library&apos;</div></pre></td></tr></table></figure>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apply <span class="string">plugin:</span> <span class="string">'com.android.library'</span></div></pre></td></tr></table></figure>
 <p>可想而知，这个<code>com.android.library</code>打包出的来的output一定就是<code>aar</code>文件了。这个aar文件位于<code>build/output/aar/</code>文件夹下。</p>
 <p>那么我们要如何打包出一个jar呢？毕竟现在还有项目是用Eclipse开发的，使用jar文件比较方便，而且jar文件也可以在Android Studio中引入。</p>
 <p>首先我们在新建HelloLib Module中new一个class，作为我们的库来提供给app module使用。如下所示，我新建了一个测试类。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">package com.nought.hellolib;</div><div class="line"></div><div class="line">import android.util.Log;</div><div class="line"></div><div class="line">public class UncleNought &#123;</div><div class="line"></div><div class="line">    public static void Output() &#123;</div><div class="line">        Log.i(UncleNought.class.getSimpleName(), &quot;I&apos;m a library!&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.nought.hellolib;</div><div class="line"></div><div class="line"><span class="keyword">import</span> android.util.Log;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UncleNought</span> &#123;</span></div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> Output() &#123;</div><div class="line">        Log.i(UncleNought.<span class="keyword">class</span>.getSimpleName(), <span class="string">"I'm a library!"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>然后在app module的build.gradle文件中添加一行<code>compile project(&#39;:hellolib&#39;)</code>，使得app module依赖我们的HelloLib module。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">    compile fileTree(include: [&apos;*.jar&apos;], dir: &apos;libs&apos;)</div><div class="line">    testCompile &apos;junit:junit:4.12&apos;</div><div class="line">    compile &apos;com.android.support:appcompat-v7:22.2.1&apos;</div><div class="line">    compile &apos;com.android.support:design:22.2.1&apos;</div><div class="line">    compile project(&apos;:hellolib&apos;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">dependencies</span> &#123;</div><div class="line">    <span class="keyword">compile</span> <span class="keyword">fileTree</span>(<span class="keyword">include</span>: [<span class="string">'*.jar'</span>], dir: <span class="string">'libs'</span>)</div><div class="line">    testCompile <span class="string">'junit:junit:4.12'</span></div><div class="line">    <span class="keyword">compile</span> <span class="string">'com.android.support:appcompat-v7:22.2.1'</span></div><div class="line">    <span class="keyword">compile</span> <span class="string">'com.android.support:design:22.2.1'</span></div><div class="line">    <span class="keyword">compile</span> <span class="keyword">project</span>(<span class="string">':hellolib'</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这样就可以在app module中调用刚才的测试类了。我们在app module中MainActivity的onCreate方法里调用<code>UncleNought.Output();</code>，可以看到输出了Log<code>I&#39;m a library!</code>。</p>
 <p><img src="/content/images/i-am-a-lib.png" alt="I am a lib"></p>
 <p>接着，我们介绍两种生成jar的方法，有了jar以后，就可以在app module中以jar包的形式来调用HelloLib中的接口。</p>
 <h2 id="方案1：拷贝默认生成的jar包"><a href="#方案1：拷贝默认生成的jar包" class="headerlink" title="方案1：拷贝默认生成的jar包"></a>方案1：拷贝默认生成的jar包</h2><p>说到jar包，其实它就是把java源文件编译出来的class字节码，以一种zip的形式压缩在了一起。Android很大部分的开发都是用java写的，那么我们可以将Android源代码编译出来的class字节码压缩到一个jar包里面，不就是我们想要的jar包吗？没错就是这个，实际上在<code>com.android.library</code>插件中，运行build命令是，也会有这样的操作，先把java源代码编译成class文件，再把文件打包成jar，再把jar压缩成dex。这其中就有jar的操作，生成的jar就位于<code>build/intermediates/bundles/release/classes.jar</code>。如果你想直接使用这个jar也是可以的，只要自己在HelloLib Module的build.gradle中写一个copy类型的task，把这个classes.jar拷贝到指定的目录下就可以了。下面是一种示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">task releaseMyLib(type: Copy, dependsOn: [&apos;build&apos;]) &#123;</div><div class="line">    from( &apos;build/intermediates/bundles/release/&apos;)</div><div class="line">    into( &apos;build/libs&apos;)</div><div class="line">    include(&apos;classes.jar&apos;)</div><div class="line">    rename(&apos;classes.jar&apos;, &apos;my-lib.jar&apos;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">task</span> <span class="selector-tag">releaseMyLib</span>(<span class="attribute">type</span>: Copy, <span class="attribute">dependsOn</span>: [<span class="string">'build'</span>]) &#123;</div><div class="line">    <span class="selector-tag">from</span>( <span class="string">'build/intermediates/bundles/release/'</span>)</div><div class="line">    <span class="selector-tag">into</span>( <span class="string">'build/libs'</span>)</div><div class="line">    <span class="selector-tag">include</span>(<span class="string">'classes.jar'</span>)</div><div class="line">    <span class="selector-tag">rename</span>(<span class="string">'classes.jar'</span>, <span class="string">'my-lib.jar'</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>在HelloLib的build.gradle脚本添加完上面的task以后，打开Android Studio自带的命令行工具，依次输入下面两行，就可以打出一个my-lib.jar包了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd hellolib</div><div class="line">gradle releaseMyLib</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> hellolib</div><div class="line">gradle releaseMyLib</div></pre></td></tr></table></figure>
 <p>这段脚本的含义非常简单，我们自定义了一个名叫releaseMyLib的task，它是Gradle API自带的<code>copy</code>类型的任务，这个任务依赖于 <code>build</code>任务，前面我们提到过，gradle有很多默认的任务，build便是其中的一个。所以当build任务结束后，会在<code>build/intermediates/bundles/release/</code>下生成<code>classes.jar</code>文件，我们只要在这之后，把它拷贝出来，重命名为<code>my-lib.jar</code>就可以了。</p>
 <p>然后把这个jar包拷贝到app module下的libs文件夹中，去掉刚才在app module的build.gradle文件中添加的<code>compile project(&#39;:hellolib&#39;)</code>，重新gradle sync一下，然后尝试运行你会发现和刚才的效果是一样的，这样就打出一个hellolib module的jar了。</p>
 <p>但是上面这种做法太偷懒了，实际上这个classes.jar中，有一些是我们不要的类，例如<code>BuildConfig.class</code>这样的类。下图是用Java Decompiler反编译看到my-lib.jar里面的内容。</p>
@@ -400,23 +414,23 @@
 <p>答案很简单：只需要在对编译出来的class字节码做Jar操作时，include我自己想要的类（或者exclude掉不想要的类）即可。那么所有的编译好的class字节码都在哪里呢？答案是<code>build/intermediates/classes/release/</code>目录下，如下图所示：</p>
 <p><img src="/content/images/output-classes.png" alt="classes"></p>
 <p>Android Library打包插件在build时，会把所有的java文件编译成class文件，放在这个目录下。所以我们接下来要做的事就是把这里面，所有需要的class，打成一个Jar包即可。下面是一个示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">task jarMyLib(type: Jar, dependsOn: [&apos;build&apos;]) &#123;</div><div class="line">    archiveName = &apos;my-lib.jar&apos;</div><div class="line">    from(&apos;build/intermediates/classes/release&apos;)</div><div class="line">    destinationDir = file(&apos;build/libs&apos;)</div><div class="line">    exclude(&apos;com/nought/hellolib/BuildConfig.class&apos;)</div><div class="line">    exclude(&apos;com/nought/hellolib/BuildConfig\$*.class&apos;)</div><div class="line">    exclude(&apos;**/R.class&apos;)</div><div class="line">    exclude(&apos;**/R\$*.class&apos;)</div><div class="line">    include(&apos;com/nought/hellolib/*.class&apos;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">task</span> jarMyLib(type: Jar, dependsOn: [<span class="string">'build'</span>]) &#123;</div><div class="line">    archiveName = <span class="string">'my-lib.jar'</span></div><div class="line">    <span class="keyword">from</span>(<span class="string">'build/intermediates/classes/release'</span>)</div><div class="line">    <span class="keyword">destinationDir</span> = <span class="keyword">file</span>(<span class="string">'build/libs'</span>)</div><div class="line">    <span class="keyword">exclude</span>(<span class="string">'com/nought/hellolib/BuildConfig.class'</span>)</div><div class="line">    <span class="keyword">exclude</span>(<span class="string">'com/nought/hellolib/BuildConfig\$*.class'</span>)</div><div class="line">    <span class="keyword">exclude</span>(<span class="string">'**/R.class'</span>)</div><div class="line">    <span class="keyword">exclude</span>(<span class="string">'**/R\$*.class'</span>)</div><div class="line">    <span class="keyword">include</span>(<span class="string">'com/nought/hellolib/*.class'</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>同样，打开Android Studio的终端，依次输入下面两行命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd hellolib</div><div class="line">gradle jarMyLib</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> hellolib</div><div class="line">gradle jarMyLib</div></pre></td></tr></table></figure>
 <p>这样就通过Jar任务，自己打包出了一个jar包。我们可以反编译一下这个jar包看看：</p>
 <p><img src="/content/images/my-jar-lib.png" alt="Jar classes"></p>
 <p>果然里面没有BuildCongfig这个类了，把这<code>my-lib.jar</code>拷贝到app module下的libs文件夹下，重新Gradle sync一下，再运行这个app module，可以看到和之前方案1中一样的效果了。</p>
 <p>这里是一种基本的自定义示例，如果还需要有别的需求，可以参考Gradle官方的DSL，里面介绍了各种Task接收的参数和使用方法。大家可以自行发挥实现自己想要的效果。</p>
 <h2 id="PS-0：如何将依赖的第三方库也打包进来"><a href="#PS-0：如何将依赖的第三方库也打包进来" class="headerlink" title="PS 0：如何将依赖的第三方库也打包进来"></a>PS 0：如何将依赖的第三方库也打包进来</h2><p>有一次我在Android开源群里，一个朋友问到“如果除了自己写的类，还想把第三方的OkHttp包打进来怎么办？”。其实这个问题很好解决，Gradle的<code>Jar</code>任务是可配置多个<code>from</code>来源的，所以我们只需要在上面的代码里添加一行:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">task jarMyLib(type: Jar, dependsOn: [&apos;build&apos;]) &#123;</div><div class="line">    archiveName = &apos;my-lib.jar&apos;</div><div class="line">    from(&apos;build/intermediates/classes/release&apos;)</div><div class="line">    from(project.zipTree(&quot;libs/xxx-x.x.x.jar&quot;)) // 添加这一行</div><div class="line">    destinationDir = file(&apos;build/libs&apos;)</div><div class="line">    exclude(&apos;com/nought/hellolib/BuildConfig.class&apos;)</div><div class="line">    exclude(&apos;com/nought/hellolib/BuildConfig\$*.class&apos;)</div><div class="line">    exclude(&apos;**/R.class&apos;)</div><div class="line">    exclude(&apos;**/R\$*.class&apos;)</div><div class="line">    include(&apos;com/nought/hellolib/*.class&apos;)</div><div class="line">    include(&apos;com/xxx/*.class&apos;) // 同时记得加上第三方的package</div></pre></td></tr></table></figure>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">task</span> jarMyLib(type: Jar, dependsOn: [<span class="string">'build'</span>]) &#123;</div><div class="line">    archiveName = <span class="string">'my-lib.jar'</span></div><div class="line">    <span class="keyword">from</span>(<span class="string">'build/intermediates/classes/release'</span>)</div><div class="line">    <span class="keyword">from</span>(<span class="keyword">project</span>.zipTree(<span class="string">"libs/xxx-x.x.x.jar"</span>)) <span class="comment">// 添加这一行</span></div><div class="line">    <span class="keyword">destinationDir</span> = <span class="keyword">file</span>(<span class="string">'build/libs'</span>)</div><div class="line">    <span class="keyword">exclude</span>(<span class="string">'com/nought/hellolib/BuildConfig.class'</span>)</div><div class="line">    <span class="keyword">exclude</span>(<span class="string">'com/nought/hellolib/BuildConfig\$*.class'</span>)</div><div class="line">    <span class="keyword">exclude</span>(<span class="string">'**/R.class'</span>)</div><div class="line">    <span class="keyword">exclude</span>(<span class="string">'**/R\$*.class'</span>)</div><div class="line">    <span class="keyword">include</span>(<span class="string">'com/nought/hellolib/*.class'</span>)</div><div class="line">    <span class="keyword">include</span>(<span class="string">'com/xxx/*.class'</span>) <span class="comment">// 同时记得加上第三方的package</span></div></pre></td></tr></table></figure>
 <p>看上面的加了注释的两行，这样就可以把第三放依赖的jar包添加进来了。</p>
 <h2 id="PS-1：为何要依赖默认的build任务"><a href="#PS-1：为何要依赖默认的build任务" class="headerlink" title="PS 1：为何要依赖默认的build任务"></a>PS 1：为何要依赖默认的build任务</h2><p>前面我们自定义<code>jarMyLib</code>的时候，都依赖了<code>build</code>任务，因为这个任务可以帮我们把所有的java源代码编译成class文件，实际上build任务自己又依赖了很多其他的任务来实现打包。如果你想实现更快速的打包，运行一下<code>gradle tasks</code>或者在Android Studio中点击右边的Gradle按钮弹出任务列表的面板，就会看到还有一个<code>compileReleaseJavaWithJavac</code>，看名字就知道这个任务是编译所有的release type的java源文件，因为我们可以把上面的代码改为dependsOn这个任务即可，改为<code>task jarMyLib(type: Jar, dependsOn: [&#39;compileReleaseJavaWithJavac&#39;])</code>。但是记住了，一定要看清楚自己的gradle插件版本，我这个Android Gradle插件的版本是<code>com.android.tools.build:gradle:1.3.0</code>，而<code>com.android.tools.build:gradle:1.2.3</code>插件版本中对应的这个Compile任务的名字是叫做<code>compileReleaseJava</code>，大家记得不要写错了。</p>
 <h2 id="PS-2：为何不直接自定义compileJava任务"><a href="#PS-2：为何不直接自定义compileJava任务" class="headerlink" title="PS 2：为何不直接自定义compileJava任务"></a>PS 2：为何不直接自定义compileJava任务</h2><p>另外大家可能会说，既然都自己自定义Jar任务，为啥不把<code>compileJava</code>任务也自定义了，其实也是可以的，这样等于完全不用依赖Android Gradle插件的默认任务了。但有的时候，假设我们的代码中要把aidl打进来，依赖默认的<code>compileReleaseJavaWithJavac</code>任务会把aidl生成的class文件也包含在里面，非常方便。如果自己去写JavaCompile任务的话，首先还要把aidl文件生成java文件，再来compile它，会有一点点麻烦。咱们做sdk开发的，不需要打那么多渠道包，直接依赖默认的<code>compileReleaseJavaWithJavac</code>其实多花个1-2s不是什么大问题。</p>
 <h2 id="PS-3：混淆自定义的jar包"><a href="#PS-3：混淆自定义的jar包" class="headerlink" title="PS 3：混淆自定义的jar包"></a>PS 3：混淆自定义的jar包</h2><p>刚才忘了提，混淆也是比较常见的一个需求，假设我们不是打包apk，在buildTypes闭包里面也没有给release类型的任务设置``为混淆。那么我们还可以自己定义一个混淆任务，话不多说，直接上代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">def androidSDKDir = plugins.getPlugin(&apos;com.android.library&apos;).sdkHandler.getSdkFolder()</div><div class="line">def androidJarDir = androidSDKDir.toString() + &apos;/platforms/&apos; + &quot;$&#123;android.compileSdkVersion&#125;&quot; + &apos;/android.jar&apos;</div><div class="line"></div><div class="line">task proguardMyLib(type: proguard.gradle.ProGuardTask, dependsOn: [&apos;jarMyLib&apos;]) &#123;</div><div class="line">    injars(&apos;build/libs/my-lib.jar&apos;)</div><div class="line">    outjars(&apos;build/libs/my-pro-lib.jar&apos;)</div><div class="line">    libraryjars(androidJarDir)</div><div class="line">    configuration &apos;proguard-rules.pro&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">androidSDKDir</span> = <span class="title">plugins</span>.<span class="title">getPlugin</span><span class="params">(<span class="string">'com.android.library'</span>)</span></span>.sdkHandler.getSdkFolder()</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">androidJarDir</span> = <span class="title">androidSDKDir</span>.<span class="title">toString</span><span class="params">()</span></span> + <span class="string">'/platforms/'</span> + <span class="string">"$&#123;android.compileSdkVersion&#125;"</span> + <span class="string">'/android.jar'</span></div><div class="line"></div><div class="line">task proguardMyLib(<span class="symbol">type:</span> proguard.gradle.ProGuardTask, <span class="symbol">dependsOn:</span> [<span class="string">'jarMyLib'</span>]) &#123;</div><div class="line">    injars(<span class="string">'build/libs/my-lib.jar'</span>)</div><div class="line">    outjars(<span class="string">'build/libs/my-pro-lib.jar'</span>)</div><div class="line">    libraryjars(androidJarDir)</div><div class="line">    configuration <span class="string">'proguard-rules.pro'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这里的混淆Task——<code>proguard.gradle.ProGuardTask</code>，也是来自Gradle标准的API，查看一下Gradle DSL，就知道怎么用了。injars、outjars和libraryjars以及混淆配置文件proguard-rules.pro这些参数，和原来使用Eclipse开发时是一样的，injars表示输入的需要被混淆的jar包，outsjars表示混淆后输出的jar包，libraryjars表示引用到的jar包不被混淆，<code>proguard-rules.pro</code>里面写的是混淆配置，具体就不在这里详细发散了。</p>
 <p>最后，还是在终端中进入HelloLib目录，执行<code>gradle proguardMyLib</code>，就可以得到混淆以后的jar包<code>my-pro-lib.jar</code>了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd hellolib</div><div class="line">gradle proguardMyLib</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> hellolib</div><div class="line">gradle proguardMyLib</div></pre></td></tr></table></figure>
 <p>同样，我们反编译一下这个<code>my-pro-lib.jar</code>，如下图所示：</p>
 <p><img src="/content/images/my-pro-lib.png" alt="Decompile my-pro-lib"></p>
 <p>有同学就会说了，这个混淆的后的jar包和原来的jar包没啥区别啊… …没错，因为我们这个类里面只调用了一句Log API，这个API又是来自于android.jar的，我们在混淆的时候使用libraryjars(android.jar)保证了这个包里面的东西不会被混淆，所以这个示例里面看起来是没有什么变化的。如果你的HelloLib Module写的很复杂，里面代码有很多的话，混淆以后是有明显变化的，自定义打包jar文件就到这里结束了，大家可以自己体验一下。</p>
@@ -425,23 +439,23 @@
 <p>其实这个需求很早就有，网上的大神们有很多的方法，这里我就举两个例子，说一下我自己的体会吧。</p>
 <h2 id="方案1：通过BuildConfig类来关闭"><a href="#方案1：通过BuildConfig类来关闭" class="headerlink" title="方案1：通过BuildConfig类来关闭"></a>方案1：通过BuildConfig类来关闭</h2><p>前面我们一经发现，当你使用Android Gradle插件打包，执行默认的build任务时，会在<code>build/intermediates/classes/release</code>中自动生成一个<code>BuildConfig.class</code>，有class就应该有java源代码文件啊，那么这个class文件对应的java文件在哪里呢？答案是<code>app/build/generated/source/buildConfig/</code>下。</p>
 <p>关于这个生成的类文件，我们可以通过在build.gradle脚本中的buildTypes闭包中指定参数，使得这个类生成出来的时候包含一个我们自定义的boolean类型的静态常量<code>ENABLE_DEBUG</code>，直接上代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">buildTypes &#123;</div><div class="line">        release &#123;</div><div class="line">            // 不显示log</div><div class="line">            buildConfigField &quot;boolean&quot;, &quot;ENABLE_DEBUG&quot;, &quot;false&quot;</div><div class="line">            ...</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        debug &#123;</div><div class="line">            // 显示Log</div><div class="line">            buildConfigField &quot;boolean&quot;, &quot;ENABLE_DEBUG&quot;, &quot;true&quot;</div><div class="line">            ...</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="class">buildTypes </span>&#123;</div><div class="line">        <span class="class">release </span>&#123;</div><div class="line">            <span class="comment">// 不显示log</span></div><div class="line">            buildConfigField <span class="string">"boolean"</span>, <span class="string">"ENABLE_DEBUG"</span>, <span class="string">"false"</span></div><div class="line">            ...</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="class">debug </span>&#123;</div><div class="line">            <span class="comment">// 显示Log</span></div><div class="line">            buildConfigField <span class="string">"boolean"</span>, <span class="string">"ENABLE_DEBUG"</span>, <span class="string">"true"</span></div><div class="line">            ...</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
 <p>按照上面的脚本编写之后，生成的release版BuildConfig类中就会多出一个常量，即<code>public static final boolean ENABLE_DEBUG = false;</code>；而debug版的BuildConfig类中的常量值则为true，即<code>public static final boolean ENABLE_DEBUG = true;</code>。你可以分别在源代码中调用这两个常量，最后这两个类分别也会被打包到release和debug版各自的apk文件当中。</p>
 <p>当你修改build.gradle脚本以后，按照Android Studio的提示，点击<code>Gradle Sync</code>，就可以在之前我们自定义的UncleNought测试类中调用BuildConfig类中常量，可以看到<code>ENABLE_DEBUG</code>这个类已经自动生成出来了。下面是一段调用的示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">package com.nought.hellolib;</div><div class="line"></div><div class="line">import android.util.Log;</div><div class="line"></div><div class="line">public class UncleNought &#123;</div><div class="line"></div><div class="line">    public static void Output() &#123;</div><div class="line">        if (BuildConfig.ENABLE_DEBUG) &#123;</div><div class="line">            Log.i(UncleNought.class.getSimpleName(), &quot;I&apos;m a library!&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.nought.hellolib;</div><div class="line"></div><div class="line"><span class="keyword">import</span> android.util.Log;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UncleNought</span> &#123;</span></div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> Output() &#123;</div><div class="line">        <span class="keyword">if</span> (BuildConfig.ENABLE_DEBUG) &#123;</div><div class="line">            Log.i(UncleNought.<span class="keyword">class</span>.getSimpleName(), <span class="string">"I'm a library!"</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>咱们可以打个包看一下，在命令行中运行:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gradle releaseMyLib</div></pre></td></tr></table></figure>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">gradle releaseMyLib</span></div></pre></td></tr></table></figure>
 <p>记住，这里必须执行<code>releaseMyLib</code>这个任务，因为我们用到了BuildConfig这个自动生成的类，假如不把它编译到我们的jar包里，那么就没法去引用<code>BuildConfig</code>里面的<code>ENABLE_DEBUG</code>常量了。打包好了以后，我们通过反编译再看一下这个jar，如下图：</p>
 <p><img src="/content/images/buildconfig-enable-debug.png" alt="enable-debug"></p>
 <p>把这个jar包给app module引用一下也会发现，现在Log已经不会输出了。</p>
 <h2 id="方案2：自定义Log开关"><a href="#方案2：自定义Log开关" class="headerlink" title="方案2：自定义Log开关"></a>方案2：自定义Log开关</h2><p>假设我们不想把BuildConfig打包进来，只想在自己的类中定义一个常量，然后在release的时候修改这个动态去常量，应该怎么做呢？这个时候就可以利用gradle强大的能力了，话不多说，一步步看代码。</p>
 <p>首先在测试类的代码里添加一个常量<code>ENABLE_DEBUG</code>：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">package com.nought.hellolib;</div><div class="line"></div><div class="line">import android.util.Log;</div><div class="line"></div><div class="line">public class UncleNought &#123;</div><div class="line"></div><div class="line">    public static boolean ENABLE_DEBUG = true;</div><div class="line"></div><div class="line">    public static void Output() &#123;</div><div class="line">        if (ENABLE_DEBUG) &#123;</div><div class="line">            Log.i(UncleNought.class.getSimpleName(), &quot;I&apos;m a library!&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.nought.hellolib;</div><div class="line"></div><div class="line"><span class="keyword">import</span> android.util.Log;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UncleNought</span> &#123;</span></div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> ENABLE_DEBUG = <span class="literal">true</span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> Output() &#123;</div><div class="line">        <span class="keyword">if</span> (ENABLE_DEBUG) &#123;</div><div class="line">            Log.i(UncleNought.<span class="keyword">class</span>.getSimpleName(), <span class="string">"I'm a library!"</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>然后修改我们的HelloLib打包脚本build.gradle文件，在前面的基础上添加：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">def enableLoggerDebug(boolean flag) &#123;</div><div class="line">    def loggerFilePath = &quot;src/main/java/com/qq/e/comm/util/GDTLogger.java&quot;</div><div class="line">    def updatedDebug = new File(loggerFilePath).getText(&apos;UTF-8&apos;)</div><div class="line">            .replaceAll(&quot;DEBUG_ENABLE\\s?=\\s?&quot; + (!flag).toString(), &quot;DEBUG_ENABLE = &quot; + flag.toString())</div><div class="line">    new File(loggerFilePath).write(updatedDebug, &apos;UTF-8&apos;)</div><div class="line">    println(flag ? &apos;GDTLogger.DEBUG_ENABLE : [true]&apos; : &apos;GDTLogger.DEBUG_ENABLE : [false]&apos;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">preBuild &#123;&#125;.doFirst &#123;</div><div class="line">    if ((&apos;jarMyLib&apos; in gradle.startParameter.taskNames)) &#123;</div><div class="line">        enableLoggerDebug(false)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">jarMyLib &#123;&#125;.doLast &#123;</div><div class="line">    enableLoggerDebug(true)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">def</span> enableLoggerDebug(<span class="keyword">boolean</span> flag) &#123;</div><div class="line">    <span class="keyword">def</span> loggerFilePath = <span class="string">"src/main/java/com/qq/e/comm/util/GDTLogger.java"</span></div><div class="line">    <span class="keyword">def</span> updatedDebug = <span class="keyword">new</span> <span class="keyword">File</span>(loggerFilePath).<span class="keyword">getText</span>(<span class="string">'UTF-8'</span>)</div><div class="line">            .replaceAll(<span class="string">"DEBUG_ENABLE\\s?=\\s?"</span> + (!flag).toString(), <span class="string">"DEBUG_ENABLE = "</span> + flag.toString())</div><div class="line">    <span class="keyword">new</span> <span class="keyword">File</span>(loggerFilePath).<span class="keyword">write</span>(updatedDebug, <span class="string">'UTF-8'</span>)</div><div class="line">    <span class="keyword">println</span>(flag ? <span class="string">'GDTLogger.DEBUG_ENABLE : [true]'</span> : <span class="string">'GDTLogger.DEBUG_ENABLE : [false]'</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line">preBuild &#123;&#125;.<span class="keyword">doFirst</span> &#123;</div><div class="line">    <span class="keyword">if</span> ((<span class="string">'jarMyLib'</span> in gradle.startParameter.taskNames)) &#123;</div><div class="line">        enableLoggerDebug(<span class="keyword">false</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">jarMyLib &#123;&#125;.<span class="keyword">doLast</span> &#123;</div><div class="line">    enableLoggerDebug(<span class="keyword">true</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>前面我提过，Gradle兼容Java的语法，所以我就想到，可以用正则表达式替换掉原来代码中的<code>true</code>，让它变成<code>false</code>。当然我们要保证这该替换必须发生在<code>complileReleaseJavaWithJavac</code>之前，然后我们在打包彻底完成以后，再把Log开关打开，即再<code>false</code>变回<code>true</code>，使得开发环境一直都是可以输出Debug Log的。</p>
 <p>可以看到我们在preBuild任务前把开关关闭了，然后在jarMyLib之后，又把开关打开了。<code>doFirst</code>和<code>doLast</code>都是通过闭包的方式向一个已有的任务里面添加可执行操作的语法。下面我们打开终端进入到HelloLib目录下，执行下面的语句打一个包试试：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gradle jarMyLib</div></pre></td></tr></table></figure>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">gradle jarMyLib</span></div></pre></td></tr></table></figure>
 <p>找到我们的jar包，反编译一下看看：</p>
 <p><img src="/content/images/custom-log-enable.png" alt="custom-enable-debug"></p>
 <p>果然，虽然我们的代码里是<code>public static boolean ENABLE_DEBUG = true;</code>，然而打出来的jar包却是<code>public static boolean ENABLE_DEBUG = false;</code>。</p>
@@ -606,8 +620,35 @@
         </nav>
 
         
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
 
         <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/unclechen" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1718455407" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
           
         </div>
 

@@ -2,8 +2,10 @@
 
 
 
+  
 
-<html class="theme-next pisces" lang="zh-Hans">
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -78,6 +80,8 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="UncleChen的博客" type="application/atom+xml" />
+
 
 
 
@@ -98,7 +102,7 @@
 <meta property="og:image" content="https://ww4.sinaimg.cn/large/006tNc79ly1ffjvarjyijj30jg05k0yr.jpg">
 <meta property="og:image" content="https://ww2.sinaimg.cn/large/006tNc79ly1ffjvztg93zj30jg0a247x.jpg">
 <meta property="og:image" content="https://ww3.sinaimg.cn/large/006tNc79ly1ffjw46ygoqj30jg06443v.jpg">
-<meta property="og:updated_time" content="2017-05-22T12:45:04.000Z">
+<meta property="og:updated_time" content="2017-05-24T07:22:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WebView缓存原理分析和应用">
 <meta name="twitter:description" content="一、背景现在的App开发，或多或少都会用到Hybrid模式，到了WebView这边，经常会加载一些js文件（例如和WebView用来Native通信的bridge.js），而这些js文件不会经常发生变化，所以我们希望js在WebView里面加载一次之后，如果js没有发生变化，下次就不用再发起网络请求去加载，从而减少流量和资源的占用。那么有什么方式可以达到这个目的呢？先得从WebView的缓存原理入">
@@ -113,7 +117,7 @@
     scheme: 'Pisces',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
-    motion: false,
+    motion: true,
     duoshuo: {
       userId: '0',
       author: '博主'
@@ -146,6 +150,16 @@
 
 
 
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c7b0eb7b32d0e8723fcb885bc9778590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
 
 
@@ -218,16 +232,6 @@
         </li>
       
         
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
@@ -244,6 +248,16 @@
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
             标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
           </a>
         </li>
       
@@ -389,7 +403,7 @@
 <li>LOAD_CACHE_ELSE_NETWORK，只要本地有，无论是否过期，或者no-cache，都使用缓存中的数据。本地没有缓存时才从网络上获取。</li>
 </ul>
 <p>设置WebView缓存的Cache Mode示例代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">WebSettings settings = webView.getSettings();</div><div class="line">settings.setCacheMode(WebSettings.LOAD_DEFAULT);</div></pre></td></tr></table></figure>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">WebSettings settings = webView.getSettings()<span class="comment">;</span></div><div class="line">settings.setCacheMode(WebSettings.LOAD_DEFAULT)<span class="comment">;</span></div></pre></td></tr></table></figure>
 <p>网上很多人都说根据网络条件去选择Cache Mode，当有网络时，设置为LOAD_DEFAULT，当没有网络时设置为LOAD_CACHE_ELSE_NETWORK。但是在我的业务中，js文件的更新都是非覆盖式的更新，也就是时候每次改变js文件的时候，文件的url地址一定会发生变化，所以我希望浏览器能够缓存下来js，并且一直使用它，那么我就给它只设置为LOAD_CACHE_ELSE_NETWORK。当然如果你要是可以改js的cdn服务器的Cache-Control字段，那也行啊，用LOAD_DEFAULT就ok了。至于文件是应该采用覆盖式or非覆盖式的更新，不是我今天要讨论的内容，在web前端领域，这是一个可以聊聊的topic。</p>
 <blockquote>
 <p>关于iOS的WebView，我同事在实际测试的时候竟然发现，控制文件缓存的Response Header是Expires字段。。而且iOS无法针对整个WebView设置Cache Mode，只能针对每一个URLRequest去设置。。后续有机会要学习一下iOS那块的情况。</p>
@@ -397,7 +411,7 @@
 <h2 id="3-在手机里面的存储路径"><a href="#3-在手机里面的存储路径" class="headerlink" title="3.在手机里面的存储路径"></a>3.在手机里面的存储路径</h2><p>浏览器默认缓存下来的文件是怎么被存储到了哪里呢？这个问题在接触到WebView以来，就一直是一个谜题。这次由于工作的需要，我特意root了两台手机，一台红米1（Android 4.4）和一台小米4c（Android 5.1），在root高系统版本（6.0和7.1）的两台Nexus都以失败告终之后，我决定还是先看看4.4和5.1系统上，WebView自带的缓存存到了哪里。</p>
 <p>首先，不用思考就知道，这些文件一定是在<strong>/data/data/包名/</strong>目录下，在我之前的一篇博客里面提到过，这是每一个应用自己的内部存储目录。</p>
 <p>接着，我们打开终端，使用adb连接手机，然后按照下面命令操作一下。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">// 1.先进入shell</div><div class="line">adb shell</div><div class="line">// 2.开启root账号 </div><div class="line">su</div><div class="line">// 3.修改文件夹权限</div><div class="line">chmod 777 data/data/你的应用包名/</div><div class="line">// 4.修改子文件夹的权限，因为Android命令行不支持向Linux那样的-R命令实现递归式的chmod。。。</div><div class="line">chmod 777 data/data/你的应用包名/*</div><div class="line">// 5.所以如果你对应用目录层级更深，你就要进一步地chmod。。。</div><div class="line">chmod 777 data/data/你的应用包名/*/*</div><div class="line">// 6.直到终端里提示你说，no such file or directory时，说明chmod完了，所有的内部存储里面的文件夹和文件都可以看到了，如果大家有更好的方法请一定告诉我，多谢了~</div></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 1.先进入shell</span></div><div class="line">adb shell</div><div class="line"><span class="comment">// 2.开启root账号 </span></div><div class="line">su</div><div class="line"><span class="comment">// 3.修改文件夹权限</span></div><div class="line">chmod <span class="number">777</span> <span class="keyword">data</span>/<span class="keyword">data</span>/你的应用包名/</div><div class="line"><span class="comment">// 4.修改子文件夹的权限，因为Android命令行不支持向Linux那样的-R命令实现递归式的chmod。。。</span></div><div class="line">chmod <span class="number">777</span> <span class="keyword">data</span>/<span class="keyword">data</span>/你的应用包名<span class="comment">/*</span></div><div class="line">// 5.所以如果你对应用目录层级更深，你就要进一步地chmod。。。</div><div class="line">chmod 777 data/data/你的应用包名/*/*</div><div class="line"><span class="comment">// 6.直到终端里提示你说，no such file or directory时，说明chmod完了，所有的内部存储里面的文件夹和文件都可以看到了，如果大家有更好的方法请一定告诉我，多谢了~</span></div></pre></td></tr></table></figure>
 <ul>
 <li>Android 4.4的目录：<code>/data/data/包名/app_webview/cache/</code>，如下图所示的第二个文件夹。</li>
 </ul>
@@ -414,10 +428,10 @@
 <p>实际上，以5.1系统为例，我看到了<code>/data/data/包名/cache/org.chromium.android_webview/</code>下面有叫<strong>index</strong>和<strong>/index-dir/the-real-index</strong>的文件，以及一堆名称为<strong>md5+下划线+数字</strong>的文件，上面的图中也可以看得到，这块的原理仍然有些疑问，也希望专业的大神可以解答一下。</p>
 <h1 id="四、H5的缓存"><a href="#四、H5的缓存" class="headerlink" title="四、H5的缓存"></a>四、H5的缓存</h1><p>讲完了WebView自带的缓存，下面讲一下H5里面的App Cache。这个Cache是由开发Web页面的开发者控制的，而不是由Native去控制的，但是Native里面的WebView也需要我们做一下设置才能支持H5的这个特性。</p>
 <h2 id="1-工作原理-1"><a href="#1-工作原理-1" class="headerlink" title="1.工作原理"></a>1.工作原理</h2><p>写Web页面代码时，指定manifest属性即可让页面使用App Cache。通常html页面代码会这么写：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;html manifest=&quot;xxx.appcache&quot;&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">manifest</span>=<span class="string">"xxx.appcache"</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>xxx.appcache文件用的是相对路径，这时appcache文件的路径是和页面一样的。也可以使用的绝对路径，但是域名要保持和页面一致。</p>
 <p>完整的xxx.appcache文件一般包括了3个section，基本格式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">CACHE MANIFEST</div><div class="line"># 2017-05-13 v1.0.0</div><div class="line">/bridge.js</div><div class="line"> </div><div class="line">NETWORK:</div><div class="line">*</div><div class="line"> </div><div class="line">FALLBACK:</div><div class="line">/404.html</div></pre></td></tr></table></figure>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">CACHE MANIFEST</div><div class="line"><span class="meta"># 2017-05-13 v1.0.0</span></div><div class="line">/bridge.js</div><div class="line"> </div><div class="line"><span class="symbol">NETWORK:</span></div><div class="line">*</div><div class="line"> </div><div class="line"><span class="symbol">FALLBACK:</span></div><div class="line">/<span class="number">404.</span>html</div></pre></td></tr></table></figure>
 <ul>
 <li>CACHE MANIFEST下面文件就是要被浏览器缓存的文件</li>
 <li>NETWORK下面的文件就是要被加载的文件</li>
@@ -436,7 +450,7 @@
 <li>manifest 文件本身不能被缓存，且 manifest 文件的更新使用的是浏览器缓存机制。所以 manifest 文件的 Cache-Control 缓存时间不能设置太长。</li>
 </ul>
 <h2 id="2-WebView如何设置才能支持AppCache"><a href="#2-WebView如何设置才能支持AppCache" class="headerlink" title="2.WebView如何设置才能支持AppCache"></a>2.WebView如何设置才能支持AppCache</h2><p>WebView默认是没有开启AppCache支持的，需要添加下面这几行代码来设置：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">WebSettings webSettings = webView.getSettings();</div><div class="line">webSettings.setAppCacheEnabled(true);</div><div class="line">String cachePath = getApplicationContext().getCacheDir().getPath(); // 把内部私有缓存目录&apos;/data/data/包名/cache/&apos;作为WebView的AppCache的存储路径</div><div class="line">webSettings.setAppCachePath(cachePath);</div><div class="line">webSettings.setAppCacheMaxSize(5 * 1024 * 1024);</div></pre></td></tr></table></figure>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">WebSettings webSettings = webView.getSettings<span class="params">()</span>;</div><div class="line">webSettings.<span class="keyword">set</span>AppCacheEnabled<span class="params">(true)</span>;</div><div class="line">String cachePath = getApplicationContext<span class="params">()</span><span class="string">.getCacheDir</span><span class="params">()</span><span class="string">.getPath</span><span class="params">()</span>; <span class="string">//</span> 把内部私有缓存目录'<span class="string">/data/data/</span>包名<span class="string">/cache/</span>'作为WebView的AppCache的存储路径</div><div class="line">webSettings.<span class="keyword">set</span>AppCachePath<span class="params">(cachePath)</span>;</div><div class="line">webSettings.<span class="keyword">set</span>AppCacheMaxSize<span class="params">(5 * 1024 * 1024)</span>;</div></pre></td></tr></table></figure>
 <p>注意：WebSettings的setAppCacheEnabled和setAppCachePath都必须要调用才行。</p>
 <h2 id="3-存储AppCache的路径"><a href="#3-存储AppCache的路径" class="headerlink" title="3.存储AppCache的路径"></a>3.存储AppCache的路径</h2><p>按照Android SDK的API说明，setAppCachePath是可以用来设置AppCache路径的，但是我实际测试发现，不管你怎么设置这个路径，设置到应用自己的内部私有目录还是外部SD卡，都无法生效。AppCache缓存文件最终都会存到<code>/data/data/包名/app_webview/cache/Application Cache</code>这个文件夹下面，在上面的Android 4.4和5.1系统目录截图可以看得到，<strong>但是如果你不调用setAppCachePath方法，WebView将不会产生这个目录</strong>。这里有点让我觉得奇怪，我猜测可能从某一个系统版本开始，为了缓存文件的完整性和安全性考虑，SDK实现的时候就吧AppCache缓存目录设置到了内部私有存储。</p>
 <h1 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h1><h2 id="相同点"><a href="#相同点" class="headerlink" title="相同点"></a>相同点</h2><p>WebView自带的缓存和AppCache都是可以用来做文件级别的缓存的，基本上比较好地满足对于非覆盖式的js、css等文件更新。</p>
@@ -602,8 +616,35 @@
         </nav>
 
         
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
 
         <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/unclechen" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1718455407" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
           
         </div>
 

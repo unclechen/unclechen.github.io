@@ -2,8 +2,10 @@
 
 
 
+  
 
-<html class="theme-next pisces" lang="zh-Hans">
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -78,6 +80,8 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="UncleChen的博客" type="application/atom+xml" />
+
 
 
 
@@ -121,7 +125,7 @@
     scheme: 'Pisces',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
-    motion: false,
+    motion: true,
     duoshuo: {
       userId: '0',
       author: '博主'
@@ -154,6 +158,16 @@
 
 
 
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c7b0eb7b32d0e8723fcb885bc9778590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
 
 
@@ -226,16 +240,6 @@
         </li>
       
         
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
@@ -252,6 +256,16 @@
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
             标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
           </a>
         </li>
       
@@ -423,9 +437,9 @@
 <p>导入Eclipse的项目后，AS会在项目的目录文件夹下生成一个<code>import-summary.txt</code>，这里面有导入过程的一些问题，导入进来的项目可能不一定立刻就能build，但是通过看导入报告，我们可以将有问题的地方一一修复，最后成功迁移到AS上来。相信我，我一开始的时候也是非常痛苦的，花了很多时间以后最终也就摸索出来了。StackOverflow真的是个好东西啊。</p>
 <h2 id="1-5-Eclipse项目迁移到Android-Studio后代码、资源文件的结构该怎么管理？"><a href="#1-5-Eclipse项目迁移到Android-Studio后代码、资源文件的结构该怎么管理？" class="headerlink" title="1.5 Eclipse项目迁移到Android Studio后代码、资源文件的结构该怎么管理？"></a>1.5 Eclipse项目迁移到Android Studio后代码、资源文件的结构该怎么管理？</h2><p>有两种方案：两种方案的区别就是文件结构应该如何配置。</p>
 <h3 id="方案1：直接按照Android-Studio标准的结构配置"><a href="#方案1：直接按照Android-Studio标准的结构配置" class="headerlink" title="方案1：直接按照Android Studio标准的结构配置"></a>方案1：直接按照Android Studio标准的结构配置</h3><p>在<code>build.gradle(Module: app)</code>中的android闭包中，添加 <strong>sourceSets</strong> 属性，并按照下面配置来写。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">sourceSets &#123;</div><div class="line">        main &#123;</div><div class="line">            manifest.srcFile &apos;src/main/AndroidManifest.xml&apos;</div><div class="line">            jniLibs.srcDirs = [&apos;libs&apos;]</div><div class="line">            java.srcDirs = [&apos;src/main/java&apos;]</div><div class="line">            resources.srcDirs = [&apos;src/main/res&apos;]</div><div class="line">            aidl.srcDirs = [&apos;src/main/aidl&apos;]</div><div class="line">            assets.srcDirs = [&apos;src/main/assets&apos;]</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">sourceSets &#123;</div><div class="line">        main &#123;</div><div class="line">            manifest<span class="selector-class">.srcFile</span> <span class="string">'src/main/AndroidManifest.xml'</span></div><div class="line">            jniLibs<span class="selector-class">.srcDirs</span> = [<span class="string">'libs'</span>]</div><div class="line">            java<span class="selector-class">.srcDirs</span> = [<span class="string">'src/main/java'</span>]</div><div class="line">            resources<span class="selector-class">.srcDirs</span> = [<span class="string">'src/main/res'</span>]</div><div class="line">            aidl<span class="selector-class">.srcDirs</span> = [<span class="string">'src/main/aidl'</span>]</div><div class="line">            assets<span class="selector-class">.srcDirs</span> = [<span class="string">'src/main/assets'</span>]</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
 <h3 id="方案2：不改变Eclipse原有结构，使用Android-Studio-Gradle来开发。"><a href="#方案2：不改变Eclipse原有结构，使用Android-Studio-Gradle来开发。" class="headerlink" title="方案2：不改变Eclipse原有结构，使用Android Studio + Gradle来开发。"></a>方案2：不改变Eclipse原有结构，使用Android Studio + Gradle来开发。</h3><p>在<code>build.gradle(Module: app)</code>中的android闭包中，添加 <strong>sourceSets</strong> 属性，按照下面的配置来写。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">sourceSets &#123;</div><div class="line">        main &#123;</div><div class="line">            manifest.srcFile &apos;AndroidManifest.xml&apos;</div><div class="line">            jniLibs.srcDirs = [&apos;libs&apos;]</div><div class="line">            java.srcDirs = [&apos;src&apos;]</div><div class="line">            resources.srcDirs = [&apos;res&apos;]</div><div class="line">            aidl.srcDirs = [&apos;src&apos;]</div><div class="line">            assets.srcDirs = [&apos;assets&apos;]</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">sourceSets &#123;</div><div class="line">        main &#123;</div><div class="line">            manifest<span class="selector-class">.srcFile</span> <span class="string">'AndroidManifest.xml'</span></div><div class="line">            jniLibs<span class="selector-class">.srcDirs</span> = [<span class="string">'libs'</span>]</div><div class="line">            java<span class="selector-class">.srcDirs</span> = [<span class="string">'src'</span>]</div><div class="line">            resources<span class="selector-class">.srcDirs</span> = [<span class="string">'res'</span>]</div><div class="line">            aidl<span class="selector-class">.srcDirs</span> = [<span class="string">'src'</span>]</div><div class="line">            assets<span class="selector-class">.srcDirs</span> = [<span class="string">'assets'</span>]</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
 <p>可以看到，不改变Eclipse工程结构的关键就在于，在 <strong>sourceSets</strong> 中，按照原来的目录结构配置源代码、资源文件的路径，在Eclipse工程结构中，AndroidManifest.xml文件，libs目录，assert目录、都是和src目录同级的。而Android Studio默认的工程结构中，这几个目录都是<code>src/main/</code>中。分清楚了这一点，其实两种结构没啥影响，怎么来都行。</p>
 <h2 id="1-6-常用快捷键"><a href="#1-6-常用快捷键" class="headerlink" title="1.6 常用快捷键"></a>1.6 常用快捷键</h2><p>以下摘自<a href="http://android-studio.org/" target="_blank" rel="external">Android Studio中文论坛</a></p>
 <p>Alt+回车 导入包,自动修正</p>
@@ -636,8 +650,35 @@
         </nav>
 
         
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
 
         <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/unclechen" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1718455407" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
           
         </div>
 

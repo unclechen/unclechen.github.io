@@ -2,8 +2,10 @@
 
 
 
+  
 
-<html class="theme-next pisces" lang="zh-Hans">
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -72,11 +74,13 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Android,适配,Android7.x," />
+  <meta name="keywords" content="Android7.x,Android,适配," />
 
 
 
 
+
+  <link rel="alternate" href="/atom.xml" title="UncleChen的博客" type="application/atom+xml" />
 
 
 
@@ -89,7 +93,7 @@
 
 
 <meta name="description" content="在上篇中，介绍了什么是App分屏模式，以及如何设置我们的App来进入分屏模式。这次我们看一下，作为开发者，我们应该如何让自己的App进入分屏模式，当App进入分屏模式时，我们注意哪些问题。 简单地说，我认为除了保证分屏时App功能、性能正常以外，我们需要重点学习 如何在分屏模式下打开新的Activity 以及 如何实现跨App/Activity的拖拽功能。">
-<meta name="keywords" content="Android,适配,Android7.x">
+<meta name="keywords" content="Android7.x,Android,适配">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android N App分屏模式完全解析（下）">
 <meta property="og:url" content="http://unclechen.github.io/2016/03/12/Android N App分屏模式完全解析-下篇/index.html">
@@ -114,7 +118,7 @@
     scheme: 'Pisces',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
-    motion: false,
+    motion: true,
     duoshuo: {
       userId: '0',
       author: '博主'
@@ -147,6 +151,16 @@
 
 
 
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c7b0eb7b32d0e8723fcb885bc9778590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
 
 
@@ -219,16 +233,6 @@
         </li>
       
         
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
@@ -245,6 +249,16 @@
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
             标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
           </a>
         </li>
       
@@ -412,9 +426,9 @@
 <p><img src="/content/images/drag-drop.png" alt="drag-drop"></p>
 <p>上图是一个最基本的例子，实现了把MainActivity中的图片保存的内容，拖拽到SecondActivity中。实现步骤如下：</p>
 <p>在MainActivity中，发起拖拽。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">// 1.首先我们在分屏模式下，打开自己App中的SecondActivity</div><div class="line">findViewById(R.id.launch_second_activity).setOnClickListener(new View.OnClickListener() &#123;</div><div class="line">            @Override</div><div class="line">            public void onClick(View view) &#123;</div><div class="line">                Intent intent = new Intent(MainActivity.this, SecondActivity.class);</div><div class="line">                intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_NEW_TASK);</div><div class="line">                startActivity(intent);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">        </div><div class="line">// 2.然后我们在MainActivity中发出拖拽事件</div><div class="line">imageView = (ImageView) findViewById(R.id.img);</div><div class="line">        /** 拖拽的发送方Activity和ImageView */</div><div class="line">        imageView.setTag(&quot;I&apos;m a ImageView from MainActivity&quot;);</div><div class="line">        imageView.setOnTouchListener(new View.OnTouchListener() &#123;</div><div class="line"></div><div class="line">            public boolean onTouch(View view, MotionEvent motionEvent) &#123;</div><div class="line">                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) &#123;</div><div class="line">                    /** 构造一个ClipData，将需要传递的数据放在里面 */</div><div class="line">                    ClipData.Item item = new ClipData.Item((CharSequence) view.getTag());</div><div class="line">                    String[] mimeTypes = &#123;ClipDescription.MIMETYPE_TEXT_PLAIN&#125;;</div><div class="line">                    ClipData dragData = new ClipData(view.getTag().toString(), mimeTypes, item);</div><div class="line">                    View.DragShadowBuilder shadow = new View.DragShadowBuilder(imageView);</div><div class="line">                    /** startDragAndDrop是Android N SDK中的新方法，替代了以前的startDrag，flag需要设置为DRAG_FLAG_GLOBAL */</div><div class="line">                    view.startDragAndDrop(dragData, shadow, null, View.DRAG_FLAG_GLOBAL);</div><div class="line">                    return true;</div><div class="line">                &#125; else &#123;</div><div class="line">                    return false;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 1.首先我们在分屏模式下，打开自己App中的SecondActivity</span></div><div class="line">findViewById(<span class="keyword">R</span>.id.launch_second_activity).setOnClickListener(<span class="keyword">new</span> <span class="keyword">View</span>.OnClickListener() &#123;</div><div class="line">            @Override</div><div class="line">            public void onClick(<span class="keyword">View</span> <span class="keyword">view</span>) &#123;</div><div class="line">                Intent intent = <span class="keyword">new</span> Intent(MainActivity.this, SecondActivity.<span class="keyword">class</span>)<span class="comment">;</span></div><div class="line">                intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_NEW_TASK)<span class="comment">;</span></div><div class="line">                startActivity(intent)<span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">        &#125;)<span class="comment">;</span></div><div class="line">        </div><div class="line"><span class="comment">// 2.然后我们在MainActivity中发出拖拽事件</span></div><div class="line">imageView = (ImageView) findViewById(<span class="keyword">R</span>.id.img)<span class="comment">;</span></div><div class="line">        <span class="comment">/** 拖拽的发送方Activity和ImageView */</span></div><div class="line">        imageView.setTag(<span class="string">"I'm a ImageView from MainActivity"</span>)<span class="comment">;</span></div><div class="line">        imageView.setOnTouchListener(<span class="keyword">new</span> <span class="keyword">View</span>.OnTouchListener() &#123;</div><div class="line"></div><div class="line">            public boolean onTouch(<span class="keyword">View</span> <span class="keyword">view</span>, MotionEvent motionEvent) &#123;</div><div class="line">                <span class="keyword">if</span> (motionEvent.getAction() == MotionEvent.ACTION_DOWN) &#123;</div><div class="line">                    <span class="comment">/** 构造一个ClipData，将需要传递的数据放在里面 */</span></div><div class="line">                    ClipData.Item item = <span class="keyword">new</span> ClipData.Item((CharSequence) <span class="keyword">view</span>.getTag())<span class="comment">;</span></div><div class="line">                    String[] mimeTypes = &#123;ClipDescription.MIMETYPE_TEXT_PLAIN&#125;<span class="comment">;</span></div><div class="line">                    ClipData dragData = <span class="keyword">new</span> ClipData(<span class="keyword">view</span>.getTag().toString(), mimeTypes, item)<span class="comment">;</span></div><div class="line">                    <span class="keyword">View</span>.DragShadowBuilder shadow = <span class="keyword">new</span> <span class="keyword">View</span>.DragShadowBuilder(imageView)<span class="comment">;</span></div><div class="line">                    <span class="comment">/** startDragAndDrop是Android N SDK中的新方法，替代了以前的startDrag，flag需要设置为DRAG_FLAG_GLOBAL */</span></div><div class="line">                    <span class="keyword">view</span>.startDragAndDrop(dragData, shadow, null, <span class="keyword">View</span>.DRAG_FLAG_GLOBAL)<span class="comment">;</span></div><div class="line">                    <span class="keyword">return</span> true<span class="comment">;</span></div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    <span class="keyword">return</span> false<span class="comment">;</span></div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;)<span class="comment">;</span></div></pre></td></tr></table></figure>
 <p>在<code>SecondActivity</code>中，接收这个拖拽的结果，在<code>ACTION_DROP</code>事件中，把结果显示出来。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">dropedText = (TextView) findViewById(R.id.text_drop);</div><div class="line">        dropedText.setOnDragListener(new View.OnDragListener() &#123;</div><div class="line">            @Override</div><div class="line">            public boolean onDrag(View view, DragEvent dragEvent) &#123;</div><div class="line">                switch (dragEvent.getAction()) &#123;</div><div class="line">                    case DragEvent.ACTION_DRAG_STARTED:</div><div class="line">                        Log.d(TAG, &quot;Action is DragEvent.ACTION_DRAG_STARTED&quot;);</div><div class="line">                        break;</div><div class="line"></div><div class="line">                    case DragEvent.ACTION_DRAG_ENTERED:</div><div class="line">                        Log.d(TAG, &quot;Action is DragEvent.ACTION_DRAG_ENTERED&quot;);</div><div class="line">                        break;</div><div class="line"></div><div class="line">                    case DragEvent.ACTION_DRAG_EXITED:</div><div class="line">                        Log.d(TAG, &quot;Action is DragEvent.ACTION_DRAG_EXITED&quot;);</div><div class="line">                        break;</div><div class="line"></div><div class="line">                    case DragEvent.ACTION_DRAG_LOCATION:</div><div class="line">                        break;</div><div class="line"></div><div class="line">                    case DragEvent.ACTION_DRAG_ENDED:</div><div class="line">                        Log.d(TAG, &quot;Action is DragEvent.ACTION_DRAG_ENDED&quot;);</div><div class="line">                        break;</div><div class="line"></div><div class="line">                    case DragEvent.ACTION_DROP:</div><div class="line">                        Log.d(TAG, &quot;ACTION_DROP event&quot;);</div><div class="line">                        /** 3.在这里显示接收到的结果 */</div><div class="line">                        dropedText.setText(dragEvent.getClipData().getItemAt(0).getText());</div><div class="line">                        break;</div><div class="line"></div><div class="line">                    default:</div><div class="line">                        break;</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                return true;</div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">dropedText = (TextView) findViewById(R.id.text_drop);</div><div class="line">        dropedText.setOnDragListener(<span class="keyword">new</span> View.OnDragListener() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="keyword">public</span> <span class="keyword">boolean</span> onDrag(View view, DragEvent dragEvent) &#123;</div><div class="line">                <span class="keyword">switch</span> (dragEvent.getAction()) &#123;</div><div class="line">                    <span class="keyword">case</span> DragEvent.<span class="string">ACTION_DRAG_STARTED:</span></div><div class="line">                        Log.d(TAG, <span class="string">"Action is DragEvent.ACTION_DRAG_STARTED"</span>);</div><div class="line">                        <span class="keyword">break</span>;</div><div class="line"></div><div class="line">                    <span class="keyword">case</span> DragEvent.<span class="string">ACTION_DRAG_ENTERED:</span></div><div class="line">                        Log.d(TAG, <span class="string">"Action is DragEvent.ACTION_DRAG_ENTERED"</span>);</div><div class="line">                        <span class="keyword">break</span>;</div><div class="line"></div><div class="line">                    <span class="keyword">case</span> DragEvent.<span class="string">ACTION_DRAG_EXITED:</span></div><div class="line">                        Log.d(TAG, <span class="string">"Action is DragEvent.ACTION_DRAG_EXITED"</span>);</div><div class="line">                        <span class="keyword">break</span>;</div><div class="line"></div><div class="line">                    <span class="keyword">case</span> DragEvent.<span class="string">ACTION_DRAG_LOCATION:</span></div><div class="line">                        <span class="keyword">break</span>;</div><div class="line"></div><div class="line">                    <span class="keyword">case</span> DragEvent.<span class="string">ACTION_DRAG_ENDED:</span></div><div class="line">                        Log.d(TAG, <span class="string">"Action is DragEvent.ACTION_DRAG_ENDED"</span>);</div><div class="line">                        <span class="keyword">break</span>;</div><div class="line"></div><div class="line">                    <span class="keyword">case</span> DragEvent.<span class="string">ACTION_DROP:</span></div><div class="line">                        Log.d(TAG, <span class="string">"ACTION_DROP event"</span>);</div><div class="line">                        <span class="comment">/** 3.在这里显示接收到的结果 */</span></div><div class="line">                        dropedText.setText(dragEvent.getClipData().getItemAt(<span class="number">0</span>).getText());</div><div class="line">                        <span class="keyword">break</span>;</div><div class="line"><span class="symbol"></span></div><div class="line">                    default:</div><div class="line">                        <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
 <p>这里实现的关键在新增加的<code>startDragAndDrop</code>方法，看下官方的API文档：</p>
 <p><img src="/content/images/start-drag.png" alt="start-drag"></p>
 <p>清楚地提到了，<code>发出的DragEvent能够被所有可见的View对象接收到</code>，所以在分屏模式下，SecondActivity可以监听View的onDrag事件，于是我们监听它！</p>
@@ -486,11 +500,11 @@
       
         <div class="post-tags">
           
+            <a href="/tags/Android7-x/" rel="tag"># Android7.x</a>
+          
             <a href="/tags/Android/" rel="tag"># Android</a>
           
             <a href="/tags/适配/" rel="tag"># 适配</a>
-          
-            <a href="/tags/Android7-x/" rel="tag"># Android7.x</a>
           
         </div>
       
@@ -618,8 +632,35 @@
         </nav>
 
         
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
 
         <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/unclechen" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1718455407" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
           
         </div>
 
