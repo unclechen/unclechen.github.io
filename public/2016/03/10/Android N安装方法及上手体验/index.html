@@ -1,0 +1,945 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android7.x,Android,适配," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="UncleChen的博客" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="今天早上一睁眼，手机上就收到几条Android N的新闻，瞅了一眼发现手里的Nexus6可以安装beta版，于是迫不及待的开始看怎么安装了。直接看官网，一共三种安装方式：  在真机上直接安装，通过OTA的方式升级 在真机上用Android N的系统镜像安装 使用模拟器  1.真机安装简单方便，Android Beta Program官网注册你的设备，然后。我是把手机插在电脑上的，登录我的Googl">
+<meta name="keywords" content="Android7.x,Android,适配">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android N安装方法及上手体验">
+<meta property="og:url" content="http://unclechen.github.io/2016/03/10/Android N安装方法及上手体验/index.html">
+<meta property="og:site_name" content="UncleChen的博客">
+<meta property="og:description" content="今天早上一睁眼，手机上就收到几条Android N的新闻，瞅了一眼发现手里的Nexus6可以安装beta版，于是迫不及待的开始看怎么安装了。直接看官网，一共三种安装方式：  在真机上直接安装，通过OTA的方式升级 在真机上用Android N的系统镜像安装 使用模拟器  1.真机安装简单方便，Android Beta Program官网注册你的设备，然后。我是把手机插在电脑上的，登录我的Googl">
+<meta property="og:image" content="http://unclechen.github.io/content/images/cover/android-n.png">
+<meta property="og:updated_time" content="2017-05-24T09:55:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android N安装方法及上手体验">
+<meta name="twitter:description" content="今天早上一睁眼，手机上就收到几条Android N的新闻，瞅了一眼发现手里的Nexus6可以安装beta版，于是迫不及待的开始看怎么安装了。直接看官网，一共三种安装方式：  在真机上直接安装，通过OTA的方式升级 在真机上用Android N的系统镜像安装 使用模拟器  1.真机安装简单方便，Android Beta Program官网注册你的设备，然后。我是把手机插在电脑上的，登录我的Googl">
+<meta name="twitter:image" content="http://unclechen.github.io/content/images/cover/android-n.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '9GQE7B6UON',
+      apiKey: '1b6c2bb25ddee8d24221b1df179afbde',
+      indexName: 'UncleChenBlog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键词进行搜索","hits_empty":"找不到关于“${query}”的文章","hits_stats":"找到 ${hits} 篇文章，耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://unclechen.github.io/2016/03/10/Android N安装方法及上手体验/"/>
+
+
+
+
+
+  <title>Android N安装方法及上手体验 | UncleChen的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c7b0eb7b32d0e8723fcb885bc9778590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UncleChen的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/03/10/Android N安装方法及上手体验/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android N安装方法及上手体验</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-10T08:00:00+08:00">
+                2016-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2016/03/10/Android N安装方法及上手体验/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+        <div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+          
+          
+            <div class="post-gallery-row">
+              <a class="post-gallery-img fancybox"
+                 href="/content/images/cover/android-n.png" rel="gallery_cj33v9ybz0006jhcqvz7p43xb"
+                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
+                <img src="/content/images/cover/android-n.png" itemprop="contentUrl"/>
+              </a>
+            
+          
+
+          
+          </div>
+        </div>
+      
+
+      
+        <p>今天早上一睁眼，手机上就收到几条Android N的新闻，瞅了一眼发现手里的Nexus6可以安装beta版，于是迫不及待的开始看怎么安装了。直接看<a href="http://developer.android.com/intl/zh-cn/preview/download.html#device-preview" target="_blank" rel="external">官网</a>，一共三种安装方式：</p>
+<ul>
+<li>在真机上直接安装，通过OTA的方式升级</li>
+<li>在真机上用Android N的系统镜像安装</li>
+<li>使用模拟器</li>
+</ul>
+<h1 id="1-真机安装"><a href="#1-真机安装" class="headerlink" title="1.真机安装"></a>1.真机安装</h1><p>简单方便，<a href="https://www.google.com/android/beta?pli=1" target="_blank" rel="external">Android Beta Program</a>官网注册你的设备，然后。我是把手机插在电脑上的，登录我的Google账号以后，就检测出我的设备了，然后再点击下图中的<code>ENROLL DEVICE</code>（由于我已经点击过了，所以现在显示的是<code>UNENROLL DEVICE</code>），手机秒秒地就收到官方的推送！爽就一个字，点击进入下载，850.6M。</p>
+<p><img src="/content/images/enroll-device.png" alt="enroll-device"></p>
+<p>下载完成后直接重启安装，大概需要5分钟。然后我手机上哪些应用喜欢自己后台一顿乱跑的就全部暴露出来了，可能是因为适配的原因很多应用都开始各种崩溃。首先是猎豹清理大师，接着是虾米音乐啊，淘宝啊，这些的，甚至有的SDK都开始不停地弹出对话框和Toast，“阿里百川XXXX”，真的是要哭了，我连关闭弹窗时间都来不及啊。。。。</p>
+<a id="more"></a>
+<h1 id="2-下载系统镜像，线刷"><a href="#2-下载系统镜像，线刷" class="headerlink" title="2.下载系统镜像，线刷"></a>2.下载系统镜像，线刷</h1><p>其实我觉得有设备的同学，通过OTA是最好的。但是如果你没有翻墙的梯子，那可能就只能线刷了。下载地址在<a href="http://developer.android.com/intl/zh-cn/preview/download.html#device-preview" target="_blank" rel="external">这里</a>。如果有好心搬运到墙内，大家才可以下载。。</p>
+<p>支持的机型为：</p>
+<p><img src="/content/images/android-n-devices.png" alt="android-n-devices"></p>
+<p>下面开始刷机，官方的步骤在这里<a href="https://developers.google.com/android/nexus/images#instructions" target="_blank" rel="external">Factory Images for Nexus Devices</a>。</p>
+<h2 id="2-1首先下载最新的Fastboot工具"><a href="#2-1首先下载最新的Fastboot工具" class="headerlink" title="2.1首先下载最新的Fastboot工具"></a>2.1首先下载最新的<code>Fastboot</code>工具</h2><p><strong>获取途径有两种：</strong></p>
+<ul>
+<li>编译好的<a href="https://source.android.com/" target="_blank" rel="external">Android Open Source Project</a></li>
+<li>Android SDK下面的<code>platform-tools/</code>目录，记得打开你的<code>SDK Manager</code>下载最新的Android SDK Platform-tools，具体版本可以看看<strong>模拟器</strong>部分。</li>
+</ul>
+<p>下载好了<code>Fastboot</code>工具以后，把它添加到系统的环境变量，这样下面我们要用的<code>flash-all</code>脚本才能在命令行中找到它。例如我的<code>fastboot</code>在<code>/Users/noughtchen/Library/Android/sdk/platform-tools/fastboot</code>下。</p>
+<blockquote>
+<p>注意：刷机会删除掉手机上已有的所有用户数据，请备份好自己个人数据如手机上的照片。</p>
+</blockquote>
+<p><strong>由于需要unlock bootloader来刷机，请先确保<code>开发者选项</code>中的<code>OEM unlocking</code>是选中状态。</strong></p>
+<h2 id="2-2下面正式进入刷机"><a href="#2-2下面正式进入刷机" class="headerlink" title="2.2下面正式进入刷机"></a>2.2下面正式进入刷机</h2><ul>
+<li>1.下载合适的系统镜像，下载列表在<a href="http://developer.android.com/intl/zh-cn/preview/download.html#device-preview" target="_blank" rel="external">这里</a>。然后解压到你的硬盘上。</li>
+<li>2.使用USB把手机连接到电脑上。</li>
+<li><p>3.以<code>fastboot</code>模式启动你的手机的bootloader，有两种方式：</p>
+<ul>
+<li>adb工具: 保持手机开机，命令行中执行：<code>adb reboot bootloader</code></li>
+<li>使用手机的组合键：关机，然后使用同时按下<code>音量-</code>、<code>音量+</code>和<code>电源键</code>（<strong>这是nexus5的组合键，其他机器请自行确认是哪几个组合</strong>），来启动你的手机。</li>
+</ul>
+</li>
+<li><p>4.使用命令行unlock手机的<code>bootloader</code>，<code>fastboot flashing unlock</code>（如果是旧设备，则命令行为<code>fastboot oem unlock</code>，<strong>具体是哪个命令，请根据自己的手机搜索一下吧</strong>），此时，你的设备应该会弹出一个确认提示框，提示说会删除所有的数据。</p>
+</li>
+<li>5.打开一个终端，使用命令行进入到你最开始解压的镜像目录。</li>
+<li>6.执行<strong><code>flash-all</code></strong>脚本，开始安装镜像。</li>
+</ul>
+<p>当这个脚本执行完成后，你的设备会重启。为了安全起见，你需要lock住bootloader，这分两步：</p>
+<ul>
+<li>1.重新以<code>fastboot</code>启动你的设备，参考上面的第3步。</li>
+<li>2.执行<code>fastboot flashing lock</code>（如果是旧设备，则命令行为<code>fastboot oem lock</code>，<strong>这里和上面的unlock是刚好相反的，请自己根据手机输入对应的命令</strong>）。</li>
+</ul>
+<p>在一些设备上，Lock bootloader也会删除数据。如果你想要再次刷机，那么就得按照上面的步骤重新再fastboot启动设备，然后unlock bootloader。 </p>
+<p><strong>刷机有风险，操作需谨慎!!!</strong>建议动手能力比较强的同学可以试试，我也只是把官网的步骤翻译解释了一下，手机变砖了不要来找我。。。</p>
+<h1 id="3-模拟器"><a href="#3-模拟器" class="headerlink" title="3.模拟器"></a>3.模拟器</h1><p>这个简单，低成本，无风险。。其实我觉得没有设备的同学，通过这个也是可以体验一下。</p>
+<p>操作之前，你需要下载最新的<code>Android N Preview SDK</code>，并新建一个虚拟机。</p>
+<ul>
+<li><p>1.安装最新的SDK和build-tools，这里我就不说了。安装完成后，需要有<code>Android SDK Built-Tools 24.0 0 rc1</code>和<code>Platform-Tools 24.0.0 rc1</code>和<code>SDK Tools 25.0.9</code>（如果你不安装SDK Tools25.0.9，就无法运行Android N的x86_64的系统镜像）。</p>
+</li>
+<li><p>2.新建一个虚拟机。在Android Studio中打开<code>Tool-Android-AVD Manager</code>，点击<code>Create Virtual Device</code>，选择一个设备（建议选择Nexus 5X, Nexus 6P, Nexus 9其中一个）。然后选择下一步，需要注意一点的是，虚拟机只支持x86的Android N系统镜像。好了，你可以一直点击下一步知道这个新的虚拟机创建完成，然后启动它吧。为了获得最佳的体验，建议安装<code>Android Studio 2.1 Preview</code>，因为Android Studio2.0开始，虚拟机的速度得到了几十倍的提升。</p>
+</li>
+</ul>
+<blockquote>
+<p>注意: 如果你现在使用的是Android Studio 2.0 Beta, 它有个已知的bug，是无法用Android N Preview的镜像来创建虚拟机的, 所以你需要安装Android Studio 2.1 preview 来新建虚拟机。</p>
+<p>For more information about creating virtual devices, see <a href="http://developer.android.com/tools/devices/index.html" target="_blank" rel="external">Managing Virtual Devices</a>.</p>
+</blockquote>
+<h1 id="4-上手体验"><a href="#4-上手体验" class="headerlink" title="4.上手体验"></a>4.上手体验</h1><p>不说别的，今天发现一个一个特别好的Android网站<a href="http://www.droid-life.com" target="_blank" rel="external">DROIDLIFE</a>，推荐给大家，这里面有Android相关的新闻视频等等，非常的棒。今天他们已经出了一个视频，介绍了Android 7.0的新特性了，例如设置菜单、通知栏、分屏等等，iOS去年就出了画中画特性，但是只能在iPad上用，Android 7.0在手机上也支持应用分屏的哟，赶紧体验一下吧。<a href="http://www.droid-life.com/2016/03/09/heres-everything-new-in-android-n-developer-preview/" target="_blank" rel="external">heres-everything-new-in-android-n-developer-preview</a>，最后奉上一张我自己体验的效果图。</p>
+<p><img src="/content/images/first-experience.png" alt="first-experience"></p>
+
+      
+    </div>
+
+    <div>    
+    
+    
+    <ul class="post-copyright">
+    <li class="post-copyright-author">
+    <strong>本文作者：</strong>unclechen
+    </li>
+    <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="/2016/03/10/Android N安装方法及上手体验/" title="Android N安装方法及上手体验">2016/03/10/Android N安装方法及上手体验/</a>
+    </li>
+    <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本文采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a>进行许可。转载请注明出处！
+    </li>
+    </ul>
+    
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android7-x/" rel="tag"># Android7.x</a>
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/适配/" rel="tag"># 适配</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/06/Android6.0权限适配之SD卡写入/" rel="next" title="Android6.0权限适配之WRITE_EXTERNAL_STORAGE（SD卡写入）">
+                <i class="fa fa-chevron-left"></i> Android6.0权限适配之WRITE_EXTERNAL_STORAGE（SD卡写入）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/12/Android N App分屏模式完全解析-上篇/" rel="prev" title="Android N App分屏模式完全解析（上）">
+                Android N App分屏模式完全解析（上） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="unclechen" />
+          <p class="site-author-name" itemprop="name">unclechen</p>
+           
+              <p class="site-description motion-element" itemprop="description">吃下恶魔果实，我就能变成超级赛亚人！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/unclechen" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1718455407" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-真机安装"><span class="nav-text">1.真机安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-下载系统镜像，线刷"><span class="nav-text">2.下载系统镜像，线刷</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1首先下载最新的Fastboot工具"><span class="nav-text">2.1首先下载最新的Fastboot工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2下面正式进入刷机"><span class="nav-text">2.2下面正式进入刷机</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-模拟器"><span class="nav-text">3.模拟器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-上手体验"><span class="nav-text">4.上手体验</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">unclechen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "071293399566469d925f180d68952611",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

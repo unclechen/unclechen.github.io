@@ -1,0 +1,97 @@
+# Hexo Configuration
+## Docs: https://hexo.io/docs/configuration.html
+## Source: https://github.com/hexojs/hexo/
+
+# Site
+title: UncleChen的博客
+subtitle:
+description: 吃下恶魔果实，我就能变成超级赛亚人！
+author: unclechen
+language: zh-Hans
+timezone:
+
+# URL
+## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
+url: http://unclechen.github.io/
+root: /
+permalink: :year/:month/:day/:title/
+permalink_defaults:
+
+# Directory
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: :lang
+skip_render:
+
+# Writing
+new_post_name: :title.md # File name of new posts
+default_layout: post
+titlecase: false # Transform title into titlecase
+external_link: true # Open external links in new tab
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+future: true
+highlight:
+  enable: true
+  line_number: true
+  auto_detect: true
+  tab_replace:
+
+# Category & Tag
+default_category: uncategorized
+category_map:
+tag_map:
+
+# Date / Time format
+## Hexo uses Moment.js to parse and display date
+## You can customize the date format as defined in
+## http://momentjs.com/docs/#/displaying/format/
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+
+# Pagination
+## Set per_page to 0 to disable pagination
+per_page: 6
+pagination_dir: page
+
+# Extensions
+## Plugins: https://hexo.io/plugins/
+# RSS订阅
+plugin:
+  - hexo-generator-feed
+# Feed Atom
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+
+## Themes: https://hexo.io/themes/
+theme: next
+
+# 集成algolia搜索（https://www.algolia.com/apps/9GQE7B6UON/dashboard 用github注册的）
+algolia:
+  applicationID: '9GQE7B6UON'
+  apiKey: '1b6c2bb25ddee8d24221b1df179afbde'
+  adminApiKey: 'b66de4462b0916cbaaae5947bd60b4a3'
+  indexName: 'UncleChenBlog'
+  chunkSize: 5000
+  fields:
+    - title
+    - slug
+    - path
+    - content:strip
+
+
+# Deployment
+## Docs: https://hexo.io/docs/deployment.html
+deploy:
+#   type: git
+#   repo: https://github.com/unclechen/unclechen.github.io
+#   branch: master
+

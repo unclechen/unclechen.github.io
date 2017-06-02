@@ -1,0 +1,920 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,适配,权限," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="UncleChen的博客" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Android6.0发布距离现在快1年了，虽然它市场占有率仍在龟速上升中，但还是有一些App开发者已经在打包应用时将targetSDKVersion设置到了23，也就是说把App适配到了Android6.0。以前调用Android系统中需要声明权限的API时，只需要在AndroidManifest.xml文件中一次性列出来。但是如果在build.gradle文件里将targetSDKVersion">
+<meta name="keywords" content="Android,适配,权限">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android6.0运行时权限简介">
+<meta property="og:url" content="http://unclechen.github.io/2016/03/05/Android6.0运行时权限简介/index.html">
+<meta property="og:site_name" content="UncleChen的博客">
+<meta property="og:description" content="Android6.0发布距离现在快1年了，虽然它市场占有率仍在龟速上升中，但还是有一些App开发者已经在打包应用时将targetSDKVersion设置到了23，也就是说把App适配到了Android6.0。以前调用Android系统中需要声明权限的API时，只需要在AndroidManifest.xml文件中一次性列出来。但是如果在build.gradle文件里将targetSDKVersion">
+<meta property="og:image" content="http://unclechen.github.io/content/images/app-cancel-perm.png">
+<meta property="og:image" content="http://unclechen.github.io/content/images/app-permission.png">
+<meta property="og:updated_time" content="2017-05-22T10:25:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android6.0运行时权限简介">
+<meta name="twitter:description" content="Android6.0发布距离现在快1年了，虽然它市场占有率仍在龟速上升中，但还是有一些App开发者已经在打包应用时将targetSDKVersion设置到了23，也就是说把App适配到了Android6.0。以前调用Android系统中需要声明权限的API时，只需要在AndroidManifest.xml文件中一次性列出来。但是如果在build.gradle文件里将targetSDKVersion">
+<meta name="twitter:image" content="http://unclechen.github.io/content/images/app-cancel-perm.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '9GQE7B6UON',
+      apiKey: '1b6c2bb25ddee8d24221b1df179afbde',
+      indexName: 'UncleChenBlog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键词进行搜索","hits_empty":"找不到关于“${query}”的文章","hits_stats":"找到 ${hits} 篇文章，耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://unclechen.github.io/2016/03/05/Android6.0运行时权限简介/"/>
+
+
+
+
+
+  <title>Android6.0运行时权限简介 | UncleChen的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c7b0eb7b32d0e8723fcb885bc9778590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UncleChen的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/03/05/Android6.0运行时权限简介/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android6.0运行时权限简介</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-05T08:00:00+08:00">
+                2016-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2016/03/05/Android6.0运行时权限简介/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Android6.0发布距离现在快1年了，虽然它市场占有率仍在龟速上升中，但还是有一些App开发者已经在打包应用时将<code>targetSDKVersion</code>设置到了<code>23</code>，也就是说把App适配到了Android6.0。以前调用Android系统中需要声明权限的API时，只需要在<code>AndroidManifest.xml</code>文件中一次性列出来。但是如果在<code>build.gradle</code>文件里将<code>targetSDKVersion</code>设为<code>23</code>以后，除了在<code>AndroidManifest.xml</code>声明，我们还需要根据App运行时所在的手机的系统版本，在调用权限之前向用户申请授权，并在用户允许以后，才可以安全的调用对应的API。</p>
+<a id="more"></a>
+<p>简单举个例子，我的App有一个地理位置读取的功能，需要<code>ACCESS_COARSE_LOCATION</code>（粗略的地理位置信息）权限，如果Apk是以<code>targetSDKVersion=22</code>的方式进行打包的，那么在安装时用户将不得授权我的App这个权限，否则他将无法安装这个应用；如果是以<code>targetSDKVersion=23</code>的形式打包的，而且用户使用的手机是Android6.0的系统，那么在安装时我的App是没有获得读取地理位置权限的，我们需要调用系统提供的<code>requestPermissions</code>接口来申请权限。这时候你可能会说那我还设置<code>targetSDKVersion=23</code>干嘛？还不如直接用<code>22</code>打包得了。。</p>
+<p>不要高兴得太早，下面我们会说理由。因为只要用户使用的是6.0系统的手机，他是可以在安装完成以后，在手机的设置界面取消一些<code>dangerous</code>权限的。</p>
+<p>下图就是6.0系统上权限管理的界面。</p>
+<p><img src="/content/images/app-cancel-perm.png" alt="app-cancel-perm"></p>
+<h1 id="targetSDKVersion和compileSDKVersion的作用"><a href="#targetSDKVersion和compileSDKVersion的作用" class="headerlink" title="targetSDKVersion和compileSDKVersion的作用"></a>targetSDKVersion和compileSDKVersion的作用</h1><p>在<code>build.gradle</code>中有这么一段：</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line"></div><div class="line">    compileSdkVersion <span class="number">23</span></div><div class="line">    buildToolsVersion <span class="string">"23.0.2"</span></div><div class="line">    ...</div><div class="line">    </div><div class="line">    defaultConfig &#123;</div><div class="line">        ...</div><div class="line">        targetSdkVersion <span class="number">22</span></div><div class="line">        ...</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>targetSDKVersion：简单来说就代表着你的App能够适配的系统版本，意味着你的App在这个版本的手机上做了充分的<strong>前向</strong>兼容性处理和实际测试。其实我们写代码时都是经常干这么一件事，就是<code>if(Build.VERSION.SDK_INT &gt;= 23) { ... }</code>，这就是兼容性处理最典型的一个例子。如果你的target设置得越高，其实调用系统提供的API时，所得到的处理也是不一样的，甚至有些新的API是只有新的系统才有的，例如前一篇博客里用到WebView的<code>setWebContentsDebuggingEnabled(boolean))</code>方法，这是Android4.4以后才可以用的一个API。</p>
+</li>
+<li><p>compileSdkVersion：是你SDK的版本号，也就是你在编程时引用的<code>android.jar</code>的版本。一般都会和targetSDKVersion相等，或者比targetSDKVersion高。</p>
+</li>
+</ul>
+<p>因此，如果我们要把自己的App适配到Android6.0系统，首先要把<code>targetSDKVersion</code>和<code>compileSDKVersion</code>全部设置为<code>23</code>。</p>
+<h1 id="Android6-0运行时权限系统到底是干嘛的？"><a href="#Android6-0运行时权限系统到底是干嘛的？" class="headerlink" title="Android6.0运行时权限系统到底是干嘛的？"></a>Android6.0运行时权限系统到底是干嘛的？</h1><p>介绍了targetSDKVersion和compileSDKVersion以后，我们就知道什么叫做适配到Android X.X了。那么Android6.0这个运行时权限系统和以前最大的不同就在于：将我们以前一股脑儿以<code>&lt;permission&gt;</code>标签方式写在<code>AndroidManifest.xml</code>文件中的权限划分成了<strong>normal permission</strong> 和 <strong>dangerous permission</strong>。</p>
+<ul>
+<li><p>Normal Permission：你写在xml文件里，那么App安装时就会默认获得这些权限，即使是在Android6.0系统的手机上，用户也无法在安装后动态取消这些normal权限，这和以前的权限系统是一样的，不变。</p>
+</li>
+<li><p>Dangerous Permission：你还是得写在xml文件里，但是App安装时具体如果执行授权分以下几种情况：</p>
+<ul>
+<li><code>targetSDKVersion &lt; 23</code> <strong>&amp;</strong> <code>API(手机系统) &lt; 6.0</code>：安装时默认获得权限，且用户无法在安装App之后取消权限。</li>
+<li><code>targetSDKVersion &gt;= 23</code> <strong>&amp;</strong> <code>API(手机系统) &lt; 6.0</code>：安装时默认获得权限，且用户无法在安装App之后取消权限。</li>
+<li><code>targetSDKVersion &lt; 23</code> <strong>&amp;</strong> <code>API(手机系统) &gt;= 6.0</code>：安装时默认获得权限，但是用户可以在安装App完成后动态取消授权（<strong>取消时手机会弹出提醒，告诉用户这个是为旧版手机打造的应用，让用户谨慎操作</strong>）。</li>
+<li><code>targetSDKVersion &gt;= 23</code> <strong>&amp;</strong> <code>API(手机系统) &gt;= 6.0</code>：安装时不会获得权限，可以在运行时向用户申请权限。用户授权以后仍然可以在设置界面中取消授权。</li>
+</ul>
+</li>
+</ul>
+<p>6.0手机上取消授权的界面如下，如果是<code>targetSDKVersion &lt; 23</code>打包的应用，取消权限时，会：</p>
+<p><img src="/content/images/app-permission.png" alt="app-权限"></p>
+<p>我们可以看到其实只有在6.0的机器上，打包了适配到6.0的App，才需要做一些明显的权限适配工作。但是实话说，不论是不是适配6.0系统，我们都应该在调用需要权限的接口前，检查一下是否具有具有该权限。因为我们会遇到厂商的修改过权限系统的ROM，也有可能自己忘记在xml里加上权限清单。当然这里面也会有坑，因为有时在不同厂商手机上直接调用<code>checkCallingOrSelfPermission</code>方法得到的结果并不准确。</p>
+<h1 id="如果我不target到23会怎么样？"><a href="#如果我不target到23会怎么样？" class="headerlink" title="如果我不target到23会怎么样？"></a>如果我不target到23会怎么样？</h1><p>很显然，如果不target到23，短期内还可以不写权限适配的代码。但是！！！前面提到了，用户仍然可以在6.0的手机上取消安装时默认赋予的dangerous权限。<strong>那么这时候会发生什么？？？？</strong>如果这个API原本应该返回的是对象，那么这时将返回<code>null</code>；如果这个API原本应该返回的是数字，这时就是<code>0</code>。可想而知，如果你只是对返回的<code>null</code>或者<code>0</code>做了一些不恰当的处理，App还是可能会crash的。所以这不是长久之计，尽快地处理好权限申请才是王道，这也是一种对App、对用户更负责的做法。</p>
+<h1 id="如何在运行时申请权限-amp-官方的权限分级列表"><a href="#如何在运行时申请权限-amp-官方的权限分级列表" class="headerlink" title="如何在运行时申请权限 &amp; 官方的权限分级列表"></a>如何在运行时申请权限 &amp; 官方的权限分级列表</h1><ul>
+<li><p>关于如何适配到6.0的权限系统，网上有非常多的例子，我觉得看了这篇文章基本上就OK了，因为网上很多貌似都翻译自这篇文章，强力推荐一下：<a href="http://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition" target="_blank" rel="external">things-you-need-to-know-about-android-m-permission</a></p>
+</li>
+<li><p>Google官方的RuntimePermissions介绍：<a href="https://developer.android.com/preview/features/runtime-permissions.html" target="_blank" rel="external">runtime-permissions</a></p>
+</li>
+<li><p>Google官方的dangerous权限及分组：<a href="https://developer.android.com/intl/zh-cn/guide/topics/security/permissions.html#normal-dangerous" target="_blank" rel="external">permissions: normal-dangerous</a></p>
+</li>
+<li><p>开源社区-权限适配组件：伟大的开源社区已经有轮子了，可以学习一下！</p>
+<ul>
+<li><a href="https://github.com/k0shk0sh/PermissionHelper" target="_blank" rel="external">PermissionHelper</a></li>
+<li><a href="https://github.com/hotchemi/PermissionsDispatcher" target="_blank" rel="external">PermissionsDispatcher</a></li>
+<li><a href="https://github.com/lovedise/PermissionGen" target="_blank" rel="external">PermissionGen</a></li>
+<li><a href="https://github.com/ParkSangGwon/TedPermission" target="_blank" rel="external">TedPermission</a>:不用自己调用checkSelfPermission(), requestPermissions(),然后再处理回调onRequestPermissionsResult(), onActivityResult()。只要一行代码，设置一个listener就可以监听授权的结果，使用起来非常简单。内部实现采用的是类似event bus的otto实现的。</li>
+</ul>
+</li>
+</ul>
+<h1 id="举个栗子（坑）：WRITE-EXTERNAL-STORGE的Android6-0适配问题"><a href="#举个栗子（坑）：WRITE-EXTERNAL-STORGE的Android6-0适配问题" class="headerlink" title="举个栗子（坑）：WRITE_EXTERNAL_STORGE的Android6.0适配问题"></a>举个栗子（坑）：WRITE_EXTERNAL_STORGE的Android6.0适配问题</h1><p>见下篇博客<a href="http://unclechen.github.io/2016/03/06/Android6.0权限适配之SD卡写入/">Android6.0权限适配之WRITE_EXTERNAL_STORAGE（SD卡写入）</a></p>
+
+      
+    </div>
+
+    <div>    
+    
+    
+    <ul class="post-copyright">
+    <li class="post-copyright-author">
+    <strong>本文作者：</strong>unclechen
+    </li>
+    <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="/2016/03/05/Android6.0运行时权限简介/" title="Android6.0运行时权限简介">2016/03/05/Android6.0运行时权限简介/</a>
+    </li>
+    <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本文采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a>进行许可。转载请注明出处！
+    </li>
+    </ul>
+    
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/适配/" rel="tag"># 适配</a>
+          
+            <a href="/tags/权限/" rel="tag"># 权限</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/26/Android WebView调用JS/" rel="next" title="Android WebView调用JS">
+                <i class="fa fa-chevron-left"></i> Android WebView调用JS
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/06/Android6.0权限适配之SD卡写入/" rel="prev" title="Android6.0权限适配之WRITE_EXTERNAL_STORAGE（SD卡写入）">
+                Android6.0权限适配之WRITE_EXTERNAL_STORAGE（SD卡写入） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="unclechen" />
+          <p class="site-author-name" itemprop="name">unclechen</p>
+           
+              <p class="site-description motion-element" itemprop="description">吃下恶魔果实，我就能变成超级赛亚人！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/unclechen" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1718455407" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#targetSDKVersion和compileSDKVersion的作用"><span class="nav-text">targetSDKVersion和compileSDKVersion的作用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android6-0运行时权限系统到底是干嘛的？"><span class="nav-text">Android6.0运行时权限系统到底是干嘛的？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如果我不target到23会怎么样？"><span class="nav-text">如果我不target到23会怎么样？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何在运行时申请权限-amp-官方的权限分级列表"><span class="nav-text">如何在运行时申请权限 & 官方的权限分级列表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#举个栗子（坑）：WRITE-EXTERNAL-STORGE的Android6-0适配问题"><span class="nav-text">举个栗子（坑）：WRITE_EXTERNAL_STORGE的Android6.0适配问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">unclechen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "071293399566469d925f180d68952611",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

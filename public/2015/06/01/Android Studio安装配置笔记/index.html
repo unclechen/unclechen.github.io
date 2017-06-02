@@ -1,0 +1,991 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,开发环境," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="UncleChen的博客" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="2015年5月29号凌晨，第一次翻墙看了谷歌开发者大会的直播，还特意跑到车库咖啡和一堆GDG开发者一起看的直播。现场来了一些Android、Google开发大牛，介绍了他们对于最新的Android、Google技术的体验。加上谷歌官方宣布了1.3beta版本的Android Studio已经支持NDK开发，这样一来貌似Eclipse在Android开发方面的最后一个独有优势也已经失去。我想如果不是">
+<meta name="keywords" content="Android,开发环境">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Studio安装配置笔记">
+<meta property="og:url" content="http://unclechen.github.io/2015/06/01/Android Studio安装配置笔记/index.html">
+<meta property="og:site_name" content="UncleChen的博客">
+<meta property="og:description" content="2015年5月29号凌晨，第一次翻墙看了谷歌开发者大会的直播，还特意跑到车库咖啡和一堆GDG开发者一起看的直播。现场来了一些Android、Google开发大牛，介绍了他们对于最新的Android、Google技术的体验。加上谷歌官方宣布了1.3beta版本的Android Studio已经支持NDK开发，这样一来貌似Eclipse在Android开发方面的最后一个独有优势也已经失去。我想如果不是">
+<meta property="og:image" content="http://unclechen.github.io/content/images/cover/helloAndroidStudioAndGradle.png">
+<meta property="og:updated_time" content="2017-05-24T09:55:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android Studio安装配置笔记">
+<meta name="twitter:description" content="2015年5月29号凌晨，第一次翻墙看了谷歌开发者大会的直播，还特意跑到车库咖啡和一堆GDG开发者一起看的直播。现场来了一些Android、Google开发大牛，介绍了他们对于最新的Android、Google技术的体验。加上谷歌官方宣布了1.3beta版本的Android Studio已经支持NDK开发，这样一来貌似Eclipse在Android开发方面的最后一个独有优势也已经失去。我想如果不是">
+<meta name="twitter:image" content="http://unclechen.github.io/content/images/cover/helloAndroidStudioAndGradle.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '9GQE7B6UON',
+      apiKey: '1b6c2bb25ddee8d24221b1df179afbde',
+      indexName: 'UncleChenBlog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键词进行搜索","hits_empty":"找不到关于“${query}”的文章","hits_stats":"找到 ${hits} 篇文章，耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://unclechen.github.io/2015/06/01/Android Studio安装配置笔记/"/>
+
+
+
+
+
+  <title>Android Studio安装配置笔记 | UncleChen的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c7b0eb7b32d0e8723fcb885bc9778590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UncleChen的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2015/06/01/Android Studio安装配置笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android Studio安装配置笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-06-01T08:00:00+08:00">
+                2015-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2015/06/01/Android Studio安装配置笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+        <div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+          
+          
+            <div class="post-gallery-row">
+              <a class="post-gallery-img fancybox"
+                 href="/content/images/cover/helloAndroidStudioAndGradle.png" rel="gallery_cj33v9yc30008jhcq7btjomqh"
+                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
+                <img src="/content/images/cover/helloAndroidStudioAndGradle.png" itemprop="contentUrl"/>
+              </a>
+            
+          
+
+          
+          </div>
+        </div>
+      
+
+      
+        <p>2015年5月29号凌晨，第一次翻墙看了谷歌开发者大会的直播，还特意跑到车库咖啡和一堆GDG开发者一起看的直播。现场来了一些Android、Google开发大牛，介绍了他们对于最新的Android、Google技术的体验。加上谷歌官方宣布了1.3beta版本的<a href="https://developer.android.com/sdk/index.html" target="_blank" rel="external">Android Studio</a>已经支持NDK开发，这样一来貌似Eclipse在Android开发方面的最后一个独有优势也已经失去。我想如果不是公司项目需要，我已经可以把AS作为我的Android主打开发环境了。另外据说1.3开始，gradle脚本的速度也会得到优化，因此希望在AS这个官方的平台上能够有更多优化的体验。</p>
+<a id="more"></a>
+<p>下面我还是以自己的AS 1.2.1.1 stable版的AS介绍一些我的学习经验。</p>
+<h1 id="1-Android-Studio安装配置"><a href="#1-Android-Studio安装配置" class="headerlink" title="1. Android Studio安装配置"></a>1. Android Studio安装配置</h1><h2 id="1-1-下载、安装和配置"><a href="#1-1-下载、安装和配置" class="headerlink" title="1.1 下载、安装和配置"></a>1.1 下载、安装和配置</h2><p>首先最重要的一步！！<strong>科学上网</strong>！！官网<a href="https://developer.android.com/sdk/index.html" target="_blank" rel="external">下载</a>最新版的AS安装文件，Windows下对应的是exe文件，MAC下应该是一个dmg文件，安装过程很简单方便。</p>
+<p><strong>（1）解决Fetching android sdk component information卡住的问题</strong></p>
+<p>安装完成后，打开Android Studio的时候可能常常会卡在启动界面 <strong>“Fetching android sdk component information”</strong> 上，这是因为AS启动时会去获取SDK组件信息，然而我们现在还没有去给Android Studio的SDK组件配置代理，因为可能会非常慢，甚至没有速度。</p>
+<p><strong>解决办法是-&gt;</strong> 进入刚安装的Android Studio目录，打开<code>bin</code>文件夹，找到<code>idea.properties</code>文件，用文本编辑器打开。在文件末尾添加一行：</p>
+<blockquote>
+<p>disable.android.first.run =true</p>
+</blockquote>
+<p>，保存。然后在任务管理器中关闭Android Studio，重新启动即可。</p>
+<p><strong>（2）设置SDK、JDK目录</strong></p>
+<p>安装完成以后，打开AS。进入的是<code>Android Studio Setup Wizard</code>界面，如下所示。</p>
+<p><img src="/content/images/helloWizard.png" alt="hello AS"></p>
+<p>这里会引导我们进行一些IDE的基本设置。包括你的Android SDK目录设置等等，这里我推荐点击<code>Cancel</code>跳过，因为我们原来在Eclipse环境下开发的时候，已经下载过Android SDK了。只需要在进入AS以后，再把SDK的目录设置为原来的SDK就好，免去下载新的sdk的麻烦，国内这个环境，就是有代理也是很慢的。跳过设置向导以后，进入AS的欢迎首页。</p>
+<p><img src="/content/images/helloAS.png" alt="hello AS"></p>
+<p>接着，选择界面上<code>Configure-&gt;Project Defaults</code>，进入之后再选择<code>Project Structure</code>。到这里就可以把Android SDK和JDK的目录设置为我们之前已经有的目录了。</p>
+<p><img src="/content/images/helloSDK.png" alt="hello SDK"></p>
+<p><strong>注意:</strong> AS需要的JDK版本必须在1.7以上，因为AS默认使用gradle打包。</p>
+<p><strong>（3）设置主题、字体设置，网络代理</strong></p>
+<p>设置了SDK、JDK目录以后，我们可以再给AS做一个基本的设置，为了让这个IDE更加顺手好用。回到AS的首页，选择<code>Configure-&gt;Settings</code>，进入下面的界面。</p>
+<p><img src="/content/images/helloSettings.png" alt="hello Settings"></p>
+<p>首先，在<code>Appearance &amp; Behavior-&gt;Appeara</code>选择<code>Darcula</code>主题，字体可以调大一些。这样整个AS就变成黑色背景的主题了，看着舒服很多。</p>
+<p>然后是代理的配置，在Settings界面左侧的菜单栏中，最上面有一个搜索框，可以直接搜索各种设置选项，我们输入<code>proxy</code>，即可跳转到代理设置的界面，如图所示我把代理设置为公司的<code>xxx-proxy.oa.com</code>。这样以后我们就可以使用AS自动更新了。所以大家一定要去搞一个自己的翻墙代理。。</p>
+<p><img src="/content/images/helloProxy.png" alt="hello Proxy"></p>
+<p>（4）新建一个test项目</p>
+<p>完成了上面的设置以后，我们使用AS的新建一个test项目。回到AS的欢迎主页，点击<code>Start a new Android Studio Project</code>，如下如所示设置应用的名称为<code>TestApplication</code>，选择项目目录。</p>
+<p><img src="/content/images/helloCreatTestApplicaiton.png" alt="hello Proxy"></p>
+<p>然后选择Minimum SDK的版本。接着一路点<code>next</code>直到<code>finish</code>。</p>
+<p><img src="/content/images/helloCreatTestApplicaiton2.png" alt="hello Proxy"></p>
+<p>进入代码编辑界面。突然发现<code>Code Editor</code>字体很小，原来是刚才设置的Appearance的字体只是IDE的字体，没有给编辑器设置字体大小，没关系，我们在菜单栏里依次选择<code>File-&gt;Settings</code>，然后搜索<code>font</code>，点击<code>Save AS...</code>，然后把字号Size由<code>12</code>改成<code>18</code>，字体Primary font改成<code>Consolas</code>，最后点击<code>OK</code>即可保存。</p>
+<p><img src="/content/images/helloFont.png" alt="hello Proxy"></p>
+<p>这样，就使用AS建立了一个Test项目。</p>
+<p><strong>PS</strong> ：实际操作时，并没有一次就搞定这么简单的一个新建项目，可能有的朋友会碰到像我一样的问题，就是这个新建的项目中，<code>Module app</code>的<code>gradle</code>脚本默认使用了最新的<code>buildToolsVersion &quot;23.0.0 rc&quot;</code>（因为我把SDK和buildTools都更新到最新版了，默认应该是选择最新的版本来build），因此遇到了 <strong><code>Execution failed for task &#39;:app:compileDebugAidl&#39;: aidl is missing</code></strong> 的问题，解决办法很简单，把<code>Module app</code>的<code>gradle</code>脚本修改一下，使用22.0.1的buildTools就好了。</p>
+<p>关于AS项目结构以及gradle脚本的知识，下面有介绍。</p>
+<h2 id="1-2-Android-Studio项目结构"><a href="#1-2-Android-Studio项目结构" class="headerlink" title="1.2 Android Studio项目结构"></a>1.2 Android Studio项目结构</h2><p>Android Studio的项目结构和Eclipse下有很大不同，首先最不一样的地方是：一个窗口下只能有一个项目，类似于一个工作空间下面只有一个项目的概念。</p>
+<p>新建了一个Test项目以后，我们可以看到AS项目的结构如下所示。</p>
+<p><img src="/content/images/helloStructure.png" alt="hello Structure"></p>
+<p>这是一个<strong>Android视图</strong>下的AS项目结构，你可以在目录下看到<code>app</code>和<code>gradle</code>两个大分类。在<code>app</code>下有我们熟悉的<code>manifest</code>，<code>res</code>，还有一个<code>java</code>文件夹，这个<code>java</code>文件夹里面就存放着java的源代码和Application的源代码，它们各自又是按照包名组织起来的。<code>gradle</code>文件夹包含了项目的gradle脚本和gradle配置文件，其中包含了两个重要的gradle脚本文件，一个是<code>build.gradle(Project: TestApplication)</code>，这个脚本代表着整个项目的gradle脚本，其中具体的语法见另外一篇博客<a href="http://unclechen.github.io/2015/10/22/Android%20Studio%20Gradle%E6%89%93%E5%8C%85%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%A4%9A%E6%B8%A0%E9%81%93+%E7%89%88%E6%9C%AC%E5%8F%B7%E7%AE%A1%E7%90%86/">Android Studio Gradle打包实践之多渠道+版本号管理</a>。另外一个是<code>build.gradle(Module: app)</code>，这个脚本是app的gradle脚本。</p>
+<p>除了 <strong>Android视图</strong>下的AS结构以外，还有一种新的视图结构 <strong>project视图</strong> 下的AS结构，如下图所示。</p>
+<p><img src="/content/images/helloStructure2.png" alt="hello Structure"></p>
+<p>这种视图下的结构和Eclipse下的结构有几分相似。在这个视图下很容看到module app目录下和project目录下分别有一个gradle脚本文件，这两个文件对于编译、打包都非常重要。</p>
+<p>关于Project和Module的概念，可以这么理解。Project类似一个workspace，因此一个Project可以包含多个Module，例如我们可以把引用的library作为一个Module放到里面来。关于Project和Module的gradle脚本，我们可以参考谷歌官方的<a href="http://tools.android.com/tech-docs/new-build-system" target="_blank" rel="external">New Build System</a>用户手册，后续我也会有一篇<a href="">gradle的总结</a>出来。</p>
+<h2 id="1-3-国内Android-SDK升级方法"><a href="#1-3-国内Android-SDK升级方法" class="headerlink" title="1.3 国内Android SDK升级方法"></a>1.3 国内Android SDK升级方法</h2><p>做Android开发的朋友都知道，当Google被墙掉之后，真的是太不方便了，什么新的东西，好用的资源都没法及时的得到。所以我们一定需要一个代理。但是国内也有很多组织，为大家带来了很多福利，比如Android SDK，就有东软的镜像，下面介绍一下怎么设置。</p>
+<p>启动<code>Android SDK Manager</code>，在主界面上方的菜单栏里依次选择<code>Tools-&gt;Options</code>，弹出<code>Android SDK Manager Settings</code>窗口中，如下图所示。</p>
+<p><img src="/content/images/helloSDKProxy.png" alt="hello SDKProxy"></p>
+<p>分别在<code>HTTP Proxy Server</code>输入<code>mirrors.neusoft.edu.cn</code>，<code>HTTP Proxy Port</code>中输入<code>80</code>。然后勾选中<code>Force https://... sources to be fetched using http://...</code>，最后点击<code>close</code>按钮关闭设置。回到<code>Android SDK Manager Settings</code>窗口以后，一般会自定刷新重新加载，如果没有自动刷新的话，可以依次手动点击菜单栏中的<code>Pakages-&gt;Reload</code>，然后就可以飞速地更新最新的Android SDK了。</p>
+<p>可以看到我已经下载了最新的Android M SDK预览版，不过我用的是公司的代理，但其实速度还没有东软这个快呢。</p>
+<h2 id="1-4-Eclipse项目迁移到Android-Studio"><a href="#1-4-Eclipse项目迁移到Android-Studio" class="headerlink" title="1.4 Eclipse项目迁移到Android Studio"></a>1.4 Eclipse项目迁移到Android Studio</h2><p>最新版的AS已经支持直接导入Eclipse项目了。（不需要向像原来那样，先从Eclipse导出一个gradle script，再导入到AS中）</p>
+<p>这里有<a href="https://developer.android.com/sdk/installing/migrate.html" target="_blank" rel="external">官方的迁移教程</a>，大家还是多看官方教程，这样其实是最有效率的。</p>
+<p>导入Eclipse的项目后，AS会在项目的目录文件夹下生成一个<code>import-summary.txt</code>，这里面有导入过程的一些问题，导入进来的项目可能不一定立刻就能build，但是通过看导入报告，我们可以将有问题的地方一一修复，最后成功迁移到AS上来。相信我，我一开始的时候也是非常痛苦的，花了很多时间以后最终也就摸索出来了。StackOverflow真的是个好东西啊。</p>
+<h2 id="1-5-Eclipse项目迁移到Android-Studio后代码、资源文件的结构该怎么管理？"><a href="#1-5-Eclipse项目迁移到Android-Studio后代码、资源文件的结构该怎么管理？" class="headerlink" title="1.5 Eclipse项目迁移到Android Studio后代码、资源文件的结构该怎么管理？"></a>1.5 Eclipse项目迁移到Android Studio后代码、资源文件的结构该怎么管理？</h2><p>有两种方案：两种方案的区别就是文件结构应该如何配置。</p>
+<h3 id="方案1：直接按照Android-Studio标准的结构配置"><a href="#方案1：直接按照Android-Studio标准的结构配置" class="headerlink" title="方案1：直接按照Android Studio标准的结构配置"></a>方案1：直接按照Android Studio标准的结构配置</h3><p>在<code>build.gradle(Module: app)</code>中的android闭包中，添加 <strong>sourceSets</strong> 属性，并按照下面配置来写。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">sourceSets &#123;</div><div class="line">        main &#123;</div><div class="line">            manifest<span class="selector-class">.srcFile</span> <span class="string">'src/main/AndroidManifest.xml'</span></div><div class="line">            jniLibs<span class="selector-class">.srcDirs</span> = [<span class="string">'libs'</span>]</div><div class="line">            java<span class="selector-class">.srcDirs</span> = [<span class="string">'src/main/java'</span>]</div><div class="line">            resources<span class="selector-class">.srcDirs</span> = [<span class="string">'src/main/res'</span>]</div><div class="line">            aidl<span class="selector-class">.srcDirs</span> = [<span class="string">'src/main/aidl'</span>]</div><div class="line">            assets<span class="selector-class">.srcDirs</span> = [<span class="string">'src/main/assets'</span>]</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h3 id="方案2：不改变Eclipse原有结构，使用Android-Studio-Gradle来开发。"><a href="#方案2：不改变Eclipse原有结构，使用Android-Studio-Gradle来开发。" class="headerlink" title="方案2：不改变Eclipse原有结构，使用Android Studio + Gradle来开发。"></a>方案2：不改变Eclipse原有结构，使用Android Studio + Gradle来开发。</h3><p>在<code>build.gradle(Module: app)</code>中的android闭包中，添加 <strong>sourceSets</strong> 属性，按照下面的配置来写。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">sourceSets &#123;</div><div class="line">        main &#123;</div><div class="line">            manifest<span class="selector-class">.srcFile</span> <span class="string">'AndroidManifest.xml'</span></div><div class="line">            jniLibs<span class="selector-class">.srcDirs</span> = [<span class="string">'libs'</span>]</div><div class="line">            java<span class="selector-class">.srcDirs</span> = [<span class="string">'src'</span>]</div><div class="line">            resources<span class="selector-class">.srcDirs</span> = [<span class="string">'res'</span>]</div><div class="line">            aidl<span class="selector-class">.srcDirs</span> = [<span class="string">'src'</span>]</div><div class="line">            assets<span class="selector-class">.srcDirs</span> = [<span class="string">'assets'</span>]</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>可以看到，不改变Eclipse工程结构的关键就在于，在 <strong>sourceSets</strong> 中，按照原来的目录结构配置源代码、资源文件的路径，在Eclipse工程结构中，AndroidManifest.xml文件，libs目录，assert目录、都是和src目录同级的。而Android Studio默认的工程结构中，这几个目录都是<code>src/main/</code>中。分清楚了这一点，其实两种结构没啥影响，怎么来都行。</p>
+<h2 id="1-6-常用快捷键"><a href="#1-6-常用快捷键" class="headerlink" title="1.6 常用快捷键"></a>1.6 常用快捷键</h2><p>以下摘自<a href="http://android-studio.org/" target="_blank" rel="external">Android Studio中文论坛</a></p>
+<p>Alt+回车 导入包,自动修正</p>
+<p>Ctrl+N   查找类</p>
+<p>Ctrl+Shift+N 查找文件</p>
+<p>Ctrl+Alt+L  格式化代码</p>
+<p>Ctrl+Alt+O 优化导入的类和包</p>
+<p>Alt+Insert 生成代码(如get,set方法,构造函数等)</p>
+<p>Ctrl+E或者Alt+Shift+C  最近更改的代码</p>
+<p>Ctrl+R 替换文本</p>
+<p>Ctrl+F 查找文本</p>
+<p>Ctrl+Shift+Space 自动补全代码</p>
+<p>Ctrl+空格 代码提示</p>
+<p>Ctrl+Alt+Space 类名或接口名提示</p>
+<p>Ctrl+P 方法参数提示</p>
+<p>Ctrl+Shift+Alt+N 查找类中的方法或变量</p>
+<p>Alt+Shift+C 对比最近修改的代码</p>
+<p>Shift+F6  Refactor下的Rename</p>
+<p>Ctrl+Y 删除行</p>
+<p>Ctrl+D 复制行</p>
+<p>Ctrl+/ 或 Ctrl+Shift+/  注释（// 或者 ）</p>
+<p>Ctrl+H 显示类结构图</p>
+<p>Ctrl+Q 显示注释文档</p>
+<p>Alt+F1 查找代码所在位置</p>
+<p>Alt+1 快速打开或隐藏工程面板</p>
+<p>Ctrl+Alt+ left/right 返回至上次浏览的位置</p>
+<p>Alt+ left/right 切换代码视图</p>
+<p>Alt+ Up/Down 在方法间快速移动定位</p>
+<p>Ctrl+Shift+Up/Down 代码向上/下移动。</p>
+<p>F2 或Shift+F2 高亮错误或警告快速定位</p>
+<p>选中文本，按Ctrl+Shift+F7 ，高亮显示所有该文本，按Esc高亮消失。</p>
+<p>Ctrl+W 选中代码，连续按会扩大选中的代码块</p>
+<p>选中文本，按Alt+F3 ，逐个往下查找相同文本，并高亮显示。</p>
+<p>Ctrl+Up/Down 光标跳转到第一行或最后一行下</p>
+<p>Ctrl+B 快速打开光标处的类或方法 </p>
+<h2 id="PS-：-个人使用AS的一些体验"><a href="#PS-：-个人使用AS的一些体验" class="headerlink" title="PS ： 个人使用AS的一些体验"></a>PS ： 个人使用AS的一些体验</h2><ul>
+<li><p>1、Android Studio是官方的IDE，集成了开发Android应用和SDK所需要的所有组件。例如，集成命令行工具，logcat支持更多的操作，支持录屏，截屏等功能。</p>
+</li>
+<li><p>2、AS使用gradle作为打包脚本，兼容Maven、Ant。其打包脚本的Groovy语法简洁，直接支持Java，与xml形式的Ant脚本相比，可读性更强（xml是给机器读的，不是给人阅读的）。gradle添加依赖也更加方便，直接在dependencies中添加一个compile即可。</p>
+</li>
+<li><p>3、AS的“单Project下包含多个Module”结构，对于多模块（一个Module相当于一个Eclipse中的project）开发有非常好的优势，如果你是做sdk开发的，可以直接按照“library + sample”的形式，从开发library（sdk），打包library，调试demo到最后发布sdk + demo都非常方便。</p>
+</li>
+<li><p>4、目前有很多开源项目和sdk都是通过aar的形式发布到Maven和jcenter，迁移到AS以后，可以在将来需要的时候将自己的sdk发布到Maven、jcenter。<a href="https://github.com/novoda/bintray-release" target="_blank" rel="external">https://github.com/novoda/bintray-release</a></p>
+</li>
+<li><p>5、编辑代码方面：模糊匹配非常强大，对Android和Java的语法检查也更加严谨（查找类的实现，支持弹窗中直接查看，代码之间的引用检查），自带代码分析工具，生成的report可以很清楚地看出代码中有哪里可能存在问题。</p>
+</li>
+<li><p>6、AS有很多好用的插件，并且随着官方对AS的不断改进和支持，在这上面开发插件的人也越来越多，有很多好用的插件可以方便配置进来，这些插件不支持Eclipse（ADT插件已经停止更新）。</p>
+</li>
+</ul>
+<hr>
+<p>今年的开发者大会上我比较关注的还是Android在系统上的一些改进，以及Material Design的一些最新实践。当我打开IO大会官网看到他们用polymer写的网页时，感觉还是非常不错的。虽然我是一个比较极端的人，但是我看待Native App VS Web的问题上没有那么绝对，学技术的可以多积累点动手实践的经验，业务需要的时候再深挖。</p>
+
+      
+    </div>
+
+    <div>    
+    
+    
+    <ul class="post-copyright">
+    <li class="post-copyright-author">
+    <strong>本文作者：</strong>unclechen
+    </li>
+    <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="/2015/06/01/Android Studio安装配置笔记/" title="Android Studio安装配置笔记">2015/06/01/Android Studio安装配置笔记/</a>
+    </li>
+    <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本文采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a>进行许可。转载请注明出处！
+    </li>
+    </ul>
+    
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/开发环境/" rel="tag"># 开发环境</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/30/使用前端开发利器Fiddler调试手机程序/" rel="next" title="使用前端开发利器Fiddler调试手机程序">
+                <i class="fa fa-chevron-left"></i> 使用前端开发利器Fiddler调试手机程序
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/10/22/Android Studio Gradle实践之多渠道自动化打包+版本号管理/" rel="prev" title="Android Studio Gradle实践之多渠道自动化打包+版本号管理">
+                Android Studio Gradle实践之多渠道自动化打包+版本号管理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="unclechen" />
+          <p class="site-author-name" itemprop="name">unclechen</p>
+           
+              <p class="site-description motion-element" itemprop="description">吃下恶魔果实，我就能变成超级赛亚人！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/unclechen" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1718455407" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Android-Studio安装配置"><span class="nav-text">1. Android Studio安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-下载、安装和配置"><span class="nav-text">1.1 下载、安装和配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Android-Studio项目结构"><span class="nav-text">1.2 Android Studio项目结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-国内Android-SDK升级方法"><span class="nav-text">1.3 国内Android SDK升级方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-Eclipse项目迁移到Android-Studio"><span class="nav-text">1.4 Eclipse项目迁移到Android Studio</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-Eclipse项目迁移到Android-Studio后代码、资源文件的结构该怎么管理？"><span class="nav-text">1.5 Eclipse项目迁移到Android Studio后代码、资源文件的结构该怎么管理？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方案1：直接按照Android-Studio标准的结构配置"><span class="nav-text">方案1：直接按照Android Studio标准的结构配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方案2：不改变Eclipse原有结构，使用Android-Studio-Gradle来开发。"><span class="nav-text">方案2：不改变Eclipse原有结构，使用Android Studio + Gradle来开发。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-常用快捷键"><span class="nav-text">1.6 常用快捷键</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PS-：-个人使用AS的一些体验"><span class="nav-text">PS ： 个人使用AS的一些体验</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">unclechen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "071293399566469d925f180d68952611",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
