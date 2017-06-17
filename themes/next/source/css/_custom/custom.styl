@@ -1,0 +1,31 @@
+// Custom styles.
+// 文章内容里面的超链接
+.post-body p a {
+  color: #0593d3;
+  border-bottom: none;
+  &:hover {
+    color: #0477ab;
+    text-decoration: underline;
+  }
+}
+
+// 文章最底部的版权信息
+.post-copyright {
+    margin: 2em 0 0;
+    padding: 0.5em 1em;
+    border-left: 3px solid #ff1700;
+    background-color: #f9f9f9;
+    list-style: none;
+}
+
+// index页面中每篇文章相隔的那条线
+.posts-expand {
+  .post-eof {
+    display: block;
+    margin: $post-eof-margin-top auto $post-eof-margin-bottom;
+    width: 100%;
+    height: 1px;
+    background: $grey-light;
+    text-align: center;
+  }
+}
