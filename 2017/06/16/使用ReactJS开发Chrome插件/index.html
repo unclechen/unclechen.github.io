@@ -1,0 +1,910 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="React,Chrome插件,Web," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="UncleChen的博客" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="一、背景相信看到这篇文章的人应该都用过Chrome插件吧，最近刚好有个这方面的需求，我就把Chrome插件的相关知识学习了一下，发现其实Chrome插件的开发和大前端Web开发的底子是一样的，无非就是runtime只限于Chrome浏览器，并且可以调用Chrome提供的一些chrome.* API来实现一些基于Chrome浏览器的小功能。这里非要类比的话，我理解chrome.* API就像我们开发">
+<meta name="keywords" content="React,Chrome插件,Web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用React.js开发Chrome插件">
+<meta property="og:url" content="http://unclechen.github.io/2017/06/16/使用ReactJS开发Chrome插件/index.html">
+<meta property="og:site_name" content="UncleChen的博客">
+<meta property="og:description" content="一、背景相信看到这篇文章的人应该都用过Chrome插件吧，最近刚好有个这方面的需求，我就把Chrome插件的相关知识学习了一下，发现其实Chrome插件的开发和大前端Web开发的底子是一样的，无非就是runtime只限于Chrome浏览器，并且可以调用Chrome提供的一些chrome.* API来实现一些基于Chrome浏览器的小功能。这里非要类比的话，我理解chrome.* API就像我们开发">
+<meta property="og:updated_time" content="2017-06-17T06:33:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用React.js开发Chrome插件">
+<meta name="twitter:description" content="一、背景相信看到这篇文章的人应该都用过Chrome插件吧，最近刚好有个这方面的需求，我就把Chrome插件的相关知识学习了一下，发现其实Chrome插件的开发和大前端Web开发的底子是一样的，无非就是runtime只限于Chrome浏览器，并且可以调用Chrome提供的一些chrome.* API来实现一些基于Chrome浏览器的小功能。这里非要类比的话，我理解chrome.* API就像我们开发">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '9GQE7B6UON',
+      apiKey: '1b6c2bb25ddee8d24221b1df179afbde',
+      indexName: 'UncleChenBlog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键词进行搜索","hits_empty":"找不到关于“${query}”的文章","hits_stats":"找到 ${hits} 篇文章，耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://unclechen.github.io/2017/06/16/使用ReactJS开发Chrome插件/"/>
+
+
+
+
+
+  <title>使用React.js开发Chrome插件 | UncleChen的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c7b0eb7b32d0e8723fcb885bc9778590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UncleChen的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2017/06/16/使用ReactJS开发Chrome插件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用React.js开发Chrome插件</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-16T08:00:00+08:00">
+                2017-06-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2017/06/16/使用ReactJS开发Chrome插件/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>相信看到这篇文章的人应该都用过Chrome插件吧，最近刚好有个这方面的需求，我就把Chrome插件的相关知识学习了一下，发现其实Chrome插件的开发和大前端Web开发的底子是一样的，无非就是runtime只限于Chrome浏览器，并且可以调用Chrome提供的一些<code>chrome.*</code> API来实现一些基于Chrome浏览器的小功能。这里非要类比的话，我理解<code>chrome.*</code> API就像我们开发Hybird应用一样，需要有一个bridge层来提供底层原生的能力给js。我是做Android开发出生的，这只是我的个人理解，可能对大Web技术的理解还是不够。</p>
+<p>其实Chrome上的插件，从UI上主要分成两类：一类是浏览器按钮（<a href="https://crxdoc-zh.appspot.com/extensions/browserAction" target="_blank" rel="external">BrowserAction</a>），另一类是页面按钮（<a href="https://crxdoc-zh.appspot.com/extensions/pageAction" target="_blank" rel="external">PageAction</a>）。两者的开发大同小异，我这里今天主要介绍的主角不是Chrome插件开发，而是<strong>如何使用React.js来开发Chrome插件</strong>，本文先简单介绍下Chrome插件的开发和ReactJS，最后介绍如何采用Facebook官方推荐的creat-react-app脚手架来开发Chrome插件。</p>
+<a id="more"></a>
+<h1 id="二、Chrome插件开发基础知识"><a href="#二、Chrome插件开发基础知识" class="headerlink" title="二、Chrome插件开发基础知识"></a>二、Chrome插件开发基础知识</h1><p>下面是我看的几篇教程，简单看一下应该就可以算Chrome插件速成了：</p>
+<ul>
+<li><a href="https://crxdoc-zh.appspot.com/extensions/getstarted" target="_blank" rel="external">入门：建立 Chrome 扩展程序</a></li>
+<li><a href="https://wizardforcel.gitbooks.io/chrome-doc/content/" target="_blank" rel="external">Chrome 扩展开发文档</a></li>
+<li><a href="http://www.ituring.com.cn/book/miniarticle/60223" target="_blank" rel="external">Chrome扩展及应用开发</a></li>
+</ul>
+<p>简单来说，一个最基本Chrome插件应用需要有一个manifest.json清单文件，这个文件一般长这样：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"manifest_version"</span>: <span class="number">2</span>,</div><div class="line"></div><div class="line">  <span class="attr">"name"</span>: <span class="string">"One-click Kittens"</span>,</div><div class="line">  <span class="attr">"description"</span>: <span class="string">"This extension demonstrates a browser action with kittens."</span>,</div><div class="line">  <span class="attr">"version"</span>: <span class="string">"1.0"</span>,</div><div class="line"></div><div class="line">  <span class="attr">"permissions"</span>: [</div><div class="line">    <span class="string">"https://secure.flickr.com/"</span></div><div class="line">  ],</div><div class="line">  <span class="attr">"browser_action"</span>: &#123;</div><div class="line">    <span class="attr">"default_icon"</span>: <span class="string">"icon.png"</span>,</div><div class="line">    <span class="attr">"default_popup"</span>: <span class="string">"popup.html"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个文件里描述了插件应用的一些属性，如名称、版本、需要的权限、界面的对应的html文件名等等。额！！乍一看怎么和AndroidManifest.xml的<strong>功能</strong>这么像啊？是的大兄弟！！恭喜你对技术的理解已经融会贯通了！</p>
+<p>根据manifest.json文件可以看到，一个Chrome插件最少得有：manifest.json文件，icon.png图标和popup.html文件。当然文件名可以随便改，只要和manifest.json里声明的一致就行。</p>
+<p>这里就不浪费时间具体说怎么开发插件了，各路前端大牛比我强100倍。但我只强调一点，那就是popup.html中引用的js文件只能是外部引入，不能在popup.html文件里面写js代码。所以一般我们还有见到popup.js文件。另外如果你想知道自己使用的插件有什么秘密，完全可以去Chrome浏览器的安装目录下面把它们给扒出来。。</p>
+<h1 id="三、React-JS基础知识"><a href="#三、React-JS基础知识" class="headerlink" title="三、React JS基础知识"></a>三、React JS基础知识</h1><p>React.js不需要多说了吧，从React这个词在技术界诞生起，就是一颗明星，连我这种死抱着Native技术的人都不得不去学习它。。</p>
+<p>简单扯两句React JS的话题（React Native下次再说），作为一个Android App/SDK开发，我没有开发过太多传统意义上的Web页面，但是经过我学习了大概一周多的时间，我发现React JS开发Web页面的思路其实和客户端很像，不去用jQuery/Zepto啊操作DOM，而是关注数据本身，以数据驱动去改变界面。重构写好了静态html后，哪块地方需要变化，你就把哪里变成一个变量放到组件的State/Props里面（至于组件怎么切分，哪个数据放State，哪个放Prop不是今天要讨论的话题），然后就只用关注数据的变化，然后setState一下界面就可以刷新了。理解了这一点，就会发现其实开发Web页面很简单。比起操作DOM，一些模板引擎之类的东西，我认为React这个思想非常容易接受，写起来也很舒服，完全没有那种混乱的感觉，而且现在ReactJS生态圈非常大，诸如Redux这类的库使得ReactJS越发的犀利，很多公司早就用得飞起了。</p>
+<p>扯得有点远了，ReactJS开发我推荐大家就看<a href="https://facebook.github.io/react/docs/hello-world.html" target="_blank" rel="external">Facebook官方的示例</a>就够了。英文不好的朋友可以看看<a href="http://www.ruanyifeng.com/blog/2015/03/react" target="_blank" rel="external">阮一峰老师的博客</a>，或者看看<a href="https://github.com/kdchang/reactjs101" target="_blank" rel="external">这篇入门教程</a>也是阔以的。</p>
+<h1 id="四、应该用哪个脚手架？"><a href="#四、应该用哪个脚手架？" class="headerlink" title="四、应该用哪个脚手架？"></a>四、应该用哪个脚手架？</h1><p>当然是Facebook官方推荐的<a href="https://github.com/facebookincubator/create-react-app" target="_blank" rel="external">creat-react-app</a>。打开终端，依次输入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">npm install -g create-react-app</div><div class="line"></div><div class="line">create-react-app my-app</div><div class="line">cd my-app/</div></pre></td></tr></table></figure>
+<p>然后就在<code>my-app</code>下面看到这些文件了。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">my-app/</div><div class="line">  README.md</div><div class="line">  node_modules/</div><div class="line">  package.json</div><div class="line">  .gitignore</div><div class="line">  public/</div><div class="line">    favicon.ico</div><div class="line">    index.html</div><div class="line">    manifest.json</div><div class="line">  src/</div><div class="line">    App.css</div><div class="line">    App.js</div><div class="line">    App.test.js</div><div class="line">    index.css</div><div class="line">    index.js</div><div class="line">    logo.svg</div><div class="line">    registerServiceWorker.js</div></pre></td></tr></table></figure>
+<p>到此为止，是一个标准的ReactJS编写WebApp的步骤，在终端输入<code>npm start</code>，就可以在浏览器中访问本地的localServer了。</p>
+<h2 id="1-怎么让这个项目支持Chrome插件开发呢？"><a href="#1-怎么让这个项目支持Chrome插件开发呢？" class="headerlink" title="1.怎么让这个项目支持Chrome插件开发呢？"></a>1.怎么让这个项目支持Chrome插件开发呢？</h2><p>前面介绍了，Chrome插件最重要的文件就是manifest.json清单文件。我们先看下脚手架给我们默认生成的manifest.json长啥样：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"short_name"</span>: <span class="string">"React App"</span>,</div><div class="line">  <span class="attr">"name"</span>: <span class="string">"Create React App Sample"</span>,</div><div class="line">  <span class="attr">"icons"</span>: [</div><div class="line">    &#123;</div><div class="line">      <span class="attr">"src"</span>: <span class="string">"favicon.ico"</span>,</div><div class="line">      <span class="attr">"sizes"</span>: <span class="string">"192x192"</span>,</div><div class="line">      <span class="attr">"type"</span>: <span class="string">"image/png"</span></div><div class="line">    &#125;</div><div class="line">  ],</div><div class="line">  <span class="attr">"start_url"</span>: <span class="string">"./index.html"</span>,</div><div class="line">  <span class="attr">"display"</span>: <span class="string">"standalone"</span>,</div><div class="line">  <span class="attr">"theme_color"</span>: <span class="string">"#000000"</span>,</div><div class="line">  <span class="attr">"background_color"</span>: <span class="string">"#ffffff"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对于一个普通的WebApp来说，manifest.json文件在缓存、离线模式以及最新的PWA场景下会起作用，但是这里我们是要开发Chrome插件，那么把它原来的内容通通删掉，改成你的Chrome插件所需要的格式和内容就好了。例如可以改成这样：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"manifest_version"</span>: <span class="number">2</span>,</div><div class="line">  <span class="attr">"name"</span>: <span class="string">"MyChromeExt"</span>,</div><div class="line">  <span class="attr">"description"</span>: <span class="string">"My first chrome extension."</span>,</div><div class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</div><div class="line">  <span class="attr">"icons"</span>: &#123;</div><div class="line">		<span class="attr">"16"</span>: <span class="string">"img/icon-16.png"</span>,</div><div class="line">		<span class="attr">"128"</span>: <span class="string">"img/icon-128.png"</span></div><div class="line">	&#125;,</div><div class="line">  <span class="attr">"browser_action"</span>: &#123;</div><div class="line">    <span class="attr">"default_icon"</span>: &#123;</div><div class="line">			<span class="attr">"19"</span>: <span class="string">"img/icon-19.png"</span>,</div><div class="line">			<span class="attr">"38"</span>: <span class="string">"img/icon-38.png"</span></div><div class="line">		&#125;,</div><div class="line">    <span class="attr">"default_title"</span>: <span class="string">"MyChromeExt"</span>,</div><div class="line">    <span class="attr">"default_popup"</span>: <span class="string">"index.html"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"permissions"</span>: [</div><div class="line">    <span class="string">"tabs"</span></div><div class="line">  ],</div><div class="line">  <span class="attr">"background"</span>: &#123;</div><div class="line">    <span class="attr">"scripts"</span>: [<span class="string">"background.js"</span>]</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里尽可能对脚手架的东西做最小的改动，把default_popup的文件名改成了<code>index.html</code>，因为脚手架默认会把js文件都打包到一个main.js文件中，并在index.html中插入这个main.js。</p>
+<p>我们运行一下<code>npm run build</code>命令，就会发现生成了一个<code>my-app/build</code>目录，这个目录就是我们可以在<a href="chrome://extensions/" target="_blank" rel="external">chrome://extensions/</a>去加载的插件目录，当然也可以用Chrome把这个目录打包成一个crx插件。</p>
+<p>使用creat-react-app脚手架开发Chrome插件的基本方法就是这样了，但是在实际中我们会遇到很多的问题，有时甚至会想要运行<a href="https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#available-scripts" target="_blank" rel="external">npm run eject</a>，然后去完全自定义<code>webpack.config.js</code>来实现打包。</p>
+<h2 id="2-background-js怎么打包？"><a href="#2-background-js怎么打包？" class="headerlink" title="2.background.js怎么打包？"></a>2.background.js怎么打包？</h2><p>我们在开发插件的时候，非常可能需要用到后台的background.js，原因如下：</p>
+<blockquote>
+<p>注意：不要在popup页面的js空间变量中保存数据。由于popup页面只在用户点击图标时才会开启，当用户关闭这个页面时就会停止，并没有一个从始至终的实例分配给popup页面。所以每当用户打开popup页面时，它都是崭新的，之前保存在变量中的数据都会消失。如果需要通过popup页面保存用户的数据，可以通过通信将数据交给后台页面（background页面）处理，或者通过localStorage和chrome.storage将数据保存在用户的硬盘上。</p>
+</blockquote>
+<p>所以background.js最后也是要进入到我们的发布文件夹下面的，这里建议还是要坚持<strong>最低程度地修改</strong>脚手架的设置，建议不要npm run eject之后来修改webpack的配置，因为实在是真的有点复杂。</p>
+<p>这次修改下<code>package.json</code>文件：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"name"</span>: <span class="string">"my-app"</span>,</div><div class="line">  <span class="attr">"version"</span>: <span class="string">"0.1.0"</span>,</div><div class="line">  <span class="attr">"private"</span>: <span class="literal">true</span>,</div><div class="line">  <span class="attr">"devDependencies"</span>: &#123;</div><div class="line">    <span class="attr">"react-scripts"</span>: <span class="string">"1.0.7"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"dependencies"</span>: &#123;</div><div class="line">    <span class="attr">"react"</span>: <span class="string">"^15.6.1"</span>,</div><div class="line">    <span class="attr">"react-dom"</span>: <span class="string">"^15.6.1"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"scripts"</span>: &#123;</div><div class="line">    <span class="attr">"start"</span>: <span class="string">"react-scripts start"</span>,</div><div class="line">    <span class="attr">"build"</span>: <span class="string">"react-scripts build"</span>,</div><div class="line">    <span class="attr">"test"</span>: <span class="string">"react-scripts test --env=jsdom"</span>,</div><div class="line">    <span class="attr">"eject"</span>: <span class="string">"react-scripts eject"</span>,</div><div class="line">    <span class="attr">"build-chrome-ext"</span>: <span class="string">"react-scripts build &amp;&amp; cp src/background.js build/background.js"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到我们添加了一个命令<code>npm run build-chrome-ext</code>，并把background.js丢到了build目录下。如果你还有其他的js，我建议在<code>my-app/src</code>下建立一个<code>my-app/src/chrome</code>文件夹，专用于存在chrome相关其他js代码，然后在build的时候统一丢到build里面。如果要minify这些js，同样可以采用<code>&amp;&amp;</code>方式去添加命令。修改</p>
+<h2 id="3-需要注意的细节"><a href="#3-需要注意的细节" class="headerlink" title="3.需要注意的细节"></a>3.需要注意的细节</h2><p>由于使用了一些<code>chrome.*</code> API，我们需要在编译js的时候将<code>chrome</code>这个全局对象声明一下。</p>
+<p>creat-react-app这个脚手架在<strong>非eject模式</strong>下，没办法修改ESlint的配置来添加global对象，只能在用到了 <code>chrome.*</code> API的代码处添加 <code>// eslint-disable-line</code> 注释来实现保证编译通过。</p>
+<p>如果你已经<code>npm run eject</code>了，在<strong>eject模式</strong>下，可以在<code>package.json</code>文件里配置ESLint：</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="string">"eslintConfig"</span>: &#123;</div><div class="line"><span class="string">"extends"</span>: <span class="string">"react-app"</span>,</div><div class="line"><span class="string">"globals"</span>: &#123;</div><div class="line">  <span class="string">"chrome"</span>: true</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="五、其他脚手架推荐"><a href="#五、其他脚手架推荐" class="headerlink" title="五、其他脚手架推荐"></a>五、其他脚手架推荐</h1><p>除了自己改造Facebook推荐的<a href="https://github.com/facebookincubator/create-react-app" target="_blank" rel="external">creat-react-app</a>外，下面两个脚手架也算是用户比较多的，专门用于开发Chrome插件的脚手架。</p>
+<ul>
+<li><a href="https://github.com/jhen0409/react-chrome-extension-boilerplate" target="_blank" rel="external">https://github.com/jhen0409/react-chrome-extension-boilerplate</a>：默认支持ReactJS，基于webpack。</li>
+<li><a href="https://github.com/yeoman/generator-chrome-extension" target="_blank" rel="external">https://github.com/yeoman/generator-chrome-extension</a>：没有默认支持ReactJS，需要自己修改，基于gulp打包。</li>
+</ul>
+
+      
+    </div>
+
+    <div>    
+    
+    
+    <ul class="post-copyright">
+    <li class="post-copyright-author">
+    <strong>本文作者：</strong>unclechen
+    </li>
+    <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="/2017/06/16/使用ReactJS开发Chrome插件/" title="使用React.js开发Chrome插件">2017/06/16/使用ReactJS开发Chrome插件/</a>
+    </li>
+    <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本文采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a>进行许可。转载请注明出处！
+    </li>
+    </ul>
+    
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/React/" rel="tag"># React</a>
+          
+            <a href="/tags/Chrome插件/" rel="tag"># Chrome插件</a>
+          
+            <a href="/tags/Web/" rel="tag"># Web</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/13/WebView缓存原理分析和应用/" rel="next" title="WebView缓存原理分析和应用">
+                <i class="fa fa-chevron-left"></i> WebView缓存原理分析和应用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="unclechen" />
+          <p class="site-author-name" itemprop="name">unclechen</p>
+           
+              <p class="site-description motion-element" itemprop="description">吃下恶魔果实，我就能变成超级赛亚人！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/unclechen" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1718455407" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、背景"><span class="nav-text">一、背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、Chrome插件开发基础知识"><span class="nav-text">二、Chrome插件开发基础知识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、React-JS基础知识"><span class="nav-text">三、React JS基础知识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、应该用哪个脚手架？"><span class="nav-text">四、应该用哪个脚手架？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-怎么让这个项目支持Chrome插件开发呢？"><span class="nav-text">1.怎么让这个项目支持Chrome插件开发呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-background-js怎么打包？"><span class="nav-text">2.background.js怎么打包？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-需要注意的细节"><span class="nav-text">3.需要注意的细节</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、其他脚手架推荐"><span class="nav-text">五、其他脚手架推荐</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">unclechen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "071293399566469d925f180d68952611",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
