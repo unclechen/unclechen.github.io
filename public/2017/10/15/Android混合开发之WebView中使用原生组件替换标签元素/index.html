@@ -1,0 +1,893 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,WebView," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="UncleChen的博客" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="一、背景在Android混合开发中，常常会把界面渲染全部交给html，而后台数据相关的处理交给Native。然而在有些时候html无法完全满足我们在界面处理上的要求，比如像要有一个自己定制的软键盘或者在html里面播放视频，或者想要把html里面的图片替换成Native中统一封装的ImageView等等。这不，跟WebView打交道这么多年，我最近还真遇到这样的需要了，希望把html中展示的一个大">
+<meta name="keywords" content="Android,WebView">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android混合开发之——WebView中使用原生组件替换标签元素">
+<meta property="og:url" content="http://unclechen.github.io/2017/10/15/Android混合开发之WebView中使用原生组件替换标签元素/index.html">
+<meta property="og:site_name" content="UncleChen的博客">
+<meta property="og:description" content="一、背景在Android混合开发中，常常会把界面渲染全部交给html，而后台数据相关的处理交给Native。然而在有些时候html无法完全满足我们在界面处理上的要求，比如像要有一个自己定制的软键盘或者在html里面播放视频，或者想要把html里面的图片替换成Native中统一封装的ImageView等等。这不，跟WebView打交道这么多年，我最近还真遇到这样的需要了，希望把html中展示的一个大">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1fkjcqk16dgj30rs082774.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1fkjcpehayoj30xc08kk08.jpg">
+<meta property="og:updated_time" content="2017-10-16T05:46:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android混合开发之——WebView中使用原生组件替换标签元素">
+<meta name="twitter:description" content="一、背景在Android混合开发中，常常会把界面渲染全部交给html，而后台数据相关的处理交给Native。然而在有些时候html无法完全满足我们在界面处理上的要求，比如像要有一个自己定制的软键盘或者在html里面播放视频，或者想要把html里面的图片替换成Native中统一封装的ImageView等等。这不，跟WebView打交道这么多年，我最近还真遇到这样的需要了，希望把html中展示的一个大">
+<meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1fkjcqk16dgj30rs082774.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '9GQE7B6UON',
+      apiKey: '1b6c2bb25ddee8d24221b1df179afbde',
+      indexName: 'UncleChenBlog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键词进行搜索","hits_empty":"找不到关于“${query}”的文章","hits_stats":"找到 ${hits} 篇文章，耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://unclechen.github.io/2017/10/15/Android混合开发之WebView中使用原生组件替换标签元素/"/>
+
+
+
+
+
+  <title>Android混合开发之——WebView中使用原生组件替换标签元素 | UncleChen的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c7b0eb7b32d0e8723fcb885bc9778590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UncleChen的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2017/10/15/Android混合开发之WebView中使用原生组件替换标签元素/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android混合开发之——WebView中使用原生组件替换标签元素</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-15T08:00:00+08:00">
+                2017-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2017/10/15/Android混合开发之WebView中使用原生组件替换标签元素/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>在Android混合开发中，常常会把界面渲染全部交给html，而后台数据相关的处理交给Native。然而在有些时候html无法完全满足我们在界面处理上的要求，比如像要有一个自己定制的软键盘或者在html里面播放视频，或者想要把html里面的图片替换成Native中统一封装的ImageView等等。这不，跟WebView打交道这么多年，我最近还真遇到这样的需要了，希望把html中展示的一个大图换成Native实现的播放器，这个播放器是自己封装过的，播放控制的界面和交互也全部都由Native实现。拍脑袋一想，这有点困难啊？html里面的标签怎么替换成Native组件呢？这不可能啊？难道要实现一套把html全部转成Native的框架？这岂不是得自己做一套ReactNative？</p>
+<a id="more"></a>
+<p>你别说我还真在万能的Github上找到一个叫<a href="https://github.com/hsllany/HtmlNative" target="_blank" rel="external">HtmlNative</a>的库，这货就真的实现了把一部分css+html转成Native，看了下它的demo，效果其实不错。但是对于我来讲还有点偏重了，因为如果一旦我们开始转换css，那么到底对css支持到一个什么样的程度呢？这种无法走到尽头的大难路，我不想走。于是我又开始看微信小程序，发现小程序大部分的组件还是WebView渲染的dom，只有几个组件入输入框，视频播放器是原生的，并且我很惊讶地发现它就是把原生组件“嵌入”到了WebView中！！！看到这里我觉得如果是把html里面的某些指定的元素替换成Native组件，是可行的，这时我开始想办法了。从界面绘制的角度，界面由一个个的View组成，每个View都应该由坐标和尺寸来描述，从而可以被摆放到正确的位置上。举个最简单的例子，我们知道ViewGroup里面的onLayout方法，当我们实现一个ViewGroup的时候，需要在onLayout方法中调用每一个子View的layout方法，并给这个方法传入left、top、right、bottom参数，这几个参数表示这个View距离父控件的左、上、右、下距离。<strong>如果我可以把html中需要替换的元素，相对WebView控件的left、top、right、bottom参数获取，并通过js传给Native，Native再把一个原生组件盖在WebView的位置上，是不是就可以实现“原声组件嵌入WebView里？”</strong></p>
+<h1 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h1><p>这里我们就以一个简单场景来做示例，比如有一个组件是包装WebView实现的，转门用于加载html格式的广告。现在需要把这个WebView里面<strong>img标签变成一个ImageView</strong>，思路如下：</p>
+<ul>
+<li>1.把WebView放到一个FrameLayout里面，使用WebView加载这个html，让其中的元素都被加载、渲染完成，这时img标签的位置和尺寸才可以确定。</li>
+<li>2.自定义WebViewClient，监听onPageFinished回调，当回调发生时，执行一段js，去获取指定的img标签的left、top、width、height属性，然后传给Native</li>
+<li>3.Native接收到之后，把ImageView添加到第一步中的FrameLayout里面。</li>
+</ul>
+<h1 id="三、具体实现方案"><a href="#三、具体实现方案" class="headerlink" title="三、具体实现方案"></a>三、具体实现方案</h1><h2 id="1-准备html"><a href="#1-准备html" class="headerlink" title="1.准备html"></a>1.准备html</h2><p>html中一定要能清楚的获取到需要替换的img标签，例如我们可以给这个img标签加上特定的id，如下所示：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>test<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"content-Type"</span> <span class="attr">content</span>=<span class="string">"text/html;charset=utf-8"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></div><div class="line"><span class="css"><span class="selector-class">.container</span>&#123; <span class="attribute">margin</span>:<span class="number">0</span> auto; <span class="attribute">width</span>:<span class="number">300px</span>; <span class="attribute">overflow</span>:hidden&#125; </span></div><div class="line"><span class="css"><span class="selector-class">.container</span> <span class="selector-tag">img</span>&#123; <span class="attribute">float</span>:left; <span class="attribute">width</span>:<span class="number">100px</span>; <span class="attribute">height</span>:<span class="number">100px</span>&#125; </span></div><div class="line"><span class="css"><span class="selector-class">.container</span> <span class="selector-class">.right</span>&#123; <span class="attribute">float</span>:right; <span class="attribute">width</span>:<span class="number">180px</span>; <span class="attribute">text-align</span>:left&#125; </span></div><div class="line"><span class="css"><span class="selector-class">.container</span> <span class="selector-class">.right</span> <span class="selector-tag">h3</span>&#123; <span class="attribute">height</span>:<span class="number">20px</span>; <span class="attribute">line-height</span>:<span class="number">20px</span>; <span class="attribute">font-family</span>:<span class="string">"Microsoft YaHei"</span>; <span class="attribute">font-size</span>:<span class="number">16px</span>; <span class="attribute">overflow</span>:hidden;&#125; </span></div><div class="line"><span class="css"><span class="selector-class">.container</span> <span class="selector-class">.right</span> <span class="selector-tag">div</span>&#123; <span class="attribute">padding-top</span>:<span class="number">0px</span>; <span class="attribute">height</span>:<span class="number">50px</span>; <span class="attribute">overflow</span>:hidden&#125;</span></div><div class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">"imageHolder"</span> <span class="attr">src</span>=<span class="string">"./img.jpeg"</span>/&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"right"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">h3</span>&gt;</span>我是一个标题好吗<span class="tag">&lt;/<span class="name">h3</span>&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>无论事态变迁，你总有一颗人仰马翻的少年心<span class="tag">&lt;/<span class="name">div</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span> </div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>这段html里面的有两个需要注意的地方：</p>
+<ul>
+<li>需要替换的html标签img，我们给它加上了一个id叫“imageHolder”，后面我们需要通过js获取这个标签。</li>
+<li>viewport里面把device-width设为设备的宽度，这样我们获取到的图片位置和宽高都是dp为单位。</li>
+</ul>
+<h1 id="2-准备好获取img标签left、top、width、height属性的js方法，提供给Native调用"><a href="#2-准备好获取img标签left、top、width、height属性的js方法，提供给Native调用" class="headerlink" title="2.准备好获取img标签left、top、width、height属性的js方法，提供给Native调用"></a>2.准备好获取img标签left、top、width、height属性的js方法，提供给Native调用</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></div><div class="line"><span class="actionscript"><span class="keyword">var</span> jsFun = &#123;</span></div><div class="line"><span class="actionscript">  <span class="comment">// 测量图片的大小和位置</span></span></div><div class="line"><span class="actionscript">  measureImagePlaceHolder: <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span></div><div class="line"><span class="javascript">    <span class="keyword">var</span> img = <span class="built_in">document</span>.getElementById(<span class="string">"imageHolder"</span>);</span></div><div class="line"><span class="actionscript">    <span class="keyword">var</span> left = img.getBoundingClientRect().left + img.scrollLeft;</span></div><div class="line"><span class="actionscript">    <span class="keyword">var</span> top = img.getBoundingClientRect().top + img.scrollTop;</span></div><div class="line"><span class="actionscript">    <span class="keyword">var</span> width = img.getBoundingClientRect().right - left;</span></div><div class="line"><span class="actionscript">    <span class="keyword">var</span> height = img.getBoundingClientRect().bottom - top;</span></div><div class="line"><span class="undefined">    JavaFun.replaceImgWithImageView(left, top, width, height);</span></div><div class="line"><span class="undefined">  &#125;</span></div><div class="line"><span class="undefined">&#125;</span></div><div class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>这段代码的功能就是获取img标签在网页中的绝对位置和大小，我是从阮一峰老师的<a href="http://www.ruanyifeng.com/blog/2009/09/find_element_s_position_using_javascript.html" target="_blank" rel="external">博客</a>学到的，把这段js加入到html的body最后即可。</p>
+<p>这时其实已经可以用chrome打开这个页面，进入inspect界面，手动调用一下<code>measureImagePlaceHolder</code>方法已经可以看到效果了，如下图所示。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fkjcqk16dgj30rs082774.jpg" alt="chrome查看js"></p>
+<h1 id="3-在Native中把WebView放到一个FrameLayout里面，自定义WebViewClient监听onPageFinished事件。"><a href="#3-在Native中把WebView放到一个FrameLayout里面，自定义WebViewClient监听onPageFinished事件。" class="headerlink" title="3.在Native中把WebView放到一个FrameLayout里面，自定义WebViewClient监听onPageFinished事件。"></a>3.在Native中把WebView放到一个FrameLayout里面，自定义WebViewClient监听onPageFinished事件。</h1><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">    setContentView(R.layout.activity_main);</div><div class="line">    rootView = (FrameLayout) findViewById(R.id.root_view);</div><div class="line">    initView();</div><div class="line">    initWebView();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">initWebView</span><span class="params">()</span> </span>&#123;</div><div class="line">    webView.getSettings().setJavaScriptEnabled(<span class="keyword">true</span>);</div><div class="line">    webView.setWebViewClient(<span class="keyword">new</span> WebViewClient() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onPageFinished</span><span class="params">(WebView view, String url)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>.onPageFinished(view, url);</div><div class="line">            view.loadUrl(<span class="string">"javascriprt:jsFun.measureImagePlaceHolder();"</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">initView</span><span class="params">()</span> </span>&#123;</div><div class="line">    webView = <span class="keyword">new</span> WebView(<span class="keyword">this</span>);</div><div class="line">    imageView = <span class="keyword">new</span> ImageView(<span class="keyword">this</span>);</div><div class="line">    FrameLayout.LayoutParams layoutParams = <span class="keyword">new</span> FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);</div><div class="line">    rootView.addView(webView, layoutParams);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="4-Native中提供一个给js调用的方法，用于传递需要替换的img标签的方法"><a href="#4-Native中提供一个给js调用的方法，用于传递需要替换的img标签的方法" class="headerlink" title="4.Native中提供一个给js调用的方法，用于传递需要替换的img标签的方法"></a>4.Native中提供一个给js调用的方法，用于传递需要替换的img标签的方法</h1><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> <span class="title">JavaFun</span> &#123;</div><div class="line">    @JavascriptInterface</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">replaceImgWithImageView</span>(<span class="params"><span class="keyword">int</span> left, <span class="keyword">int</span> top, <span class="keyword">int</span> width, <span class="keyword">int</span> height</span>) </span>&#123;</div><div class="line">        final Context context = MainActivity.<span class="keyword">this</span>.getApplicationContext();</div><div class="line">        <span class="keyword">if</span> (imageView == <span class="literal">null</span>) &#123;</div><div class="line">            imageView = <span class="keyword">new</span> ImageView(MainActivity.<span class="keyword">this</span>);</div><div class="line">        &#125;</div><div class="line">        final FrameLayout.LayoutParams <span class="keyword">params</span> = <span class="keyword">new</span> FrameLayout.LayoutParams(dp2px(context, width), dp2px(context, height));</div><div class="line">        <span class="keyword">params</span>.leftMargin = dp2px(context, left);</div><div class="line">        <span class="keyword">params</span>.topMargin = dp2px(context, top);</div><div class="line">        <span class="keyword">new</span> Handler(Looper.getMainLooper()).post(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">            @Override</div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                rootView.addView(imageView, <span class="keyword">params</span>);</div><div class="line">                imageView.setBackgroundColor(Color.WHITE);</div><div class="line">                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.shepherd));</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 此后还需要在initWebView方法添加一行。把一个名为JavaFun的对象注入js：webView.addJavascriptInterface(new JavaFun(), "JavaFun");</span></div><div class="line"><span class="comment">// 然后在js的measureImagePlaceHolder方法后面添加一行调用Java的代码：JavaFun.replaceImgWithImageView(left, top, width, height);</span></div></pre></td></tr></table></figure>
+<p>关于Java和JS通信的方法，这里不做介绍，感兴趣的同学可以看看前面写过的博客。</p>
+<p>我们看下两种模式下的效果，左边是html的img标签渲染图片的效果，右边是ImageView渲染图片的效果，为了明显对比，我用了两张不同的图片，打开了开发者模式的布局边界：</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fkjcpehayoj30xc08kk08.jpg" alt="two mode"></p>
+<p>怎么样，是不是还可以用来其他的Native组件来替换html标签啊？哈哈，我要用我们的视频组件去替换喽。上面这个小例子的代码在<a href="https://github.com/unclechen/ReplaceElementInHtml" target="_blank" rel="external">这里</a>，仅供大家参考，更复杂的例子还需要具体情况具体分析了。</p>
+<h1 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h1><p>在界面开发的时候，不论是Android、iOS还是html，其实我们都是在处理布局，也就是说撇开各个平台上它们自己定义的一套标准，大部分时候，我们编写界面就是在处理界面上每一个元素在这个界面的位置和这个元素自身的大小。ReactNative类的框架干得事情就是帮开发者把html里面那套布局转换到Android和iOS各自的平台，站在现在看，可能会有人会争论html什么时候统一天下。但也许将来会出现一个新标准，在各个平台上都可以执行，而不是现阶段的哪个平台去取代哪个平台这么简单。前段时间看到过一个叫<a href="https://flutter.io/" target="_blank" rel="external">Flutter</a>的东西，好像就有点这个方向的意思，感兴趣的同学可以看看去。</p>
+
+      
+    </div>
+
+    <div>    
+    
+    
+    <ul class="post-copyright">
+    <li class="post-copyright-author">
+    <strong>本文作者：</strong>unclechen
+    </li>
+    <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="/2017/10/15/Android混合开发之WebView中使用原生组件替换标签元素/" title="Android混合开发之——WebView中使用原生组件替换标签元素">2017/10/15/Android混合开发之WebView中使用原生组件替换标签元素/</a>
+    </li>
+    <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本文采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a>进行许可。转载请注明出处！
+    </li>
+    </ul>
+    
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/WebView/" rel="tag"># WebView</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/16/使用ReactJS开发Chrome插件/" rel="next" title="使用React.js开发Chrome插件">
+                <i class="fa fa-chevron-left"></i> 使用React.js开发Chrome插件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="unclechen" />
+          <p class="site-author-name" itemprop="name">unclechen</p>
+           
+              <p class="site-description motion-element" itemprop="description">吃下恶魔果实，我就能变成超级赛亚人！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/unclechen" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1718455407" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、背景"><span class="nav-text">一、背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、思路"><span class="nav-text">二、思路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、具体实现方案"><span class="nav-text">三、具体实现方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-准备html"><span class="nav-text">1.准备html</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-准备好获取img标签left、top、width、height属性的js方法，提供给Native调用"><span class="nav-text">2.准备好获取img标签left、top、width、height属性的js方法，提供给Native调用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-在Native中把WebView放到一个FrameLayout里面，自定义WebViewClient监听onPageFinished事件。"><span class="nav-text">3.在Native中把WebView放到一个FrameLayout里面，自定义WebViewClient监听onPageFinished事件。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Native中提供一个给js调用的方法，用于传递需要替换的img标签的方法"><span class="nav-text">4.Native中提供一个给js调用的方法，用于传递需要替换的img标签的方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、总结"><span class="nav-text">四、总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">unclechen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "071293399566469d925f180d68952611",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

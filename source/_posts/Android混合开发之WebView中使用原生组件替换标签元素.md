@@ -1,13 +1,12 @@
 ---
 layout: post
-title:Android混合开发之——WebView中使用原生组件替换标签元素
+title: Android混合开发之——WebView中使用原生组件替换标签元素
 date: '2017-10-15'
 tags:
   - Android
   - WebView
 categories: 
   - 技术
-
 ---
 
 # 一、背景
