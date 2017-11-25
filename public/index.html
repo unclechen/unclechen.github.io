@@ -2,10 +2,8 @@
 
 
 
-  
 
-
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next pisces" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -112,7 +110,7 @@
     scheme: 'Pisces',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
-    motion: true,
+    motion: false,
     duoshuo: {
       userId: 'undefined',
       author: '博主'
@@ -558,7 +556,7 @@
       
         
           <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>相信看到这篇文章的人应该都用过Chrome插件吧，最近刚好有个这方面的需求，我就把Chrome插件的相关知识学习了一下，发现其实Chrome插件的开发和大前端Web开发的底子是一样的，无非就是runtime只限于Chrome浏览器，并且可以调用Chrome提供的一些<code>chrome.*</code> API来实现一些基于Chrome浏览器的小功能。这里非要类比的话，我理解<code>chrome.*</code> API就像我们开发Hybird应用一样，需要有一个bridge层来提供底层原生的能力给js。我是做Android开发出生的，这只是我的个人理解，可能对大Web技术的理解还是不够。</p>
-<p>其实Chrome上的插件，从UI上主要分成两类：一类是浏览器按钮（<a href="https://crxdoc-zh.appspot.com/extensions/browserAction" target="_blank" rel="external">BrowserAction</a>），另一类是页面按钮（<a href="https://crxdoc-zh.appspot.com/extensions/pageAction" target="_blank" rel="external">PageAction</a>）。两者的开发大同小异，我这里今天主要介绍的主角不是Chrome插件开发，而是<strong>如何使用React.js来开发Chrome插件</strong>，本文先简单介绍下Chrome插件的开发和ReactJS，最后介绍如何采用Facebook官方推荐的creat-react-app脚手架来开发Chrome插件。</p>
+<p>其实Chrome上的插件，从UI上主要分成两类：一类是浏览器按钮（<a href="https://crxdoc-zh.appspot.com/extensions/browserAction" target="_blank" rel="noopener">BrowserAction</a>），另一类是页面按钮（<a href="https://crxdoc-zh.appspot.com/extensions/pageAction" target="_blank" rel="noopener">PageAction</a>）。两者的开发大同小异，我这里今天主要介绍的主角不是Chrome插件开发，而是<strong>如何使用React.js来开发Chrome插件</strong>，本文先简单介绍下Chrome插件的开发和ReactJS，最后介绍如何采用Facebook官方推荐的creat-react-app脚手架来开发Chrome插件。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/06/16/使用ReactJS开发Chrome插件/#more" rel="contents">
@@ -845,7 +843,7 @@
 
       
         
-          <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>记录一次周末在家速成的爬虫实现之旅。受人之托，想要把这个页面<a href="http://baike.baidu.com/starrank?fr=lemmaxianhua" target="_blank" rel="external">http://baike.baidu.com/starrank?fr=lemmaxianhua</a>的明星排行榜爬取下来。用chrome打开一看，其实就1000条记录。然后“右键菜单”-&gt;“检查”，看下网页的结构，也不是特别复杂。所以我目测只要用<strong>python</strong>自带的<code>urllib2</code>库打开网页，获取html代码，再交给<code>BeautifulSoup</code>库解析html代码，应该就可以快速搞定。</p>
+          <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>记录一次周末在家速成的爬虫实现之旅。受人之托，想要把这个页面<a href="http://baike.baidu.com/starrank?fr=lemmaxianhua" target="_blank" rel="noopener">http://baike.baidu.com/starrank?fr=lemmaxianhua</a>的明星排行榜爬取下来。用chrome打开一看，其实就1000条记录。然后“右键菜单”-&gt;“检查”，看下网页的结构，也不是特别复杂。所以我目测只要用<strong>python</strong>自带的<code>urllib2</code>库打开网页，获取html代码，再交给<code>BeautifulSoup</code>库解析html代码，应该就可以快速搞定。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016/12/11/python利用beautifulsoup+selenium自动翻页抓取网页内容/#more" rel="contents">

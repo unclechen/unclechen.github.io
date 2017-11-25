@@ -374,15 +374,15 @@ changyan:
 #   user_id: 0
 #   admin_nickname: Author
 
-# gitalk comment
+# gitalk
 gitalk:
   enable: true
   githubID: unclechen
-  repo: https://github.com/unclechen/blog_comment_repo
+  repo: blog_comment_repo
   ClientID: a11668e1882acefd3ff5
   ClientSecret: 0c20ad42eb72f7677c7fb68fd25710a4edbd5ece
   adminUser: unclechen
-  distractionFreeMode: false
+  distractionFreeMode: true
 
 
 # Facebook SDK Support.
@@ -498,7 +498,7 @@ exturl: false
 #! ---------------------------------------------------------------
 
 # Motion 加载动画
-use_motion: true
+use_motion: false
 
 # Fancybox
 fancybox: true
