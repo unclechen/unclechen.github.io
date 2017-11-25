@@ -92,7 +92,7 @@
 
 
 
-<meta name="description" content="上次介绍了Android Studio的安装、配置和基本使用。这次讲一下Android Studio用到的打包工具Gradle。Gradle是一种构建项目的框架，兼容Maven、Ant，为Java项目提供了很多插件去实现打包功能。废话不多说，下面直接进入实战。当我写这篇博客的时候，Android Studio的版本已经更新到了1.4，比上一篇博客的版本又更新了。">
+<meta name="description" content="上次介绍了Android Studio的安装、配置和基本使用。这次讲一下Android Studio用到的打包工具Gradle。Gradle是一种构建项目的框架，兼容Maven、Ant，为Java项目提供了很多插件去实现打包功能。废话不多说，下面直接进入实战。当我写这篇博客的时候，Android Studio的版本已经">
 <meta name="keywords" content="Android,打包,gradle">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android Studio Gradle实践之多渠道自动化打包+版本号管理">
@@ -121,7 +121,7 @@
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: 'undefined',
       author: '博主'
     },
     algolia: {
@@ -601,6 +601,7 @@
     
       <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
     
+    <div id="gitalk-container"></div>
   </div>
 
 
@@ -768,6 +769,7 @@
 </div>
 
 
+<!--
 <div class="powered-by">
   由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
 </div>
@@ -778,6 +780,7 @@
     NexT.Pisces
   </a>
 </div>
+-->
 
 
         
@@ -909,6 +912,22 @@
 
 
 
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+    var gitalk = new Gitalk({
+      clientID: 'a11668e1882acefd3ff5',
+      clientSecret: '0c20ad42eb72f7677c7fb68fd25710a4edbd5ece',
+      repo: 'https://github.com/unclechen/blog_comment_repo',
+      owner: 'unclechen',
+      admin: ['unclechen'],
+      id: location.pathname,
+      distractionFreeMode: 'false'
+    })
+    gitalk.render('gitalk-container')           
+       </script>
 
 
   

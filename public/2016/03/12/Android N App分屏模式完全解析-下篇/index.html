@@ -92,7 +92,7 @@
 
 
 
-<meta name="description" content="在上篇中，介绍了什么是App分屏模式，以及如何设置我们的App来进入分屏模式。这次我们看一下，作为开发者，我们应该如何让自己的App进入分屏模式，当App进入分屏模式时，我们注意哪些问题。 简单地说，我认为除了保证分屏时App功能、性能正常以外，我们需要重点学习 如何在分屏模式下打开新的Activity 以及 如何实现跨App/Activity的拖拽功能。">
+<meta name="description" content="在上篇中，介绍了什么是App分屏模式，以及如何设置我们的App来进入分屏模式。这次我们看一下，作为开发者，我们应该如何让自己的App进入分屏模式，当App进入分屏模式时，我们注意哪些问题。 简单地说，我认为除了保证分屏时App功能、性能正常以外，我们需要重点学习 如何在分屏模式下打开新的Activity 以及 如何实现">
 <meta name="keywords" content="Android7.x,Android,适配">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android N App分屏模式完全解析（下）">
@@ -121,7 +121,7 @@
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: 'undefined',
       author: '博主'
     },
     algolia: {
@@ -625,6 +625,7 @@
     
       <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
     
+    <div id="gitalk-container"></div>
   </div>
 
 
@@ -792,6 +793,7 @@
 </div>
 
 
+<!--
 <div class="powered-by">
   由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
 </div>
@@ -802,6 +804,7 @@
     NexT.Pisces
   </a>
 </div>
+-->
 
 
         
@@ -933,6 +936,22 @@
 
 
 
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+    var gitalk = new Gitalk({
+      clientID: 'a11668e1882acefd3ff5',
+      clientSecret: '0c20ad42eb72f7677c7fb68fd25710a4edbd5ece',
+      repo: 'https://github.com/unclechen/blog_comment_repo',
+      owner: 'unclechen',
+      admin: ['unclechen'],
+      id: location.pathname,
+      distractionFreeMode: 'false'
+    })
+    gitalk.render('gitalk-container')           
+       </script>
 
 
   

@@ -92,7 +92,7 @@
 
 
 
-<meta name="description" content="上手了Android N Preview，第一个不能错过的新特性就是App分屏的支持。Android7.0原生系统就可以支持两个App横屏并排或者竖屏上下摆放了。第二个新特性就是在Android TV上，原生系统也可以支持App实现画中画，用户可以一边看视频一边操作其他的应用。 其实早先在国内部分厂商以及鹅厂的微信App就已经支持在大尺寸手机上进行分屏浏览。也有一些视频播放器，如MoboPlaye">
+<meta name="description" content="上手了Android N Preview，第一个不能错过的新特性就是App分屏的支持。Android7.0原生系统就可以支持两个App横屏并排或者竖屏上下摆放了。第二个新特性就是在Android TV上，原生系统也可以支持App实现画中画，用户可以一边看视频一边操作其他的应用。 其实早先在国内部分厂商以及鹅厂的微信Ap">
 <meta name="keywords" content="Android7.x,Android,适配">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android N App分屏模式完全解析（上）">
@@ -118,7 +118,7 @@
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: 'undefined',
       author: '博主'
     },
     algolia: {
@@ -611,6 +611,7 @@
     
       <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
     
+    <div id="gitalk-container"></div>
   </div>
 
 
@@ -778,6 +779,7 @@
 </div>
 
 
+<!--
 <div class="powered-by">
   由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
 </div>
@@ -788,6 +790,7 @@
     NexT.Pisces
   </a>
 </div>
+-->
 
 
         
@@ -919,6 +922,22 @@
 
 
 
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+    var gitalk = new Gitalk({
+      clientID: 'a11668e1882acefd3ff5',
+      clientSecret: '0c20ad42eb72f7677c7fb68fd25710a4edbd5ece',
+      repo: 'https://github.com/unclechen/blog_comment_repo',
+      owner: 'unclechen',
+      admin: ['unclechen'],
+      id: location.pathname,
+      distractionFreeMode: 'false'
+    })
+    gitalk.render('gitalk-container')           
+       </script>
 
 
   

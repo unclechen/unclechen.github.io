@@ -92,7 +92,7 @@
 
 
 
-<meta name="description" content="一、背景相信看到这篇文章的人应该都用过Chrome插件吧，最近刚好有个这方面的需求，我就把Chrome插件的相关知识学习了一下，发现其实Chrome插件的开发和大前端Web开发的底子是一样的，无非就是runtime只限于Chrome浏览器，并且可以调用Chrome提供的一些chrome.* API来实现一些基于Chrome浏览器的小功能。这里非要类比的话，我理解chrome.* API就像我们开发">
+<meta name="description" content="一、背景相信看到这篇文章的人应该都用过Chrome插件吧，最近刚好有个这方面的需求，我就把Chrome插件的相关知识学习了一下，发现其实Chrome插件的开发和大前端Web开发的底子是一样的，无非就是runtime只限于Chrome浏览器，并且可以调用Chrome提供的一些chrome.* API来实现一些基于Chro">
 <meta name="keywords" content="React,Chrome插件,Web">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用React.js开发Chrome插件">
@@ -116,7 +116,7 @@
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: 'undefined',
       author: '博主'
     },
     algolia: {
@@ -572,6 +572,7 @@
     
       <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
     
+    <div id="gitalk-container"></div>
   </div>
 
 
@@ -739,6 +740,7 @@
 </div>
 
 
+<!--
 <div class="powered-by">
   由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
 </div>
@@ -749,6 +751,7 @@
     NexT.Pisces
   </a>
 </div>
+-->
 
 
         
@@ -880,6 +883,22 @@
 
 
 
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+    var gitalk = new Gitalk({
+      clientID: 'a11668e1882acefd3ff5',
+      clientSecret: '0c20ad42eb72f7677c7fb68fd25710a4edbd5ece',
+      repo: 'https://github.com/unclechen/blog_comment_repo',
+      owner: 'unclechen',
+      admin: ['unclechen'],
+      id: location.pathname,
+      distractionFreeMode: 'false'
+    })
+    gitalk.render('gitalk-container')           
+       </script>
 
 
   

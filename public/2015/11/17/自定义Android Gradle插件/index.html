@@ -92,7 +92,7 @@
 
 
 
-<meta name="description" content="上一篇博客介绍到Gradle实践之自定义打包jar+Log开关自动关闭。可以自己定义打包的jar已经不错了，但是还是不够爽，怎么办？自己写一个Plugin！会用轮子，也要会造轮子是不是，我们经常使用到的com.android.library和com.android.application都是Google给我们提供的Gradle插件，里面已经实现了大部分App开发者所需要的功能。Github上面也已">
+<meta name="description" content="上一篇博客介绍到Gradle实践之自定义打包jar+Log开关自动关闭。可以自己定义打包的jar已经不错了，但是还是不够爽，怎么办？自己写一个Plugin！会用轮子，也要会造轮子是不是，我们经常使用到的com.android.library和com.android.application都是Google给我们提供的Gr">
 <meta name="keywords" content="Android,打包,gradle">
 <meta property="og:type" content="article">
 <meta property="og:title" content="自定义Android Gradle插件">
@@ -124,7 +124,7 @@
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: 'undefined',
       author: '博主'
     },
     algolia: {
@@ -613,6 +613,7 @@
     
       <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
     
+    <div id="gitalk-container"></div>
   </div>
 
 
@@ -780,6 +781,7 @@
 </div>
 
 
+<!--
 <div class="powered-by">
   由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
 </div>
@@ -790,6 +792,7 @@
     NexT.Pisces
   </a>
 </div>
+-->
 
 
         
@@ -921,6 +924,22 @@
 
 
 
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+    var gitalk = new Gitalk({
+      clientID: 'a11668e1882acefd3ff5',
+      clientSecret: '0c20ad42eb72f7677c7fb68fd25710a4edbd5ece',
+      repo: 'https://github.com/unclechen/blog_comment_repo',
+      owner: 'unclechen',
+      admin: ['unclechen'],
+      id: location.pathname,
+      distractionFreeMode: 'false'
+    })
+    gitalk.render('gitalk-container')           
+       </script>
 
 
   

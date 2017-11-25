@@ -92,7 +92,7 @@
 
 
 
-<meta name="description" content="一、背景在Android混合开发中，常常会把界面渲染全部交给html，而后台数据相关的处理交给Native。然而在有些时候html无法完全满足我们在界面处理上的要求，比如像要有一个自己定制的软键盘或者在html里面播放视频，或者想要把html里面的图片替换成Native中统一封装的ImageView等等。这不，跟WebView打交道这么多年，我最近还真遇到这样的需要了，希望把html中展示的一个大">
+<meta name="description" content="一、背景在Android混合开发中，常常会把界面渲染全部交给html，而后台数据相关的处理交给Native。然而在有些时候html无法完全满足我们在界面处理上的要求，比如像要有一个自己定制的软键盘或者在html里面播放视频，或者想要把html里面的图片替换成Native中统一封装的ImageView等等。这不，跟Web">
 <meta name="keywords" content="Android,WebView">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android混合开发之——WebView中使用原生组件替换标签元素">
@@ -119,7 +119,7 @@
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: 'undefined',
       author: '博主'
     },
     algolia: {
@@ -550,6 +550,7 @@
     
       <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
     
+    <div id="gitalk-container"></div>
   </div>
 
 
@@ -717,6 +718,7 @@
 </div>
 
 
+<!--
 <div class="powered-by">
   由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
 </div>
@@ -727,6 +729,7 @@
     NexT.Pisces
   </a>
 </div>
+-->
 
 
         
@@ -858,6 +861,22 @@
 
 
 
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+    var gitalk = new Gitalk({
+      clientID: 'a11668e1882acefd3ff5',
+      clientSecret: '0c20ad42eb72f7677c7fb68fd25710a4edbd5ece',
+      repo: 'https://github.com/unclechen/blog_comment_repo',
+      owner: 'unclechen',
+      admin: ['unclechen'],
+      id: location.pathname,
+      distractionFreeMode: 'false'
+    })
+    gitalk.render('gitalk-container')           
+       </script>
 
 
   
