@@ -92,7 +92,7 @@
 
 
 
-<meta name="description" content="一、背景随着谷歌推出的MaterialDesign不断被各种实践，最近我也碰到这么一个需求，就是要求实现一个图片的转场效果。在第一个界面上，图片被点击后，会渐渐地滑动到第二个界面中去。 其实仔细观察一下Google相册也有用到这种效果，大概的效果图是这样的：  按照我的理解，这种效果要是直接把View拿出来复用就可以。但是经过学习（国内外各种大神的博客）和实践发现，里面有不少可以思考的地方。">
+<meta name="description" content="一、背景随着谷歌推出的MaterialDesign不断被各种实践，最近我也碰到这么一个需求，就是要求实现一个图片的转场效果。在第一个界面上，图片被点击后，会渐渐地滑动到第二个界面中去。 其实仔细观察一下Google相册也有用到这种效果，大概的效果图是这样的：  按照我的理解，这种效果要是直接把View拿出来复用就可以。">
 <meta name="keywords" content="Android,动画">
 <meta property="og:type" content="article">
 <meta property="og:title" content="利用属性动画在Android4.x上实现Android L的元素转场动画效果（shared elements transition）">
@@ -118,7 +118,7 @@
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: 'undefined',
       author: '博主'
     },
     algolia: {
@@ -658,6 +658,7 @@
     
       <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
     
+    <div id="gitalk-container"></div>
   </div>
 
 
@@ -825,6 +826,7 @@
 </div>
 
 
+<!--
 <div class="powered-by">
   由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
 </div>
@@ -835,6 +837,7 @@
     NexT.Pisces
   </a>
 </div>
+-->
 
 
         
@@ -966,6 +969,22 @@
 
 
 
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+    var gitalk = new Gitalk({
+      clientID: 'a11668e1882acefd3ff5',
+      clientSecret: '0c20ad42eb72f7677c7fb68fd25710a4edbd5ece',
+      repo: 'https://github.com/unclechen/blog_comment_repo',
+      owner: 'unclechen',
+      admin: ['unclechen'],
+      id: location.pathname,
+      distractionFreeMode: 'false'
+    })
+    gitalk.render('gitalk-container')           
+       </script>
 
 
   

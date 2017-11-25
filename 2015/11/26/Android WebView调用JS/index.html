@@ -92,7 +92,7 @@
 
 
 
-<meta name="description" content="个人认为Android的WebView一直是一个比较难搞的东西，因为它需要和很多的Web开发打交道，如果以前没接触过Web相关的开发就会觉得有些不爽，但是现在越来越多的应用都是Hybrid的模式，HTML5定稿一年多，感觉也挺火，这也是以做内容为主的App非常需要的技术，所以还得多学学。 从Android4.4开始，WebView底层的实现从原来的Webkit变成了chromium，从而实现了对H">
+<meta name="description" content="个人认为Android的WebView一直是一个比较难搞的东西，因为它需要和很多的Web开发打交道，如果以前没接触过Web相关的开发就会觉得有些不爽，但是现在越来越多的应用都是Hybrid的模式，HTML5定稿一年多，感觉也挺火，这也是以做内容为主的App非常需要的技术，所以还得多学学。 从Android4.4开始，W">
 <meta name="keywords" content="Android,WebView">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android WebView调用JS">
@@ -118,7 +118,7 @@
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: 'undefined',
       author: '博主'
     },
     algolia: {
@@ -578,6 +578,7 @@
     
       <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
     
+    <div id="gitalk-container"></div>
   </div>
 
 
@@ -745,6 +746,7 @@
 </div>
 
 
+<!--
 <div class="powered-by">
   由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
 </div>
@@ -755,6 +757,7 @@
     NexT.Pisces
   </a>
 </div>
+-->
 
 
         
@@ -886,6 +889,22 @@
 
 
 
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+    var gitalk = new Gitalk({
+      clientID: 'a11668e1882acefd3ff5',
+      clientSecret: '0c20ad42eb72f7677c7fb68fd25710a4edbd5ece',
+      repo: 'https://github.com/unclechen/blog_comment_repo',
+      owner: 'unclechen',
+      admin: ['unclechen'],
+      id: location.pathname,
+      distractionFreeMode: 'false'
+    })
+    gitalk.render('gitalk-container')           
+       </script>
 
 
   

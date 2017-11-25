@@ -92,7 +92,7 @@
 
 
 
-<meta name="description" content="一、背景在Android开发中有时候会遇到需要检查一个View是不是对用户可见，比如在消息流中，根据ImageView是否在屏幕中出现了再决定加载它，或者当视频滑入屏幕被用户可见时才播放、滑出屏幕就自动停止播放等等。乍一看好像都是在ListView、RecyclerView、ScrollView这些组件里面比较需要做这件事，今天总结一下我在实际开发中是怎么处理View可见性检查的。">
+<meta name="description" content="一、背景在Android开发中有时候会遇到需要检查一个View是不是对用户可见，比如在消息流中，根据ImageView是否在屏幕中出现了再决定加载它，或者当视频滑入屏幕被用户可见时才播放、滑出屏幕就自动停止播放等等。乍一看好像都是在ListView、RecyclerView、ScrollView这些组件里面比较需要做这">
 <meta name="keywords" content="Android,View">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android View的可见性检查方法（上）">
@@ -119,7 +119,7 @@
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: 'undefined',
       author: '博主'
     },
     algolia: {
@@ -584,6 +584,7 @@
     
       <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
     
+    <div id="gitalk-container"></div>
   </div>
 
 
@@ -751,6 +752,7 @@
 </div>
 
 
+<!--
 <div class="powered-by">
   由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
 </div>
@@ -761,6 +763,7 @@
     NexT.Pisces
   </a>
 </div>
+-->
 
 
         
@@ -892,6 +895,22 @@
 
 
 
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+    var gitalk = new Gitalk({
+      clientID: 'a11668e1882acefd3ff5',
+      clientSecret: '0c20ad42eb72f7677c7fb68fd25710a4edbd5ece',
+      repo: 'https://github.com/unclechen/blog_comment_repo',
+      owner: 'unclechen',
+      admin: ['unclechen'],
+      id: location.pathname,
+      distractionFreeMode: 'false'
+    })
+    gitalk.render('gitalk-container')           
+       </script>
 
 
   
