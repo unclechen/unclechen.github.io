@@ -2,10 +2,8 @@
 
 
 
-  
 
-
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next pisces" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -101,7 +99,7 @@
 <meta property="og:description" content="上手了Android N Preview，第一个不能错过的新特性就是App分屏的支持。Android7.0原生系统就可以支持两个App横屏并排或者竖屏上下摆放了。第二个新特性就是在Android TV上，原生系统也可以支持App实现画中画，用户可以一边看视频一边操作其他的应用。 其实早先在国内部分厂商以及鹅厂的微信App就已经支持在大尺寸手机上进行分屏浏览。也有一些视频播放器，如MoboPlaye">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://unclechen.github.io/content/images/cover/muti-screen.png">
-<meta property="og:updated_time" content="2017-06-17T06:29:27.000Z">
+<meta property="og:updated_time" content="2017-11-25T10:20:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android N App分屏模式完全解析（上）">
 <meta name="twitter:description" content="上手了Android N Preview，第一个不能错过的新特性就是App分屏的支持。Android7.0原生系统就可以支持两个App横屏并排或者竖屏上下摆放了。第二个新特性就是在Android TV上，原生系统也可以支持App实现画中画，用户可以一边看视频一边操作其他的应用。 其实早先在国内部分厂商以及鹅厂的微信App就已经支持在大尺寸手机上进行分屏浏览。也有一些视频播放器，如MoboPlaye">
@@ -116,7 +114,7 @@
     scheme: 'Pisces',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
-    motion: true,
+    motion: false,
     duoshuo: {
       userId: 'undefined',
       author: '博主'
@@ -426,7 +424,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="/content/images/cover/muti-screen.png" rel="gallery_cj40x22i60000wucqlhkf40rb"
+                 href="/content/images/cover/muti-screen.png" rel="gallery_cjaf6qdku002qdysxya0one8f"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="/content/images/cover/muti-screen.png" itemprop="contentUrl"/>
               </a>
@@ -441,7 +439,7 @@
       
         <p>上手了Android N Preview，第一个不能错过的新特性就是App分屏的支持。Android7.0原生系统就可以支持两个App横屏并排或者竖屏上下摆放了。第二个新特性就是在Android TV上，原生系统也可以支持App实现画中画，用户可以一边看视频一边操作其他的应用。</p>
 <p>其实早先在国内部分厂商以及鹅厂的微信App就已经支持在大尺寸手机上进行分屏浏览。也有一些视频播放器，如MoboPlayer就已经实现了按下Home键回到首页时以迷你播放器的形式进行播放。这种体验非常棒，我猜测一般是通过WindowManager来添加悬浮播放器界面的。但是这次是原生系统增加了对这种特性的支持，相信我们会有更多理由为用户的体验做出更多新的尝试。</p>
-<p>下面介绍一下我参考<a href="http://developer.android.com/intl/zh-cn/preview/features/multi-window.html#running" target="_blank" rel="external">multi-window-support</a>对App分屏模式进行的实践。</p>
+<p>下面介绍一下我参考<a href="http://developer.android.com/intl/zh-cn/preview/features/multi-window.html#running" target="_blank" rel="noopener">multi-window-support</a>对App分屏模式进行的实践。</p>
 <p>首先引用一下官方的说法：</p>
 <blockquote>
 <p>如果你使用Android N Preview SDK来构建你的App，你可以给添加App一些分屏浏览的配置。例如设置Activity的最小尺寸，也可以禁止自己的App进入分屏模式，保证你的App只能在全屏模式下展示。</p>
@@ -464,7 +462,7 @@
 <li>打开一个App，然后长按右下角的方块，此时已经打开的这个App将进入分屏模式。然后在屏幕上的任务管理器中选择另外一个App，单击它使得这个App也进入分屏模式。</li>
 <li>最新发现：下拉通知栏，长按右上角的设置图标，将开启隐藏设置功能<code>“系统界面调谐器”</code>，进入设置界面，最下方有系统界面调谐器选项，进入后选择<code>“Other”-&gt;“启用分屏上滑手势”</code>，就可以从任务管理器上上滑进入分屏模式了。具体操作是<code>当一个App已经处于全屏模式时，用手指从右下角的小方块向上滑动</code>。这个设置将来在正式版可能有变化，所以还是不要太依赖。</li>
 </ol>
-<p>用户还可以在这两个App之间拖动数据，例如将一个App的Activity上的文件拖动到另外一个App的Activity中去。具体的实现下面会介绍，谷歌官方也有<a href="http://developer.android.com/intl/zh-cn/guide/topics/ui/drag-drop.html" target="_blank" rel="external">拖拽相关的教程</a>。</p>
+<p>用户还可以在这两个App之间拖动数据，例如将一个App的Activity上的文件拖动到另外一个App的Activity中去。具体的实现下面会介绍，谷歌官方也有<a href="http://developer.android.com/intl/zh-cn/guide/topics/ui/drag-drop.html" target="_blank" rel="noopener">拖拽相关的教程</a>。</p>
 <h1 id="分屏模式的生命周期"><a href="#分屏模式的生命周期" class="headerlink" title="分屏模式的生命周期"></a>分屏模式的生命周期</h1><p>首先要说明的一点是，分屏模式没有改变Activity的生命周期。</p>
 <p>官方说法是：</p>
 <blockquote>
@@ -472,18 +470,18 @@
 </blockquote>
 <p>怎么理解这段话，看下图：</p>
 <p><img src="/content/images/two-apps.png" alt="two-app"></p>
-<p>其实就是说处于分屏模式下的两个Ap各自处于生命周期的什么状态。上图中我打开了两个App，上面的是一个Gmail App，下面这个是一个Demo App（<a href="https://github.com/jaredrummler/APKParser" target="_blank" rel="external">ApkParser</a>先感谢作者的分享~）是个开源应用，能够解析Apk，后面会用到它）。现在这两个App都是进入了<code>分屏模式</code>，我们还可以拖动中间这条白线来调整两个App占用的大小。</p>
+<p>其实就是说处于分屏模式下的两个Ap各自处于生命周期的什么状态。上图中我打开了两个App，上面的是一个Gmail App，下面这个是一个Demo App（<a href="https://github.com/jaredrummler/APKParser" target="_blank" rel="noopener">ApkParser</a>先感谢作者的分享~）是个开源应用，能够解析Apk，后面会用到它）。现在这两个App都是进入了<code>分屏模式</code>，我们还可以拖动中间这条白线来调整两个App占用的大小。</p>
 <p>我点击了Gmail，浏览了一封邮件，那么此时<strong>Gmail</strong>就被系统视为<code>topmost</code>状态，它是处于<code>resumed</code>状态的，而下面的<strong>ApkPaserDemo</strong>虽然对用户可见，但是<strong>它仍然是处于<code>paused</code>状态</strong>的。接着我点击了系统的<code>back</code>按钮返回，响应的是上面的<strong>Gmail</strong>（因为它被视为topmost）。然后我又点击了下面的<strong>ApkParserDemo</strong>，这时它从<code>paused</code>状态变成了<code>resumed</code>状态。而上面的<strong>Gmail</strong>进入了 <code>paused</code>状态。</p>
 <p>注意，这两个App对于用户都是<strong>始终可见</strong>的，当它们处于<code>paused</code>状态时，也将比那些后台的处于<strong>不可见的</strong>App得到更高系统优先级。这个优先级怎么体现呢？两个App进入分屏模式后，一定有一个处于resume/topmost状态，假如我一直按<code>back</code>返回，当这个topmost状态App的task返回栈已经为空时，那么系统将把另外一个可见的App恢复为全屏模式，这就是我的理解。</p>
 <p>那么这种<code>可见的pause</code>的状态将带来什么影响呢？引用下官方说法是：</p>
 <blockquote>
 <p>在分屏模式中，一个App可以在对用户可见的状态下进入<code>paused</code>状态，所以你的App在处理业务时，应该知道自己什么时候应该真正的<code>暂停</code>。例如一个视频播放器，如果进入了分屏模式，就不应该在<code>onPaused()</code>回调中暂停视频播放，而应该在<code>onStop()</code>回调中才暂停视频，然后在<code>onStart</code>回调中恢复视频播放。关于如果知道自己进入了分屏模式，在<code>Android N</code>的Activity类中，增加了一个<code>void onMultiWindowChanged(boolean inMultiWindow)</code>回调，所以我们可以在这个回调知道App是不是进入了分屏模式。</p>
 </blockquote>
-<p>当App进入分屏模式后，将会触发Activity的<code>onConfigurationChanged()</code>，这与以前我们在处理App从<code>横竖屏切换</code>时的方法一样，不同于的是这里是宽/高有所改变，而<code>横竖屏切换</code>是宽高互换。至于如何处理，可以参考官方文档<a href="http://developer.android.com/intl/zh-cn/guide/topics/resources/runtime-changes.html" target="_blank" rel="external">处理运行时变更</a>。我们最好处理好这种运行时状态的改变，否则我们的Activity将被重新创建，即以新的宽高尺寸重新<code>onCreate()</code>一遍。</p>
+<p>当App进入分屏模式后，将会触发Activity的<code>onConfigurationChanged()</code>，这与以前我们在处理App从<code>横竖屏切换</code>时的方法一样，不同于的是这里是宽/高有所改变，而<code>横竖屏切换</code>是宽高互换。至于如何处理，可以参考官方文档<a href="http://developer.android.com/intl/zh-cn/guide/topics/resources/runtime-changes.html" target="_blank" rel="noopener">处理运行时变更</a>。我们最好处理好这种运行时状态的改变，否则我们的Activity将被重新创建，即以新的宽高尺寸重新<code>onCreate()</code>一遍。</p>
 <p>注意，如果用户重新调整窗口的大小，系统在<strong>必要的时候</strong>也可能触发<code>onConfigurationChanged()</code>。当App的窗口被用户拖动，其尺寸改变后界面的还没有绘制完成时，系统将用App主题中的<code>windowBackground</code>属性指定的背景来暂时填充这些区域。</p>
 <h1 id="如何设置App的分屏模式"><a href="#如何设置App的分屏模式" class="headerlink" title="如何设置App的分屏模式"></a>如何设置App的分屏模式</h1><p>说了一堆分屏的操作方法、生命周期，那么作为开发者，怎样才能让App进入<code>分屏</code>模式呢？有下面这几个属性。</p>
 <h2 id="android-resizeableActivity"><a href="#android-resizeableActivity" class="headerlink" title="android:resizeableActivity"></a>android:resizeableActivity</h2><p>如果你适配到了<code>Android N</code>，即<code>build.gradle</code>是这样的：</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="section">android</span> &#123;</div><div class="line">    <span class="attribute">compileSdkVersion</span> <span class="string">'android-N'</span></div><div class="line">    buildToolsVersion <span class="string">'24.0.0 rc1'</span></div><div class="line"></div><div class="line">    defaultConfig &#123;</div><div class="line">        <span class="attribute">applicationId</span> <span class="string">"com.example.noughtchen.andndemo"</span></div><div class="line">        minSdkVersion <span class="string">'N'</span></div><div class="line">        targetSdkVersion <span class="string">'N'</span></div><div class="line">        versionCode <span class="number">1</span></div><div class="line">        versionName <span class="string">"1.0"</span></div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">android</span> &#123;</span><br><span class="line">    <span class="attribute">compileSdkVersion</span> <span class="string">'android-N'</span></span><br><span class="line">    buildToolsVersion <span class="string">'24.0.0 rc1'</span></span><br><span class="line"></span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        <span class="attribute">applicationId</span> <span class="string">"com.example.noughtchen.andndemo"</span></span><br><span class="line">        minSdkVersion <span class="string">'N'</span></span><br><span class="line">        targetSdkVersion <span class="string">'N'</span></span><br><span class="line">        versionCode <span class="number">1</span></span><br><span class="line">        versionName <span class="string">"1.0"</span></span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>那么直接在<code>AndroidManifest.xml</code>中的<code>&lt;application&gt;</code>或者<code>&lt;activity&gt;</code>标签下设置新的属性<code>android:resizeableActivity=&quot;true&quot;</code>。</p>
 <p>设置了这个属性后，你的App/Activity就可以进入<code>分屏模式</code>或者<code>自由模式</code>了。</p>
 <p>如果这个属性被设为<code>false</code>，那么你的App将无法进入分屏模式，如果你在打开这个App时，长按右下角的小方块，App将仍然处于全屏模式，系统会弹出Toast提示你无法进入分屏模式。这个属性在你<strong>target</strong>到<code>Android N</code>后，<code>android:resizeableActivity</code>的默认值就是<code>true</code>。</p>
@@ -493,7 +491,7 @@
 <p>所以其实我们在视频里看到那么多系统自带的App都是可以分屏浏览，原因就在于此。<strong>这些App其实也并没有全部适配到Android N</strong>。我不是骗你，不信你用<code>ApkParser</code>打开前面分屏过Gmail App的xml文件看看！</p>
 <p><img src="/content/images/gmail-xml.png" alt="Gmail-xml"></p>
 <h2 id="android-supportsPictureInPicture"><a href="#android-supportsPictureInPicture" class="headerlink" title="android:supportsPictureInPicture"></a>android:supportsPictureInPicture</h2><p>这里不多说，Activity标签下，添加<code>android:supportsPictureInPicture=&quot;true&quot;</code>即可。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">activity</span></span></div><div class="line">            <span class="attr">android:name</span>=<span class="string">".MainActivity"</span></div><div class="line">            <span class="attr">android:label</span>=<span class="string">"@string/app_name"</span></div><div class="line">            <span class="attr">android:resizeableActivity</span>=<span class="string">"true"</span></div><div class="line">            <span class="attr">android:supportsPictureInPicture</span>=<span class="string">"true"</span></div><div class="line">            <span class="attr">android:theme</span>=<span class="string">"@style/AppTheme.NoActionBar"</span>&gt;</div><div class="line">            ...</div><div class="line">        <span class="tag">&lt;/<span class="name">activity</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">activity</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:name</span>=<span class="string">".MainActivity"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:label</span>=<span class="string">"@string/app_name"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:resizeableActivity</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:supportsPictureInPicture</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:theme</span>=<span class="string">"@style/AppTheme.NoActionBar"</span>&gt;</span></span><br><span class="line">            ...</span><br><span class="line">        <span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <h2 id="Layout-attributes"><a href="#Layout-attributes" class="headerlink" title="Layout attributes"></a>Layout attributes</h2><p>在Android N中，我们可以向<code>manifest</code>文件中添加<code>layout</code>节点，并设置一些新增加的属性，通过这些属性来设置分屏模式的一些行为，如最小尺寸等。</p>
 <ul>
 <li>android:defaultWidth</li>
@@ -502,7 +500,7 @@
 <li>android:minimalSize</li>
 </ul>
 <p>我们可以给一个<code>Activity</code>增加一个<code>layout</code>子节点：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">activity</span></span></div><div class="line">            <span class="attr">android:name</span>=<span class="string">".MainActivity"</span></div><div class="line">            <span class="attr">android:label</span>=<span class="string">"@string/app_name"</span></div><div class="line">            <span class="attr">android:resizeableActivity</span>=<span class="string">"true"</span></div><div class="line">            <span class="attr">android:supportsPictureInPicture</span>=<span class="string">"true"</span></div><div class="line">            <span class="attr">android:theme</span>=<span class="string">"@style/AppTheme.NoActionBar"</span>&gt;</div><div class="line">            ...</div><div class="line">            <span class="tag">&lt;<span class="name">layout</span> <span class="attr">android:defaultHeight</span>=<span class="string">"500dp"</span></span></div><div class="line">                    <span class="attr">android:defaultWidth</span>=<span class="string">"600dp"</span></div><div class="line">                    <span class="attr">android:gravity</span>=<span class="string">"top|end"</span></div><div class="line">                    <span class="attr">android:minimalSize</span>=<span class="string">"450dp"</span> /&gt;</div><div class="line">            ...</div><div class="line">        <span class="tag">&lt;/<span class="name">activity</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">activity</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:name</span>=<span class="string">".MainActivity"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:label</span>=<span class="string">"@string/app_name"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:resizeableActivity</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:supportsPictureInPicture</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:theme</span>=<span class="string">"@style/AppTheme.NoActionBar"</span>&gt;</span></span><br><span class="line">            ...</span><br><span class="line">            <span class="tag">&lt;<span class="name">layout</span> <span class="attr">android:defaultHeight</span>=<span class="string">"500dp"</span></span></span><br><span class="line"><span class="tag">                    <span class="attr">android:defaultWidth</span>=<span class="string">"600dp"</span></span></span><br><span class="line"><span class="tag">                    <span class="attr">android:gravity</span>=<span class="string">"top|end"</span></span></span><br><span class="line"><span class="tag">                    <span class="attr">android:minimalSize</span>=<span class="string">"450dp"</span> /&gt;</span></span><br><span class="line">            ...</span><br><span class="line">        <span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>下一篇<a href="http://unclechen.github.io/2016/03/12/Android-N-App分屏模式完全解析-下篇/">Android N App分屏模式完全解析（下）</a>将介绍一下分屏模式下运行的App将有哪些行为回调以及应该怎么处理等。</p>
 <hr>
 <p>ps：封面图片来自于谷歌官网</p>
@@ -926,18 +924,18 @@
 
   <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
   <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-   <script type="text/javascript">
-    var gitalk = new Gitalk({
-      clientID: 'a11668e1882acefd3ff5',
-      clientSecret: '0c20ad42eb72f7677c7fb68fd25710a4edbd5ece',
-      repo: 'https://github.com/unclechen/blog_comment_repo',
-      owner: 'unclechen',
-      admin: ['unclechen'],
-      id: location.pathname,
-      distractionFreeMode: 'false'
-    })
-    gitalk.render('gitalk-container')           
-       </script>
+  <script type="text/javascript">
+      var gitalk = new Gitalk({
+        clientID: 'a11668e1882acefd3ff5',
+        clientSecret: '0c20ad42eb72f7677c7fb68fd25710a4edbd5ece',
+        repo: 'blog_comment_repo',
+        owner: 'unclechen',
+        admin: ['unclechen'],
+        id: location.pathname,
+        distractionFreeMode: 'true'
+      })
+      gitalk.render('gitalk-container')
+  </script>
 
 
   
