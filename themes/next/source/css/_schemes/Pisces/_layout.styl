@@ -1,7 +1,7 @@
 .header {
   position: relative;
   margin: 0 auto;
-  width: $main-desktop;
+  width: calc(100% - 360px);
 
   +tablet() {
     width: auto;
@@ -18,7 +18,7 @@
   padding: 0;
   width: 240px;
   background: white;
-  box-shadow: $box-shadow-inner;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12);
   border-radius: $border-radius-inner;
 
   +desktop-large() {
@@ -47,7 +47,7 @@
 }
 
 .container .main-inner {
-  width: $main-desktop;
+  width: calc(100% - 360px);
 
   +tablet() {
     width: auto;
@@ -60,11 +60,9 @@
 .content-wrap {
   float: right;
   box-sizing: border-box;
-  padding: $content-desktop-padding;
+  padding: 0;
   width: $content-desktop;
-  background: white;
   min-height: 700px;
-  box-shadow: $box-shadow-inner;
   border-radius: $border-radius-inner;
 
   +tablet() {
@@ -86,7 +84,7 @@
   margin-top: 300px;
   width: $sidebar-desktop;
   background: $body-bg-color;
-  box-shadow: none;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12);
 
   +tablet() {
     display: none;

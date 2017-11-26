@@ -9,6 +9,7 @@
   {% endif %}
 
   <article class="{{ post_class }}" itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
     <link itemprop="mainEntityOfPage" href="{{ config.url }}{{ url_for(post.path) }}">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -401,6 +402,7 @@
         <div class="post-eof"></div>
       {% endif %}
     </footer>
+  </div>
   </article>
 
 {% endmacro %}

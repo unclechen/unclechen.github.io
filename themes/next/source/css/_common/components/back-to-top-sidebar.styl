@@ -1,5 +1,5 @@
 .back-to-top {
-  display: none;
+  display: block;
   margin: 15px -10px -20px;
   background: $body-bg-color;
   font-size: $b2t-font-size;
@@ -7,6 +7,9 @@
   cursor: pointer;
   text-align: center;
   -webkit-transform: translateZ(0);
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+  transition-delay: 0s;
   transition-property: bottom;
   the-transition();
     &:hover { opacity: 0.8; }

@@ -99,7 +99,7 @@
 <meta property="og:description" content="一、背景记录一次周末在家速成的爬虫实现之旅。受人之托，想要把这个页面http://baike.baidu.com/starrank?fr=lemmaxianhua的明星排行榜爬取下来。用chrome打开一看，其实就1000条记录。然后“右键菜单”-&amp;gt;“检查”，看下网页的结构，也不是特别复杂。所以我目测只要用python自带的urllib2库打开网页，获取html代码，再交给Beautiful">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/006y8lVagw1famy31l1mvj30go0gjwh6.jpg">
-<meta property="og:updated_time" content="2017-11-25T10:20:41.000Z">
+<meta property="og:updated_time" content="2017-11-25T16:01:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python利用beautifulsoup+selenium自动翻页抓取网页内容">
 <meta name="twitter:description" content="一、背景记录一次周末在家速成的爬虫实现之旅。受人之托，想要把这个页面http://baike.baidu.com/starrank?fr=lemmaxianhua的明星排行榜爬取下来。用chrome打开一看，其实就1000条记录。然后“右键菜单”-&amp;gt;“检查”，看下网页的结构，也不是特别复杂。所以我目测只要用python自带的urllib2库打开网页，获取html代码，再交给Beautiful">
@@ -112,7 +112,7 @@
   var CONFIG = {
     root: '/',
     scheme: 'Pisces',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true},
     fancybox: true,
     motion: false,
     duoshuo: {
@@ -325,6 +325,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
     <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/12/11/python利用beautifulsoup+selenium自动翻页抓取网页内容/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -548,6 +549,7 @@
       
       
     </footer>
+  </div>
   </article>
 
 
@@ -713,6 +715,13 @@
       
 
       
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
 
     </div>
   </aside>
@@ -755,11 +764,6 @@
       </div>
     </footer>
 
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
     
 
   </div>

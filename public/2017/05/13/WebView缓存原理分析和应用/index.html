@@ -101,7 +101,7 @@
 <meta property="og:image" content="https://ww4.sinaimg.cn/large/006tNc79ly1ffjvarjyijj30jg05k0yr.jpg">
 <meta property="og:image" content="https://ww2.sinaimg.cn/large/006tNc79ly1ffjvztg93zj30jg0a247x.jpg">
 <meta property="og:image" content="https://ww3.sinaimg.cn/large/006tNc79ly1ffjw46ygoqj30jg06443v.jpg">
-<meta property="og:updated_time" content="2017-11-25T10:20:41.000Z">
+<meta property="og:updated_time" content="2017-11-25T16:01:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WebView缓存原理分析和应用">
 <meta name="twitter:description" content="一、背景现在的App开发，或多或少都会用到Hybrid模式，到了WebView这边，经常会加载一些js文件（例如和WebView用来Native通信的bridge.js），而这些js文件不会经常发生变化，所以我们希望js在WebView里面加载一次之后，如果js没有发生变化，下次就不用再发起网络请求去加载，从而减少流量和资源的占用。那么有什么方式可以达到这个目的呢？先得从WebView的缓存原理入">
@@ -114,7 +114,7 @@
   var CONFIG = {
     root: '/',
     scheme: 'Pisces',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true},
     fancybox: true,
     motion: false,
     duoshuo: {
@@ -327,6 +327,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
     <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2017/05/13/WebView缓存原理分析和应用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -592,6 +593,7 @@
       
       
     </footer>
+  </div>
   </article>
 
 
@@ -757,6 +759,13 @@
       
 
       
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
 
     </div>
   </aside>
@@ -799,11 +808,6 @@
       </div>
     </footer>
 
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
     
 
   </div>

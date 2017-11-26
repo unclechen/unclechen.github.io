@@ -102,7 +102,7 @@
 <meta property="og:image" content="http://unclechen.github.io/content/images/drag-drop.png">
 <meta property="og:image" content="http://unclechen.github.io/content/images/start-drag.png">
 <meta property="og:image" content="http://unclechen.github.io/content/images/drop-event.png">
-<meta property="og:updated_time" content="2017-11-25T10:20:41.000Z">
+<meta property="og:updated_time" content="2017-11-25T16:01:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android N App分屏模式完全解析（下）">
 <meta name="twitter:description" content="在上篇中，介绍了什么是App分屏模式，以及如何设置我们的App来进入分屏模式。这次我们看一下，作为开发者，我们应该如何让自己的App进入分屏模式，当App进入分屏模式时，我们注意哪些问题。 简单地说，我认为除了保证分屏时App功能、性能正常以外，我们需要重点学习 如何在分屏模式下打开新的Activity 以及 如何实现跨App/Activity的拖拽功能。">
@@ -115,7 +115,7 @@
   var CONFIG = {
     root: '/',
     scheme: 'Pisces',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true},
     fancybox: true,
     motion: false,
     duoshuo: {
@@ -328,6 +328,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
     <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/03/12/Android N App分屏模式完全解析-下篇/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -604,6 +605,7 @@
       
       
     </footer>
+  </div>
   </article>
 
 
@@ -769,6 +771,13 @@
       
 
       
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
 
     </div>
   </aside>
@@ -811,11 +820,6 @@
       </div>
     </footer>
 
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
     
 
   </div>

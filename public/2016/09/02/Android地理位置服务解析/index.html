@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/65e4f1e6gw1f7f47p124kj20rs0m376v.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/65e4f1e6gw1f7f4svf6zsj20mj064ab0.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/65e4f1e6gw1f7f94tb263j20eu022t8r.jpg">
-<meta property="og:updated_time" content="2017-11-25T10:20:41.000Z">
+<meta property="og:updated_time" content="2017-11-25T16:01:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android地理位置服务解析">
 <meta name="twitter:description" content="手机设备有哪几种定位方式GPS基于卫星发射的信号，可以推算出手机到每颗卫星的距离，根据卫星的位置，推测出手机的位置。 这是一张简单的GPS定位原理图，需要一点数学知识，先不讨论这个细节，需要的同学看这里。  现在卫星信号全球都覆盖了，手机一般都有GPS芯片，因此可以实现定位。GPS方式准确度是最高的，走卫星通道，不需要联网就可以要使用。但是它的缺点也非常明显：  1.比较耗电;  2.绝大部分用户">
@@ -118,7 +118,7 @@
   var CONFIG = {
     root: '/',
     scheme: 'Pisces',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true},
     fancybox: true,
     motion: false,
     duoshuo: {
@@ -331,6 +331,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
     <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/09/02/Android地理位置服务解析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -637,6 +638,7 @@
       
       
     </footer>
+  </div>
   </article>
 
 
@@ -802,6 +804,13 @@
       
 
       
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
 
     </div>
   </aside>
@@ -844,11 +853,6 @@
       </div>
     </footer>
 
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
     
 
   </div>
