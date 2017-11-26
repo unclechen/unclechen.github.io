@@ -100,7 +100,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://unclechen.github.io/content/images/app-cancel-perm.png">
 <meta property="og:image" content="http://unclechen.github.io/content/images/app-permission.png">
-<meta property="og:updated_time" content="2017-11-25T10:20:41.000Z">
+<meta property="og:updated_time" content="2017-11-25T16:01:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android6.0运行时权限简介">
 <meta name="twitter:description" content="Android6.0发布距离现在快1年了，虽然它市场占有率仍在龟速上升中，但还是有一些App开发者已经在打包应用时将targetSDKVersion设置到了23，也就是说把App适配到了Android6.0。以前调用Android系统中需要声明权限的API时，只需要在AndroidManifest.xml文件中一次性列出来。但是如果在build.gradle文件里将targetSDKVersion">
@@ -113,7 +113,7 @@
   var CONFIG = {
     root: '/',
     scheme: 'Pisces',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true},
     fancybox: true,
     motion: false,
     duoshuo: {
@@ -326,6 +326,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
     <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/03/05/Android6.0运行时权限简介/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -557,6 +558,7 @@
       
       
     </footer>
+  </div>
   </article>
 
 
@@ -722,6 +724,13 @@
       
 
       
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
 
     </div>
   </aside>
@@ -764,11 +773,6 @@
       </div>
     </footer>
 
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
     
 
   </div>

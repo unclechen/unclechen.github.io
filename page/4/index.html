@@ -108,7 +108,7 @@
   var CONFIG = {
     root: '/',
     scheme: 'Pisces',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true},
     fancybox: true,
     motion: false,
     duoshuo: {
@@ -323,6 +323,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
     <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2015/10/22/Android Studio Gradle实践之多渠道自动化打包+版本号管理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -453,6 +454,7 @@
         <div class="post-eof"></div>
       
     </footer>
+  </div>
   </article>
 
 
@@ -466,6 +468,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
     <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2015/06/01/Android Studio安装配置笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -557,7 +560,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="/content/images/cover/helloAndroidStudioAndGradle.png" rel="gallery_cjaf6qdlw002zdysxjfyrlqnb"
+                 href="/content/images/cover/helloAndroidStudioAndGradle.png" rel="gallery_cjag9ybkd0008bisx66lkgcj4"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="/content/images/cover/helloAndroidStudioAndGradle.png" itemprop="contentUrl"/>
               </a>
@@ -612,6 +615,7 @@
         <div class="post-eof"></div>
       
     </footer>
+  </div>
   </article>
 
 
@@ -625,6 +629,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
     <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2015/04/30/使用前端开发利器Fiddler调试手机程序/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -716,7 +721,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="/content/images/cover/helloFiddler.jpg" rel="gallery_cjaf6qdpd0045dysxgltrxqcp"
+                 href="/content/images/cover/helloFiddler.jpg" rel="gallery_cjag9ybm1001ebisxbnivqmmq"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="/content/images/cover/helloFiddler.jpg" itemprop="contentUrl"/>
               </a>
@@ -771,6 +776,7 @@
         <div class="post-eof"></div>
       
     </footer>
+  </div>
   </article>
 
 
@@ -907,6 +913,13 @@
       
 
       
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
 
     </div>
   </aside>
@@ -949,11 +962,6 @@
       </div>
     </footer>
 
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
     
 
   </div>
