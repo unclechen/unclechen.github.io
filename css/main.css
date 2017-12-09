@@ -871,7 +871,6 @@ pre .javascript .function {
 .pagination .next,
 .pagination .page-number {
   border-bottom: 0;
-  border-top: 1px solid #eee;
   transition-property: border-color;
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
@@ -1804,7 +1803,7 @@ img:hover {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ff7a81;
+  background: #0d7442;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3145,7 +3144,7 @@ body {
   min-height: auto;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12), 0 -1px 0.5px 0 rgba(0,0,0,0.09);
   border-radius: initial;
-  background: rgba(255,255,255,0.85) none repeat scroll !important;
+  background: rgba(255,255,255,0.9) none repeat scroll !important;
 }
 #posts > article + article .post-block {
   margin-top: 10px;
@@ -3156,19 +3155,21 @@ body {
   padding-top: 0px;
 }
 .header-inner {
-  background: rgba(255,255,255,0.85) none repeat scroll !important;
+  background: rgba(255,255,255,0.9) none repeat scroll !important;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12);
 }
 .sidebar-inner {
-  background: rgba(255,255,255,0.85) none repeat scroll !important;
+  background: rgba(255,255,255,0.9) none repeat scroll !important;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12);
 }
 .pagination {
   margin: 10px 0 0;
   text-align: center;
-  background: rgba(255,255,255,0.85) none repeat scroll !important;
-  border-top: 1px solid #eee;
+  background: rgba(255,255,255,0.9) none repeat scroll !important;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12), 0 -1px 0.5px 0 rgba(0,0,0,0.09);
   border-radius: initial;
   padding: 10px 0 10px;
+}
+.page-number {
+  border-top: none;
 }
