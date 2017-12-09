@@ -11,7 +11,6 @@
 {% block content %}
 
   <div id="posts" class="posts-expand">
-  <div class="post-block">
     {{ post_template.render(page) }}
 
     <div class="post-spread">
@@ -25,7 +24,6 @@
         {% include '_partials/share/duoshuo_share.swig' %}
       {% endif %}
     </div>
-  </div>
   </div>
 
 {% endblock %}
