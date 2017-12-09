@@ -16,6 +16,7 @@
 {% block content %}
 
   <div id="posts" class="posts-expand">
+  <div class="post-block">
   {% include '_partials/page-header.swig' %}
     {# tagcloud page support #}
     {% if page.type === "tags" %}
@@ -39,6 +40,7 @@
     {% else %}
       {{ page.content }}
     {% endif %}
+  </div>
   </div>
 
 {% endblock %}
