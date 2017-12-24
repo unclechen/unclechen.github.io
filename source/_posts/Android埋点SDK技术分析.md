@@ -47,7 +47,7 @@ Mixpanel现在的Android SDK没有提供这个功能，但是神策Android SDK�
 
 > 在软件业，AOP为Aspect Oriented Programming的缩写，意为：面向切面编程，通过预编译方式和运行期动态代理实现程序功能的统一维护的一种技术。AOP是OOP的延续，是软件开发中的一个热点，也是Spring框架中的一个重要内容，是函数式编程的一种衍生范型。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。（from baidu baike）
 
-简而言之，AOP是可以通过预编译方式和运行期动态代理实现在不修改源代码的情况下给程序动态统一添加功能的一种技术。
+> 简而言之，AOP是可以通过预编译方式和运行期动态代理实现在不修改源代码的情况下给程序动态统一添加功能的一种技术。
 
 **Sensors Analytics AndroidSDK全埋点的实现就是通过在代码编译阶段，找到源代码中需要上报事件的位置，插入SDK的事件上报代码。它用到的框架是[AspectJ](https://www.eclipse.org/aspectj/)。**
 
@@ -108,7 +108,7 @@ SensorsDataAPI.sharedInstance().track(AopConstants.APP_CLICK_EVENT_NAME, propert
 
 ### 3.2.2 使用ajc编译器向源代码中插入Aspect代码
 
-采用AspectJ框架编写的代码，想要注入原来的工程的代码，需要在`app/build.gradle`中引用ajc编译器，脚本如下：
+采用AspectJ框架编写的代码，想要注入原来的工程的代码，需要在`/app/build.gradle`中引用ajc编译器，脚本如下：
 
 ```groovy
 ...
@@ -190,7 +190,7 @@ apply plugin: 'com.sensorsdata.analytics.android'
 
 ### 3.2.3 完成代码插入，查看插入之后的效果
 
-完成上面两步，就可以实现在`android.view.View.OnClickListener.onClick(android.view.View)`方法中插入我们的数据上报代码了。我们在demo代码中加一个Button，并给它set一个OnClickListener，编译一下代码，查看`build/intermediates/classes/debug/`里面class文件，经过ajc编译之后，原始代码中插入了Aspect的代码，并调用了`ViewOnClickListenerAspectj`里面的`onViewClickAOP`方法。
+完成上面两步，就可以实现在`android.view.View.OnClickListener.onClick(android.view.View)`方法中插入我们的数据上报代码了。我们在demo代码中加一个Button，并给它set一个OnClickListener，编译一下代码，查看`/build/intermediates/classes/debug/`里面class文件，经过ajc编译之后，原始代码中插入了Aspect的代码，并调用了`ViewOnClickListenerAspectj`里面的`onViewClickAOP`方法。
 
 ```java
 public class MainActivity extends Activity {
@@ -232,7 +232,7 @@ AspectJ的基本用法就是这样，SensorsAndroidSDK借助AspectJ插入了Aspe
 - Aspect Oriented Programming in Android：[https://fernandocejas.com/2014/08/03/aspect-oriented-programming-in-android/](https://fernandocejas.com/2014/08/03/aspect-oriented-programming-in-android/)
 - AOP之AspectJ全面剖析in Android：[http://www.jianshu.com/p/f90e04bcb326](http://www.jianshu.com/p/f90e04bcb326)
 - 沪江开源了一个叫做AspectJX的插件，扩展了AspectJ，除了对src代码进行AOP，还支持kotlin、工程中引用的jar和aar进行AOP：[https://github.com/HujiangTechnology/gradle_plugin_android_aspectjx](https://github.com/HujiangTechnology/gradle_plugin_android_aspectjx)
--  关于 Spring AOP (AspectJ) 你该知晓的一切：[http://blog.csdn.net/javazejian/article/details/56267036](http://blog.csdn.net/javazejian/article/details/56267036)
+- 关于 Spring AOP (AspectJ) 你该知晓的一切：[http://blog.csdn.net/javazejian/article/details/56267036](http://blog.csdn.net/javazejian/article/details/56267036)
 
 
 # 四、可视化埋点

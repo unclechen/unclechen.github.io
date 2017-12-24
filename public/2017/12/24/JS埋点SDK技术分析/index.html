@@ -1,0 +1,990 @@
+<!doctype html>
+
+
+
+
+<html class="theme-next pisces" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="SDK,埋点,无埋点,可视化埋点,JS,监测,数据," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="UncleChen的博客" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="一、背景上一篇博客分析了Android上的埋点SDK技术原理，这次我们看一下这几种方案在Web页面上的实践。在JS里面同样有代码埋点、全埋点、可视化埋点三种方案，如果对这几种方案的概念不了解可以看下上一篇博客。由于mixpanel-js和Sensors Analytics JavaScript SDK都开源了自己的SD">
+<meta name="keywords" content="SDK,埋点,无埋点,可视化埋点,JS,监测,数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS埋点SDK技术分析">
+<meta property="og:url" content="http://unclechen.github.io/2017/12/24/JS埋点SDK技术分析/index.html">
+<meta property="og:site_name" content="UncleChen的博客">
+<meta property="og:description" content="一、背景上一篇博客分析了Android上的埋点SDK技术原理，这次我们看一下这几种方案在Web页面上的实践。在JS里面同样有代码埋点、全埋点、可视化埋点三种方案，如果对这几种方案的概念不了解可以看下上一篇博客。由于mixpanel-js和Sensors Analytics JavaScript SDK都开源了自己的SDK，就以它们为例进行分析。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-24T12:16:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JS埋点SDK技术分析">
+<meta name="twitter:description" content="一、背景上一篇博客分析了Android上的埋点SDK技术原理，这次我们看一下这几种方案在Web页面上的实践。在JS里面同样有代码埋点、全埋点、可视化埋点三种方案，如果对这几种方案的概念不了解可以看下上一篇博客。由于mixpanel-js和Sensors Analytics JavaScript SDK都开源了自己的SDK，就以它们为例进行分析。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '9GQE7B6UON',
+      apiKey: '1b6c2bb25ddee8d24221b1df179afbde',
+      indexName: 'UncleChenBlog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键词进行搜索","hits_empty":"找不到关于“${query}”的文章","hits_stats":"找到 ${hits} 篇文章，耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://unclechen.github.io/2017/12/24/JS埋点SDK技术分析/"/>
+
+
+
+
+
+  <title>JS埋点SDK技术分析 | UncleChen的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c7b0eb7b32d0e8723fcb885bc9778590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UncleChen的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2017/12/24/JS埋点SDK技术分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JS埋点SDK技术分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-24T08:00:00+08:00">
+                2017-12-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2017/12/24/JS埋点SDK技术分析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h2><p><a href="http://unclechen.github.io/2017/12/18/Android%E5%9F%8B%E7%82%B9SDK%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/">上一篇博客</a>分析了Android上的埋点SDK技术原理，这次我们看一下这几种方案在Web页面上的实践。在JS里面同样有代码埋点、全埋点、可视化埋点三种方案，如果对这几种方案的概念不了解可以看下上一篇博客。由于<a href="https://github.com/mixpanel/mixpanel-js" target="_blank" rel="noopener">mixpanel-js</a>和<a href="https://github.com/sensorsdata/sa-sdk-javascript" target="_blank" rel="noopener">Sensors Analytics JavaScript SDK</a>都开源了自己的SDK，就以它们为例进行分析。</p>
+<a id="more"></a>
+<h2 id="二、代码埋点"><a href="#二、代码埋点" class="headerlink" title="二、代码埋点"></a>二、代码埋点</h2><p>以Mixpanel为例（源码位于<code>/src/mixpanel-core.js</code>），看一下里面的实现。</p>
+<h3 id="2-1-基本用法"><a href="#2-1-基本用法" class="headerlink" title="2.1 基本用法"></a>2.1 基本用法</h3><p>埋点之前，需要加载SDK，并调用SDK的初始化接口。以Mixpanel为例，官方介入文档提供的加载、初始化SDK代码如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- start Mixpanel --&gt;</span><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="javascript">(<span class="function"><span class="keyword">function</span>(<span class="params">e,a</span>)</span>&#123;<span class="keyword">if</span>(!a.__SV)&#123;<span class="keyword">var</span> b=<span class="built_in">window</span>;<span class="keyword">try</span>&#123;<span class="keyword">var</span> c,l,i,j=b.location,g=j.hash;c=<span class="function"><span class="keyword">function</span>(<span class="params">a,b</span>)</span>&#123;<span class="keyword">return</span>(l=a.match(<span class="built_in">RegExp</span>(b+<span class="string">"=([^&amp;]*)"</span>)))?l[<span class="number">1</span>]:<span class="literal">null</span>&#125;;g&amp;&amp;c(g,<span class="string">"state"</span>)&amp;&amp;(i=<span class="built_in">JSON</span>.parse(<span class="built_in">decodeURIComponent</span>(c(g,<span class="string">"state"</span>))),<span class="string">"mpeditor"</span>===i.action&amp;&amp;(b.sessionStorage.setItem(<span class="string">"_mpcehash"</span>,g),history.replaceState(i.desiredHash||<span class="string">""</span>,e.title,j.pathname+j.search)))&#125;<span class="keyword">catch</span>(m)&#123;&#125;<span class="keyword">var</span> k,h;<span class="built_in">window</span>.mixpanel=a;a._i=[];a.init=<span class="function"><span class="keyword">function</span>(<span class="params">b,c,f</span>)</span>&#123;<span class="function"><span class="keyword">function</span> <span class="title">e</span>(<span class="params">b,a</span>)</span>&#123;<span class="keyword">var</span> c=a.split(<span class="string">"."</span>);<span class="number">2</span>==c.length&amp;&amp;(b=b[c[<span class="number">0</span>]],a=c[<span class="number">1</span>]);b[a]=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;b.push([a].concat(<span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>,</span></span><br><span class="line"><span class="actionscript"><span class="number">0</span>)))&#125;&#125;<span class="keyword">var</span> d=a;<span class="string">"undefined"</span>!==<span class="keyword">typeof</span> f?d=a[f]=[]:f=<span class="string">"mixpanel"</span>;d.people=d.people||[];d.toString=<span class="function"><span class="keyword">function</span><span class="params">(b)</span></span>&#123;<span class="keyword">var</span> a=<span class="string">"mixpanel"</span>;<span class="string">"mixpanel"</span>!==f&amp;&amp;(a+=<span class="string">"."</span>+f);b||(a+=<span class="string">" (stub)"</span>);<span class="keyword">return</span> a&#125;;d.people.toString=<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> d.toString(<span class="number">1</span>)+<span class="string">".people (stub)"</span>&#125;;k=<span class="string">"disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user"</span>.split(<span class="string">" "</span>);</span></span><br><span class="line"><span class="javascript"><span class="keyword">for</span>(h=<span class="number">0</span>;h&lt;k.length;h++)e(d,k[h]);a._i.push([b,c,f])&#125;;a.__SV=<span class="number">1.2</span>;b=e.createElement(<span class="string">"script"</span>);b.type=<span class="string">"text/javascript"</span>;b.async=!<span class="number">0</span>;b.src=<span class="string">"undefined"</span>!==<span class="keyword">typeof</span> MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:<span class="string">"file:"</span>===e.location.protocol&amp;&amp;<span class="string">"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js"</span>.match(<span class="regexp">/^\/\//</span>)?<span class="string">"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js"</span>:<span class="string">"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js"</span>;c=e.getElementsByTagName(<span class="string">"script"</span>)[<span class="number">0</span>];c.parentNode.insertBefore(b,c)&#125;&#125;)(<span class="built_in">document</span>,<span class="built_in">window</span>.mixpanel||[]);</span></span><br><span class="line"><span class="actionscript">mixpanel.init(<span class="string">"YOUR TOKEN"</span>);</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span><span class="comment">&lt;!-- end Mixpanel --&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这是一段立即执行的js代码，作用通常是去异步加载真正的JS SDK，然后调用SDK的初始化接口init方法，完成初始化的操作。</p>
+<p>初始化代码为<code>mixpanel.init(&#39;YOUR TOKEN&#39;, { your: &#39;config&#39; }, &#39;library_name&#39;);</code>，也可以简写为<code>mixpanel.init(&quot;YOUR TOKEN&quot;)</code>。</p>
+<p>看下这几个参数的含义：</p>
+<ul>
+<li>第一个参数是你在后台注册的app token</li>
+<li><p>第二个参数是SDK的配置，传入了一堆key-value，如果不传，SDK内部也有个默认配置。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">var</span> <span class="string">DEFAULT_CONFIG</span> <span class="string">=</span> <span class="string">&#123;</span></span><br><span class="line"><span class="attr">    'api_host':</span> <span class="string">HTTP_PROTOCOL</span> <span class="string">+</span> <span class="string">'api.mixpanel.com'</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'app_host':</span> <span class="string">HTTP_PROTOCOL</span> <span class="string">+</span> <span class="string">'mixpanel.com'</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'autotrack':</span> <span class="literal">true</span><span class="string">,</span> <span class="string">//</span> <span class="string">是否打开全埋点监测</span></span><br><span class="line"><span class="attr">    'cdn':</span> <span class="string">HTTP_PROTOCOL</span> <span class="string">+</span> <span class="string">'cdn.mxpnl.com'</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'cross_subdomain_cookie':</span> <span class="literal">true</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'persistence':</span> <span class="string">'cookie'</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'persistence_name':</span> <span class="string">''</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'cookie_name':</span> <span class="string">''</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'loaded':</span> <span class="string">function()</span> <span class="string">&#123;&#125;,</span></span><br><span class="line"><span class="attr">    'store_google':</span> <span class="literal">true</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'save_referrer':</span> <span class="literal">true</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'test':</span> <span class="literal">false</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'verbose':</span> <span class="literal">false</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'img':</span> <span class="literal">false</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'track_pageview':</span> <span class="literal">true</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'debug':</span> <span class="literal">false</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'track_links_timeout':</span> <span class="number">300</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'cookie_expiration':</span> <span class="number">365</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'upgrade':</span> <span class="literal">false</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'disable_persistence':</span> <span class="literal">false</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'disable_cookie':</span> <span class="literal">false</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'secure_cookie':</span> <span class="literal">false</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'ip':</span> <span class="literal">true</span><span class="string">,</span></span><br><span class="line"><span class="attr">    'property_blacklist':</span> <span class="string">[]</span></span><br><span class="line"><span class="string">&#125;;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第三个参数是SDK全局变量名（可以避免变量名污染）</p>
+</li>
+</ul>
+<blockquote>
+<p>Mixpanel接入文档：<a href="https://mixpanel.com/help/reference/javascript" target="_blank" rel="noopener">https://mixpanel.com/help/reference/javascript</a></p>
+</blockquote>
+<h3 id="2-2-上报的基本实现"><a href="#2-2-上报的基本实现" class="headerlink" title="2.2 上报的基本实现"></a>2.2 上报的基本实现</h3><p>代码埋点的方式通常都会被封装成类似<code>track(eventName, properties)</code>的接口，例如在Mixpanel中，可以用<code>mixpanel.track(&quot;Played song&quot;, {&quot;genre&quot;: &quot;hip-hop&quot;});</code>来上报事件。</p>
+<p>这里是整个SDK中核心的地方，使用频率也是最高的。代码位于<code>/src/mixpanel-core.js</code>里面，先撇开复杂的逻辑和条件控制，看一下track的基本实现：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  track方法实现</span></span><br><span class="line">MixpanelLib.prototype.track = <span class="function"><span class="keyword">function</span>(<span class="params">event_name, properties, callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 各种边界判断</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// 获取一些公共参数，和用户传入的properties一起encode</span></span><br><span class="line">    <span class="keyword">var</span> truncated_data = _.truncate(data, <span class="number">255</span>);</span><br><span class="line">    <span class="keyword">var</span> json_data = _.JSONEncode(truncated_data);</span><br><span class="line">    <span class="keyword">var</span> encoded_data = _.base64Encode(json_data);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'MIXPANEL REQUEST:'</span>);</span><br><span class="line">    <span class="built_in">console</span>.log(truncated_data);</span><br><span class="line">    <span class="comment">// 调用_send_request发送请求</span></span><br><span class="line">    <span class="keyword">this</span>._send_request(</span><br><span class="line">        <span class="keyword">this</span>.get_config(<span class="string">'api_host'</span>) + <span class="string">'/track/'</span>,</span><br><span class="line">        &#123; <span class="string">'data'</span>: encoded_data &#125;,</span><br><span class="line">        <span class="keyword">this</span>._prepare_callback(callback, truncated_data)</span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">return</span> truncated_data;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发送请求的实现，主要用的是XMLHttpRequest，如果浏览器不支持XMLHttpRequest，那么用动态添加img/script标签的方式</span></span><br><span class="line">MixpanelLib.prototype._send_request = <span class="function"><span class="keyword">function</span>(<span class="params">url, data, callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 一些特殊情况的处理</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">if</span> (<span class="string">'img'</span> <span class="keyword">in</span> data) &#123;</span><br><span class="line">        <span class="keyword">var</span> img = <span class="built_in">document</span>.createElement(<span class="string">'img'</span>);</span><br><span class="line">        img.src = url;</span><br><span class="line">        <span class="built_in">document</span>.body.appendChild(img);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (USE_XHR) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">var</span> req = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">            req.open(<span class="string">'GET'</span>, url, <span class="literal">true</span>);</span><br><span class="line">            <span class="comment">// send the mp_optout cookie</span></span><br><span class="line">            <span class="comment">// withCredentials cannot be modified until after calling .open on Android and Mobile Safari</span></span><br><span class="line">            req.withCredentials = <span class="literal">true</span>;</span><br><span class="line">            req.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (req.readyState === <span class="number">4</span>) &#123; <span class="comment">// XMLHttpRequest.DONE == 4, except in safari 4</span></span><br><span class="line">                    <span class="keyword">if</span> (req.status === <span class="number">200</span>) &#123;</span><br><span class="line">                        <span class="keyword">if</span> (callback) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (verbose_mode) &#123;</span><br><span class="line">                                callback(_.JSONDecode(req.responseText));</span><br><span class="line">                            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                                callback(<span class="built_in">Number</span>(req.responseText));</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="keyword">var</span> error = <span class="string">'Bad HTTP status: '</span> + req.status + <span class="string">' '</span> + req.statusText;</span><br><span class="line">                        <span class="built_in">console</span>.error(error);</span><br><span class="line">                        <span class="keyword">if</span> (callback) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (verbose_mode) &#123;</span><br><span class="line">                                callback(&#123;<span class="attr">status</span>: <span class="number">0</span>, <span class="attr">error</span>: error&#125;);</span><br><span class="line">                            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                                callback(<span class="number">0</span>);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            req.send(<span class="literal">null</span>); <span class="comment">// 发送异步请求</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">            <span class="built_in">console</span>.error(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> script = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</span><br><span class="line">        script.type = <span class="string">'text/javascript'</span>;</span><br><span class="line">        script.async = <span class="literal">true</span>;</span><br><span class="line">        script.defer = <span class="literal">true</span>;</span><br><span class="line">        script.src = url;</span><br><span class="line">        <span class="keyword">var</span> s = <span class="built_in">document</span>.getElementsByTagName(<span class="string">'script'</span>)[<span class="number">0</span>];</span><br><span class="line">        s.parentNode.insertBefore(script, s);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>上面就是事件上报代码的核心实现。但是由于Web自身的一些特性，比如在追踪页面跳转行为（链接的点击、表单的提交等）时，为了防止数据发送不及时导致的数据丢失，SDK中提供一些诸如<code>track_links</code>和<code>track_forms</code>特殊方法，这些方法内部用的其实是setTimeout。</p>
+<h2 id="三、全埋点"><a href="#三、全埋点" class="headerlink" title="三、全埋点"></a>三、全埋点</h2><p>Mixpanel和神策都提供了名为<strong>“AutoTrack”</strong>的方案，只需要在初始化SDK的时候，传入一个参数即可打开这个功能。JS SDK可以自动监测网页中所有的一类事件，这和AndroidSDK里面监听所有按钮的点击有些类似。</p>
+<h3 id="3-1-自动监测的元素、事件类型"><a href="#3-1-自动监测的元素、事件类型" class="headerlink" title="3.1 自动监测的元素、事件类型"></a>3.1 自动监测的元素、事件类型</h3><ul>
+<li><p><strong>神策JS：</strong>设置AutoTrack之后，SDK就会自动追踪页面上的按钮(<code>a</code>、<code>button</code>、<code>input</code>) 这种html标签类型的点击情况，一旦页面某一个按钮发生了点击行为，SDK就会去采集此按钮的一些信息，例如: 这个按钮的标签类型，这个按钮的文本内容，这个按钮的<code>name</code>，这个按钮的<code>id</code>、<code>class</code>名，还有一些按钮特有的属性如<code>href</code>等。</p>
+</li>
+<li><p><strong>MixpanelJS：</strong>设置AutoTrack之后，SDK会监测页面上的所有<code>form表单</code>、<code>input标签</code>、<code>select和textarea标签</code>产生的<code>submit</code>、<code>change</code>、<code>click</code>事件，并采集这些标签上的属性一起上报。</p>
+</li>
+</ul>
+<h3 id="3-2-全埋点监测的实现"><a href="#3-2-全埋点监测的实现" class="headerlink" title="3.2 全埋点监测的实现"></a>3.2 全埋点监测的实现</h3><p>以Mixpanel为例，在<code>/src/autotrack.js</code>代码中，把几个关键的方法扣出来看一下（不要问我为什么以Mixpanel为例，因为代码少一些。。。）。</p>
+<p>当SDK初始化的时候，会执行autotrack里面的<code>_addDomEventHandlers</code>方法，给整个document的<code>submit</code>、<code>change</code>、<code>click</code>事件设置监听器。当监听到这几类事件时，会执行<code>_trackEvent</code>方法。</p>
+<p>直接看代码，我给代码里面加了一点注释，来说明自动监测上报的过程。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SDK初始化时，通过register_event设置需要监听了submit、change、click这3类事件</span></span><br><span class="line"><span class="comment">// Mixpanel的js sdk代码里面自己封装了一个underscore模块，里面有一些工具方法</span></span><br><span class="line">_addDomEventHandlers: <span class="function"><span class="keyword">function</span>(<span class="params">instance</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> handler = _.bind(<span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">            e = e || <span class="built_in">window</span>.event;</span><br><span class="line">            <span class="keyword">this</span>._trackEvent(e, instance);</span><br><span class="line">        &#125;, <span class="keyword">this</span>);</span><br><span class="line">        _.register_event(<span class="built_in">document</span>, <span class="string">'submit'</span>, handler, <span class="literal">false</span>, <span class="literal">true</span>);</span><br><span class="line">        _.register_event(<span class="built_in">document</span>, <span class="string">'change'</span>, handler, <span class="literal">false</span>, <span class="literal">true</span>);</span><br><span class="line">        _.register_event(<span class="built_in">document</span>, <span class="string">'click'</span>, handler, <span class="literal">false</span>, <span class="literal">true</span>);</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line"><span class="comment">// register_event的实现，优先采用addEventListener的方式，如果浏览器不支持会尝试使用onXXX的方式</span></span><br><span class="line"><span class="keyword">var</span> register_event = <span class="function"><span class="keyword">function</span>(<span class="params">element, type, handler, oldSchool, useCapture</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!element) &#123;</span><br><span class="line">            <span class="built_in">console</span>.error(<span class="string">'No valid element provided to register_event'</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (element.addEventListener &amp;&amp; !oldSchool) &#123;</span><br><span class="line">            element.addEventListener(type, handler, !!useCapture);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">var</span> ontype = <span class="string">'on'</span> + type;</span><br><span class="line">            <span class="keyword">var</span> old_handler = element[ontype]; <span class="comment">// can be undefined</span></span><br><span class="line">            element[ontype] = makeHandler(element, handler, old_handler);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听到事件发生后，调用_trackEvent方法来上报</span></span><br><span class="line">_trackEvent: <span class="function"><span class="keyword">function</span>(<span class="params">e, instance</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 首先找到这个事件的target</span></span><br><span class="line">        <span class="keyword">var</span> target = <span class="keyword">this</span>._getEventTarget(e);</span><br><span class="line">        <span class="keyword">if</span> (target.nodeType === TEXT_NODE) &#123;</span><br><span class="line">            target = target.parentNode;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 然后判断是不是autotrack要监测的事件，如果不是的话，啥也不干直接返回。</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>._shouldTrackDomEvent(target, e)) &#123;</span><br><span class="line">            <span class="comment">// 如果满足监测条件，那么从当前标签开始，向上追溯到body标签，并记录这条路径上所有的元素到一个数组中</span></span><br><span class="line">            <span class="keyword">var</span> targetElementList = [target];</span><br><span class="line">            <span class="keyword">var</span> curEl = target;</span><br><span class="line">            <span class="keyword">while</span> (curEl.parentNode &amp;&amp; !<span class="keyword">this</span>._isTag(curEl, <span class="string">'body'</span>)) &#123;</span><br><span class="line">                targetElementList.push(curEl.parentNode);</span><br><span class="line">                curEl = curEl.parentNode;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 按照刚才记录的路径开始遍历（相当于自底向上）</span></span><br><span class="line">            <span class="keyword">var</span> elementsJson = [];</span><br><span class="line">            <span class="keyword">var</span> href, elementText, form, explicitNoTrack = <span class="literal">false</span>;</span><br><span class="line">            _.each(targetElementList, <span class="function"><span class="keyword">function</span>(<span class="params">el, idx</span>) </span>&#123;</span><br><span class="line">                <span class="comment">// if the element or a parent element is an anchor tag</span></span><br><span class="line">                <span class="comment">// include the href as a property</span></span><br><span class="line">                <span class="comment">// 读取到a标签或者form标签时，记录它们的属性。</span></span><br><span class="line">                <span class="keyword">if</span> (el.tagName.toLowerCase() === <span class="string">'a'</span>) &#123;</span><br><span class="line">                    href = el.getAttribute(<span class="string">'href'</span>);</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (el.tagName.toLowerCase() === <span class="string">'form'</span>) &#123;</span><br><span class="line">                    form = el;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// crawl up to max of 5 nodes to populate text content</span></span><br><span class="line">                <span class="comment">// 读取节点的文本内容，最多往上读个5层</span></span><br><span class="line">                <span class="keyword">if</span> (!elementText &amp;&amp; idx &lt; <span class="number">5</span> &amp;&amp; el.textContent) &#123;</span><br><span class="line">                    <span class="keyword">var</span> textContent = _.trim(el.textContent);</span><br><span class="line">                    <span class="keyword">if</span> (textContent) &#123;</span><br><span class="line">                        elementText = textContent.replace(<span class="regexp">/[\r\n]/g</span>, <span class="string">' '</span>).replace(<span class="regexp">/[ ]+/g</span>, <span class="string">' '</span>).substring(<span class="number">0</span>, <span class="number">255</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// allow users to programatically prevent tracking of elements by adding class 'mp-no-track'</span></span><br><span class="line">                <span class="comment">// 如果不希望某个节点被监测，开发者可以设置一个名为`mp-no-track`的css class</span></span><br><span class="line">                <span class="keyword">var</span> classes = <span class="keyword">this</span>._getClassName(el).split(<span class="string">' '</span>);</span><br><span class="line">                <span class="keyword">if</span> (_.includes(classes, <span class="string">'mp-no-track'</span>)) &#123;</span><br><span class="line">                    explicitNoTrack = <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 读取每个标签的属性，最后这条路径上所有的标签都会被记录下来保存在elementsJson数组中</span></span><br><span class="line">                elementsJson.push(<span class="keyword">this</span>._getPropertiesFromElement(el));</span><br><span class="line">            &#125;, <span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 如果是一个开发者设置了不需要监测的标签，那么直接返回，不上报了</span></span><br><span class="line">            <span class="keyword">if</span> (explicitNoTrack) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 处理采集到的属性，这里面有几个getXXXProperties(element/elements)方法（_getPropertiesFromElement、_getDefaultProperties、_getCustomProperties、_getFormFieldProperties），就是在读取各种属性</span></span><br><span class="line">            <span class="keyword">var</span> props = _.extend(</span><br><span class="line">                <span class="keyword">this</span>._getDefaultProperties(e.type), <span class="comment">// 事件的基本属性，包含事件名称、window.location.host、window.location.pathname</span></span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="string">'$elements'</span>: elementsJson, <span class="comment">// target标签到body标签这条路径上的所有标签及其属性</span></span><br><span class="line">                    <span class="string">'$el_attr__href'</span>: href, <span class="comment">// 采集到的href链接</span></span><br><span class="line">                    <span class="string">'$el_text'</span>: elementText <span class="comment">// target标签的文本内容</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="keyword">this</span>._getCustomProperties(targetElementList) <span class="comment">// 读取自定义属性，这里应该是指用户在后台管理界面配置的属性</span></span><br><span class="line">            );</span><br><span class="line">            <span class="keyword">if</span> (form &amp;&amp; (e.type === <span class="string">'submit'</span> || e.type === <span class="string">'click'</span>)) &#123;</span><br><span class="line">                _.extend(props, <span class="keyword">this</span>._getFormFieldProperties(form)); <span class="comment">// 读取表单的一些属性</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 调用了代码埋点中介绍的track方法上报一个名为`$web_event`的事件，并带上采集的到的属性</span></span><br><span class="line">            instance.track(<span class="string">'$web_event'</span>, props);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line"><span class="comment">// _trackEvent之前，需要判断标签上的发生的事件是不是应该被autotrack监测上报</span></span><br><span class="line">_shouldTrackDomEvent: <span class="function"><span class="keyword">function</span>(<span class="params">element, event</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// html根节点下面的事件不需要监测</span></span><br><span class="line">        <span class="keyword">if</span> (!element || <span class="keyword">this</span>._isTag(element, <span class="string">'html'</span>) || element.nodeType !== ELEMENT_NODE) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> tag = element.tagName.toLowerCase();</span><br><span class="line">        <span class="comment">// 查看标签的名字</span></span><br><span class="line">        <span class="comment">// 如果是html则不监听</span></span><br><span class="line">        <span class="comment">// 如果是form标签下的submit事件，或者是input-&gt;button、input-&gt;submit标签的change、click事件，或者是select、textarea标签下的change、click事件，可以监听</span></span><br><span class="line">        <span class="comment">// 如果是其他标签，监听click事件</span></span><br><span class="line">        <span class="keyword">switch</span> (tag) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'html'</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'form'</span>:</span><br><span class="line">                <span class="keyword">return</span> event.type === <span class="string">'submit'</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'input'</span>:</span><br><span class="line">                <span class="keyword">if</span> ([<span class="string">'button'</span>, <span class="string">'submit'</span>].indexOf(element.getAttribute(<span class="string">'type'</span>)) === <span class="number">-1</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span> event.type === <span class="string">'change'</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> event.type === <span class="string">'click'</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'select'</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'textarea'</span>:</span><br><span class="line">                <span class="keyword">return</span> event.type === <span class="string">'change'</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="keyword">return</span> event.type === <span class="string">'click'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br></pre></td></tr></table></figure>
+<h3 id="3-3-全埋点小结"><a href="#3-3-全埋点小结" class="headerlink" title="3.3 全埋点小结"></a>3.3 全埋点小结</h3><p>可以看到全埋点还是有点暴力的，会采集的数据量也挺大，并且采集到的属性也比较多，可以看到在MixpanelSDK中，如果页面结构比较深，那么数据报过去分析起来可能还是需要花点时间的。在神策SDK的接入文档中也提到，建议那些按钮不是很多的，相对简单的页面可以采用这个方法。一般情况下，如果网页上的按钮比较多的话，因为每次按钮的点击都会发数据，会导数据量增大。。</p>
+<h2 id="四、可视化埋点"><a href="#四、可视化埋点" class="headerlink" title="四、可视化埋点"></a>四、可视化埋点</h2><p>Mixpanel和神策，都提供了JS可视化埋点功能，与全埋点相比，这种方式可以指定自己想要监测的元素和属性（所有可以点击的元素），既可以做到动态配置，又不会像全埋点那样产生大量的数据。</p>
+<p>以Mixpanel为例，可视化埋点的入口在后台管理界面，需要在后台输入需要埋点的页面url，然后再进入我们的Web页面，此时就会加载可视化圈选的编辑器（代码见<code>autotrack.js</code>中的<code>_maybeLoadEditor</code>方法，需要注意的是这个页面必须已经嵌入了JS SDK）。</p>
+<p><strong>可视化埋点需要完成两件事：</strong></p>
+<ul>
+<li><strong>圈选元素，保存配置</strong>：这一步最重要的就是保存好需要追踪的元素的element_path，以及需要追踪的元素。</li>
+<li><strong>下发配置，上报行为</strong>：这一步最重要的就是通过element_path找到元素，给它添加一个点击监听器。</li>
+</ul>
+<h3 id="4-1-圈选操作"><a href="#4-1-圈选操作" class="headerlink" title="4.1 圈选操作"></a>4.1 圈选操作</h3><p>在JS SDK内部，通常会<strong>判断当前页面的sessionStorge/localStorage中是否有一个开启可视化编辑器标志字段（例如Mixpanel是<code>_mpcehash</code>字段）</strong>，读取这个字段，解析到其中的打开可视化编辑器的开关开启之后，就会加载可视化编辑器。由此可见其实从SDK后台管理界面跳转到可视化圈选页面时，就是向SessionStorage中写入了相应的标志。</p>
+<blockquote>
+<p>MixpanelJS加载可视化编辑器时，需要从<code>//mixpanel.com/js-bundle/reports/collect-everything/editor.js?_ts={$timestamp}</code>去加载一个js文件，<strong>这个js差不多可以看成一个独立的圈选SDK，</strong>最后这个请求会被重定向到一个cdn地址（<code>https://cdn4.mxpnl.com/static/asset-cache/3fc4abfdcebcb5121f1ebf143415b232/compiled/reports/collect-everything/editor.min.js</code>），随便打开这个js看下就有两万多行，因此单独做成一个按需加载的SDK是很有必要的。</p>
+</blockquote>
+<p>由于Mixpanel就没有提供圈选SDK的源码，不过我从其他的SDK上体验了一下这种操作，就是在开发者web页面上，当用户的鼠标经过<strong>可以被点击</strong>的元素时，这个元素会被一种颜色高亮提示，此时点击一下这个元素，就会弹出一个浮窗，用户填写信息，设置一个事件和一些属性，保存之后就算完成对这个元素的圈选操作了（可能每个SDK在这里的操作上有些小差别，但是基本原理都是这样），当圈选过的元素的配置保存好了以后，这个元素会用特殊的颜色高亮起来。</p>
+<p><strong>虽然圈选SDK的代码可以有很长，但是圈选元素的核心是记录了元素哪些信息后，可以让上报SDK找到对应的元素。</strong>查看神策JS SDK中的<code>vtrack.sdk.js</code>这个文件发现，当神策SDK进入可视化圈选模式的时候，会去加载<code>verdor.js</code>和<code>verdor.css</code>，这两个文件可以看作一个圈选SDK。讲真，圈选SDK的代码都挺长，抓重点，看下<code>vendor.js</code>代码里是<strong>如何标记需要追踪的元素的</strong>。</p>
+<p>在<code>vendor.js</code>中，有一个<code>EventDefine</code>模块，这个模块负责把一个标签处理成我们要保存的selector。</p>
+<p><strong>EventDefine</strong>有三个方法：</p>
+<ul>
+<li>getSelfAttr：获取一个标签内部的文本内容，举例来说，一个<code>&lt;p&gt;This is another paragraph.&lt;/p&gt;</code>得到的内容是<code>This is another paragraph.</code>。</li>
+<li>toSelector：把一个标签的tagName、id、classNames解析出来，拼成一个串。举例来说，一个<code>&lt;div id=&quot;test&quot; class=&quot;uncle chen&quot;&gt;&lt;/div&gt;</code>标签，它的selector是<code>div#id.uncle.chen</code>，这个selector是可以直接给jQuery用来查找元素的。</li>
+<li>toAllSelector：选择一个需要追踪的标签，并给这个标签定义点击时上报的事件（EventDefine），最后将这个事件转成一个selector保存下来，selector就是用于给jQuery来查找元素的选择器，这里需要注意，如果一个元素是在iFrame里面的，那么SDK保存的选择器路径是相对iFrame内部的，而不是最外层的document。</li>
+</ul>
+<p>前两个方法都是给<code>toAllSelector</code>方法调用的，<code>toAllSelector</code>方法是圈选SDK的重点，这个方法的实现如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">toAllSelector: <span class="function"><span class="keyword">function</span>(<span class="params">$target, outDocuemnt</span>) </span>&#123;</span><br><span class="line">    outDocuemnt = outDocuemnt ? $(outDocuemnt) : $(<span class="built_in">document</span>);</span><br><span class="line">    <span class="keyword">var</span> $parent, newSelSize, newSelector, parts, selSize, selector, targetSel;</span><br><span class="line">    selector = <span class="keyword">this</span>.toSelector($target, outDocuemnt);</span><br><span class="line">    $parent = $target.parent();</span><br><span class="line">    selSize = outDocuemnt.find(selector).length;</span><br><span class="line">    <span class="keyword">while</span> ($parent.prop(<span class="string">'tagName'</span>) !== <span class="string">'BODY'</span> &amp;&amp; selSize !== <span class="number">1</span>) &#123;</span><br><span class="line">      newSelector = <span class="string">''</span> + (<span class="keyword">this</span>.toSelector($parent)) + <span class="string">' '</span> + selector; <span class="comment">// 如果向上回溯的话，selector会用空格分开保存</span></span><br><span class="line">      newSelSize = outDocuemnt.find(newSelector).length;</span><br><span class="line">      <span class="keyword">if</span> (newSelSize &lt; selSize) &#123;</span><br><span class="line">        selector = newSelector;</span><br><span class="line">        selSize = newSelSize;</span><br><span class="line">      &#125;</span><br><span class="line">      $parent = $parent.parent();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> nthEle = selector;</span><br><span class="line">    <span class="keyword">var</span> selfAttr = <span class="keyword">this</span>.getSelfAttr($target);</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      nthEle: nthEle,</span><br><span class="line">      selfAttr: selfAttr</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>当选中一个标签时，SDK会提取出这个标签的selector，然后用jQuery选择器查找这个selector指向的元素，如果这个selector指向的元素有多个（<code>selSize !== 1</code>，也就是说这个元素有着多个兄弟标签），那么还需要进一步去提取其父标签的selector，直到找出可以唯一标识这个元素的selector为止，最后将需要追踪的这个元素以{nthEle: nthEle, selfAttr: selfAttr}`，nthEle是selector，selfAttr是文本内容。</p>
+<h3 id="4-2-监测"><a href="#4-2-监测" class="headerlink" title="4.2 监测"></a>4.2 监测</h3><p>圈选元素，保存配置之后，SDK如何根据配置来监测配置好的元素，并进行上报呢？仍然以神策js为例，<code>vtrack.sdk.js</code>在正常模式下，会去解析后台下发的配置，找到圈选过的元素，绑定事件。</p>
+<p><strong>1.下发配置</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 进入普通模式时，会从后台的一个接口去拉去圈选过的元素（这里也叫“部署”过的元素）的关键信息，然后进行解析</span></span><br><span class="line">  enterNormalMode: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    sd.vtrack_mode = <span class="string">'normalMode'</span>;</span><br><span class="line">    <span class="keyword">var</span> me = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">this</span>.getDeployFile().then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      me.parseDeployFile(); <span class="comment">// 解析配置</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
+<p><strong>2.解析配置，监测元素</strong></p>
+<p>不多说直接看代码实现，分析见注释：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 解析配置，查看当前页面中是否有元素需要被追踪，把需要追踪的元素的配置保存到requiredData变量中</span></span><br><span class="line">parseDeployFile: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.requireData = <span class="keyword">this</span>.checkUrl(<span class="keyword">this</span>.deployData);</span><br><span class="line">  <span class="keyword">this</span>.listenEvents();</span><br><span class="line">&#125;,</span><br><span class="line"><span class="comment">// 找到元素，绑定点击事件的处理，当元素被点击时，上报事件</span></span><br><span class="line">listenEvents: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> data = <span class="keyword">this</span>.requireData;</span><br><span class="line">  <span class="keyword">var</span> me = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; data.length; i++) &#123;</span><br><span class="line">    <span class="keyword">this</span>.getEle(data[i]).on(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">ev</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        me.doVTrackAction(ev);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;(data[i]));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;,</span><br><span class="line">doVTrackAction: <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">  sd.track(</span><br><span class="line">    data.eventName,</span><br><span class="line">    &#123;</span><br><span class="line">      $from_vtrack: <span class="built_in">String</span>(data.trigger_id)</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      $lib_method: <span class="string">'vtrack'</span>,</span><br><span class="line">      $lib_detail: <span class="built_in">String</span>(data.trigger_id)</span><br><span class="line">    &#125;</span><br><span class="line">  );</span><br><span class="line">&#125;,</span><br><span class="line"><span class="comment">// 通过jQuery的选择器来找到元素，我们在前一节的圈选操作中知道，圈选SDK会把一个定义好的事件eventDefine转化成一个&#123;nthEle: nthEle, selfAttr: selfAttr&#125;结构保存起来，这里去寻找元素的时候和圈选那里的逻辑其实是一个逆操作。这里要注意，和圈选时一样元素，碰到iframe时要特殊处理一下。</span></span><br><span class="line">getEle: <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> ele;</span><br><span class="line">  <span class="keyword">if</span> ($(data.nthEle[<span class="number">0</span>]) &amp;&amp; $(data.nthEle[<span class="number">0</span>]).prop(<span class="string">'tagName'</span>) === <span class="string">'IFRAME'</span>) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      ele = $(data.nthEle[<span class="number">0</span>]).contents().find(data.nthEle.slice(<span class="number">1</span>).join(<span class="string">' '</span>));</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    ;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    ele = $(data.nthEle.join(<span class="string">' '</span>));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (data.selfAttr &amp;&amp; data.selfAttr.text !== <span class="keyword">void</span> <span class="number">0</span>) &#123;</span><br><span class="line">    ele = ele.filter(<span class="string">':contains('</span> + data.selfAttr.text + <span class="string">')'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> ele;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>可以看出，在JS上实现可视化埋点不是一件太麻烦的事情，不过它缺点是只会没有读取标签元素的属性等信息，也不会像代码埋点的方案那样去理解业务场景；另外，当页面的结构发生变化的时候，可能要重新进行一次圈选操作。有些平台是通过对事件监测的告警来提醒用户的，当事件数量同比大幅减少的时候，大概率是因为某次改版导致页面DomTree产生了变化，jQuery选择器找不到之前圈选的元素了，这时就应该提醒用户重新圈选了。</p>
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><p>本文从代码埋点、全埋点、可视化埋点三个角度，以Mixpanel、神策数据的JS SDK的源代码，分析了Web页面埋点的实现方案的实现。在流量红利逐渐消失的现在，数据的采集、分析和精细化的运营显得更加重要，下面简单列一个表格对以上三种方式的埋点方案进行对比，还是那句话，三种埋点方式相辅相成，结合业务需求搭配使用，适合自己的才是最好的。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">埋点方案</th>
+<th style="text-align:left">优点</th>
+<th style="text-align:left">缺点</th>
+<th style="text-align:left">适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">代码埋点</td>
+<td style="text-align:left">可以按照业务上报详细、定制化的数据</td>
+<td style="text-align:left">需要开发人员参与，更新维护成本高，无法获得历史数据</td>
+<td style="text-align:left">对上下文理解要求较高的业务数据</td>
+</tr>
+<tr>
+<td style="text-align:center">全埋点</td>
+<td style="text-align:left">对发人员依赖低，仅需嵌入一次SDK，可以全量上报通用数据，可以拿到历史数据</td>
+<td style="text-align:left">数量量太大，占用更多资源，且无法收集业务上下文数据，给后续数据筛选和分析带来一定的难度</td>
+<td style="text-align:left">上下文相对独立的、通用的数据</td>
+</tr>
+<tr>
+<td style="text-align:center">可视化埋点</td>
+<td style="text-align:left">对开发人员依赖低，可以按照业务需求上报数据，对上下文数据有一定收集能力</td>
+<td style="text-align:left">圈选事件有一定的操作难度，事件需要被更新时无法获得历史数据，界面变化时圈选的元素可能失效</td>
+<td style="text-align:left">业务上下文数据相对简单，操作交互比较固定的界面</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    <div>    
+    
+    
+    <ul class="post-copyright">
+    <li class="post-copyright-author">
+    <strong>本文作者：</strong>unclechen
+    </li>
+    <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="/2017/12/24/JS埋点SDK技术分析/" title="JS埋点SDK技术分析">2017/12/24/JS埋点SDK技术分析/</a>
+    </li>
+    <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本文采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a>进行许可。转载请注明出处！
+    </li>
+    </ul>
+    
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SDK/" rel="tag"># SDK</a>
+          
+            <a href="/tags/埋点/" rel="tag"># 埋点</a>
+          
+            <a href="/tags/无埋点/" rel="tag"># 无埋点</a>
+          
+            <a href="/tags/可视化埋点/" rel="tag"># 可视化埋点</a>
+          
+            <a href="/tags/JS/" rel="tag"># JS</a>
+          
+            <a href="/tags/监测/" rel="tag"># 监测</a>
+          
+            <a href="/tags/数据/" rel="tag"># 数据</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/18/Android埋点SDK技术分析/" rel="next" title="Android埋点SDK技术分析">
+                <i class="fa fa-chevron-left"></i> Android埋点SDK技术分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="unclechen" />
+          <p class="site-author-name" itemprop="name">unclechen</p>
+           
+              <p class="site-description motion-element" itemprop="description">吃下恶魔果实，我就能变成超级赛亚人！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/unclechen" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1718455407" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、背景"><span class="nav-text">一、背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、代码埋点"><span class="nav-text">二、代码埋点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-基本用法"><span class="nav-text">2.1 基本用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-上报的基本实现"><span class="nav-text">2.2 上报的基本实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、全埋点"><span class="nav-text">三、全埋点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-自动监测的元素、事件类型"><span class="nav-text">3.1 自动监测的元素、事件类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-全埋点监测的实现"><span class="nav-text">3.2 全埋点监测的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-全埋点小结"><span class="nav-text">3.3 全埋点小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、可视化埋点"><span class="nav-text">四、可视化埋点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-圈选操作"><span class="nav-text">4.1 圈选操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-监测"><span class="nav-text">4.2 监测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、总结"><span class="nav-text">五、总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">unclechen</span>
+</div>
+
+
+<!--
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+-->
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "071293399566469d925f180d68952611",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script type="text/javascript">
+      var gitalk = new Gitalk({
+        clientID: 'a11668e1882acefd3ff5',
+        clientSecret: '0c20ad42eb72f7677c7fb68fd25710a4edbd5ece',
+        repo: 'blog_comment_repo',
+        owner: 'unclechen',
+        admin: ['unclechen'],
+        id: location.pathname,
+        distractionFreeMode: 'true'
+      })
+      gitalk.render('gitalk-container')
+  </script>
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
