@@ -90,7 +90,7 @@
 
 
 
-<meta name="description" content="前一篇博客中介绍了Android6.0运行时权限简介，最近遇到这么一个情况，就是一个App以前都是在SD卡根目录直接新建了一个XXX/image/目录，来保存图片缓存的，但是如果适配到Android6.0，我们就需要弹出对话框给用户，来申请WRITE_EXTERNAL_STORAGE权限，如果仅仅是缓存图片为了提高加载">
+<meta name="description" content="前一篇博客中介绍了Android6.0运行时权限简介，最近遇到这么一个情况，就是一个App以前都是在SD卡根目录直接新建了一个XXX/image/目录，来保存图片缓存的，但是如果适配到Android6.0，我们就需要弹出对话框给用户，来申请WRITE_EXTERNAL_STORAGE权限，如果仅仅是缓存图片为了提高加载速度，对于一个小白用户来讲，好像并不是什么值得让他授权的理由。。。 下面记录一下">
 <meta name="keywords" content="Android,适配,权限">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android6.0权限适配之WRITE_EXTERNAL_STORAGE（SD卡写入）">
@@ -101,7 +101,7 @@
 <meta property="og:image" content="http://unclechen.github.io/content/images/app-storage.png">
 <meta property="og:image" content="http://unclechen.github.io/content/images/app-perm-before.png">
 <meta property="og:image" content="http://unclechen.github.io/content/images/app-perm-after.png">
-<meta property="og:updated_time" content="2017-12-09T14:16:25.000Z">
+<meta property="og:updated_time" content="2017-12-19T08:53:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android6.0权限适配之WRITE_EXTERNAL_STORAGE（SD卡写入）">
 <meta name="twitter:description" content="前一篇博客中介绍了Android6.0运行时权限简介，最近遇到这么一个情况，就是一个App以前都是在SD卡根目录直接新建了一个XXX/image/目录，来保存图片缓存的，但是如果适配到Android6.0，我们就需要弹出对话框给用户，来申请WRITE_EXTERNAL_STORAGE权限，如果仅仅是缓存图片为了提高加载速度，对于一个小白用户来讲，好像并不是什么值得让他授权的理由。。。 下面记录一下">
@@ -491,7 +491,7 @@
 <h1 id="Last，最后还有个坑！"><a href="#Last，最后还有个坑！" class="headerlink" title="Last，最后还有个坑！"></a>Last，最后还有个坑！</h1><p>好了，是不是现在不用SD卡上创建的目录<code>XXX/image/</code>，直接改为改为<code>SDCard/Android/data/应用包名/cache/image/</code>就OK了？还真不完全是这样的。。。</p>
 <p><strong>？？？纳尼？？？？</strong></p>
 <p>通常我们开发App时会设置<code>targetSDKVersion=23</code>时，并同时<strong>向前兼容</strong>，还会设置<code>minSdkVersion=14</code>表示支持的最低系统版本是Android4.0(<code>API = 14</code>)。也就是说我们的<code>build.gradle</code>一般长这样：</p>
-<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">    compileSdkVersion 23</span><br><span class="line">    buildToolsVersion <span class="string">"23.0.2"</span></span><br><span class="line">    <span class="string">...</span></span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        applicationId <span class="string">"xxx.xxx"</span></span><br><span class="line">        minSdkVersion 14</span><br><span class="line">        targetSdkVersion 23</span><br><span class="line">        <span class="keyword">version</span>Code 1</span><br><span class="line">        <span class="keyword">version</span>Name <span class="string">"1.0"</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="string">...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    compileSdkVersion 23</div><div class="line">    buildToolsVersion <span class="string">"23.0.2"</span></div><div class="line">    <span class="string">...</span></div><div class="line">    defaultConfig &#123;</div><div class="line">        applicationId <span class="string">"xxx.xxx"</span></div><div class="line">        minSdkVersion 14</div><div class="line">        targetSdkVersion 23</div><div class="line">        <span class="keyword">version</span>Code 1</div><div class="line">        <span class="keyword">version</span>Name <span class="string">"1.0"</span></div><div class="line">    &#125;</div><div class="line">    <span class="string">...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>但是前面我们说过，通过<code>Context.getExternalCacheDir()</code>接口获取应用扩展存储目录时，只有在<code>API &gt;= 19</code>时才不需要申请权限。也就是说如果是上面这种兼容到<code>API 14</code>的应用，还是需要在<code>AndroidManifest.xml</code>中注册<code>WRITE_EXTERNAL_STORAGE</code>权限的。</p>
 <p>前一篇博客<a href="http://unclechen.github.io/2016/03/05/Android6.0运行时权限简介/">Android6.0运行时权限简介</a>知道，如果在<code>AndroidManifest.xml</code>文件里注册过<code>WRITE_EXTERNAL_STORAGE</code>，当App运行在一台6.0的设备时，即使你的App全程都没有调用<code>requestPermissons</code>来申请权限，用户还是可以在<strong>Android6.0系统上</strong> 进入<code>设置-&gt;应用-&gt;你的App-&gt;权限</code>里面，取消<code>存储空间</code>这一个权限。记住是运行在<strong>6.0系统的机器</strong>上，这是关键，因为低于6.0的系统根本没有这个设置。</p>
 <p>如下图所示，只要在manifest里面注册了，就可以动态取消之！</p>
@@ -500,9 +500,9 @@
 <p>为啥啊？6.0机器上，我不是不需要申请权限就可以获得写入<code>SDCard/Android/data/应用包名/cache/</code>目录吗？实际测试时发现，当用户取消了权限之后，SDK接口中与<code>File</code>相关的API全部都返回空了，于是我们就没法写文件了。</p>
 <p>其实我们还需要做的是：</p>
 <p>将AndroidManifest.xml文件中的</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;uses-permission android:<span class="attribute">name</span>=<span class="string">"android.permission.WRITE_EXTERNAL_STORAGE"</span>/&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;uses-permission android:<span class="attribute">name</span>=<span class="string">"android.permission.WRITE_EXTERNAL_STORAGE"</span>/&gt;</div></pre></td></tr></table></figure>
 <p>改为</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;uses-permission android:<span class="attribute">name</span>=<span class="string">"android.permission.WRITE_EXTERNAL_STORAGE"</span></span><br><span class="line">android:<span class="attribute">maxSdkVersion</span>=<span class="string">"18"</span>/&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;uses-permission android:<span class="attribute">name</span>=<span class="string">"android.permission.WRITE_EXTERNAL_STORAGE"</span></div><div class="line">android:<span class="attribute">maxSdkVersion</span>=<span class="string">"18"</span>/&gt;</div></pre></td></tr></table></figure>
 <p>表示只在<code>API &lt;= 18</code>时，才申请<code>WRITE_EXTERNAL_STORAGE</code>权限。这样用户就无法在Android6.0系统的设置下面看到<code>存储空间</code>权限的开关，当然也就无法关闭它了，如下图所示。</p>
 <p><img src="/content/images/app-perm-after.png" alt="app-权限"></p>
 
