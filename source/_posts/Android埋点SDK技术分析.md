@@ -25,7 +25,7 @@ categories:
 - **可视化埋点：**可视化埋点是指产品/运营在Web页面/App的界面上进行圈选，配置需要监测界面上哪一个元素，然后保存这个配置，当App启动时会从后台服务器获得产品/运营预先圈选好的配置，然后根据这份配置监测App界面上的元素，当某一个元素满足条件时，就会上报行为数据到后台服务器。有了全埋点技术方案，从体验优化的角度很容易想到按需埋点，可视化埋点就是一种按需配置埋点的方案。现在也有一些公司提供了这类SDK，圈选监测元素时，一般都是提供一个Web管理界面，手机在安装并初始化了SDK之后，可以和管理界面了连接，让用户在Web管理界面上配置需要监测的元素。
 
 
-业界有多家SDK都支持上面介绍的3种埋点方案中的一种或者全部，例如Mixpanel、Sensorsdata、TalkingData、GrowingIO、诸葛IO、Heap Analytics、MTA、Umeng Analytics、百度，只是大家对后两种埋点的称呼不完全相同，有的叫无埋点或者codeless埋点。由于[Mixpanel](https://github.com/mixpanel/mixpanel-android)（支持代码埋点、可视化埋点）和[Sensorsdata](https://github.com/sensorsdata/sa-sdk-android)（全部支持）都开源了自己的全部SDK，技术方案也比较类似，下面以它们的Android SDK为例，简单分析一下3种埋点方案的技术实现。
+业界有多家SDK都支持上面介绍的3种埋点方案中的一种或者全部，例如Mixpanel、Sensorsdata、TalkingData、GrowingIO、诸葛IO、Heap Analytics、MTA、Umeng Analytics、百度，只是大家对后两种埋点的称呼不完全相同，有的叫无埋点或者codeless埋点。由于[Mixpanel](https://github.com/mixpanel/mixpanel-android)（支持代码埋点、可视化埋点）和[Sensorsdata](https://github.com/sensorsdata/sa-sdk-android)（全部支持）都开源了自己的全部SDK，技术方案也比较类似，下面以它们的Android SDK为例，简单分析一下3种埋点方案的技术实现。关于JS的SDK技术实现，可以看下我的另一篇博客-[JS埋点SDK技术分析](http://unclechen.github.io/2017/12/24/JS%E5%9F%8B%E7%82%B9SDK%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/)。
 
 <!-- more -->
 
