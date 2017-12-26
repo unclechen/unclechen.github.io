@@ -417,7 +417,6 @@ Mixpanel和神策，都提供了JS可视化埋点功能，与全埋点相比，�
   },
   // 通过jQuery的选择器来找到元素，我们在前一节的圈选操作中知道，圈选SDK会把一个定义好的事件eventDefine转化成一个{nthEle: nthEle, selfAttr: selfAttr}结构保存起来，这里去寻找元素的时候和圈选那里的逻辑其实是一个逆操作。
   // 这里要注意，和圈选时一样元素，碰到iframe时要特殊处理一下。
-  // 关于元素的查找，在Mixpanel-JS中没有用jQuery，而是用的Document.querySelectorAll方法，在追踪移动页面的时候会显得更优化一些，毕竟jQuery是有些重的。
   getEle: function(data) {
     var ele;
     if ($(data.nthEle[0]) && $(data.nthEle[0]).prop('tagName') === 'IFRAME') {
@@ -435,6 +434,9 @@ Mixpanel和神策，都提供了JS可视化埋点功能，与全埋点相比，�
     return ele;
   },
 ```
+
+关于元素的查找，在Mixpanel-JS中没有用jQuery，而是用的Document.querySelectorAll方法，在追踪移动页面的时候会显得更优化一些，毕竟jQuery是有些重的。
+此外，当追踪一些特殊的标签时，可以考虑用[XPath](http://www.w3school.com.cn/xpath/)去定位，今日头条的广告监测插件其实就用到了XPath。
 
 可以看出，在JS上实现可视化埋点不是一件太麻烦的事情，不过它缺点是只会没有读取标签元素的属性等信息，也不会像代码埋点的方案那样去理解业务场景；另外，当页面的结构发生变化的时候，可能要重新进行一次圈选操作。有些平台是通过对事件监测的告警来提醒用户的，当事件数量同比大幅减少的时候，大概率是因为某次改版导致页面DomTree产生了变化，jQuery选择器找不到之前圈选的元素了，这时就应该提醒用户重新圈选了。
 
