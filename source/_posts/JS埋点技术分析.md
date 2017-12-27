@@ -1,6 +1,6 @@
 ---
 layout: post
-title: JS埋点SDK技术分析
+title: JS埋点技术分析
 date: '2017-12-24'
 tags:
   - JS

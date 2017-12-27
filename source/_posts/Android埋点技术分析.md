@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Android埋点SDK技术分析
+title: Android埋点技术分析
 date: '2017-12-18'
 tags:
   - Android
@@ -14,13 +14,15 @@ categories:
 
 # 一、概念
 
-埋点，是对Web网站、App进行数据采集的一种方法。通过埋点，可以收集用户在应用中的产生行为，进而用于分析和优化产品后续的体验，也可以为产品的运营提供数据支撑，其中常见的指标有PV、UV、页面时长和按钮的点击等。
+埋点，是对网站、App或者后台等应用程序进行数据采集的一种方法。通过埋点，可以收集用户在应用中的产生行为，进而用于分析和优化产品后续的体验，也可以为产品的运营提供数据支撑，其中常见的指标有PV、UV、页面时长和按钮的点击等。
 
 采集行为数据时，通常需要在Web页面/App里面添加一些代码，当用户的行为达到某种条件时，就会向服务器上报用户的行为。其实添加这些代码的过程就可以叫做“埋点”，在很久以前就已经出现了这种技术。随着技术的发展和大家对数据采集要求的不断提高，我认为埋点的技术方案走过了下面几个阶段：
 
 - **代码埋点：**代码埋点是指开发人员按照产品/运营的需求，在Web页面/App的源码里面添加行为上报的代码，当用户的行为满足某一个条件时，这些代码就会被执行，向服务器上报行为数据。这种方案是最基础的方案，每次增加或者修改数据上报的条件，都需要开发人员的参与，并且只能在下一个版本上线后才能看到效果。很多公司都提供了这类数据上报的SDK，将行为上报的后台服务器接口封装成了简单的客户端SDK接口。开发者可以通过嵌入这类SDK，在埋点的地方调用少量的代码就可以上报行为数据。
 
 - **全埋点：**全埋点指的是将Web页面/App内产生的所有的、满足某个条件的行为，全部上报到后台服务器。例如把App中所有的按钮点击都进行上报，然后由产品/运营去后台筛选所需要的行为数据。这种方案的优点非常明显，就是可以不用在新增/修改行为上报条件时，再找开发人员去修改埋点的代码。然而它的缺点也和优点一样明显，那就是上报的数据量比代码埋点大很多，里面可能很多是没有价值的数据。此外，这种方案更倾向于独立去看待用户的行为，而没有关注行为的上下文，给数据分析带来了一些难度。很多公司也提供了这类功能的SDK，通过静态或者动态的方式，“Hook”了原有的App代码，从而实现了行为的监测，在数据上报时通常是采用累积多条再上报的方案来合并请求。
+
+> hook直译是钩子的意思，以前学信息安全的时候在windows上听到过，大体意思是通过某种手段去改变系统API的一个行为，绕过系统的某个方法，或者改变系统的工作流程。在这里其实是指把本来要执行某个方法的对象替换成另一个，一般用的是反射或者代理，需要找到hook的代码位置，甚至还可以在编译阶段实现替换。
 
 - **可视化埋点：**可视化埋点是指产品/运营在Web页面/App的界面上进行圈选，配置需要监测界面上哪一个元素，然后保存这个配置，当App启动时会从后台服务器获得产品/运营预先圈选好的配置，然后根据这份配置监测App界面上的元素，当某一个元素满足条件时，就会上报行为数据到后台服务器。有了全埋点技术方案，从体验优化的角度很容易想到按需埋点，可视化埋点就是一种按需配置埋点的方案。现在也有一些公司提供了这类SDK，圈选监测元素时，一般都是提供一个Web管理界面，手机在安装并初始化了SDK之后，可以和管理界面了连接，让用户在Web管理界面上配置需要监测的元素。
 
@@ -233,6 +235,130 @@ AspectJ的基本用法就是这样，SensorsAndroidSDK借助AspectJ插入了Aspe
 - AOP之AspectJ全面剖析in Android：[http://www.jianshu.com/p/f90e04bcb326](http://www.jianshu.com/p/f90e04bcb326)
 - 沪江开源了一个叫做AspectJX的插件，扩展了AspectJ，除了对src代码进行AOP，还支持kotlin、工程中引用的jar和aar进行AOP：[https://github.com/HujiangTechnology/gradle_plugin_android_aspectjx](https://github.com/HujiangTechnology/gradle_plugin_android_aspectjx)
 - 关于 Spring AOP (AspectJ) 你该知晓的一切：[http://blog.csdn.net/javazejian/article/details/56267036](http://blog.csdn.net/javazejian/article/details/56267036)
+
+## 3.4 其他思路
+
+上面介绍的是以AspectJ为代表的**“静态Hook”**实现方案，有没有其他办法可以不修改源代码，只是在App运行的时候去**“动态Hook”**点击行为的处理呢？答案是肯定的，在Java的世界，还有反射大法啊，下面看一下怎么实现点击事件的替换吧。
+
+在[android.view.View.java](https://github.com/aosp-mirror/platform_frameworks_base/blob/master/core/java/android/view/View.java)的源码（`API>=14`）中，有这么几个关键的方法：
+
+```java
+    // getListenerInfo方法：返回所有的监听器信息mListenerInfo
+    ListenerInfo getListenerInfo() {
+        if (mListenerInfo != null) {
+            return mListenerInfo;
+        }
+        mListenerInfo = new ListenerInfo();
+        return mListenerInfo;
+    }
+    
+    // 监听器信息
+    static class ListenerInfo {
+        ... // 此处省略各种xxxListener
+        /**
+         * Listener used to dispatch click events.
+         * This field should be made private, so it is hidden from the SDK.
+         * {@hide}
+         */
+        public OnClickListener mOnClickListener;
+
+        /**
+         * Listener used to dispatch long click events.
+         * This field should be made private, so it is hidden from the SDK.
+         * {@hide}
+         */
+        protected OnLongClickListener mOnLongClickListener;
+
+        ...
+    }
+    ListenerInfo mListenerInfo;
+    
+    // 我们非常熟悉的方法，内部其实是把mListenerInfo的mOnClickListener设成了我们创建的OnclickListner对象
+    public void setOnClickListener(@Nullable OnClickListener l) {
+        if (!isClickable()) {
+            setClickable(true);
+        }
+        getListenerInfo().mOnClickListener = l;
+    }
+    
+    /**
+     * 判断这个View是否设置了点击监听器
+     * Return whether this view has an attached OnClickListener.  Returns
+     * true if there is a listener, false if there is none.
+     */
+    public boolean hasOnClickListeners() {
+        ListenerInfo li = mListenerInfo;
+        return (li != null && li.mOnClickListener != null);
+    }
+```
+
+通过上面几个方法可以看到，点击监听器其实被保存在了**`mListenerInfo.mOnClickListener`**里面。那么实现**Hook点击监听器**时，只要将这个`mOnClickListener`替换成我们包装的**点击监听器代理对象**就行了。简单看一下实现思路：
+
+**1. 创建点击监听器的代理类**
+
+```
+    // 点击监听器的代理类，具有上报点击行为的功能
+    class OnClickListenerWrapper implements View.OnClickListener {
+        // 原始的点击监听器对象
+        private View.OnClickListener onClickListener;
+
+        public OnClickListenerWrapper(View.OnClickListener onClickListener) {
+            this.onClickListener = onClickListener;
+        }
+
+        @Override
+        public void onClick(View view) {
+            // 让原来的点击监听器正常工作
+            if(onClickListener != null){
+                onClickListener.onClick(view);
+            }
+            // 点击事件上报，可以获取被点击view的一些属性
+            track(APP_CLICK_EVENT_NAME, getSomeProperties(view));
+        }
+    }
+```
+
+**2. 反射获取一个View的mListenerInfo.mOnClickListener，替换成代理的点击监听器**
+
+```
+    // 对一个View的点击监听器进行hook
+    public void hookView(View view) {
+        // 1. 反射调用View的getListenerInfo方法（API>=14），获得mListenerInfo对象
+        Class viewClazz = Class.forName("android.view.View");
+        Method getListenerInfoMethod = viewClazz.getDeclaredMethod("getListenerInfo");
+        if (!getListenerInfoMethod.isAccessible()) {
+            getListenerInfoMethod.setAccessible(true);
+        }
+        Object mListenerInfo = listenerInfoMethod.invoke(view);
+        
+        // 2. 然后从mListenerInfo中反射获取mOnClickListener对象
+        Class listenerInfoClazz = Class.forName("android.view.View$ListenerInfo");
+        Field onClickListenerField = listenerInfoClazz.getDeclaredField("mOnClickListener");
+        if (!onClickListenerField.isAccessible()) {
+            onClickListenerField.setAccessible(true);
+        }
+        View.OnClickListener mOnClickListener = (View.OnClickListener) onClickListenerField.get(mListenerInfo);
+        
+        // 3. 创建代理的点击监听器对象
+        View.OnClickListener mOnClickListenerWrapper = new OnClickListenerWrapper(mOnClickListener);
+        
+        // 4. 把mListenerInfo的mOnClickListener设成新的onClickListenerWrapper
+        onClickListenerField.set(mListenerInfo, mOnClickListenerWrapper);
+        // 用这个似乎也可以：view.setOnClickListener(mOnClickListenerWrapper);     
+    }
+```
+
+注意，如果是`API<14`的话，mOnClickListener直接是直接以一个Field保存在View对象中的，没有ListenerInfo，因此反射的次数要更少一些。
+
+**3. 对App中所有的View进行Hook**
+
+我们在分析的是全埋点，那么怎样把App里面所有的View点击都Hook到呢？有两种方式：
+
+- 第一种：当Activity创建完成后，开始从Activity的DecorView开始自顶向下深度遍历ViewTree，遍历到一个View的时候，对它进行hookView操作。这种方式有点暴力，由于这里面遍历ViewTree的时候用到了大量反射，性能会有影响。
+
+- 第二种：比第一种方式稍微优秀一些，来源是一个Github上的开源库[AndroidTracker](https://github.com/foolchen/AndroidTracker)（Kotlin实现）。他的处理方式是当Activity创建完成后，在DecorView中添加一个透明的View作为子View，在这个子View的onTouchEvent方法中，根据触摸坐标找到屏幕中包含了这个坐标的View，再对这些View尝试进行hookView操作。**这种方式比较取巧，首先是拿到了手指按下的位置，根据这个位置来找需要被Hook的View，避免了在遍历ViewTree的同时对View进行反射。具体实现是在遍历ViewTree中的每个View时，判断这个View的坐标是否包含手指按下的坐标，以及View是否Visible，如果满足这两个条件，就把这个View保存到一个ArrayList<View>hitViews。然后再遍历这个ArrayList里面的View，如果一个View#hasOnClickListeners返回true，那么才对他进行hookView操作。**
+
+整体来看，动态Hook的思路用到了反射，难免对程序性能产生影响，如果要采用这种方式实现全埋点方案，还需要好好评估。
 
 
 # 四、可视化埋点
