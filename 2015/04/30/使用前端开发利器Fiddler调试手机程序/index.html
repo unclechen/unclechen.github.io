@@ -99,7 +99,7 @@
 <meta property="og:description" content="Fiddler是一个非常好用的web前端调试工具，它能记录客户端和服务器的http和https所有请求和响应，允许监视、设置断点，修改输入输出数据。与其他的抓包工具，例如wireshark、firebug等不同，Fiddler可以允许你在调试CGI接口时，修改返回的数据，也就是可以构造请求和模拟响应。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://unclechen.github.io/content/images/cover/helloFiddler.jpg">
-<meta property="og:updated_time" content="2017-12-25T04:09:35.000Z">
+<meta property="og:updated_time" content="2018-01-01T10:53:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用前端开发利器Fiddler调试手机程序">
 <meta name="twitter:description" content="Fiddler是一个非常好用的web前端调试工具，它能记录客户端和服务器的http和https所有请求和响应，允许监视、设置断点，修改输入输出数据。与其他的抓包工具，例如wireshark、firebug等不同，Fiddler可以允许你在调试CGI接口时，修改返回的数据，也就是可以构造请求和模拟响应。">
@@ -425,7 +425,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="/content/images/cover/helloFiddler.jpg" rel="gallery_cjbosvok4001jdgsyvjcnfxke"
+                 href="/content/images/cover/helloFiddler.jpg" rel="gallery_cjbwbekyo001jt8sx03sbmpek"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="/content/images/cover/helloFiddler.jpg" itemprop="contentUrl"/>
               </a>
@@ -438,11 +438,11 @@
       
 
       
-        <p><a href="http://www.telerik.com/fiddler" target="_blank" rel="external">Fiddler</a>是一个非常好用的web前端调试工具，它能记录客户端和服务器的http和https所有请求和响应，允许监视、设置断点，修改输入输出数据。与其他的抓包工具，例如wireshark、firebug等不同，Fiddler可以允许你在调试CGI接口时，修改返回的数据，也就是可以<strong>构造请求</strong>和<strong>模拟响应</strong>。</p>
+        <p><a href="http://www.telerik.com/fiddler" target="_blank" rel="noopener">Fiddler</a>是一个非常好用的web前端调试工具，它能记录客户端和服务器的http和https所有请求和响应，允许监视、设置断点，修改输入输出数据。与其他的抓包工具，例如wireshark、firebug等不同，Fiddler可以允许你在调试CGI接口时，修改返回的数据，也就是可以<strong>构造请求</strong>和<strong>模拟响应</strong>。</p>
 <a id="more"></a>
 <p>此外，Fiddler还可以支持模拟低速网络（如手机网络）过滤请求等等，安装了<strong>Willow</strong>插件以后你还可以轻松实现修改Host等操作。可惜的是目前Fiddler只支持Windows系统，没办法，毕竟是基于<code>.net框架</code>开发的嘛。</p>
 <h1 id="1-Fiddler的安装和配置"><a href="#1-Fiddler的安装和配置" class="headerlink" title="1. Fiddler的安装和配置"></a>1. Fiddler的安装和配置</h1><ul>
-<li>下载安装：从官网下载Fiddler，现在的版本应该是Fiddler4：<a href="http://www.telerik.com/download/fiddler" target="_blank" rel="external">http://www.telerik.com/download/fiddler</a>。</li>
+<li>下载安装：从官网下载Fiddler，现在的版本应该是Fiddler4：<a href="http://www.telerik.com/download/fiddler" target="_blank" rel="noopener">http://www.telerik.com/download/fiddler</a>。</li>
 </ul>
 <p><strong>注意</strong>：由于Fiddler4是基于<code>.net框架</code>的，所以需要在自己的电脑上先安装<code>.NetFrameWork</code>，安装好了以后，就可以下载Fiddler4进行安装了。</p>
 <ul>
@@ -471,7 +471,7 @@
 <p>其中我们最常用就是<strong>Add Rule</strong>功能了，通过这个我们可以设置一些规则，将回包进行重定向。右键选择<strong>Add Rule</strong>以后，我们在<strong>Match</strong>栏填写<strong>正则表达式</strong>来匹配网络请求，<strong>Action</strong>栏选择我们本地的一个文件来替换<strong>match</strong>栏对应的请求的回包,这里我选择了自己写的一个<code>hello fiddler.html</code>测试文件。记住，规则保存好了以后，<strong>必须勾选Willow菜单左上角的小勾</strong>，使得回包替换功能开启，确保Willow小树的图标变成了<strong>绿色</strong>的！</p>
 <p><img src="/content/images/fiddlerWillowRule.png" alt="fiddler willow rule"></p>
 <p><code>hello fiddler.html</code>文件的代码如下：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"zh-CN"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>hello fiddler<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    </div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">    hello fiddler</div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"zh-CN"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>hello fiddler<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    hello fiddler</span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>此时我们在打开手机浏览器输入<code>m.baidu.com</code>以后，不会再看到正常的百度首页，而是本地文件的<code>hello fiddler.html</code>测试页面了。</p>
 <p><img src="/content/images/helloFiddler.png" alt="hello fiddler"></p>
 <p>再回到Fiddler左侧的流量包界面，我们可以看到命中的数据包被标注为<strong>黄色</strong>了。因此我们判断自己定义的规则是否生效，可以看看数据包是不是被标为<strong>黄色</strong>了。此外由于，Fiddler回包替换的规则支持正则表达式，所以有时写的规则不一定是完全正确的，大家要多检查下rule中设置规则。</p>
@@ -744,7 +744,7 @@
         <div class="copyright" >
   
   &copy;  2015 - 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
