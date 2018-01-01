@@ -707,7 +707,7 @@
       
         
           <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>App开发中一个比较常见的问题就是动态化，有时我们会需要程序的某一个逻辑可以动态改变而不需要发版本让用户重新安装。例如，App中的某个WebView有一个url白名单，我们希望它可以动态改变。这是个常见的需求，现在无论是技术面上还是产品上大家都在讲一个动态化，所以一波接一波出了各种插件化，甚至是ReactNative、weex、微信小程序等等这些轮子。</p>
-<p>但是在实际中需要考虑到很多的业务特点，使得我们在<strong>统一化</strong>和<strong>个性化</strong>的时候比较难以选择，半年前天猫的技术博客就出了这篇文章–<a href="http://pingguohe.net/2016/03/18/config-center.html" target="_blank" rel="external">动态调整的基础 —— 配置中心</a>，里面介绍了阿里的团队在这方面的实践经验。今天我以一个遇到的实际需求为例，总结下我的想法。</p>
+<p>但是在实际中需要考虑到很多的业务特点，使得我们在<strong>统一化</strong>和<strong>个性化</strong>的时候比较难以选择，半年前天猫的技术博客就出了这篇文章–<a href="http://pingguohe.net/2016/03/18/config-center.html" target="_blank" rel="noopener">动态调整的基础 —— 配置中心</a>，里面介绍了阿里的团队在这方面的实践经验。今天我以一个遇到的实际需求为例，总结下我的想法。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016/09/25/App动态配置探讨/#more" rel="contents">
@@ -855,9 +855,9 @@
           <h1 id="一、Apk反编译工具及其使用方法"><a href="#一、Apk反编译工具及其使用方法" class="headerlink" title="一、Apk反编译工具及其使用方法"></a>一、Apk反编译工具及其使用方法</h1><h2 id="1-原理"><a href="#1-原理" class="headerlink" title="1.原理"></a>1.原理</h2><p>学习反编译之前，建议先学习一下Apk打包的过程，明白打包完成后的Apk里面都有什么文件，各种文件都是怎么生成的。</p>
 <p>这里有两篇AndroidWeekly中推荐过的好文章：</p>
 <ul>
-<li><p><a href="http://mp.weixin.qq.com/s?__biz=MzI0NjIzNDkwOA==&amp;mid=2247483789&amp;idx=1&amp;sn=6aed8c7907d5bd9c8a5e7f2c2dcdac2e&amp;scene=1&amp;srcid=0831CCuRJsbJNuz1WxU6uUsI#wechat_redirect" target="_blank" rel="external">浅析 Android 打包流程</a></p>
+<li><p><a href="http://mp.weixin.qq.com/s?__biz=MzI0NjIzNDkwOA==&amp;mid=2247483789&amp;idx=1&amp;sn=6aed8c7907d5bd9c8a5e7f2c2dcdac2e&amp;scene=1&amp;srcid=0831CCuRJsbJNuz1WxU6uUsI#wechat_redirect" target="_blank" rel="noopener">浅析 Android 打包流程</a></p>
 </li>
-<li><p><a href="http://mp.weixin.qq.com/s?__biz=MzI1NjEwMTM4OA==&amp;mid=2651232113&amp;idx=1&amp;sn=02f413999ab0865e23d272e69b9e6196&amp;scene=1&amp;srcid=0831gT4p6M0NFG5HTTeRHTUC#wechat_redirect" target="_blank" rel="external">Android构建过程分析</a></p>
+<li><p><a href="http://mp.weixin.qq.com/s?__biz=MzI1NjEwMTM4OA==&amp;mid=2651232113&amp;idx=1&amp;sn=02f413999ab0865e23d272e69b9e6196&amp;scene=1&amp;srcid=0831gT4p6M0NFG5HTTeRHTUC#wechat_redirect" target="_blank" rel="noopener">Android构建过程分析</a></p>
 </li>
 </ul>
 <p>Apk技术也有非常多的技术可以学习，主要都是围绕着如何减小体积，如何提高打包速度展开，这里先不多说了。下面是一张基本的Apk文件结构图。</p>
@@ -1007,7 +1007,7 @@
       
         
           <h1 id="手机设备有哪几种定位方式"><a href="#手机设备有哪几种定位方式" class="headerlink" title="手机设备有哪几种定位方式"></a>手机设备有哪几种定位方式</h1><h2 id="GPS"><a href="#GPS" class="headerlink" title="GPS"></a>GPS</h2><p>基于卫星发射的信号，可以推算出手机到每颗卫星的距离，根据卫星的位置，推测出手机的位置。</p>
-<p>这是一张简单的GPS定位原理图，需要一点数学知识，先不讨论这个细节，需要的同学看<a href="http://baike.baidu.com/view/193655.htm" target="_blank" rel="external">这里</a>。</p>
+<p>这是一张简单的GPS定位原理图，需要一点数学知识，先不讨论这个细节，需要的同学看<a href="http://baike.baidu.com/view/193655.htm" target="_blank" rel="noopener">这里</a>。</p>
 <p><img src="http://ww1.sinaimg.cn/large/65e4f1e6gw1f7fbixzcaxj20dw0bo750.jpg" alt="gps定位原理图"></p>
 <p>现在卫星信号全球都覆盖了，手机一般都有GPS芯片，因此可以实现定位。GPS方式准确度是最高的，走卫星通道，不需要联网就可以要使用。但是它的缺点也非常明显：</p>
 <ul>
@@ -1364,7 +1364,7 @@
         <div class="copyright" >
   
   &copy;  2015 - 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
