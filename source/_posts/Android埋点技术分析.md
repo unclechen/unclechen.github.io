@@ -14,17 +14,19 @@ categories:
 
 # 一、概念
 
-埋点，是对网站、App或者后台等应用程序进行数据采集的一种方法。通过埋点，可以收集用户在应用中的产生行为，进而用于分析和优化产品后续的体验，也可以为产品的运营提供数据支撑，其中常见的指标有PV、UV、页面时长和按钮的点击等。
+埋点，是对网站、App或者后台等应用程序进行数据采集的一种方法。通过埋点，可以收集用户在应用中的产生行为，进而用于分析和优化产品后续的体验，也可以为产品的运营提供数据支撑，其中常见的指标有PV、UV、页面时长和按钮的点击等，通常可以采集到下面这些数据。
+
+- 行为数据：时间、地点、人物、交互的内容等- 质量数据：App运行情况、浏览器加载情况、错误异常等- 环境数据：手机型号、操作系统版本、浏览器UA、地理、运营商、网络环境等- 运营数据：PV、UV、点击量、日活、留存、渠道来源等
 
 采集行为数据时，通常需要在Web页面/App里面添加一些代码，当用户的行为达到某种条件时，就会向服务器上报用户的行为。其实添加这些代码的过程就可以叫做“埋点”，在很久以前就已经出现了这种技术。随着技术的发展和大家对数据采集要求的不断提高，我认为埋点的技术方案走过了下面几个阶段：
 
-- **代码埋点：**代码埋点是指开发人员按照产品/运营的需求，在Web页面/App的源码里面添加行为上报的代码，当用户的行为满足某一个条件时，这些代码就会被执行，向服务器上报行为数据。这种方案是最基础的方案，每次增加或者修改数据上报的条件，都需要开发人员的参与，并且只能在下一个版本上线后才能看到效果。很多公司都提供了这类数据上报的SDK，将行为上报的后台服务器接口封装成了简单的客户端SDK接口。开发者可以通过嵌入这类SDK，在埋点的地方调用少量的代码就可以上报行为数据。
+- **代码埋点：代码埋点是指在某个事件发生时调用数据发送接口上报数据。**例如开发人员按照产品/运营的需求，在Web页面/App的源码里面添加行为上报的代码，当用户的行为满足某一个条件时，这些代码就会被执行，向服务器上报行为数据。这种方案是最基础的方案，每次增加或者修改数据上报的条件，都需要开发人员的参与，并且只能在下一个版本上线后才能看到效果。基本上所有的数据平台都提供了这类数据上报的SDK，将行为上报的后台服务器接口封装成了简单的客户端SDK接口。开发者可以通过嵌入这类SDK，在埋点的地方调用少量的代码就可以上报行为数据。
 
-- **全埋点：**全埋点指的是将Web页面/App内产生的所有的、满足某个条件的行为，全部上报到后台服务器。例如把App中所有的按钮点击都进行上报，然后由产品/运营去后台筛选所需要的行为数据。这种方案的优点非常明显，就是可以不用在新增/修改行为上报条件时，再找开发人员去修改埋点的代码。然而它的缺点也和优点一样明显，那就是上报的数据量比代码埋点大很多，里面可能很多是没有价值的数据。此外，这种方案更倾向于独立去看待用户的行为，而没有关注行为的上下文，给数据分析带来了一些难度。很多公司也提供了这类功能的SDK，通过静态或者动态的方式，“Hook”了原有的App代码，从而实现了行为的监测，在数据上报时通常是采用累积多条再上报的方案来合并请求。
+- **全埋点：全埋点指的是将Web页面/App内产生的所有的、满足某个条件的行为，全部上报到后台服务器。**例如把一个App中所有的按钮点击都进行上报，然后由产品/运营去后台筛选所需要的行为数据。这种方案的优点非常明显，就是可以不用在新增/修改行为上报条件时，再找开发人员去修改埋点的代码。然而它的缺点也和优点一样明显，那就是上报的数据量比代码埋点大很多，里面可能很多是没有价值的数据。此外，这种方案更倾向于独立去看待用户的行为，而没有关注行为的上下文，给数据分析带来了一些难度。很多公司也提供了这类功能的SDK，通过静态或者动态的方式，**“Hook”了原有的App代码**，从而实现了行为的监测，在数据上报时通常是采用累积多条再上报的方案来合并请求。
 
-> hook直译是钩子的意思，以前学信息安全的时候在windows上听到过，大体意思是通过某种手段去改变系统API的一个行为，绕过系统的某个方法，或者改变系统的工作流程。在这里其实是指把本来要执行某个方法的对象替换成另一个，一般用的是反射或者代理，需要找到hook的代码位置，甚至还可以在编译阶段实现替换。
+- **可视化埋点：可视化埋点是指通过可视化工具配置采集节点，在App/Web解析配置查找节点，监听节点产生的事件并上报。**例如产品在Web页面/App的界面上进行圈选，配置需要监测界面上哪一个元素，然后保存这个配置，当App启动时会从后台服务器获得产品/运营预先圈选好的配置，然后根据这份配置查找并监测App界面上的元素，当某一个元素满足条件时，就会上报行为数据到后台服务器。有了暴力的全埋点技术方案，很容易联想到按需埋点，可视化埋点就是一种按需配置埋点的方案。现在也有一些公司提供了这类SDK，圈选监测元素时，有的是提供一个Web管理界面，手机在安装并初始化了SDK之后，可以和管理界面了连接，让用户在Web管理界面上配置需要监测的元素，有的是直接让用户在手机上圈选元素进行埋点。
 
-- **可视化埋点：**可视化埋点是指产品/运营在Web页面/App的界面上进行圈选，配置需要监测界面上哪一个元素，然后保存这个配置，当App启动时会从后台服务器获得产品/运营预先圈选好的配置，然后根据这份配置监测App界面上的元素，当某一个元素满足条件时，就会上报行为数据到后台服务器。有了全埋点技术方案，从体验优化的角度很容易想到按需埋点，可视化埋点就是一种按需配置埋点的方案。现在也有一些公司提供了这类SDK，圈选监测元素时，一般都是提供一个Web管理界面，手机在安装并初始化了SDK之后，可以和管理界面了连接，让用户在Web管理界面上配置需要监测的元素。
+> hook直译是钩子的意思，以前学信息安全的时候在windows上听到过，大体意思是通过某种手段去改变系统API的一个行为，绕过系统的某个方法，或者改变系统的工作流程。在这里其实是指把本来要执行某个方法的对象替换成另一个，一般用的是反射或者代理，需要找到hook的代码位置，甚至还可以在编译阶段实现替换。全埋点和可视化埋点都需要Hook掉App原本的代码实现。
 
 
 业界有多家SDK都支持上面介绍的3种埋点方案中的一种或者全部，例如Mixpanel、Sensorsdata、TalkingData、GrowingIO、诸葛IO、Heap Analytics、MTA、Umeng Analytics、百度，只是大家对后两种埋点的称呼不完全相同，有的叫无埋点或者codeless埋点。由于[Mixpanel](https://github.com/mixpanel/mixpanel-android)（支持代码埋点、可视化埋点）和[Sensorsdata](https://github.com/sensorsdata/sa-sdk-android)（全部支持）都开源了自己的全部SDK，技术方案也比较类似，下面以它们的Android SDK为例，简单分析一下3种埋点方案的技术实现。关于JS的SDK技术实现，可以看下我的另一篇博客-[JS埋点SDK技术分析](http://unclechen.github.io/2017/12/24/JS%E5%9F%8B%E7%82%B9SDK%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/)。
@@ -33,9 +35,25 @@ categories:
 
 # 二、代码埋点
 
-包含Mixpanel SDK在内的大部分SDK，都会把这种埋点方案封装成一个比较简单的接口，在这里是`track(String eventName, JSONObject properties)`，开发者在调用这个接口时，可以把一个事件名称和事件的属性传入，然后就可以上报到后台了。
+包含Mixpanel SDK在内的大部分SDK，都会把这种埋点方案封装成一个比较简单的接口，在这里是`track(String eventName, JSONObject properties)`，开发者在调用这个接口时，可以把一个事件名称和事件的属性传入，然后就可以上报到后台了。一般代码埋点长这样：
 
-在实现上，Mixpanel SDK默认采用一条HandlerThread线程来处理事件，当开发者调用`track(String eventName, JSONObject properties)`方法时，**主线程切换到HandlerThread**当中，并先将事件存入数据库。然后看SDK中是否累计到了40个事件，如果累计到40个事件的话，就合并它们上报到后台。
+```java
+button.setOnClickListener(new View.OnClickListener() {
+  @Override
+  public void onClick(View v) {
+    // 业务代码
+    // ...
+    // 埋点上报
+    JSONObject properties = new JSONObject();
+    properties.put("price", 6800);
+    properties.put("name", "Pixel2 XL");
+    Tracker.track("PURCHASE", properties);
+    }
+  });
+```
+
+
+Mixpanel SDK内部采用一条HandlerThread线程来处理事件，当开发者调用`track(String eventName, JSONObject properties)`方法时，**主线程切换到HandlerThread**当中，并先将事件存入数据库。然后看SDK中是否累计到了40个事件，如果累计到40个事件的话，就合并它们上报到后台。
 
 当开发者设置为debug模式，或者手动调用`flush`接口时，可以立即上报累计的所有事件，不过由于只有一条线程，所以如果在flush的时候，前面的事件还没有处理完成，SDK会间隔1分钟再次去处理后面的这些事件。
 
@@ -43,9 +61,13 @@ categories:
 
 # 三、全埋点
 
-## 3.1 AOP基础
+## 3.1 基本原理
 
-Mixpanel现在的Android SDK没有提供这个功能，但是神策Android SDK提供了，实现方式是AOP。
+全埋点要对方法进行Hook，按照**是否在运行时**这个条件来区分，Android全埋点可以有下面两种方式：
+
+- **静态Hook：**AspectJ实现AOP，编译期修改代码- **动态Hook：**运行时替换View.OnClickListener等事件回调
+
+这里的Hook其实就是一种AOP实现。
 
 > 那么什么是AOP？AOP为Aspect Oriented Programming的缩写，意为：面向切面编程，通过预编译方式和运行期动态代理实现程序功能的统一维护的一种技术。AOP是OOP的延续，是软件开发中的一个热点，也是Spring框架中的一个重要内容，是函数式编程的一种衍生范型。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。（from baidu baike）
 
@@ -53,7 +75,12 @@ Mixpanel现在的Android SDK没有提供这个功能，但是神策Android SDK�
 
 **Sensors Analytics AndroidSDK全埋点的实现就是通过在代码编译阶段，找到源代码中需要上报事件的位置，插入SDK的事件上报代码。它用到的框架是[AspectJ](https://www.eclipse.org/aspectj/)。**
 
-说到这里，需要简单了解一下AspectJ以及它里面的一些概念.它是AOP的领跑者，在很多地方我们可以看到它的身影，例如JakeWharton大神贡献的一个注解日志和性能调优框架[Hugo](https://github.com/JakeWharton/hugo)，在Spring框架里面也有应用到AspectJ的概念（虽然Spring AOP的实现是用的动态代理）。我理解AspectJ里面的主要几个概念有：
+
+## 3.2 使用AspectJ做静态Hook
+
+### 3.2.1 AspectJ基本概念
+
+在很多地方我们可以看到AspectJ的身影，例如JakeWharton大神贡献的一个注解日志和性能调优框架[Hugo](https://github.com/JakeWharton/hugo)，在Spring框架里面也有应用到AspectJ的概念（不过Spring AOP的实现是用的动态代理）。我理解AspectJ里面的主要几个概念有：
 
 - **JPoint：**代码切点（就是我们要插入代码的地方）
 - **Aspect：**代码切点的描述
@@ -68,11 +95,11 @@ Mixpanel现在的Android SDK没有提供这个功能，但是神策Android SDK�
 
 如果你对AspectJ有了解的话，已经可以猜到SDK内部是怎么实现全埋点的了；如果没有接触，我觉得也不用急于全面地去学习AspectJ，毕竟AspectJ的功能很强大（可远不止前置、后置这么简单的增强），埋点这种业务只用到了AspectJ当中的一小部分功能而已，可以直接看下面的分析。
 
-## 3.2 全埋点-技术实现
+### 3.2.2 实现
 
 神策SDK里面是如何监测View点击事件呢？我把SDK代码简化一下进行分析，有下面几个步骤：
 
-### 3.2.1 定义一个Aspect
+#### 3.2.2.1 定义一个Aspect
 
 ```java
 import org.aspectj.lang.JoinPoint;
@@ -108,7 +135,7 @@ SensorsDataAPI.sharedInstance().track(AopConstants.APP_CLICK_EVENT_NAME, propert
 
 可以看到AOP实现的点击监测，最后也走`track`方法进行上报了。
 
-### 3.2.2 使用ajc编译器向源代码中插入Aspect代码
+#### 3.2.2.2 使用ajc编译器向源代码中“织入”Aspect代码
 
 采用AspectJ框架编写的代码，想要注入原来的工程的代码，需要在`/app/build.gradle`中引用ajc编译器，脚本如下：
 
@@ -190,7 +217,7 @@ variants.all { variant ->
 apply plugin: 'com.sensorsdata.analytics.android'
 ```
 
-### 3.2.3 完成代码插入，查看插入之后的效果
+#### 3.2.2.3 查看织入后的class文件
 
 完成上面两步，就可以实现在`android.view.View.OnClickListener.onClick(android.view.View)`方法中插入我们的数据上报代码了。我们在demo代码中加一个Button，并给它set一个OnClickListener，编译一下代码，查看`/build/intermediates/classes/debug/`里面class文件，经过ajc编译之后，原始代码中插入了Aspect的代码，并调用了`ViewOnClickListenerAspectj`里面的`onViewClickAOP`方法。
 
@@ -227,20 +254,15 @@ public class MainActivity extends Activity {
 
 AspectJ的基本用法就是这样，除了对`OnClickListener`进行替换，理论上可以对任何已知的方法进行替换，所以在埋点SDK中还可以采用对RatingBar、CheckBox、RadioButton等控件的点击进行监听。
 
-神策AndroidSDK借助AspectJ插入Aspect代码，是一种静态代理的方式。静态的全埋点方案，本质上是在程序没有运行之前，通常是编译或者链接的阶段，对字节码进行修改，插入事件上报的代码。
+神策AndroidSDK借助AspectJ插入Aspect代码，就是一种静态Hook的方式。本质上是在程序没有运行之前，通常是编译或者链接的阶段，对字节码进行修改，插入事件上报的代码。
 
 修改字节码除了这种方案之外，还有Android Gradle插件提供的trasform api（1.5.0版本以上）、ASM、Javassist。在网易乐得的埋点方案，Nuwa热修复项目都可以见到这些技术的实践。
 
-## 3.3 AspectJ相关资料
+## 3.3 使用代理模式实现动态Hook
 
-- Aspect Oriented Programming in Android：[https://fernandocejas.com/2014/08/03/aspect-oriented-programming-in-android/](https://fernandocejas.com/2014/08/03/aspect-oriented-programming-in-android/)
-- AOP之AspectJ全面剖析in Android：[http://www.jianshu.com/p/f90e04bcb326](http://www.jianshu.com/p/f90e04bcb326)
-- 沪江开源了一个叫做AspectJX的插件，扩展了AspectJ，除了对src代码进行AOP，还支持kotlin、工程中引用的jar和aar进行AOP：[https://github.com/HujiangTechnology/gradle_plugin_android_aspectjx](https://github.com/HujiangTechnology/gradle_plugin_android_aspectjx)
-- 关于 Spring AOP (AspectJ) 你该知晓的一切：[http://blog.csdn.net/javazejian/article/details/56267036](http://blog.csdn.net/javazejian/article/details/56267036)
+### 3.3.1 代理模式
 
-## 3.4 其他思路
-
-上面分析了以AspectJ为代表的**“静态Hook”**实现方案，有没有其他办法可以不修改源代码，只是在App运行的时候去**“动态Hook”**点击行为的处理呢？答案是肯定的，JDK里面已经有动态代理了，底层通过反射大法实现，可以从这个角度出发，看下怎么实现点击事件的监测上报。
+上面分析了以AspectJ为代表的**“静态Hook”**实现方案，有没有其他办法可以不修改源代码，只是**在App运行的时候去“动态Hook”**点击行为的处理呢？答案是肯定的，JAVA里面有一个设计模式叫代理模式，从这个角度出发，看下怎么**在运行时**实现点击事件的监测上报。
 
 在[android.view.View.java](https://github.com/aosp-mirror/platform_frameworks_base/blob/master/core/java/android/view/View.java)的源码（`API>=14`）中，有这么几个关键的方法：
 
@@ -294,9 +316,11 @@ AspectJ的基本用法就是这样，除了对`OnClickListener`进行替换，�
     }
 ```
 
-通过上面几个方法可以看到，点击监听器其实被保存在了**`mListenerInfo.mOnClickListener`**里面。那么实现**Hook点击监听器**时，只要将这个`mOnClickListener`替换成我们包装的**点击监听器代理对象**就行了。简单看一下实现思路：
+通过上面几个方法可以看到，点击监听器其实被保存在了**`mListenerInfo.mOnClickListener`**里面。那么实现**Hook点击监听器**时，只要将这个`mOnClickListener`替换成我们包装的**点击监听器代理对象**就可以实现点击监听的代理了。
 
-**1. 创建点击监听器的代理类**
+### 3.3.2 实现
+
+#### 3.3.2.1 创建点击监听器的代理类
 
 ```
     // 点击监听器的代理类，具有上报点击行为的功能
@@ -320,7 +344,7 @@ AspectJ的基本用法就是这样，除了对`OnClickListener`进行替换，�
     }
 ```
 
-**2. 反射获取一个View的mListenerInfo.mOnClickListener，替换成代理的点击监听器**
+#### 3.3.2.2 反射获取一个View的mListenerInfo.mOnClickListener，替换成代理的点击监听器
 
 ```
     // 对一个View的点击监听器进行hook
@@ -352,7 +376,7 @@ AspectJ的基本用法就是这样，除了对`OnClickListener`进行替换，�
 
 注意，如果是`API<14`的话，mOnClickListener直接是直接以一个Field保存在View对象中的，没有ListenerInfo，因此反射的次数要更少一些。
 
-**3. 对App中所有的View进行Hook**
+#### 3.3.2.3 对App中所有的View进行动态Hook
 
 我们在分析的是全埋点，那么怎样把App里面所有的View点击都Hook到呢？有两种方式：
 
@@ -360,31 +384,44 @@ AspectJ的基本用法就是这样，除了对`OnClickListener`进行替换，�
 
 - 第二种：比第一种方式稍微优秀一些，来源是一个Github上的开源库[AndroidTracker](https://github.com/foolchen/AndroidTracker)（Kotlin实现）。他的处理方式是当Activity创建完成后，在DecorView中添加一个透明的View作为子View，在这个子View的onTouchEvent方法中，根据触摸坐标找到屏幕中包含了这个坐标的View，再对这些View尝试进行hookView操作。**这种方式比较取巧，首先是拿到了手指按下的位置，根据这个位置来找需要被Hook的View，避免了在遍历ViewTree的同时对View进行反射。具体实现是在遍历ViewTree中的每个View时，判断这个View的坐标是否包含手指按下的坐标，以及View是否Visible，如果满足这两个条件，就把这个View保存到一个ArrayList<View>hitViews。然后再遍历这个ArrayList里面的View，如果一个View#hasOnClickListeners返回true，那么才对他进行hookView操作。**
 
-整体来看，动态Hook的思路用到了反射，难免对程序性能产生影响，如果要采用这种方式实现全埋点方案，还需要好好评估。
+
+### 3.3.3 动态Hook小结
+
+整体来看，动态Hook的思路这里用到了反射，难免对程序性能产生影响，如果要采用这种方式实现全埋点方案，还需要好好评估。既然提到了代理，要说一下**这里的“代理模式”其实还是JAVA的静态代理**，不是动态代理。因为`OnClickListener`和`OnClickListenerWrapper`是在编写代码的时候就确定了，并不是在运行时动态生成了一个`OnClickListenerWrapper`。在JDK中动态代理是使用Native去生成了代理类的字节码（比如使用ASM等工具），并使用ClassLoader加载进来的。
+
+
+## 3.4 全埋点参考资料
+
+- Aspect Oriented Programming in Android：[https://fernandocejas.com/2014/08/03/aspect-oriented-programming-in-android/](https://fernandocejas.com/2014/08/03/aspect-oriented-programming-in-android/)
+- AOP之AspectJ全面剖析in Android（AspectJ详细用法）：[http://www.jianshu.com/p/f90e04bcb326](http://www.jianshu.com/p/f90e04bcb326)
+- 沪江开源了一个叫做AspectJX的插件，扩展了AspectJ，除了对src代码进行AOP，还支持kotlin、工程中引用的jar和aar进行AOP：[https://github.com/HujiangTechnology/gradle_plugin_android_aspectjx](https://github.com/HujiangTechnology/gradle_plugin_android_aspectjx)
+- 关于 Spring AOP (AspectJ) 你该知晓的一切：[http://blog.csdn.net/javazejian/article/details/56267036](http://blog.csdn.net/javazejian/article/details/56267036)
 
 
 # 四、可视化埋点
 
-第三章介绍的是App全埋点，显然这种方式产生的数据太多，无论是对用户资源的节约，还是后续的数据分析都不太好。那么能否也借助动态代理这类的Hook技术，只对我们感兴趣的控件进行埋点呢？这就是可视化埋点。
+第三章介绍的是App全埋点，显然这种方式产生的数据太多，无论是对用户资源的节约，还是后续的数据分析都不太好。那么能否**同样借助动态Hook技术，在运行时，只对我们感兴趣的控件进行埋点呢？**这就是可视化埋点。
 
-## 4.1 可视化埋点-技术实现
+## 4.1 可视化埋点原理
 
 可视化埋点，需要经过两个步骤，可以由非技术人员操作完成。
 
-- 第一步，使用已经嵌入了SDK的App连接管理界面，当手机App与后台同步时，后台管理界面上会显示和手机App一样的界面，用户可以在管理界面上用鼠标选择需要监测的元素，设置事件名称，保存这个配置。（也有一些SDK，比如GrowingIO的SDK圈选操作是在手机悬浮了一个原点，拖动圆点到需要监测的元素上来设置埋点位置的，不管是什么方式本质上是一样的，需要保存一份配置到后台）。
-- 第二步，嵌入了SDK的App启动时，会从服务器获取到一份配置，再根据这份配置去检测App中的界面及其元素，满足配置的条件时向服务器上报事件。
+- **第一步：通过可视化工具配置采集的View。**例如使用已经嵌入了SDK的App连接管理界面，当手机App与后台同步时，后台管理界面上会显示和手机App一样的界面，用户可以在管理界面上用鼠标选择需要监测的元素，设置事件名称，保存这个配置。（也有一些SDK，比如GrowingIO的SDK圈选操作是在手机悬浮了一个原点，拖动圆点到需要监测的元素上来设置埋点位置的，不管是什么方式本质上是一样的，需要保存一份配置到后台）。
+- **第二步：App解析配置，找到View，Hook它的事件并上报数据。**例如嵌入了SDK的App启动时，会从服务器获取到一份配置，再根据这份配置去检测App中的界面及其元素，满足配置的条件时向服务器上报事件。
 
 这里面最重要的技术点就是如何把手机上需要埋点的元素记录下来，然后根据配置信息找到需要埋点的控件，再替换这个控件的交互事件处理方法（如点击、长按等）。下面以Mixpanel、SensorsdataSDK为例（这两个SDK实现是一样的），简单分析一下技术方案的实现。
 
-### 4.1.1 圈选需要监测的元素，保存配置
+## 4.2 可视化埋点实现
 
-**1.创建WebSocket连接后台**
+### 4.2.1 圈选需要监测的View，保存配置
+
+#### 4.2.1.1 创建WebSocket连接后台
 
 采用WebSocket连接是因为要让手机和后台长时间保持连接，是一个**持续的、实时的双向通信**，WebSocket正适合这种场景。
 
-> 在Mixpanel和神策SDK里面其实都用到了开源的[Java-WebSocket](https://github.com/TooTallNate/Java-WebSocket)实现。此外，还有一个非常著名的Android同屏工具[Vysor](https://www.vysor.io/)，里面也有一个基于WebSocket的网络框架[AndroidAsync](https://github.com/koush/AndroidAsync)。如果对WebSocket感兴趣，可以看看它们。这里其实只要是用Java实现的WebSocket通信就行。
+在Mixpanel和神策SDK里面其实都用到了开源的[Java-WebSocket](https://github.com/TooTallNate/Java-WebSocket)实现。此外，还有一个非常著名的Android同屏工具[Vysor](https://www.vysor.io/)，里面也有一个基于WebSocket的网络框架[AndroidAsync](https://github.com/koush/AndroidAsync)。如果对WebSocket感兴趣，可以看看它们。这里其实只要是用Java实现的WebSocket通信就行。
 
-**2.把App界面截图和里面的子View信息发送到后台**
+#### 4.2.1.2 把App界面截图和里面的子View信息发送到后台
 
 创建WebSocket连接后，SDK会在主线程中，对App中启动的Activity进行扫描，找到界面的RootView（其实是DecorView）。在查找RootView的同时，会采用反射调用View类`createSnapshot`方法对RootView进行截图，从而实现了对屏幕的截图。
 
@@ -394,7 +431,7 @@ AspectJ的基本用法就是这样，除了对`OnClickListener`进行替换，�
 
 一个简单的Activity，ContentView里面有一个LineaLayout，LinearLayout里面放了一个Button。先序遍历Activity的ViewTree后，SDK会把下面这些数据传到WebSocket的服务器（数据有点多，大概有13k，数据主要来自截图）：
 
-```
+```json
 {
     "type": "snapshot_response", 
     "payload": {
@@ -682,7 +719,7 @@ AspectJ的基本用法就是这样，除了对`OnClickListener`进行替换，�
 - classes：View自身以及所有的父类类名，是一个数组，这里决定了一个View到底可以有哪些交互，比如点击、长按等
 - subviews：子View的hashcode，是一个数组
 
-**3.保存待监测的元素的关键信息**
+#### 4.2.1.3 保存待监测的元素的关键信息
 
 将上面收集到数据发送到连接的WebSocket后台，由后台解析之后，可以把App界面的截图展示在Web页面。然后把可以监测的元素以方框的形式添加在界面上提示用户（web页面实现时，我推测只需要用到这个View的left、top、width、height属性在html上加一个div标签，然后设置一个有颜色的border属性即可）。用户可以在这个Web页面点击需要监测的元素，设置这个元素的事件名称（event_type和event_name），点击保存。保存一个需要监测的元素时，需要保存这个元素在当前Activity的ViewTree的路径`path`，以及这个View在父控件中的`index`，具体有下面几个信息：
 
@@ -698,9 +735,9 @@ AspectJ的基本用法就是这样，除了对`OnClickListener`进行替换，�
 	- sa_id_name：View在Apk中的id的字符串名称
 
 
-### 4.1.2 获取配置，监测元素的行为，上报事件
+### 4.2.2 获取配置，查找View，监测View的行为后上报事件
 
-**1.获取配置**
+#### 4.2.2.1 获取配置，查找View
 
 SDK启动时，会从服务器拉取一份JSON格式的配置，保存到sharedPreference里，同时SDK会扫描`android.R`文件里面的资源id和资源的name并缓存起来。
 
@@ -734,13 +771,13 @@ event_bindings: {
 
 收到了这份配置之后，SDK会把根据每个event信息，生成一个`ViewVisitor`。`ViewVisitor`的作用就是把`path`数组里面指向的所有View元素都找到，并且根据event_type，**给这个View设置相应的行为监测器**，当这个View发生指定行为时，监测器就会监测到，并上报行为。
 
-在生成ViewVisitor之后，SDK内部是以`Map<activity, ViewVisitor>`结构保存它们的，这也比较容易理解，毕竟我们的界面是随着一个一个的Activity被create，onResume之后才被用户看见的嘛。其实在ViewVisitor对象中还有一个`PathFinder`对象，这个对象负责在ViewTree中根据path去查找View（这里其实是一个树的查找问题）。
+在生成ViewVisitor之后，SDK内部是以`Map<activity, ViewVisitor>`结构保存它们的，这也比较容易理解，毕竟我们的界面是随着一个一个的Activity被create，onResume之后才被用户看见的嘛。在ViewVisitor对象中还有一个`PathFinder`对象，这个对象负责在ViewTree中根据path去查找View（这里其实是在一个tree里面查找node的问题）。
 
-**2.监测元素，上报事件**
+#### 4.2.2.2 监测View的行为，上报事件
 
 `ViewVisitor`是怎么给View设置监听器，监测元素的产生的行为呢？**答案就是`View.AccessibilityDelegate`。**
 
-在Android SDK里面，AccessibilityService)为我们提供了一系列的事件回调，帮助我们指示一些用户界面的状态变化。我们可以派生辅助功能类，进而对不同的AccessibilityEvent进行处理，我们看下AccessibilityEvent里面有哪些事件类型：
+在Android SDK里面，AccessibilityService（无障碍服务）为我们提供了一系列的事件回调，帮助我们指示一些用户界面的状态变化。我们可以派生辅助功能类，进而对不同的AccessibilityEvent进行处理，我们看下AccessibilityEvent里面有哪些事件类型：
 
 ```java
     /**
@@ -836,28 +873,29 @@ public void setAccessibilityDelegate(@Nullable AccessibilityDelegate delegate) {
 }
 ```
 
-由此可见View的点击处理内部确实调用到了`sendAccessibilityEvent `，所以在RootView开始绘制的时候，给View注册AccessibilityDelegate可以监测到它的点击事件。可视化埋点这里也是一种**“动态Hook”**的实现，不过没有采用第三章中介绍的反射方案，而是采用了AccessibilityDelegate来实现，这种方式效率上显然会更好一些。
+由此可见View的点击处理内部确实调用到了`sendAccessibilityEvent `，所以在RootView开始绘制的时候，给View注册AccessibilityDelegate可以监测到它的点击事件。可视化埋点这里对View的事件监测也是一种**“动态Hook”**的实现，不过没有采用第三章中介绍的反射获取OnClickListener的方案，而是采用了获取AccessibilityDelegate来实现，这种方式反射次数少一些，效率上会更好一些。
 
 > 在网上看到有网友提出，setAccessibilityDelegate来监测View的点击对大多数厂商的机型和版本都是可以的，但是有部分机型是无法成功捕获监控到点击事件。从View的标识生成，以及监测原理来讲，这个方案的稳定性存在一些疑问。
 
-## 4.2 可视化埋点的难点和优化
+## 4.3 可视化埋点的难点和优化
 
 上面简单分析了Mixpanel和SensorsSDK可视化埋点的基本实现，里面最重要有一个技术点值得仔细琢磨，那就是**如何唯一标识App中的一个View？由于View是长在ViewTree上的一个节点，那么用纵向的路径，以及横向的下标应该可以标识一个View。**
 
 - 纵向的路径：是指从根View到这个View的父控件的路径上经过的每一个节点
 - 横向的下标：是指这个View在父控件中的同类元素的下标索引（例如一个LinearLayout中有两个Button，那么第一个Button的下标就是0，第二个Button的下标就是1，这种方式可以抵抗父控件中加入一个非Button类型的元素时对ViewTree的改变，保证仍然可以找到Button，但是无法抵抗父控件中加入同类型的元素）
 
-上面仅仅提到了标识一个View的基本方法，但是有很多实际场景，会对View的查找造成毁灭性的影响，例如Fragment的变化，ListView中控件的复用等等，这里有两篇网易的博客，里面对一些场景的优化做了详细地说明，可以仔细看看：
+上面仅仅提到了标识一个View的基本方法，但是有很多实际场景，会对View的查找造成毁灭性的影响，例如界面中Fragment的变化，ViewTree的变化，ListView中控件的复用等等，这里有两篇网易的博客，里面对一些场景的优化做了详细地说明，可以仔细看看：
 
 - [http://www.infoq.com/cn/presentations/netease-happy-to-no-burial-point-data-collection-practice-road](http://www.infoq.com/cn/presentations/netease-happy-to-no-burial-point-data-collection-practice-road)
 - [http://www.jianshu.com/p/b5ffe845fe2d](http://www.jianshu.com/p/b5ffe845fe2d)
 
 
-## 4.3 参考资料
+## 4.4 可视化埋点参考资料
 
 - sensorsdata git，包含了Android、iOS、js、JAVA等多个版本的SDK：[https://github.com/sensorsdata](https://github.com/sensorsdata)
 - Mixpanel git，包含了Android、iOS、js、JAVA等多个版本的SDK：[https://github.com/mixpanel](https://github.com/mixpanel)
 - 网易移动端数据收集和分析博客：[http://www.jianshu.com/c/ee326e36f556](http://www.jianshu.com/c/ee326e36f556)
+- 美团点评前端无痕埋点实践：[https://tech.meituan.com/mt-mobile-analytics-practice.html](https://tech.meituan.com/mt-mobile-analytics-practice.html)
 
 # 五、总结
 
@@ -865,6 +903,6 @@ public void setAccessibilityDelegate(@Nullable AccessibilityDelegate delegate) {
 
 |埋点方案|优点|缺点|适用场景|
 |:---:|:---|:---|:---|
-|代码埋点|可以按照业务上报详细、定制化的数据|需要开发人员参与，更新维护成本高，无法获得历史数据|对上下文理解要求较高的业务数据|
-|全埋点|对发人员依赖低，可以全量上报一类通用数据，可以拿到历史数据|数量量太大，占用更多资源，且无法收集业务上下文数据|上下文相对独立的、通用的数据|
-|可视化埋点|对开发人员依赖低，可以按照业务需求上报数据，对上下文数据有一定收集能力|圈选事件有一定的操作难度，事件需要被更新时无法获得历史数据，界面变化时圈选的元素可能失效|业务上下文数据相对简单，操作交互比较固定的界面|
+|代码埋点|1.使用灵活，精确控制发送时机 <br> 2.方便设置自定义业务相关的属性|1.埋点成本高，工作量大，必须是技术人员才能完成 <br> 2.更新成本高，一旦上线很难修改。只能通过热修复或者重新发版 <br> 3.对业务代码的侵入大|对业务上下文理解要求较高的业务数据，如电商购物这类可能经过多次页面跳转，埋点时还需要带上前面页面中的一些信息|
+|全埋点|1.开发、维护成本低 <br> 2.可以追溯历史数据 <br> 3.对业务代码侵入小 <br> 4.可以收集到一些额外信息，例如界面的热力图|1.高额流量和计算成本 <br> 2.无法灵活收集属性 <br> 3.动态的Hook方式支持的控件有限、事件类型有限，大量事件监测时反射对App运行性能有影响 <br> 4.静态的Hook方式需要第三方编译器参与，打包时间增长|上下文相对独立的、通用的数据，如点击热力图，性能监控和日志|
+|可视化埋点|1.开发、维护成本低 <br> 2.可以按需埋点，灵活性好 <br> 3.对业务代码侵入小|1.界面的结构发生变化时，圈选的待监测元素可能会失效 <br> 2.支持的控件和事件类型有限 <br> 3.无法灵活地收集到上下文属性|上下文相对简单，依靠控件可以获得上下文信息，界面结构比较简单固定，如新闻阅读、游戏分享界面|

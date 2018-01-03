@@ -413,7 +413,7 @@
 
       
         
-          <h2 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h2><p><a href="http://unclechen.github.io/2017/12/18/Android%E5%9F%8B%E7%82%B9SDK%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/">上一篇博客</a>分析了Android上的埋点SDK技术原理，这次我们看一下这几种方案在Web页面上的实践。在JS里面同样有代码埋点、全埋点、可视化埋点三种方案，如果对这几种方案的概念不了解可以看下上一篇博客。由于<a href="https://github.com/mixpanel/mixpanel-js" target="_blank" rel="noopener">mixpanel-js</a>和<a href="https://github.com/sensorsdata/sa-sdk-javascript" target="_blank" rel="noopener">Sensors Analytics JavaScript SDK</a>都开源了自己的SDK，就以它们为例进行分析。</p>
+          <h2 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h2><p><a href="http://unclechen.github.io/2017/12/18/Android%E5%9F%8B%E7%82%B9SDK%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/">上一篇博客</a>分析了Android上的埋点SDK技术原理，这次我们看一下这几种方案在Web页面上的实践。在JS里面同样有代码埋点、全埋点、可视化埋点三种方案，如果对这几种方案的概念不了解可以看下上一篇博客。由于<a href="https://github.com/mixpanel/mixpanel-js" target="_blank" rel="external">mixpanel-js</a>和<a href="https://github.com/sensorsdata/sa-sdk-javascript" target="_blank" rel="external">Sensors Analytics JavaScript SDK</a>都开源了自己的SDK，就以它们为例进行分析。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/12/24/JS埋点技术分析/#more" rel="contents">
@@ -558,21 +558,26 @@
 
       
         
-          <h1 id="一、概念"><a href="#一、概念" class="headerlink" title="一、概念"></a>一、概念</h1><p>埋点，是对网站、App或者后台等应用程序进行数据采集的一种方法。通过埋点，可以收集用户在应用中的产生行为，进而用于分析和优化产品后续的体验，也可以为产品的运营提供数据支撑，其中常见的指标有PV、UV、页面时长和按钮的点击等。</p>
+          <h1 id="一、概念"><a href="#一、概念" class="headerlink" title="一、概念"></a>一、概念</h1><p>埋点，是对网站、App或者后台等应用程序进行数据采集的一种方法。通过埋点，可以收集用户在应用中的产生行为，进而用于分析和优化产品后续的体验，也可以为产品的运营提供数据支撑，其中常见的指标有PV、UV、页面时长和按钮的点击等，通常可以采集到下面这些数据。</p>
+<ul>
+<li>行为数据：时间、地点、人物、交互的内容等</li>
+<li>质量数据：App运行情况、浏览器加载情况、错误异常等</li>
+<li>环境数据：手机型号、操作系统版本、浏览器UA、地理、运营商、网络环境等</li>
+<li>运营数据：PV、UV、点击量、日活、留存、渠道来源等</li>
+</ul>
 <p>采集行为数据时，通常需要在Web页面/App里面添加一些代码，当用户的行为达到某种条件时，就会向服务器上报用户的行为。其实添加这些代码的过程就可以叫做“埋点”，在很久以前就已经出现了这种技术。随着技术的发展和大家对数据采集要求的不断提高，我认为埋点的技术方案走过了下面几个阶段：</p>
 <ul>
-<li><p><strong>代码埋点：</strong>代码埋点是指开发人员按照产品/运营的需求，在Web页面/App的源码里面添加行为上报的代码，当用户的行为满足某一个条件时，这些代码就会被执行，向服务器上报行为数据。这种方案是最基础的方案，每次增加或者修改数据上报的条件，都需要开发人员的参与，并且只能在下一个版本上线后才能看到效果。很多公司都提供了这类数据上报的SDK，将行为上报的后台服务器接口封装成了简单的客户端SDK接口。开发者可以通过嵌入这类SDK，在埋点的地方调用少量的代码就可以上报行为数据。</p>
+<li><p><strong>代码埋点：代码埋点是指在某个事件发生时调用数据发送接口上报数据。</strong>例如开发人员按照产品/运营的需求，在Web页面/App的源码里面添加行为上报的代码，当用户的行为满足某一个条件时，这些代码就会被执行，向服务器上报行为数据。这种方案是最基础的方案，每次增加或者修改数据上报的条件，都需要开发人员的参与，并且只能在下一个版本上线后才能看到效果。基本上所有的数据平台都提供了这类数据上报的SDK，将行为上报的后台服务器接口封装成了简单的客户端SDK接口。开发者可以通过嵌入这类SDK，在埋点的地方调用少量的代码就可以上报行为数据。</p>
 </li>
-<li><p><strong>全埋点：</strong>全埋点指的是将Web页面/App内产生的所有的、满足某个条件的行为，全部上报到后台服务器。例如把App中所有的按钮点击都进行上报，然后由产品/运营去后台筛选所需要的行为数据。这种方案的优点非常明显，就是可以不用在新增/修改行为上报条件时，再找开发人员去修改埋点的代码。然而它的缺点也和优点一样明显，那就是上报的数据量比代码埋点大很多，里面可能很多是没有价值的数据。此外，这种方案更倾向于独立去看待用户的行为，而没有关注行为的上下文，给数据分析带来了一些难度。很多公司也提供了这类功能的SDK，通过静态或者动态的方式，“Hook”了原有的App代码，从而实现了行为的监测，在数据上报时通常是采用累积多条再上报的方案来合并请求。</p>
+<li><p><strong>全埋点：全埋点指的是将Web页面/App内产生的所有的、满足某个条件的行为，全部上报到后台服务器。</strong>例如把一个App中所有的按钮点击都进行上报，然后由产品/运营去后台筛选所需要的行为数据。这种方案的优点非常明显，就是可以不用在新增/修改行为上报条件时，再找开发人员去修改埋点的代码。然而它的缺点也和优点一样明显，那就是上报的数据量比代码埋点大很多，里面可能很多是没有价值的数据。此外，这种方案更倾向于独立去看待用户的行为，而没有关注行为的上下文，给数据分析带来了一些难度。很多公司也提供了这类功能的SDK，通过静态或者动态的方式，<strong>“Hook”了原有的App代码</strong>，从而实现了行为的监测，在数据上报时通常是采用累积多条再上报的方案来合并请求。</p>
+</li>
+<li><p><strong>可视化埋点：可视化埋点是指通过可视化工具配置采集节点，在App/Web解析配置查找节点，监听节点产生的事件并上报。</strong>例如产品在Web页面/App的界面上进行圈选，配置需要监测界面上哪一个元素，然后保存这个配置，当App启动时会从后台服务器获得产品/运营预先圈选好的配置，然后根据这份配置查找并监测App界面上的元素，当某一个元素满足条件时，就会上报行为数据到后台服务器。有了暴力的全埋点技术方案，很容易联想到按需埋点，可视化埋点就是一种按需配置埋点的方案。现在也有一些公司提供了这类SDK，圈选监测元素时，有的是提供一个Web管理界面，手机在安装并初始化了SDK之后，可以和管理界面了连接，让用户在Web管理界面上配置需要监测的元素，有的是直接让用户在手机上圈选元素进行埋点。</p>
 </li>
 </ul>
 <blockquote>
-<p>hook直译是钩子的意思，以前学信息安全的时候在windows上听到过，大体意思是通过某种手段去改变系统API的一个行为，绕过系统的某个方法，或者改变系统的工作流程。在这里其实是指把本来要执行某个方法的对象替换成另一个，一般用的是反射或者代理，需要找到hook的代码位置，甚至还可以在编译阶段实现替换。</p>
+<p>hook直译是钩子的意思，以前学信息安全的时候在windows上听到过，大体意思是通过某种手段去改变系统API的一个行为，绕过系统的某个方法，或者改变系统的工作流程。在这里其实是指把本来要执行某个方法的对象替换成另一个，一般用的是反射或者代理，需要找到hook的代码位置，甚至还可以在编译阶段实现替换。全埋点和可视化埋点都需要Hook掉App原本的代码实现。</p>
 </blockquote>
-<ul>
-<li><strong>可视化埋点：</strong>可视化埋点是指产品/运营在Web页面/App的界面上进行圈选，配置需要监测界面上哪一个元素，然后保存这个配置，当App启动时会从后台服务器获得产品/运营预先圈选好的配置，然后根据这份配置监测App界面上的元素，当某一个元素满足条件时，就会上报行为数据到后台服务器。有了全埋点技术方案，从体验优化的角度很容易想到按需埋点，可视化埋点就是一种按需配置埋点的方案。现在也有一些公司提供了这类SDK，圈选监测元素时，一般都是提供一个Web管理界面，手机在安装并初始化了SDK之后，可以和管理界面了连接，让用户在Web管理界面上配置需要监测的元素。</li>
-</ul>
-<p>业界有多家SDK都支持上面介绍的3种埋点方案中的一种或者全部，例如Mixpanel、Sensorsdata、TalkingData、GrowingIO、诸葛IO、Heap Analytics、MTA、Umeng Analytics、百度，只是大家对后两种埋点的称呼不完全相同，有的叫无埋点或者codeless埋点。由于<a href="https://github.com/mixpanel/mixpanel-android" target="_blank" rel="noopener">Mixpanel</a>（支持代码埋点、可视化埋点）和<a href="https://github.com/sensorsdata/sa-sdk-android" target="_blank" rel="noopener">Sensorsdata</a>（全部支持）都开源了自己的全部SDK，技术方案也比较类似，下面以它们的Android SDK为例，简单分析一下3种埋点方案的技术实现。关于JS的SDK技术实现，可以看下我的另一篇博客-<a href="http://unclechen.github.io/2017/12/24/JS%E5%9F%8B%E7%82%B9SDK%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/">JS埋点SDK技术分析</a>。</p>
+<p>业界有多家SDK都支持上面介绍的3种埋点方案中的一种或者全部，例如Mixpanel、Sensorsdata、TalkingData、GrowingIO、诸葛IO、Heap Analytics、MTA、Umeng Analytics、百度，只是大家对后两种埋点的称呼不完全相同，有的叫无埋点或者codeless埋点。由于<a href="https://github.com/mixpanel/mixpanel-android" target="_blank" rel="external">Mixpanel</a>（支持代码埋点、可视化埋点）和<a href="https://github.com/sensorsdata/sa-sdk-android" target="_blank" rel="external">Sensorsdata</a>（全部支持）都开源了自己的全部SDK，技术方案也比较类似，下面以它们的Android SDK为例，简单分析一下3种埋点方案的技术实现。关于JS的SDK技术实现，可以看下我的另一篇博客-<a href="http://unclechen.github.io/2017/12/24/JS%E5%9F%8B%E7%82%B9SDK%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/">JS埋点SDK技术分析</a>。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/12/18/Android埋点技术分析/#more" rel="contents">
@@ -863,7 +868,7 @@
       
         
           <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>相信看到这篇文章的人应该都用过Chrome插件吧，最近刚好有个这方面的需求，我就把Chrome插件的相关知识学习了一下，发现其实Chrome插件的开发和大前端Web开发的底子是一样的，无非就是runtime只限于Chrome浏览器，并且可以调用Chrome提供的一些<code>chrome.*</code> API来实现一些基于Chrome浏览器的小功能。这里非要类比的话，我理解<code>chrome.*</code> API就像我们开发Hybird应用一样，需要有一个bridge层来提供底层原生的能力给js。我是做Android开发出生的，这只是我的个人理解，可能对大Web技术的理解还是不够。</p>
-<p>其实Chrome上的插件，从UI上主要分成两类：一类是浏览器按钮（<a href="https://crxdoc-zh.appspot.com/extensions/browserAction" target="_blank" rel="noopener">BrowserAction</a>），另一类是页面按钮（<a href="https://crxdoc-zh.appspot.com/extensions/pageAction" target="_blank" rel="noopener">PageAction</a>）。两者的开发大同小异，我这里今天主要介绍的主角不是Chrome插件开发，而是<strong>如何使用React.js来开发Chrome插件</strong>，本文先简单介绍下Chrome插件的开发和ReactJS，最后介绍如何采用Facebook官方推荐的creat-react-app脚手架来开发Chrome插件。</p>
+<p>其实Chrome上的插件，从UI上主要分成两类：一类是浏览器按钮（<a href="https://crxdoc-zh.appspot.com/extensions/browserAction" target="_blank" rel="external">BrowserAction</a>），另一类是页面按钮（<a href="https://crxdoc-zh.appspot.com/extensions/pageAction" target="_blank" rel="external">PageAction</a>）。两者的开发大同小异，我这里今天主要介绍的主角不是Chrome插件开发，而是<strong>如何使用React.js来开发Chrome插件</strong>，本文先简单介绍下Chrome插件的开发和ReactJS，最后介绍如何采用Facebook官方推荐的creat-react-app脚手架来开发Chrome插件。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/06/16/使用ReactJS开发Chrome插件/#more" rel="contents">
@@ -1154,7 +1159,7 @@
 
       
         
-          <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>记录一次周末在家速成的爬虫实现之旅。受人之托，想要把这个页面<a href="http://baike.baidu.com/starrank?fr=lemmaxianhua" target="_blank" rel="noopener">http://baike.baidu.com/starrank?fr=lemmaxianhua</a>的明星排行榜爬取下来。用chrome打开一看，其实就1000条记录。然后“右键菜单”-&gt;“检查”，看下网页的结构，也不是特别复杂。所以我目测只要用<strong>python</strong>自带的<code>urllib2</code>库打开网页，获取html代码，再交给<code>BeautifulSoup</code>库解析html代码，应该就可以快速搞定。</p>
+          <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>记录一次周末在家速成的爬虫实现之旅。受人之托，想要把这个页面<a href="http://baike.baidu.com/starrank?fr=lemmaxianhua" target="_blank" rel="external">http://baike.baidu.com/starrank?fr=lemmaxianhua</a>的明星排行榜爬取下来。用chrome打开一看，其实就1000条记录。然后“右键菜单”-&gt;“检查”，看下网页的结构，也不是特别复杂。所以我目测只要用<strong>python</strong>自带的<code>urllib2</code>库打开网页，获取html代码，再交给<code>BeautifulSoup</code>库解析html代码，应该就可以快速搞定。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016/12/11/python利用beautifulsoup+selenium自动翻页抓取网页内容/#more" rel="contents">
