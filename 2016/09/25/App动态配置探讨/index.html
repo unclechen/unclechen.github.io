@@ -90,7 +90,7 @@
 
 
 
-<meta name="description" content="一、背景App开发中一个比较常见的问题就是动态化，有时我们会需要程序的某一个逻辑可以动态改变而不需要发版本让用户重新安装。例如，App中的某个WebView有一个url白名单，我们希望它可以动态改变。这是个常见的需求，现在无论是技术面上还是产品上大家都在讲一个动态化，所以一波接一波出了各种插件化，甚至是ReactNat">
+<meta name="description" content="一、背景App开发中一个比较常见的问题就是动态化，有时我们会需要程序的某一个逻辑可以动态改变而不需要发版本让用户重新安装。例如，App中的某个WebView有一个url白名单，我们希望它可以动态改变。这是个常见的需求，现在无论是技术面上还是产品上大家都在讲一个动态化，所以一波接一波出了各种插件化，甚至是ReactNative、weex、微信小程序等等这些轮子。 但是在实际中需要考虑到很多的业务特点">
 <meta name="keywords" content="客户端,服务器,动态化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="App动态配置探讨">
@@ -98,7 +98,7 @@
 <meta property="og:site_name" content="UncleChen的博客">
 <meta property="og:description" content="一、背景App开发中一个比较常见的问题就是动态化，有时我们会需要程序的某一个逻辑可以动态改变而不需要发版本让用户重新安装。例如，App中的某个WebView有一个url白名单，我们希望它可以动态改变。这是个常见的需求，现在无论是技术面上还是产品上大家都在讲一个动态化，所以一波接一波出了各种插件化，甚至是ReactNative、weex、微信小程序等等这些轮子。 但是在实际中需要考虑到很多的业务特点">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-01T10:53:47.000Z">
+<meta property="og:updated_time" content="2017-12-27T08:32:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="App动态配置探讨">
 <meta name="twitter:description" content="一、背景App开发中一个比较常见的问题就是动态化，有时我们会需要程序的某一个逻辑可以动态改变而不需要发版本让用户重新安装。例如，App中的某个WebView有一个url白名单，我们希望它可以动态改变。这是个常见的需求，现在无论是技术面上还是产品上大家都在讲一个动态化，所以一波接一波出了各种插件化，甚至是ReactNative、weex、微信小程序等等这些轮子。 但是在实际中需要考虑到很多的业务特点">
@@ -421,7 +421,7 @@
 
       
         <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>App开发中一个比较常见的问题就是动态化，有时我们会需要程序的某一个逻辑可以动态改变而不需要发版本让用户重新安装。例如，App中的某个WebView有一个url白名单，我们希望它可以动态改变。这是个常见的需求，现在无论是技术面上还是产品上大家都在讲一个动态化，所以一波接一波出了各种插件化，甚至是ReactNative、weex、微信小程序等等这些轮子。</p>
-<p>但是在实际中需要考虑到很多的业务特点，使得我们在<strong>统一化</strong>和<strong>个性化</strong>的时候比较难以选择，半年前天猫的技术博客就出了这篇文章–<a href="http://pingguohe.net/2016/03/18/config-center.html" target="_blank" rel="noopener">动态调整的基础 —— 配置中心</a>，里面介绍了阿里的团队在这方面的实践经验。今天我以一个遇到的实际需求为例，总结下我的想法。</p>
+<p>但是在实际中需要考虑到很多的业务特点，使得我们在<strong>统一化</strong>和<strong>个性化</strong>的时候比较难以选择，半年前天猫的技术博客就出了这篇文章–<a href="http://pingguohe.net/2016/03/18/config-center.html" target="_blank" rel="external">动态调整的基础 —— 配置中心</a>，里面介绍了阿里的团队在这方面的实践经验。今天我以一个遇到的实际需求为例，总结下我的想法。</p>
 <a id="more"></a>
 <h1 id="二、需求-amp-目标：设计一个动态配置中心"><a href="#二、需求-amp-目标：设计一个动态配置中心" class="headerlink" title="二、需求&amp;目标：设计一个动态配置中心"></a>二、需求&amp;目标：设计一个动态配置中心</h1><ul>
 <li><p><strong>需求：</strong>支持不同业务、不同平台、不同版本（一般是版本的范围），按需动态下发配置。这里业务可以是不同的App、也可以是同一个App里面不同的模块，或者不同的SDK。</p>
@@ -434,7 +434,7 @@
 <li>1.配置的数据结构</li>
 </ul>
 <p>这是客户端希望拿到的下发配置信息，这里我的需求就是一个<strong>key-value</strong>形式的json字符串，value里面是客户端可以自己解析出来使用的结构即可。</p>
-<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"base_setting"</span>: &#123;</span><br><span class="line">        <span class="string">"key_1"</span>: <span class="string">"value_1"</span>,</span><br><span class="line">        <span class="string">"key_2"</span>: <span class="string">"value_2"</span>  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="string">"base_setting"</span>: &#123;</div><div class="line">        <span class="string">"key_1"</span>: <span class="string">"value_1"</span>,</div><div class="line">        <span class="string">"key_2"</span>: <span class="string">"value_2"</span>  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <ul>
 <li>2.元信息（meta-info）：<strong>业务(bizType) -&gt; 平台(platform) -&gt; 版本(version)</strong></li>
 </ul>
