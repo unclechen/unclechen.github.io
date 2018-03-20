@@ -16,7 +16,7 @@ categories:
 
 ## 一、背景
 
-[上一篇博客](http://unclechen.github.io/2017/12/18/Android%E5%9F%8B%E7%82%B9SDK%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/)分析了Android上的埋点SDK技术原理，这次我们看一下这几种方案在Web页面上的实践。在JS里面同样有代码埋点、全埋点、可视化埋点三种方案，如果对这几种方案的概念不了解可以看下上一篇博客。由于[mixpanel-js](https://github.com/mixpanel/mixpanel-js)和[Sensors Analytics JavaScript SDK](https://github.com/sensorsdata/sa-sdk-javascript)都开源了自己的SDK，就以它们为例进行分析。
+[上一篇博客](http://unclechen.github.io/2017/12/18/Android%E5%9F%8B%E7%82%B9SDK%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/)分析了Android上的埋点SDK技术原理，这次我看看Web页面上的埋点。Web页面上的埋点主要通过JS完成，在JS里面同样有代码埋点、全埋点、可视化埋点三种方案，如果对这几种方案的概念不了解可以看下上一篇博客。由于[mixpanel-js](https://github.com/mixpanel/mixpanel-js)和[Sensors Analytics JavaScript SDK](https://github.com/sensorsdata/sa-sdk-javascript)都开源了自己的SDK，就以它们为例进行分析。
 
 <!-- more -->
 
@@ -26,7 +26,7 @@ categories:
 
 ### 2.1 基本用法
 
-埋点之前，需要加载SDK，并调用SDK的初始化接口。以Mixpanel为例，官方介入文档提供的加载、初始化SDK代码如下：
+埋点之前，需要在head部分嵌入SDK，并调用SDK的初始化接口。以Mixpanel为例，官方介入文档提供的加载、初始化SDK代码如下：
 
 ```
 <!-- start Mixpanel --><script type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
@@ -37,12 +37,25 @@ mixpanel.init("YOUR TOKEN");</script><!-- end Mixpanel -->
 
 这是一段立即执行的js代码，作用通常是去异步加载真正的JS SDK，然后调用SDK的初始化接口init方法，完成初始化的操作。
 
-初始化代码为`mixpanel.init('YOUR TOKEN', { your: 'config' }, 'library_name');`，也可以简写为`mixpanel.init("YOUR TOKEN")`。
+初始化的核心代码为
 
-看下这几个参数的含义：
-- 第一个参数是你在后台注册的app token
-- 第二个参数是SDK的配置，传入了一堆key-value，如果不传，SDK内部也有个默认配置。
+```js
+mixpanel.init('YOUR TOKEN', { your: 'config' }, 'library_name')
 ```
+
+也可以简写为
+
+```js
+mixpanel.init("YOUR TOKEN")
+```
+
+
+看下init方里面几个参数的含义：
+
+- 第一个参数是你在后台注册的app token
+- 第二个参数是SDK的配置，传入了一堆key-value，如果不传，SDK内部也有个默认配置，长下面这样：
+
+```js
 var DEFAULT_CONFIG = {
     'api_host': HTTP_PROTOCOL + 'api.mixpanel.com',
     'app_host': HTTP_PROTOCOL + 'mixpanel.com',
@@ -70,7 +83,8 @@ var DEFAULT_CONFIG = {
     'property_blacklist': []
 };
 ```
-- 第三个参数是SDK全局变量名（可以避免变量名污染）
+
+- 第三个参数是SDK全局变量名
 
 > Mixpanel接入文档：[https://mixpanel.com/help/reference/javascript](https://mixpanel.com/help/reference/javascript)
 
@@ -78,7 +92,7 @@ var DEFAULT_CONFIG = {
 
 代码埋点的方式通常都会被封装成类似`track(eventName, properties)`的接口，例如在Mixpanel中，可以用`mixpanel.track("Played song", {"genre": "hip-hop"});`来上报事件。
 
-这里是整个SDK中核心的地方，使用频率也是最高的。代码位于`/src/mixpanel-core.js`里面，先撇开复杂的逻辑和条件控制，看一下track的基本实现：
+这里是整个SDK中最重要的地方，使用频率也是最高的。代码位于`/src/mixpanel-core.js`里面，先撇开复杂的逻辑和条件控制，看一下track的基本实现，我稍微加了点注释：
 
 ```js
 //  track方法实现
@@ -154,11 +168,11 @@ MixpanelLib.prototype._send_request = function(url, data, callback) {
 };
 ```
 
-上面就是事件上报代码的核心实现。但是由于Web自身的一些特性，比如在追踪页面跳转行为（链接的点击、表单的提交等）时，为了防止数据发送不及时导致的数据丢失，SDK中提供一些诸如`track_links`和`track_forms`特殊方法，这些方法内部用的其实是setTimeout。
+上面就是事件上报代码的核心实现。但是由于Web应用自身的一些特性，比如在追踪页面跳转行为（链接的点击、表单的提交等）时，为了防止数据发送不及时导致的数据丢失，SDK中提供一些诸如`track_links`和`track_forms`特殊方法，这些方法内部用的其实是setTimeout或者等待服务器返回结果之后再让页面跳转。
 
 ## 三、全埋点
 
-Mixpanel和神策都提供了名为**“AutoTrack”**的方案，只需要在初始化SDK的时候，传入一个参数即可打开这个功能。JS SDK可以自动监测网页中所有的一类事件，这和AndroidSDK里面监听所有按钮的点击有些类似。
+Mixpanel和神策都提供了名为**“AutoTrack”**的方案，只需要在初始化SDK的时候，传入一个参数即可打开这个功能。JS SDK可以自动监测网页中所有的点击、表单submit等事件，这和AndroidSDK里面监听所有按钮的点击有些类似。
 
 ### 3.1 自动监测的元素、事件类型
 
@@ -305,37 +319,42 @@ _shouldTrackDomEvent: function(element, event) {
 
 ### 3.3 全埋点小结
 
-可以看到全埋点还是有点暴力的，会采集的数据量也挺大，并且采集到的属性也比较多，可以看到在MixpanelSDK中，如果页面结构比较深，那么数据报过去分析起来可能还是需要花点时间的。在神策SDK的接入文档中也提到，建议那些按钮不是很多的，相对简单的页面可以采用这个方法。一般情况下，如果网页上的按钮比较多的话，因为每次按钮的点击都会发数据，会导数据量增大。。
+可以看到全埋点还是有点暴力的，会采集的数据量也挺大，并且采集到的属性也比较多，可以看到在MixpanelSDK中，如果页面结构比较深，那么数据报过去分析起来可能还是需要花点时间的，同时也会产生大量可能不会使用的数据，对资源也是一种浪费。在神策SDK的接入文档中也提到，建议那些按钮不是很多的，相对简单的页面可以采用这个方法。一般情况下，如果网页上的按钮比较多的话，因为每次按钮的点击都会发数据，数据量很大。
 
 ## 四、可视化埋点
 
-Mixpanel和神策，都提供了JS可视化埋点功能，与全埋点相比，这种方式可以指定自己想要监测的元素和属性（所有可以点击的元素），既可以做到动态配置，又不会像全埋点那样产生大量的数据。
+Mixpanel和神策等平台，都提供了JS可视化埋点功能，与全埋点相比，这种方式可以指定自己想要监测的元素和属性（所有可以点击的元素），既可以做到动态配置，又不会像全埋点那样产生大量的数据（但也有例外，比如Mixpanel的可视化埋点仍然上报了全量点击数据，只是在后台根据可视化配置过滤出实际的数据）。
 
-以Mixpanel为例，可视化埋点的入口在后台管理界面，需要在后台输入需要埋点的页面url，然后再进入我们的Web页面，此时就会加载可视化圈选的编辑器（代码见`autotrack.js`中的`_maybeLoadEditor`方法，需要注意的是这个页面必须已经嵌入了JS SDK）。
+可视化埋点首先需要进入埋点模式，以Mixpanel为例，可视化埋点的入口在后台管理界面，需要在后台输入需要埋点的页面url，然后再进入我的Web页面，此时就会加载可视化标记的编辑器（代码见`autotrack.js`中的`_maybeLoadEditor`方法，需要注意的是这个页面必须已经嵌入了JS SDK）。
 
-**可视化埋点需要完成两件事：**
+> 这里一定要从平台登录才可以进入可视化编辑状态，这实际上是对安全性的一个保证，试想如果只要嵌入SDK就可以做可视化埋点，那岂不是我的Web应用随便就可以被别人埋点，对我的数据产生干扰了。在Mixpanel JS SDK内部，通常会**判断当前页面的sessionStorge/localStorage中是否有一个开启可视化编辑器标志字段（例如Mixpanel是`_mpcehash`字段）**，读取这个字段，解析到其中的打开可视化编辑器的开关开启之后，就会加载可视化编辑器。由此可见其实从SDK后台管理界面跳转到可视化标记页面时，就是向SessionStorage中写入了相应的标志。
 
-- **圈选元素，保存配置**：这一步最重要的就是保存好需要追踪的元素的element_path，以及需要追踪的元素。
-- **下发配置，上报行为**：这一步最重要的就是通过element_path找到元素，给它添加一个点击监听器。
+**可视化埋点的两个关键点是：**
 
-### 4.1 圈选操作
+- **标记元素，保存配置**：这一步要保存好需要追踪的元素的element_path，以及需要追踪的元素。
+- **下发配置，查找元素，监听点击，上报行为**：这一步要通过element_path找到元素，给它添加一个点击监听器，当点击事件发生时SDK上报事件。
 
-在JS SDK内部，通常会**判断当前页面的sessionStorge/localStorage中是否有一个开启可视化编辑器标志字段（例如Mixpanel是`_mpcehash`字段）**，读取这个字段，解析到其中的打开可视化编辑器的开关开启之后，就会加载可视化编辑器。由此可见其实从SDK后台管理界面跳转到可视化圈选页面时，就是向SessionStorage中写入了相应的标志。
+这里最重要的就是：**元素的标记和查找**，不同的SDK就是实现标记和查找的时候稍微有一些差异。
 
-> MixpanelJS加载可视化编辑器时，需要从`//mixpanel.com/js-bundle/reports/collect-everything/editor.js?_ts={$timestamp}`去加载一个js文件，**这个js差不多可以看成一个独立的圈选SDK，**最后这个请求会被重定向到一个cdn地址（`https://cdn4.mxpnl.com/static/asset-cache/3fc4abfdcebcb5121f1ebf143415b232/compiled/reports/collect-everything/editor.min.js`），随便打开这个js看下就有两万多行，因此单独做成一个按需加载的SDK是很有必要的。
+### 4.1 标记元素，保存配置
 
-由于Mixpanel就没有提供圈选SDK的源码，不过我从其他的SDK上体验了一下这种操作，就是在开发者web页面上，当用户的鼠标经过**可以被点击**的元素时，这个元素会被一种颜色高亮提示，此时点击一下这个元素，就会弹出一个浮窗，用户填写信息，设置一个事件和一些属性，保存之后就算完成对这个元素的圈选操作了（可能每个SDK在这里的操作上有些小差别，但是基本原理都是这样），当圈选过的元素的配置保存好了以后，这个元素会用特殊的颜色高亮起来。
+> MixpanelJS加载可视化编辑器时，需要从`//mixpanel.com/js-bundle/reports/collect-everything/editor.js?_ts={$timestamp}`去加载一个js文件，**这个js差不多可以看成一个独立的标记SDK，**最后这个请求会被重定向到一个cdn地址（`https://cdn4.mxpnl.com/static/asset-cache/3fc4abfdcebcb5121f1ebf143415b232/compiled/reports/collect-everything/editor.min.js`），随便打开这个js看下就有两万多行，因此单独做成了一个按需加载的模块。
 
-**虽然圈选SDK的代码可以有很长，但是圈选元素的核心是如何唯一标识需要被追踪的元素。**查看神策JS SDK中的`vtrack.sdk.js`这个文件发现，当神策SDK进入可视化圈选模式的时候，会去加载`vendor.js`和`vendor.css`，这两个文件可以看作一个圈选SDK。讲真，圈选SDK的代码都挺长，抓重点，看下`vendor.js`代码里是**如何标记需要追踪的元素的**。
+由于Mixpanel就没有提供标记SDK的源码，不过从体验和**抓包分析后台下发的配置**，我仍然可以推测出技术实现的细节。
 
-在`vendor.js`中，有一个`EventDefine`模块，这个模块负责把一个标签处理成我们要保存的selector。
+**从体验的角度来讲，**当进入可视化编辑状态时，在开发者web页面上，用户的鼠标经过**可以被点击**的元素（例如a、button标签等）时，这个元素会被一种颜色高亮提示，此时点击一下这个元素，就会弹出一个浮窗，用户填写信息，设置一个事件和一些属性，保存之后就算完成对这个元素的标记操作了，当标记过的元素的配置保存好了以后，这个元素会用另外一种特殊的颜色高亮标识起来。
+
+**从技术的角度来讲，**我看下神策JS SDK中的`vtrack.sdk.js`这个文件，当神策SDK进入可视化标记模式的时候，会去加载`vendor.js`和`vendor.css`，这两个文件可以看作一个标记SDK。那么`vendor.js`代码里是**如何标记需要追踪的元素的**呢？
+
+在`vendor.js`中，有一个`EventDefine`模块，这个模块负责把一个标签处理成我要保存的selector。
 
 **EventDefine**有三个方法：
-- getSelfAttr：获取一个标签内部的文本内容，举例来说，一个`<p>This is another paragraph.</p>`得到的内容是`This is another paragraph.`。
+
+- getSelfAttr：获取一个标签内的文本内容，举例来说，一个`<p>This is another paragraph.</p>`得到的内容是`This is another paragraph.`。
 - toSelector：把一个标签的tagName、id、classNames解析出来，拼成一个串。举例来说，一个`<div id="test" class="uncle chen"></div>`标签，它的selector是`div#id.uncle.chen`，这个selector是可以直接给jQuery用来查找元素的。
 - toAllSelector：选择一个需要追踪的标签，并给这个标签定义点击时上报的事件（EventDefine），最后将这个事件转成一个selector保存下来，selector就是用于给jQuery来查找元素的选择器，这里需要注意，如果一个元素是在iFrame里面的，那么SDK保存的选择器路径是相对iFrame内部的，而不是最外层的document。
 
-前两个方法都是给`toAllSelector`方法调用的，`toAllSelector`方法是圈选SDK的重点，这个方法的实现如下：
+前两个方法都是给`toAllSelector`方法调用的，`toAllSelector`方法是神策的标记SDK的重点，这个方法的实现如下：
 
 ```js
   toAllSelector: function($target, outDocuemnt) {
@@ -362,16 +381,20 @@ Mixpanel和神策，都提供了JS可视化埋点功能，与全埋点相比，�
     }
 ```
 
-当选中一个标签时，SDK会提取出这个标签的selector，然后用jQuery选择器查找这个selector指向的元素，如果这个selector指向的元素有多个（`selSize !== 1`，也就是说这个元素有着多个兄弟标签），那么还需要进一步去提取其父标签的selector，直到找出可以唯一标识这个元素的selector为止，最后将需要追踪的这个元素以{nthEle: nthEle, selfAttr: selfAttr}`，nthEle是selector，selfAttr是文本内容。
+当选中一个标签时，SDK会提取出这个标签的selector，然后用jQuery选择器查找这个selector指向的元素，如果这个selector指向的元素有多个（`selSize !== 1`，也就是说这个元素有着多个兄弟标签），那么还需要进一步去提取其父标签的selector，直到找出可以**唯一**标识这个元素的selector为止，最后将需要追踪的这个元素以{nthEle: nthEle, selfAttr: selfAttr}`，nthEle是selector，selfAttr是文本内容。
 
-### 4.2 监测
+**简单总结一下元素的标记，在Web页面中，一个元素的唯一css选择器生成算法，应该记录了从body到这个元素的完整路径，并记录每一个节点是其父亲节点的第几个孩子节点，即这个元素在整个Dom Tree中的深度和下标。此外，为了在一定程度上抵抗Dom Tree的变化，下标应该记录的是这个元素在父节点中相同类型元素的index（nth-of-type），而不是其父节点下面所有孩子节点的index（nth-child）。**
 
-圈选元素，保存配置之后，SDK如何根据配置来监测配置好的元素，并进行上报呢？仍然以神策js为例，`vtrack.sdk.js`在正常模式下，会去解析后台下发的配置，找到圈选过的元素，绑定事件。
+### 4.2 查找元素，监听上报
+
+标记元素，保存配置之后，SDK如何根据配置来监测配置好的元素，并进行上报呢？前面我说到Mixpanel在可视化埋点的上报实现里，仍然保持了全量点击事件上报，并在每个上报中把元素在Dom Tree的完整路径一起上报到了后台，由后台去过滤出可视化事件。
+
+所以这里我看下神策js的代码，在可视化模块`vtrack.sdk.js`中，正常模式下，会去解析后台下发的配置，找到标记过的元素，绑定事件。
 
 **1.下发配置**
 
 ```js
-// 进入普通模式时，会从后台的一个接口去拉去圈选过的元素（这里也叫“部署”过的元素）的关键信息，然后进行解析
+// 进入普通模式时，会从后台的一个接口去拉去标记过的元素（这里也叫“部署”过的元素）的关键信息，然后进行解析
   enterNormalMode: function() {
     sd.vtrack_mode = 'normalMode';
     var me = this;
@@ -381,9 +404,92 @@ Mixpanel和神策，都提供了JS可视化埋点功能，与全埋点相比，�
   },
 ```
 
+由于神策的后台代码是走私有化部署的，我没有办法体验，这里看一份诸葛IO平台可视化配置：
+
+```json
+{
+  "code": 10001,
+  "msg": "Request success",
+  "visual_events": [
+    {
+      "event_name": "button3333",
+      "url": "http://localhost:63343/sa-sdk-javascript/zhuge.html?_ijt=kc0vtnal8qahrd2tq5obomukh8", 
+      "element": [
+        "#b"
+      ],
+      "attr": [
+        {
+          "name": "ppp",
+          "selector": "body>p:eq(0)"
+        }
+      ],
+      "app_id": 56070,
+      "platform": 3,
+      "create_date_time": "2018-01-23 17:45:53",
+      "hidden": null,
+      "stop": null,
+      "alias_name": null,
+      "edit_url": "http://localhost:63343/sa-sdk-javascript/zhuge.html?_ijt=kc0vtnal8qahrd2tq5obomukh8"
+    },
+    {
+      "event_name": "button点击2222",
+      "url": "",
+      "element": [
+        "#b"
+      ],
+      "attr": [],
+      "app_id": 56070,
+      "platform": 3,
+      "create_date_time": "2018-01-23 17:39:16",
+      "hidden": null,
+      "stop": null,
+      "alias_name": null,
+      "edit_url": "http://localhost:63343/sa-sdk-javascript/zhuge.html?_ijt=k9d5hjmkqt1ethu1ao51cf4t9e"
+    },
+    {
+      "event_name": "20180123",
+      "url": "",
+      "element": [
+        "#b"
+      ],
+      "attr": [],
+      "app_id": 56070,
+      "platform": 3,
+      "create_date_time": "2018-01-23 17:08:04",
+      "hidden": null,
+      "stop": null,
+      "alias_name": null,
+      "edit_url": "http://localhost:63343/sa-sdk-javascript/zhuge.html?_ijt=ir7e9n0scm88b0k2uvotnc4ntd"
+    },
+    {
+      "event_name": "hello链接点击",
+      "url": "http://localhost:63342/sa-sdk-javascript/zhuge.html?_ijt=hg3r25mmicg2icf0jtndtaskh7#",
+      "element": [
+        "body>a:eq(0)"
+      ],
+      "attr": [
+        {
+          "name": "自定义属性",
+          "selector": "body>p:eq(0)"
+        }
+      ],
+      "app_id": 56070,
+      "platform": 3,
+      "create_date_time": "2017-12-22 16:25:29",
+      "hidden": false,
+      "stop": false,
+      "alias_name": null,
+      "edit_url": "http://localhost:63342/sa-sdk-javascript/zhuge.html?_ijt=hg3r25mmicg2icf0jtndtaskh7#"
+    }
+  ]
+}
+```
+
+注意，上面这份配置有两个字段，一个是url，另一个是editUrl，editUrl表示标记元素的时候，是在哪一个页面里操作的。url表示应该去哪个url下面查找标记的元素。因为有些情况下，虽然我们是在某一个页面标记的元素，但是我们有很多其他页面和这个页面长得类似，比如商品详情类的页面，所以我们其实希望在所有的商品详情页都可以上报某些事件。所以，如果url为一个具体的值，例如"[http://localhost:63342/sa-sdk-javascript/zhuge.html?_ijt=hg3r25mmicg2icf0jtndtaskh7#](http://localhost:63342/sa-sdk-javascript/zhuge.html?_ijt=hg3r25mmicg2icf0jtndtaskh7#)"，说明只应该在这个url对应的页面中查找元素，上报行为即可；如果url=""，说明我们应该在整个Web应用中的所有页面都去依据路径查找元素，上报事件。
+
 **2.解析配置，监测元素**
 
-不多说直接看代码实现，分析见注释：
+还是直接看神策代码实现，里面加了点注释：
 
 ```js
   // 解析配置，查看当前页面中是否有元素需要被追踪，把需要追踪的元素的配置保存到requiredData变量中
@@ -415,8 +521,8 @@ Mixpanel和神策，都提供了JS可视化埋点功能，与全埋点相比，�
       }
     );
   },
-  // 通过jQuery的选择器来找到元素，我们在前一节的圈选操作中知道，圈选SDK会把一个定义好的事件eventDefine转化成一个{nthEle: nthEle, selfAttr: selfAttr}结构保存起来，这里去寻找元素的时候和圈选那里的逻辑其实是一个逆操作。
-  // 这里要注意，和圈选时一样元素，碰到iframe时要特殊处理一下。
+  // 通过jQuery的选择器来找到元素，我在前一节的标记操作中知道，标记SDK会把一个定义好的事件eventDefine转化成一个{nthEle: nthEle, selfAttr: selfAttr}结构保存起来，这里去寻找元素的时候和标记那里的逻辑其实是一个逆操作。
+  // 这里要注意，和标记时一样元素，碰到iframe时要特殊处理一下。
   getEle: function(data) {
     var ele;
     if ($(data.nthEle[0]) && $(data.nthEle[0]).prop('tagName') === 'IFRAME') {
@@ -435,10 +541,20 @@ Mixpanel和神策，都提供了JS可视化埋点功能，与全埋点相比，�
   },
 ```
 
-关于元素的查找，在Mixpanel-JS中没有用jQuery，而是用的Document.querySelectorAll方法，在追踪移动页面的时候会显得更优化一些，毕竟jQuery是有些重的。
+神策查找元素的时候用到了jQuery，而在Mixpanel中没有用jQuery，而是用的`Document.querySelectorAll`这个API。毕竟有很多移动页面为了优化加载速度，不会用jQuery这么重的库。
+
 此外，当追踪一些特殊的标签时，可以考虑用[XPath](http://www.w3school.com.cn/xpath/)去定位，今日头条的广告监测插件其实就用到了XPath。
 
-可以看出，在JS上实现可视化埋点不是一件太麻烦的事情，不过它缺点是只会没有读取标签元素的属性等信息，也不会像代码埋点的方案那样去理解业务场景；另外，当页面的结构发生变化的时候，可能要重新进行一次圈选操作。有些平台是通过对事件监测的告警来提醒用户的，当事件数量同比大幅减少的时候，大概率是因为某次改版导致页面DomTree产生了变化，jQuery选择器找不到之前圈选的元素了，这时就应该提醒用户重新圈选了。
+**3.给事件上报添加属性**
+
+单独把添加属性拿出来讲，是因为它的原理是类似的。前面我们只提到标记一个元素，当它被点击的时候上报事件，但是这样没有在上报事件的同时带上自定义的一些属性。
+
+其实只要是Web页面上出现了的元素，我们都可以把它记录下来，然后在事件发生的时候，查找到这些元素，并把它们的内容作为事件的属性上报上来。我们可以在标记了一个元素的时候，再去标记其他的一些元素（例如一些文本标签），并设置其他这些元素各自所对应的key，当事件发生时，我们可以找到其他这些元素，并获取到其中显示的文本内容，作为各自参数的值，上报到后台。
+
+
+### 4.3 可视化埋点小结
+
+可以看出，在JS上实现可视化埋点不是一件太麻烦的事情，我认为最关键的两件事就是标记元素和查找元素。不过它缺点是只会读取页面上的标签元素的展示出来的属性，也不会像代码埋点的方案那样去理解业务场景，获取上下文（通常在内存里）的一些属性；另外，当页面的结构发生变化的时候，可能要重新进行一次标记操作。有些平台是通过对事件监测的告警来提醒用户的，当事件数量同比大幅减少的时候，大概率是因为某次改版导致页面Dom Tree产生了变化，通过配置下发里面的元素路径找不到之前标记的元素了，这时就应该提醒用户重新标记。
 
 
 ## 五、总结
@@ -449,4 +565,4 @@ Mixpanel和神策，都提供了JS可视化埋点功能，与全埋点相比，�
 |:---:|:---|:---|:---|
 |代码埋点|可以按照业务上报详细、定制化的数据|需要开发人员参与，更新维护成本高，无法获得历史数据|对上下文理解要求较高的业务数据|
 |全埋点|对发人员依赖低，仅需嵌入一次SDK，可以全量上报通用数据，可以拿到历史数据|数量量太大，占用更多资源，且无法收集业务上下文数据，给后续数据筛选和分析带来一定的难度|上下文相对独立的、通用的数据|
-|可视化埋点|对开发人员依赖低，可以按照业务需求上报数据，对上下文数据有一定收集能力|圈选事件有一定的操作难度，事件需要被更新时无法获得历史数据，界面变化时圈选的元素可能失效|业务上下文数据相对简单，操作交互比较固定的界面|
+|可视化埋点|对开发人员依赖低，可以按照业务需求上报数据，对上下文数据有一定收集能力|标记事件有一定的操作难度，事件需要被更新时无法获得历史数据，界面变化时标记的元素可能失效|业务上下文数据相对简单，操作交互比较固定的界面|
