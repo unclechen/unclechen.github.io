@@ -324,6 +324,153 @@
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <div class="post-block" style="opacity: 1; display: block;">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2015/11/26/Android WebView调用JS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/11/26/Android WebView调用JS/" itemprop="url">Android WebView调用JS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-26T08:00:00+08:00">
+                2015-11-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>个人认为Android的WebView一直是一个比较难搞的东西，因为它需要和很多的Web开发打交道，如果以前没接触过Web相关的开发就会觉得有些不爽，但是现在越来越多的应用都是Hybrid的模式，HTML5定稿一年多，感觉也挺火，这也是以做内容为主的App非常需要的技术，所以还得多学学。</p>
+<p>从Android4.4开始，WebView底层的实现从原来的Webkit变成了chromium，从而实现了对HTML5更好的支持，并且也和Chrome浏览器的一些特征越来越像。接触过WebView开发应该对<code>WebView.setWebContentsDebuggingEnabled(true)</code>不会陌生，正是从4.4开始的改变才使得WebView的调试变得更加方便。</p>
+<p>只是用来展示一个网页内容还好，如果要通过WebView执行JS脚本来和Native代码做一些通信，就要小心可能会踩到各种坑了。例如onclick事件没用，用onTap又会触发两次，4.4以上只能用loadUrl的方法执行一行js代码，还有可能会被转码，API17以上需要给Java方法添加注解，API17以下又要换一种方法保证安全性等等。在这里记录一下我自己的学习心得和踩过的坑。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2015/11/26/Android WebView调用JS/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>    
+    
+    
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
     <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2015/11/17/自定义Android Gradle插件/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -703,7 +850,7 @@
 
       
         
-          <p>上次介绍了<a href="http://unclechen.github.io/2015/06/01/Android%20Studio%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E7%AC%94%E8%AE%B0/">Android Studio的安装、配置和基本使用</a>。这次讲一下Android Studio用到的打包工具Gradle。<a href="http://gradle.org/" target="_blank" rel="external">Gradle</a>是一种构建项目的框架，兼容Maven、Ant，为Java项目提供了很多插件去实现打包功能。废话不多说，下面直接进入实战。当我写这篇博客的时候，Android Studio的版本已经更新到了<strong>1.4</strong>，比上一篇博客的版本又更新了。</p>
+          <p>上次介绍了<a href="http://unclechen.github.io/2015/06/01/Android%20Studio%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E7%AC%94%E8%AE%B0/">Android Studio的安装、配置和基本使用</a>。这次讲一下Android Studio用到的打包工具Gradle。<a href="http://gradle.org/" target="_blank" rel="noopener">Gradle</a>是一种构建项目的框架，兼容Maven、Ant，为Java项目提供了很多插件去实现打包功能。废话不多说，下面直接进入实战。当我写这篇博客的时候，Android Studio的版本已经更新到了<strong>1.4</strong>，比上一篇博客的版本又更新了。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2015/10/22/Android Studio Gradle实践之多渠道自动化打包+版本号管理/#more" rel="contents">
@@ -850,7 +997,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="/content/images/cover/helloAndroidStudioAndGradle.png" rel="gallery_cjezejqwf0009eqsywm29r11y"
+                 href="/content/images/cover/helloAndroidStudioAndGradle.png" rel="gallery_cjh4tf8dr0008mtsxn762bd56"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="/content/images/cover/helloAndroidStudioAndGradle.png" itemprop="contentUrl"/>
               </a>
@@ -864,7 +1011,7 @@
 
       
         
-          <p>2015年5月29号凌晨，第一次翻墙看了谷歌开发者大会的直播，还特意跑到车库咖啡和一堆GDG开发者一起看的直播。现场来了一些Android、Google开发大牛，介绍了他们对于最新的Android、Google技术的体验。加上谷歌官方宣布了1.3beta版本的<a href="https://developer.android.com/sdk/index.html" target="_blank" rel="external">Android Studio</a>已经支持NDK开发，这样一来貌似Eclipse在Android开发方面的最后一个独有优势也已经失去。我想如果不是公司项目需要，我已经可以把AS作为我的Android主打开发环境了。另外据说1.3开始，gradle脚本的速度也会得到优化，因此希望在AS这个官方的平台上能够有更多优化的体验。</p>
+          <p>2015年5月29号凌晨，第一次翻墙看了谷歌开发者大会的直播，还特意跑到车库咖啡和一堆GDG开发者一起看的直播。现场来了一些Android、Google开发大牛，介绍了他们对于最新的Android、Google技术的体验。加上谷歌官方宣布了1.3beta版本的<a href="https://developer.android.com/sdk/index.html" target="_blank" rel="noopener">Android Studio</a>已经支持NDK开发，这样一来貌似Eclipse在Android开发方面的最后一个独有优势也已经失去。我想如果不是公司项目需要，我已经可以把AS作为我的Android主打开发环境了。另外据说1.3开始，gradle脚本的速度也会得到优化，因此希望在AS这个官方的平台上能够有更多优化的体验。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2015/06/01/Android Studio安装配置笔记/#more" rel="contents">
@@ -1011,7 +1158,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="/content/images/cover/helloFiddler.jpg" rel="gallery_cjezejqxh001leqsy6pjllgsl"
+                 href="/content/images/cover/helloFiddler.jpg" rel="gallery_cjh4tf8ei001lmtsxaz3p1zfc"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="/content/images/cover/helloFiddler.jpg" itemprop="contentUrl"/>
               </a>
@@ -1025,7 +1172,7 @@
 
       
         
-          <p><a href="http://www.telerik.com/fiddler" target="_blank" rel="external">Fiddler</a>是一个非常好用的web前端调试工具，它能记录客户端和服务器的http和https所有请求和响应，允许监视、设置断点，修改输入输出数据。与其他的抓包工具，例如wireshark、firebug等不同，Fiddler可以允许你在调试CGI接口时，修改返回的数据，也就是可以<strong>构造请求</strong>和<strong>模拟响应</strong>。</p>
+          <p><a href="http://www.telerik.com/fiddler" target="_blank" rel="noopener">Fiddler</a>是一个非常好用的web前端调试工具，它能记录客户端和服务器的http和https所有请求和响应，允许监视、设置断点，修改输入输出数据。与其他的抓包工具，例如wireshark、firebug等不同，Fiddler可以允许你在调试CGI接口时，修改返回的数据，也就是可以<strong>构造请求</strong>和<strong>模拟响应</strong>。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2015/04/30/使用前端开发利器Fiddler调试手机程序/#more" rel="contents">
@@ -1120,7 +1267,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1142,7 +1289,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-count">32</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
