@@ -1,0 +1,972 @@
+<!doctype html>
+
+
+
+
+<html class="theme-next pisces" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java Web,后端," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="UncleChen的博客" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="一、Play框架简介Play是一个Full-Stack的Web应用开发框架，使用它可以快速编写自己的Web应用，也可以使用它来编写RESTful API。与现在非常流行的Spring全家桶相比，Play略显小众，但它的设计思想天生就是分布式、异步的，也得到许多开发者的认可，在实际生产环境中也有像Linkedin这样的大">
+<meta name="keywords" content="Java Web,后端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Play框架编写Web应用">
+<meta property="og:url" content="http://unclechen.github.io/2018/05/13/使用Play框架编写Web应用/index.html">
+<meta property="og:site_name" content="UncleChen的博客">
+<meta property="og:description" content="一、Play框架简介Play是一个Full-Stack的Web应用开发框架，使用它可以快速编写自己的Web应用，也可以使用它来编写RESTful API。与现在非常流行的Spring全家桶相比，Play略显小众，但它的设计思想天生就是分布式、异步的，也得到许多开发者的认可，在实际生产环境中也有像Linkedin这样的大公司采用。对于一个没有开发过Web应用或者后台应用的开发者来讲，学习和使用Pla">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1fr9zxjidkgj31gi1a64bg.jpg">
+<meta property="og:updated_time" content="2018-05-13T12:43:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Play框架编写Web应用">
+<meta name="twitter:description" content="一、Play框架简介Play是一个Full-Stack的Web应用开发框架，使用它可以快速编写自己的Web应用，也可以使用它来编写RESTful API。与现在非常流行的Spring全家桶相比，Play略显小众，但它的设计思想天生就是分布式、异步的，也得到许多开发者的认可，在实际生产环境中也有像Linkedin这样的大公司采用。对于一个没有开发过Web应用或者后台应用的开发者来讲，学习和使用Pla">
+<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1fr9zxjidkgj31gi1a64bg.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '9GQE7B6UON',
+      apiKey: '1b6c2bb25ddee8d24221b1df179afbde',
+      indexName: 'UncleChenBlog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键词进行搜索","hits_empty":"找不到关于“${query}”的文章","hits_stats":"找到 ${hits} 篇文章，耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://unclechen.github.io/2018/05/13/使用Play框架编写Web应用/"/>
+
+
+
+
+
+  <title>使用Play框架编写Web应用 | UncleChen的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c7b0eb7b32d0e8723fcb885bc9778590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UncleChen的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2018/05/13/使用Play框架编写Web应用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用Play框架编写Web应用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-13T08:00:00+08:00">
+                2018-05-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2018/05/13/使用Play框架编写Web应用/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一、Play框架简介"><a href="#一、Play框架简介" class="headerlink" title="一、Play框架简介"></a>一、Play框架简介</h2><p><a href="https://www.playframework.com/" target="_blank" rel="noopener">Play</a>是一个Full-Stack的Web应用开发框架，使用它可以快速编写自己的Web应用，也可以使用它来编写RESTful API。与现在非常流行的Spring全家桶相比，Play略显小众，但它的设计思想天生就是分布式、异步的，也得到许多开发者的认可，在实际生产环境中也有像Linkedin这样的大公司采用。对于一个没有开发过Web应用或者后台应用的开发者来讲，学习和使用Play框架也许是一个不错的选择。</p>
+<a id="more"></a>
+<p>可能有些接触过Scala语言的开发者，或多或少听过Play这个框架，也知道Play框架大部分代码是使用Scala开发的。不禁会有疑问，是不是一定要学会Scala才可以使用Play呢？这个疑问我也有过，但是据使用过Play的开发者介绍，在Play框架中使用Java语言开发Web应用的过程中，基本上是不会需要你真正去学习Scala的。Play框架本身对Java的支持非常全面，不用担心自己不会Scala。我举一个例子，做过Android开发的同学，一定记得在2014年，我们从Eclipse切换的Android Studio时，需要将自己的ant.xml打包脚本移植到gradle脚本。当时我还在实习，完全是一个菜鸟，也不懂groovy，而且那时候网上关于gradle的资料也非常的少，但是即使这样，我依然能够把一个ant编写的打包脚本移植到gradle，如此类比一下，相信大家应该心里有数了。</p>
+<h2 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h2><p>我使用的Play版本是2.6.x，系统是macosx 10.12.5。配置环境的时候，推荐按照<a href="https://www.playframework.com/documentation/2.6.x/Home" target="_blank" rel="noopener">官方文档</a>操作。</p>
+<h3 id="JDK"><a href="#JDK" class="headerlink" title="JDK"></a>JDK</h3><p>Play 2.6.x要求必须是Java 8，现在使用到的SBT版本是1.x。</p>
+<h3 id="SBT"><a href="#SBT" class="headerlink" title="SBT"></a>SBT</h3><p>SBT(simple-build tool)，Play默认使用的构建工具。可以用homebrew安装，也可以手动下载sbt程序到电脑。</p>
+<blockquote>
+<p>提醒一下，我在mac osx 10.12上运行<code>brew install sbt@1</code>时，提示需要安装9.x版本的xcode，才可以用brew安装sbt。所以我采用了手动下载sbt，然后配置环境变量的方法，使得电脑上可以使用<code>sbt</code>命令。但是请记住一点，手动安装的sbt，目录是你自己放的文件目录，而不是默认的<code>usr/local/sbt</code>，如果你需要修改<code>sbtopt</code>这种配置文件的话，记得在自己正确的目录下操作。</p>
+</blockquote>
+<h3 id="Intellij-IDEA"><a href="#Intellij-IDEA" class="headerlink" title="Intellij IDEA"></a>Intellij IDEA</h3><p>安装IDEA后，还需要安装Scala插件。关于IDE的设置，请参考<a href="https://www.playframework.com/documentation/2.6.x/IDE" target="_blank" rel="noopener">这里</a>。</p>
+<blockquote>
+<p>尽量安装新版的IDEA和对应版本的Scala插件，亲测2017.2的IDEA安装插件后可能会有BUG。</p>
+</blockquote>
+<h2 id="三、认识Play项目的结构"><a href="#三、认识Play项目的结构" class="headerlink" title="三、认识Play项目的结构"></a>三、认识Play项目的结构</h2><p>Play框架的文档很全面，如果要全面深入地学习Play，可以仔细阅读官方的Document。这里可以从Play的示例<a href="https://github.com/playframework/play-java-starter-example" target="_blank" rel="noopener">play-java-starter-example</a>入手，开始认识Play框架的结构，并了解如何使用Play来开发Web应用。</p>
+<p>使用idea的<code>Import Project</code>导入play-java-started-example工程，记得在import wizard中选择<code>Import project from external model</code>的<code>SBT project</code>，然后点击下一步。导入项目后，进入终端输入<code>sbt run</code>就可以让这个项目运行起来了。</p>
+<blockquote>
+<p>注意：sbt第一次运行时比较慢，需要耐心等待。</p>
+</blockquote>
+<p>根据console的提示，在浏览器中打开<code>http://localhost:9000</code>，我们可以看到一个Web欢迎页面。</p>
+<hr>
+<p>搞定上面的准备工作之后，我们开始看Play应用的目录是如何组织起来的，进而分析一下我们在浏览器中输入<code>http://localhost:9000</code>之后，Play是如何工作的。</p>
+<p>下面是来自<a href="https://www.playframework.com/documentation/2.6.x/Anatomy" target="_blank" rel="noopener">Play官方文档中的Anatomy of a Play application</a>。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">app                      → Application sources</span><br><span class="line"> └ assets                → Compiled asset sources</span><br><span class="line">    └ stylesheets        → Typically LESS CSS sources</span><br><span class="line">    └ javascripts        → Typically CoffeeScript sources</span><br><span class="line"> └ controllers           → Application controllers</span><br><span class="line"> └ models                → Application business layer</span><br><span class="line"> └ views                 → Templates</span><br><span class="line">build.sbt                → Application build script</span><br><span class="line">conf                     → Configurations files <span class="keyword">and</span> other non-compiled resources (on classpath)</span><br><span class="line"> └ application.conf      → Main configuration file</span><br><span class="line"> └ routes                → Routes definition</span><br><span class="line">dist                     → Arbitrary files <span class="keyword">to</span> be included <span class="keyword">in</span> your projects distribution</span><br><span class="line">public                   → Public assets</span><br><span class="line"> └ stylesheets           → CSS files</span><br><span class="line"> └ javascripts           → Javascript files</span><br><span class="line"> └ images                → Image files</span><br><span class="line">project                  → sbt configuration files</span><br><span class="line"> └ build.properties      → Marker <span class="keyword">for</span> sbt project</span><br><span class="line"> └ plugins.sbt           → sbt plugins including the declaration <span class="keyword">for</span> Play itself</span><br><span class="line">lib                      → Unmanaged libraries dependencies</span><br><span class="line">logs                     → Logs folder</span><br><span class="line"> └ application.log       →<span class="built_in"> Default </span>log file</span><br><span class="line">target                   → Generated stuff</span><br><span class="line"> └ resolution-cache      → <span class="builtin-name">Info</span> about dependencies</span><br><span class="line"> └ scala-2.11</span><br><span class="line">    └ api                → Generated API docs</span><br><span class="line">    └ classes            → Compiled class files</span><br><span class="line">    └ routes             → Sources generated <span class="keyword">from</span> routes</span><br><span class="line">    └ twirl              → Sources generated <span class="keyword">from</span> templates</span><br><span class="line"> └ universal             → Application packaging</span><br><span class="line"> └ web                   → Compiled web assets</span><br><span class="line">test                     → source folder <span class="keyword">for</span> unit <span class="keyword">or</span> functional tests</span><br></pre></td></tr></table></figure>
+<p>Play框架采用了MVC架构，把Web应用分成模型层、控制层和视图层。每个层次对应的文件存放在不同的目录下面，下面依次介绍一下关键的几个目录。</p>
+<h3 id="app-目录"><a href="#app-目录" class="headerlink" title="app/目录"></a><code>app/</code>目录</h3><p>存放着所有的Java源代码代码、Scala源代码、模板和编译后的资源文件（如LESS CSS、CoffeeScript）。在这个目录下，一般会有三个默认的package：controllers、models、views。</p>
+<blockquote>
+<p>和以往我们看到的代码package不同的是，play默认的package layout没有<code>com.youcompany</code>这样的前缀。不过我们如果想添加前缀也完全是OK的。包括<code>app/assets</code>目录，完全也是可选的。</p>
+</blockquote>
+<h3 id="public-目录"><a href="#public-目录" class="headerlink" title="public/目录"></a><code>public/</code>目录</h3><p><code>public/</code>目录下面存放的是一些静态资源文件，这个目录默认被分成3个子目录，分别用来存放我们的js、css、image这3类文件。</p>
+<blockquote>
+<p>在一个新创建的应用中，<code>public/</code>目录默认会被映射到<code>assets</code>这个URL路径下，需要的话我们也可以手动修改。</p>
+</blockquote>
+<h3 id="conf-目录"><a href="#conf-目录" class="headerlink" title="conf/目录"></a><code>conf/</code>目录</h3><p>顾名思义，这个目录下面放的是配置文件，Play中主要用两类配置文件：</p>
+<ul>
+<li><code>application.conf</code>：整个应用的配置参数，例如db连接参数、缓存策略等配置</li>
+<li><code>routes</code>：路由定义</li>
+</ul>
+<h3 id="build-sbt文件"><a href="#build-sbt文件" class="headerlink" title="build.sbt文件"></a><code>build.sbt</code>文件</h3><p>项目的构建脚本，主要的构建配置都在这里，例如项目依赖的jar包、应用的版本号等等。不过<code>project/</code>目录下的<code>.scala</code>文件也会对项目的配置起作用。这个文件有点类似于我们的<code>build.gradle</code>。</p>
+<h3 id="lib-目录"><a href="#lib-目录" class="headerlink" title="lib/目录"></a><code>lib/</code>目录</h3><p>这个目录用于存放一些以来的外部jar包等等，是一个可选目录。不过一般我们都可以在<code>build.sbt</code>中添加依赖。</p>
+<h3 id="project-目录"><a href="#project-目录" class="headerlink" title="project/目录"></a><code>project/</code>目录</h3><p>前面就说到这个目录下的scala文件也会对项目配置起作用。这里包含两个sbt构建配置文件：</p>
+<ul>
+<li><code>plugin.sbt</code>：定义了需要用到哪些sbt插件。我感觉有点类似于<code>build.gradle</code>里面写的<code>apply &#39;idea&#39;</code>。</li>
+<li><code>build.properties</code>：定义了sbt的版本。我感觉有点类似于的<code>gradle-wrapper.properties</code>。</li>
+</ul>
+<h3 id="target-目录"><a href="#target-目录" class="headerlink" title="target/目录"></a><code>target/</code>目录</h3><p>这个目录存放着工程构建完以后生成的文件，从这里可以了解到代码经过sbt构建后，最终变成了什么样的结果。主要包括下面几个子目录：</p>
+<ul>
+<li><code>classes/</code>：编译后的class文件（来自Java和Scala源码）</li>
+<li><code>classes_managed</code>：<code>classes/</code>目录下组织好的其他子目录，包含框架生成的class文件，例如routes和template引擎生成的class文件。</li>
+<li><code>resource_managed</code>：组织好的、生成的资源，比如编译过的LESS CSS、CoffeeScript结果。</li>
+<li><code>src_managed</code>：组织好的生成的代码文件，例如模板引擎生成的Scala文件。</li>
+<li><code>web/</code>：sbt-web任务生成的资源文件，例如来自<code>app/assets</code>和<code>public</code>文件夹里面的文件。</li>
+</ul>
+<blockquote>
+<p>Play应用默认的文件组织结构与SBT默认的并不相同。如果我们想用SBT默认的代码和文件组织结构，可以禁用掉PlayLayoutPlugin。但是这有一定的风险。</p>
+</blockquote>
+<p>通过上面应用组织结构，可以看到其实Play框架采用的也是<strong>约定优于配置</strong>的规范，让我们集中精力在程序的开发上面，而不是去写太多的配置文件。</p>
+<h2 id="四、使用Play开发Web应用"><a href="#四、使用Play开发Web应用" class="headerlink" title="四、使用Play开发Web应用"></a>四、使用Play开发Web应用</h2><p>在上面我们运行<code>sbt run</code>命令后，可以访问<a href="http://localhost:9000" target="_blank" rel="noopener">http://localhost:9000</a>来访问这个示例程序，看到了一个Welcome Page。</p>
+<p>Play框架是一个典型的MVC架构，下面分析一下这个示例工程是工作起来的，从而了解怎么使用Play开发Web应用。</p>
+<h3 id="定义路由和Controller"><a href="#定义路由和Controller" class="headerlink" title="定义路由和Controller"></a>定义路由和Controller</h3><p>前面介绍了<code>conf/routes</code>文件定义了整个应用的路由，也就是说我们在浏览器输入的url（request），经过这个文件的映射，会交给相应的Controller处理，然后返回结果给浏览器。看一下<code>routes</code>文件的内容：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Routes</span></span><br><span class="line"><span class="comment"># This file defines all application routes (Higher priority routes first)</span></span><br><span class="line"><span class="comment"># ~~~~</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># An example controller showing a sample home page</span></span><br><span class="line"><span class="builtin-name">GET</span>     /                           controllers.HomeController.index</span><br><span class="line"></span><br><span class="line"><span class="comment"># 省略其他路由配置</span></span><br><span class="line"><span class="built_in">..</span>.</span><br></pre></td></tr></table></figure>
+<p>所以当访问<code>http://localhost:9000</code>时，会交给<code>app/controllers/HomeController.index()</code>方法来处理这个请求，并得到结果返回给浏览器。</p>
+<h3 id="模板引擎"><a href="#模板引擎" class="headerlink" title="模板引擎"></a>模板引擎</h3><p>下面看一下<code>HomeController.index</code>方法是如何渲染出Html页面来的。</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Result <span class="keyword">index</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> ok(<span class="keyword">index</span>.render(<span class="string">"Your new application is ready."</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里调用了<code>ok</code>方法来返回一个<code>Result</code>对象，我们仔细分析一下这个方法的签名。</p>
+<p>先看<code>ok</code>方法的返回值类型<code>Result</code>，在Play中，<code>Result</code>类可以理解为一个定义了http响应的数据结构，包含了响应的HTTP Status Code和的content。那<code>ok</code>方法是哪里定义的呢？原来<code>HomeController</code>继承了<code>Controller</code>类，<code>Controller</code>类继承了<code>Results</code>类，而<code>ok</code>方法是<code>Results</code>类里面定义的，这个方法可以返回一个Result对象。</p>
+<p>再看<code>ok</code>方法的参数，这个参数是<code>Content</code>类，它定义了响应的contentType和body。这里的Content是由<code>index.render</code>方法生成的。</p>
+<p>接着我们再看<code>index.render</code>是如何生成的<code>Content</code>的，这里的<code>index</code>类，并不是我们写的，而是Play生成的，使用idea可以很容易找到它在<code>target/scala-2.12/twirl/main/views/html/index.template.scala</code>这个scala文件里，这个文件定义了一个scala里面的单例（我们可以暂时不要纠结这个Scala文件里面<code>object index ....</code>是怎么生成一个单例对象的，只需要知道这个文件是从<code>app/views/index.scala.html</code>生成的）。好了，我们知道<code>index</code>对象是Play生成的，看看它的<code>render</code>方法，这个方法接收一个<code>String类型</code>的参数，然后返回了前面的<code>Content</code>。</p>
+<p>所以我们浏览器展示Html的是<code>app/views/index.scala.html</code>这个模板渲染出来，这是<a href="https://www.playframework.com/documentation/2.6.13/ScalaTemplates" target="_blank" rel="noopener">Play模板引擎</a>的工作了，我们看下里面有什么内容。</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">@*</span><br><span class="line"> * This template takes a single argument, a String containing a</span><br><span class="line"> * message to display.</span><br><span class="line"> *@</span><br><span class="line">@(message: String)</span><br><span class="line"></span><br><span class="line">@*</span><br><span class="line"> * Call the `<span class="javascript">main</span>` template with two arguments. The first</span><br><span class="line"> * argument <span class="keyword">is</span> a `<span class="javascript"><span class="built_in">String</span></span>` with the title <span class="keyword">of</span> the page, the second</span><br><span class="line"> * argument <span class="keyword">is</span> an `<span class="javascript">Html</span>` object containing the body <span class="keyword">of</span> the page.</span><br><span class="line"> *@</span><br><span class="line">@main(<span class="string">"Welcome to Play"</span>) &#123;</span><br><span class="line"></span><br><span class="line">    @*</span><br><span class="line">     * Get an `<span class="javascript">Html</span>` object <span class="keyword">by</span> calling the built-<span class="keyword">in</span> Play welcome</span><br><span class="line">     * template <span class="keyword">and</span> passing a `<span class="javascript"><span class="built_in">String</span></span>` message.</span><br><span class="line">     *@</span><br><span class="line">    @welcome(message, style = <span class="string">"java"</span>)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Play内置了基于Scala语言的Twirl模板引擎，跟着注释就可以了解这个模板是怎么被渲染成我们看到的html的。</p>
+<p>首先<code>index</code>模板接收了一个字符串作为参数（<code>Your new application is ready.</code>），然后把两个参数传递给了<code>main</code>模板，一个是字符串<code>Welcome to Play</code>，另一个是调用<code>welcome</code>模板生成的<code>Html</code>对象。<code>welcome</code>模板接收了<code>Your new application is ready.</code>参数和<code>style=&quot;java&quot;</code>参数，然后渲染成了Html对象。打开<code>Welcome.scala.html</code>可以看到一些Html标签以及传入的第一个参数被放在了最上方的<section>里面。</section></p>
+<blockquote>
+<p>我们可以看到其实Play框架帮我们生成的很多文件，都是基于Scala的，因此学习一下Scala对我们理解Play框架非常有帮助。</p>
+</blockquote>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>以上就是从play-java-start-example这个示例工程来了解如何使用Play开发Web应用，这个示例比较简单，甚至没有涉及到model层的代码。开发一个完整的应用，还需要学习更多知识，比如<a href="https://www.playframework.com/documentation/2.6.x/Filters" target="_blank" rel="noopener">filters拦截器</a>、异步处理、状态保持、如何集成ORM框架、支持WebSocket、编写RESTFul APIs、安全以及使用其他的模板引擎等等。</p>
+<h2 id="五、其他话题"><a href="#五、其他话题" class="headerlink" title="五、其他话题"></a>五、其他话题</h2><h3 id="Play框架与React集成"><a href="#Play框架与React集成" class="headerlink" title="Play框架与React集成"></a>Play框架与React集成</h3><p>现在前端开发中有很多都转向了React，我们也可以使用Play框架和React一起编写Web应用。毕竟模板引擎这么多，如果如果已经会使用React开发Web前端，没有必要非得用到Play里面的模板引擎。因此使用React替换掉Play的模板引擎做的工作，是完全没有问题的。</p>
+<h3 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h3><ul>
+<li><a href="https://www.playframework.com/documentation/2.6.x/Home" target="_blank" rel="noopener">官方文档Home</a></li>
+<li><a href="https://www.playframework.com/documentation/2.6.x/Tutorials" target="_blank" rel="noopener">官方的Tutorials</a></li>
+<li><a href="https://playframework.com/download/#starters" target="_blank" rel="noopener">Play Starter Examples</a></li>
+<li><a href="https://www.playframework.com/documentation/2.6.x/Anatomy" target="_blank" rel="noopener">Play工程的结构剖析</a></li>
+</ul>
+<h3 id="全栈开发"><a href="#全栈开发" class="headerlink" title="全栈开发"></a>全栈开发</h3><p>关于全栈，一个对技术有追求，乐于学习进步的人，不应拘泥于只学习某一项技能。有机会要多去熟悉一些其他的技术，做一个“T型”人才，全栈开发是很好的一个实践。除了像Play这样的框架，Ruby on Rails、Python Django，甚至NodeJS，都可以值得了解和学习的全栈框架。</p>
+<p>我认为在学习某一个方向的技术时，需要学习它里面编程的思维方式，并找到一个方向上不同技术之间的共同点，比如学习编程语言的时候，我们都会学习数据类型、流程、异常处理等等；客户端或者前端，核心的基础知识是图形界面开发，从大学时候学的MFC，到现在的Android、iOS、小程序、快应用、React、Vue、Flutter，都需要处理界面的生命周期，比如<code>初始化 -&gt; 展现 - &gt; 消失 -&gt; 销毁</code>；而后端开发，一般都是在处理请求的生命周期，即把一个request变成一个response，比如<code>路由 -&gt; 处理请求参数 -&gt; 处理响应 -&gt; 返回给客户端</code>。希望大家都可以学习进步，走在技术时代的前面！</p>
+<p>最后放上两个我个人觉得不错的学习资料，来自极客时间（InfoQ下面的极客帮面向广告互联网从业者做的一个应用，里面有一些老司机的分享，也有一些付费的知识分析）。最近我看到两个不错的、体系化的分享，与大家分享一下，下面是我的邀请链接，我已经开始学习，觉得帮助还是挺大的。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fr9zxjidkgj31gi1a64bg.jpg" alt=""></p>
+
+      
+    </div>
+
+    <div>    
+    
+    
+    <ul class="post-copyright">
+    <li class="post-copyright-author">
+    <strong>本文作者：</strong>unclechen
+    </li>
+    <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="/2018/05/13/使用Play框架编写Web应用/" title="使用Play框架编写Web应用">2018/05/13/使用Play框架编写Web应用/</a>
+    </li>
+    <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本文采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a>进行许可。转载请注明出处！
+    </li>
+    </ul>
+    
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java-Web/" rel="tag"># Java Web</a>
+          
+            <a href="/tags/后端/" rel="tag"># 后端</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/24/JS埋点技术分析/" rel="next" title="JS埋点技术分析">
+                <i class="fa fa-chevron-left"></i> JS埋点技术分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="unclechen" />
+          <p class="site-author-name" itemprop="name">unclechen</p>
+           
+              <p class="site-description motion-element" itemprop="description">吃下恶魔果实，我就能变成超级赛亚人！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/unclechen" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1718455407" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、Play框架简介"><span class="nav-text">一、Play框架简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、环境搭建"><span class="nav-text">二、环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK"><span class="nav-text">JDK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SBT"><span class="nav-text">SBT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Intellij-IDEA"><span class="nav-text">Intellij IDEA</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、认识Play项目的结构"><span class="nav-text">三、认识Play项目的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#app-目录"><span class="nav-text">app/目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#public-目录"><span class="nav-text">public/目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#conf-目录"><span class="nav-text">conf/目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#build-sbt文件"><span class="nav-text">build.sbt文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lib-目录"><span class="nav-text">lib/目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#project-目录"><span class="nav-text">project/目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#target-目录"><span class="nav-text">target/目录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、使用Play开发Web应用"><span class="nav-text">四、使用Play开发Web应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义路由和Controller"><span class="nav-text">定义路由和Controller</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模板引擎"><span class="nav-text">模板引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、其他话题"><span class="nav-text">五、其他话题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Play框架与React集成"><span class="nav-text">Play框架与React集成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相关资料"><span class="nav-text">相关资料</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#全栈开发"><span class="nav-text">全栈开发</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">unclechen</span>
+</div>
+
+
+<!--
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+-->
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "071293399566469d925f180d68952611",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script type="text/javascript">
+      var gitalk = new Gitalk({
+        clientID: 'a11668e1882acefd3ff5',
+        clientSecret: '0c20ad42eb72f7677c7fb68fd25710a4edbd5ece',
+        repo: 'blog_comment_repo',
+        owner: 'unclechen',
+        admin: ['unclechen'],
+        id: location.pathname,
+        distractionFreeMode: 'true'
+      })
+      gitalk.render('gitalk-container')
+  </script>
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
