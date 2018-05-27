@@ -90,7 +90,7 @@
 
 
 
-<meta name="description" content="Android6.0发布距离现在快1年了，虽然它市场占有率仍在龟速上升中，但还是有一些App开发者已经在打包应用时将targetSDKVersion设置到了23，也就是说把App适配到了Android6.0。以前调用Android系统中需要声明权限的API时，只需要在AndroidManifest.xml文件中一次性列">
+<meta name="description" content="Android6.0发布距离现在快1年了，虽然它市场占有率仍在龟速上升中，但还是有一些App开发者已经在打包应用时将targetSDKVersion设置到了23，也就是说把App适配到了Android6.0。以前调用Android系统中需要声明权限的API时，只需要在AndroidManifest.xml文件中一次性列出来。但是如果在build.gradle文件里将targetSDKVersion">
 <meta name="keywords" content="Android,适配,权限">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android6.0运行时权限简介">
@@ -100,7 +100,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://unclechen.github.io/content/images/app-cancel-perm.png">
 <meta property="og:image" content="http://unclechen.github.io/content/images/app-permission.png">
-<meta property="og:updated_time" content="2018-05-13T07:13:37.000Z">
+<meta property="og:updated_time" content="2018-05-20T13:04:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android6.0运行时权限简介">
 <meta name="twitter:description" content="Android6.0发布距离现在快1年了，虽然它市场占有率仍在龟速上升中，但还是有一些App开发者已经在打包应用时将targetSDKVersion设置到了23，也就是说把App适配到了Android6.0。以前调用Android系统中需要声明权限的API时，只需要在AndroidManifest.xml文件中一次性列出来。但是如果在build.gradle文件里将targetSDKVersion">
@@ -430,7 +430,7 @@
 <p>下图就是6.0系统上权限管理的界面。</p>
 <p><img src="/content/images/app-cancel-perm.png" alt="app-cancel-perm"></p>
 <h1 id="targetSDKVersion和compileSDKVersion的作用"><a href="#targetSDKVersion和compileSDKVersion的作用" class="headerlink" title="targetSDKVersion和compileSDKVersion的作用"></a>targetSDKVersion和compileSDKVersion的作用</h1><p>在<code>build.gradle</code>中有这么一段：</p>
-<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line"></span><br><span class="line">    compileSdkVersion <span class="number">23</span></span><br><span class="line">    buildToolsVersion <span class="string">"23.0.2"</span></span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        ...</span><br><span class="line">        targetSdkVersion <span class="number">22</span></span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line"></div><div class="line">    compileSdkVersion <span class="number">23</span></div><div class="line">    buildToolsVersion <span class="string">"23.0.2"</span></div><div class="line">    ...</div><div class="line">    </div><div class="line">    defaultConfig &#123;</div><div class="line">        ...</div><div class="line">        targetSdkVersion <span class="number">22</span></div><div class="line">        ...</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
 <ul>
 <li><p>targetSDKVersion：简单来说就代表着你的App能够适配的系统版本，意味着你的App在这个版本的手机上做了充分的<strong>前向</strong>兼容性处理和实际测试。其实我们写代码时都是经常干这么一件事，就是<code>if(Build.VERSION.SDK_INT &gt;= 23) { ... }</code>，这就是兼容性处理最典型的一个例子。如果你的target设置得越高，其实调用系统提供的API时，所得到的处理也是不一样的，甚至有些新的API是只有新的系统才有的，例如前一篇博客里用到WebView的<code>setWebContentsDebuggingEnabled(boolean))</code>方法，这是Android4.4以后才可以用的一个API。</p>
 </li>
@@ -456,18 +456,18 @@
 <p>我们可以看到其实只有在6.0的机器上，打包了适配到6.0的App，才需要做一些明显的权限适配工作。但是实话说，不论是不是适配6.0系统，我们都应该在调用需要权限的接口前，检查一下是否具有具有该权限。因为我们会遇到厂商的修改过权限系统的ROM，也有可能自己忘记在xml里加上权限清单。当然这里面也会有坑，因为有时在不同厂商手机上直接调用<code>checkCallingOrSelfPermission</code>方法得到的结果并不准确。</p>
 <h1 id="如果我不target到23会怎么样？"><a href="#如果我不target到23会怎么样？" class="headerlink" title="如果我不target到23会怎么样？"></a>如果我不target到23会怎么样？</h1><p>很显然，如果不target到23，短期内还可以不写权限适配的代码。但是！！！前面提到了，用户仍然可以在6.0的手机上取消安装时默认赋予的dangerous权限。<strong>那么这时候会发生什么？？？？</strong>如果这个API原本应该返回的是对象，那么这时将返回<code>null</code>；如果这个API原本应该返回的是数字，这时就是<code>0</code>。可想而知，如果你只是对返回的<code>null</code>或者<code>0</code>做了一些不恰当的处理，App还是可能会crash的。所以这不是长久之计，尽快地处理好权限申请才是王道，这也是一种对App、对用户更负责的做法。</p>
 <h1 id="如何在运行时申请权限-amp-官方的权限分级列表"><a href="#如何在运行时申请权限-amp-官方的权限分级列表" class="headerlink" title="如何在运行时申请权限 &amp; 官方的权限分级列表"></a>如何在运行时申请权限 &amp; 官方的权限分级列表</h1><ul>
-<li><p>关于如何适配到6.0的权限系统，网上有非常多的例子，我觉得看了这篇文章基本上就OK了，因为网上很多貌似都翻译自这篇文章，强力推荐一下：<a href="http://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition" target="_blank" rel="noopener">things-you-need-to-know-about-android-m-permission</a></p>
+<li><p>关于如何适配到6.0的权限系统，网上有非常多的例子，我觉得看了这篇文章基本上就OK了，因为网上很多貌似都翻译自这篇文章，强力推荐一下：<a href="http://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition" target="_blank" rel="external">things-you-need-to-know-about-android-m-permission</a></p>
 </li>
-<li><p>Google官方的RuntimePermissions介绍：<a href="https://developer.android.com/preview/features/runtime-permissions.html" target="_blank" rel="noopener">runtime-permissions</a></p>
+<li><p>Google官方的RuntimePermissions介绍：<a href="https://developer.android.com/preview/features/runtime-permissions.html" target="_blank" rel="external">runtime-permissions</a></p>
 </li>
-<li><p>Google官方的dangerous权限及分组：<a href="https://developer.android.com/intl/zh-cn/guide/topics/security/permissions.html#normal-dangerous" target="_blank" rel="noopener">permissions: normal-dangerous</a></p>
+<li><p>Google官方的dangerous权限及分组：<a href="https://developer.android.com/intl/zh-cn/guide/topics/security/permissions.html#normal-dangerous" target="_blank" rel="external">permissions: normal-dangerous</a></p>
 </li>
 <li><p>开源社区-权限适配组件：伟大的开源社区已经有轮子了，可以学习一下！</p>
 <ul>
-<li><a href="https://github.com/k0shk0sh/PermissionHelper" target="_blank" rel="noopener">PermissionHelper</a></li>
-<li><a href="https://github.com/hotchemi/PermissionsDispatcher" target="_blank" rel="noopener">PermissionsDispatcher</a></li>
-<li><a href="https://github.com/lovedise/PermissionGen" target="_blank" rel="noopener">PermissionGen</a></li>
-<li><a href="https://github.com/ParkSangGwon/TedPermission" target="_blank" rel="noopener">TedPermission</a>:不用自己调用checkSelfPermission(), requestPermissions(),然后再处理回调onRequestPermissionsResult(), onActivityResult()。只要一行代码，设置一个listener就可以监听授权的结果，使用起来非常简单。内部实现采用的是类似event bus的otto实现的。</li>
+<li><a href="https://github.com/k0shk0sh/PermissionHelper" target="_blank" rel="external">PermissionHelper</a></li>
+<li><a href="https://github.com/hotchemi/PermissionsDispatcher" target="_blank" rel="external">PermissionsDispatcher</a></li>
+<li><a href="https://github.com/lovedise/PermissionGen" target="_blank" rel="external">PermissionGen</a></li>
+<li><a href="https://github.com/ParkSangGwon/TedPermission" target="_blank" rel="external">TedPermission</a>:不用自己调用checkSelfPermission(), requestPermissions(),然后再处理回调onRequestPermissionsResult(), onActivityResult()。只要一行代码，设置一个listener就可以监听授权的结果，使用起来非常简单。内部实现采用的是类似event bus的otto实现的。</li>
 </ul>
 </li>
 </ul>
@@ -625,7 +625,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">25</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

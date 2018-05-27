@@ -324,6 +324,151 @@
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <div class="post-block" style="opacity: 1; display: block;">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2018/05/20/使用Play框架和React编写Web应用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/20/使用Play框架和React编写Web应用/" itemprop="url">使用Play框架和React编写Web应用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-20T08:00:00+08:00">
+                2018-05-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h2><p>上一篇文章提到<a href="http://unclechen.github.io/2018/05/13/%E4%BD%BF%E7%94%A8Play%E6%A1%86%E6%9E%B6%E7%BC%96%E5%86%99Web%E5%BA%94%E7%94%A8/">使用Play框架编写Web应用</a>，Play框架内置了模板引擎，支持MVC架构，但这本质还是一种Server Rendering。现在越来越多的网站（尤其是不需要seo的一些商业平台系统），都在变成SPA（Single Page Application），使用React、Vue、Angular进行开发。我们先不讨论哪种方式更好，只看看它们到底是怎么做的。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/20/使用Play框架和React编写Web应用/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>    
+    
+    
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
     <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2018/05/13/使用Play框架编写Web应用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -413,7 +558,7 @@
 
       
         
-          <h2 id="一、Play框架简介"><a href="#一、Play框架简介" class="headerlink" title="一、Play框架简介"></a>一、Play框架简介</h2><p><a href="https://www.playframework.com/" target="_blank" rel="noopener">Play</a>是一个Full-Stack的Web应用开发框架，使用它可以快速编写自己的Web应用，也可以使用它来编写RESTful API。与现在非常流行的Spring全家桶相比，Play略显小众，但它的设计思想天生就是分布式、异步的，也得到许多开发者的认可，在实际生产环境中也有像Linkedin这样的大公司采用。对于一个没有开发过Web应用或者后台应用的开发者来讲，学习和使用Play框架也许是一个不错的选择。</p>
+          <h2 id="一、Play框架简介"><a href="#一、Play框架简介" class="headerlink" title="一、Play框架简介"></a>一、Play框架简介</h2><p><a href="https://www.playframework.com/" target="_blank" rel="external">Play</a>是一个Full-Stack的Web应用开发框架，使用它可以快速编写自己的Web应用，也可以使用它来编写RESTful API。与现在非常流行的Spring全家桶相比，Play略显小众，但它的设计思想天生就是分布式、异步的，也得到许多开发者的认可，在实际生产环境中也有像Linkedin这样的大公司采用。对于一个没有开发过Web应用或者后台应用的开发者来讲，学习和使用Play框架也许是一个不错的选择。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/05/13/使用Play框架编写Web应用/#more" rel="contents">
@@ -558,7 +703,7 @@
 
       
         
-          <h2 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h2><p><a href="http://unclechen.github.io/2017/12/18/Android%E5%9F%8B%E7%82%B9SDK%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/">上一篇博客</a>分析了Android上的埋点SDK技术原理，这次我看看Web页面上的埋点。Web页面上的埋点主要通过JS完成，在JS里面同样有代码埋点、全埋点、可视化埋点三种方案，如果对这几种方案的概念不了解可以看下上一篇博客。由于<a href="https://github.com/mixpanel/mixpanel-js" target="_blank" rel="noopener">mixpanel-js</a>和<a href="https://github.com/sensorsdata/sa-sdk-javascript" target="_blank" rel="noopener">Sensors Analytics JavaScript SDK</a>都开源了自己的SDK，就以它们为例进行分析。</p>
+          <h2 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h2><p><a href="http://unclechen.github.io/2017/12/18/Android%E5%9F%8B%E7%82%B9SDK%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/">上一篇博客</a>分析了Android上的埋点SDK技术原理，这次我看看Web页面上的埋点。Web页面上的埋点主要通过JS完成，在JS里面同样有代码埋点、全埋点、可视化埋点三种方案，如果对这几种方案的概念不了解可以看下上一篇博客。由于<a href="https://github.com/mixpanel/mixpanel-js" target="_blank" rel="external">mixpanel-js</a>和<a href="https://github.com/sensorsdata/sa-sdk-javascript" target="_blank" rel="external">Sensors Analytics JavaScript SDK</a>都开源了自己的SDK，就以它们为例进行分析。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/12/24/JS埋点技术分析/#more" rel="contents">
@@ -722,7 +867,7 @@
 <blockquote>
 <p>hook直译是钩子的意思，以前学信息安全的时候在windows上听到过，大体意思是通过某种手段去改变系统API的一个行为，绕过系统的某个方法，或者改变系统的工作流程。在这里其实是指把本来要执行某个方法的对象替换成另一个，一般用的是反射或者代理，需要找到hook的代码位置，甚至还可以在编译阶段实现替换。全埋点和可视化埋点都需要Hook掉App原本的代码实现。</p>
 </blockquote>
-<p>业界有多家SDK都支持上面介绍的3种埋点方案中的一种或者全部，例如Mixpanel、Sensorsdata、TalkingData、GrowingIO、诸葛IO、Heap Analytics、MTA、Umeng Analytics、百度，只是大家对后两种埋点的称呼不完全相同，有的叫无埋点或者codeless埋点。由于<a href="https://github.com/mixpanel/mixpanel-android" target="_blank" rel="noopener">Mixpanel</a>（支持代码埋点、可视化埋点）和<a href="https://github.com/sensorsdata/sa-sdk-android" target="_blank" rel="noopener">Sensorsdata</a>（全部支持）都开源了自己的全部SDK，技术方案也比较类似，下面以它们的Android SDK为例，简单分析一下3种埋点方案的技术实现。关于JS的SDK技术实现，可以看下我的另一篇博客-<a href="http://unclechen.github.io/2017/12/24/JS%E5%9F%8B%E7%82%B9SDK%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/">JS埋点SDK技术分析</a>。</p>
+<p>业界有多家SDK都支持上面介绍的3种埋点方案中的一种或者全部，例如Mixpanel、Sensorsdata、TalkingData、GrowingIO、诸葛IO、Heap Analytics、MTA、Umeng Analytics、百度，只是大家对后两种埋点的称呼不完全相同，有的叫无埋点或者codeless埋点。由于<a href="https://github.com/mixpanel/mixpanel-android" target="_blank" rel="external">Mixpanel</a>（支持代码埋点、可视化埋点）和<a href="https://github.com/sensorsdata/sa-sdk-android" target="_blank" rel="external">Sensorsdata</a>（全部支持）都开源了自己的全部SDK，技术方案也比较类似，下面以它们的Android SDK为例，简单分析一下3种埋点方案的技术实现。关于JS的SDK技术实现，可以看下我的另一篇博客-<a href="http://unclechen.github.io/2017/12/24/JS%E5%9F%8B%E7%82%B9SDK%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/">JS埋点SDK技术分析</a>。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/12/18/Android埋点技术分析/#more" rel="contents">
@@ -1013,156 +1158,10 @@
       
         
           <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>相信看到这篇文章的人应该都用过Chrome插件吧，最近刚好有个这方面的需求，我就把Chrome插件的相关知识学习了一下，发现其实Chrome插件的开发和大前端Web开发的底子是一样的，无非就是runtime只限于Chrome浏览器，并且可以调用Chrome提供的一些<code>chrome.*</code> API来实现一些基于Chrome浏览器的小功能。这里非要类比的话，我理解<code>chrome.*</code> API就像我们开发Hybird应用一样，需要有一个bridge层来提供底层原生的能力给js。我是做Android开发出生的，这只是我的个人理解，可能对大Web技术的理解还是不够。</p>
-<p>其实Chrome上的插件，从UI上主要分成两类：一类是浏览器按钮（<a href="https://crxdoc-zh.appspot.com/extensions/browserAction" target="_blank" rel="noopener">BrowserAction</a>），另一类是页面按钮（<a href="https://crxdoc-zh.appspot.com/extensions/pageAction" target="_blank" rel="noopener">PageAction</a>）。两者的开发大同小异，我这里今天主要介绍的主角不是Chrome插件开发，而是<strong>如何使用React.js来开发Chrome插件</strong>，本文先简单介绍下Chrome插件的开发和ReactJS，最后介绍如何采用Facebook官方推荐的creat-react-app脚手架来开发Chrome插件。</p>
+<p>其实Chrome上的插件，从UI上主要分成两类：一类是浏览器按钮（<a href="https://crxdoc-zh.appspot.com/extensions/browserAction" target="_blank" rel="external">BrowserAction</a>），另一类是页面按钮（<a href="https://crxdoc-zh.appspot.com/extensions/pageAction" target="_blank" rel="external">PageAction</a>）。两者的开发大同小异，我这里今天主要介绍的主角不是Chrome插件开发，而是<strong>如何使用React.js来开发Chrome插件</strong>，本文先简单介绍下Chrome插件的开发和ReactJS，最后介绍如何采用Facebook官方推荐的creat-react-app脚手架来开发Chrome插件。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/06/16/使用ReactJS开发Chrome插件/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>    
-    
-    
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <div class="post-block" style="opacity: 1; display: block;">
-    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2017/05/13/WebView缓存原理分析和应用/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="unclechen">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="UncleChen的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/13/WebView缓存原理分析和应用/" itemprop="url">WebView缓存原理分析和应用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-13T08:00:00+08:00">
-                2017-05-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>现在的App开发，或多或少都会用到Hybrid模式，到了WebView这边，经常会加载一些js文件（例如和WebView用来Native通信的bridge.js），而这些js文件不会经常发生变化，所以我们希望js在WebView里面加载一次之后，如果js没有发生变化，下次就不用再发起网络请求去加载，从而减少流量和资源的占用。那么有什么方式可以达到这个目的呢？先得从WebView的缓存原理入手。</p>
-<h1 id="二、WebView的缓存类型"><a href="#二、WebView的缓存类型" class="headerlink" title="二、WebView的缓存类型"></a>二、WebView的缓存类型</h1><p>WebView主要包括两类缓存，<strong>一类是浏览器自带的网页数据缓存</strong>，这是所有的浏览器都支持的、由HTTP协议定义的缓存；<strong>另一类是H5缓存</strong>，这是由web页面的开发者设置的，H5缓存主要包括了App Cache、DOM Storage、Local Storage、Web SQL Database 存储机制等，这里我们主要介绍App Cache来缓存js文件。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/05/13/WebView缓存原理分析和应用/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1209,7 +1208,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1254,7 +1253,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">25</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

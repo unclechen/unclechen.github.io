@@ -324,6 +324,160 @@
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <div class="post-block" style="opacity: 1; display: block;">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/09/02/Android地理位置服务解析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/09/02/Android地理位置服务解析/" itemprop="url">Android地理位置服务解析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-02T08:00:00+08:00">
+                2016-09-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="手机设备有哪几种定位方式"><a href="#手机设备有哪几种定位方式" class="headerlink" title="手机设备有哪几种定位方式"></a>手机设备有哪几种定位方式</h1><h2 id="GPS"><a href="#GPS" class="headerlink" title="GPS"></a>GPS</h2><p>基于卫星发射的信号，可以推算出手机到每颗卫星的距离，根据卫星的位置，推测出手机的位置。</p>
+<p>这是一张简单的GPS定位原理图，需要一点数学知识，先不讨论这个细节，需要的同学看<a href="http://baike.baidu.com/view/193655.htm" target="_blank" rel="external">这里</a>。</p>
+<p><img src="http://ww1.sinaimg.cn/large/65e4f1e6gw1f7fbixzcaxj20dw0bo750.jpg" alt="gps定位原理图"></p>
+<p>现在卫星信号全球都覆盖了，手机一般都有GPS芯片，因此可以实现定位。GPS方式准确度是最高的，走卫星通道，不需要联网就可以要使用。但是它的缺点也非常明显：</p>
+<ul>
+<li>1.比较耗电; </li>
+<li>2.绝大部分用户默认不开启GPS模块，也不会长时间开着; </li>
+<li>3.从GPS模块启动到获取第一次定位数据，可能需要<strong>比较长的时间</strong>; </li>
+<li>4.<strong>只能在户外使用</strong>，当有遮挡物干扰时，几乎无法使用，如城市大楼密集的地方。</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/09/02/Android地理位置服务解析/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>    
+    
+    
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
     <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/08/21/不写代码实现px转换成dp/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -711,7 +865,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="/content/images/cover/muti-screen.png" rel="gallery_cjh4tf8df0000mtsx3q5f0ydg"
+                 href="/content/images/cover/muti-screen.png" rel="gallery_cjhotdju60000czsx5kxr13rn"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="/content/images/cover/muti-screen.png" itemprop="contentUrl"/>
               </a>
@@ -727,7 +881,7 @@
         
           <p>上手了Android N Preview，第一个不能错过的新特性就是App分屏的支持。Android7.0原生系统就可以支持两个App横屏并排或者竖屏上下摆放了。第二个新特性就是在Android TV上，原生系统也可以支持App实现画中画，用户可以一边看视频一边操作其他的应用。</p>
 <p>其实早先在国内部分厂商以及鹅厂的微信App就已经支持在大尺寸手机上进行分屏浏览。也有一些视频播放器，如MoboPlayer就已经实现了按下Home键回到首页时以迷你播放器的形式进行播放。这种体验非常棒，我猜测一般是通过WindowManager来添加悬浮播放器界面的。但是这次是原生系统增加了对这种特性的支持，相信我们会有更多理由为用户的体验做出更多新的尝试。</p>
-<p>下面介绍一下我参考<a href="http://developer.android.com/intl/zh-cn/preview/features/multi-window.html#running" target="_blank" rel="noopener">multi-window-support</a>对App分屏模式进行的实践。</p>
+<p>下面介绍一下我参考<a href="http://developer.android.com/intl/zh-cn/preview/features/multi-window.html#running" target="_blank" rel="external">multi-window-support</a>对App分屏模式进行的实践。</p>
 <p>首先引用一下官方的说法：</p>
 <blockquote>
 <p>如果你使用Android N Preview SDK来构建你的App，你可以给添加App一些分屏浏览的配置。例如设置Activity的最小尺寸，也可以禁止自己的App进入分屏模式，保证你的App只能在全屏模式下展示。</p>
@@ -878,7 +1032,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="/content/images/cover/android-n.png" rel="gallery_cjh4tf8do0006mtsxgp5oimbg"
+                 href="/content/images/cover/android-n.png" rel="gallery_cjhotdjui0006czsxuelz3fz5"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="/content/images/cover/android-n.png" itemprop="contentUrl"/>
               </a>
@@ -892,13 +1046,13 @@
 
       
         
-          <p>今天早上一睁眼，手机上就收到几条Android N的新闻，瞅了一眼发现手里的Nexus6可以安装beta版，于是迫不及待的开始看怎么安装了。直接看<a href="http://developer.android.com/intl/zh-cn/preview/download.html#device-preview" target="_blank" rel="noopener">官网</a>，一共三种安装方式：</p>
+          <p>今天早上一睁眼，手机上就收到几条Android N的新闻，瞅了一眼发现手里的Nexus6可以安装beta版，于是迫不及待的开始看怎么安装了。直接看<a href="http://developer.android.com/intl/zh-cn/preview/download.html#device-preview" target="_blank" rel="external">官网</a>，一共三种安装方式：</p>
 <ul>
 <li>在真机上直接安装，通过OTA的方式升级</li>
 <li>在真机上用Android N的系统镜像安装</li>
 <li>使用模拟器</li>
 </ul>
-<h1 id="1-真机安装"><a href="#1-真机安装" class="headerlink" title="1.真机安装"></a>1.真机安装</h1><p>简单方便，<a href="https://www.google.com/android/beta?pli=1" target="_blank" rel="noopener">Android Beta Program</a>官网注册你的设备，然后。我是把手机插在电脑上的，登录我的Google账号以后，就检测出我的设备了，然后再点击下图中的<code>ENROLL DEVICE</code>（由于我已经点击过了，所以现在显示的是<code>UNENROLL DEVICE</code>），手机秒秒地就收到官方的推送！爽就一个字，点击进入下载，850.6M。</p>
+<h1 id="1-真机安装"><a href="#1-真机安装" class="headerlink" title="1.真机安装"></a>1.真机安装</h1><p>简单方便，<a href="https://www.google.com/android/beta?pli=1" target="_blank" rel="external">Android Beta Program</a>官网注册你的设备，然后。我是把手机插在电脑上的，登录我的Google账号以后，就检测出我的设备了，然后再点击下图中的<code>ENROLL DEVICE</code>（由于我已经点击过了，所以现在显示的是<code>UNENROLL DEVICE</code>），手机秒秒地就收到官方的推送！爽就一个字，点击进入下载，850.6M。</p>
 <p><img src="/content/images/enroll-device.png" alt="enroll-device"></p>
 <p>下载完成后直接重启安装，大概需要5分钟。然后我手机上哪些应用喜欢自己后台一顿乱跑的就全部暴露出来了，可能是因为适配的原因很多应用都开始各种崩溃。首先是猎豹清理大师，接着是虾米音乐啊，淘宝啊，这些的，甚至有的SDK都开始不停地弹出对话框和Toast，“阿里百川XXXX”，真的是要哭了，我连关闭弹窗时间都来不及啊。。。。</p>
           <!--noindex-->
@@ -1098,156 +1252,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <div class="post-block" style="opacity: 1; display: block;">
-    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/03/05/Android6.0运行时权限简介/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="unclechen">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="UncleChen的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/03/05/Android6.0运行时权限简介/" itemprop="url">Android6.0运行时权限简介</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-05T08:00:00+08:00">
-                2016-03-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Android6.0发布距离现在快1年了，虽然它市场占有率仍在龟速上升中，但还是有一些App开发者已经在打包应用时将<code>targetSDKVersion</code>设置到了<code>23</code>，也就是说把App适配到了Android6.0。以前调用Android系统中需要声明权限的API时，只需要在<code>AndroidManifest.xml</code>文件中一次性列出来。但是如果在<code>build.gradle</code>文件里将<code>targetSDKVersion</code>设为<code>23</code>以后，除了在<code>AndroidManifest.xml</code>声明，我们还需要根据App运行时所在的手机的系统版本，在调用权限之前向用户申请授权，并在用户允许以后，才可以安全的调用对应的API。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/03/05/Android6.0运行时权限简介/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>    
-    
-    
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1292,7 +1301,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">25</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
