@@ -1,0 +1,930 @@
+<!doctype html>
+
+
+
+
+<html class="theme-next pisces" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java Web,后端,React," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="UncleChen的博客" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="一、背景上一篇文章提到使用Play框架编写Web应用，Play框架内置了模板引擎，支持MVC架构，但这本质还是一种Server Rendering。现在越来越多的网站（尤其是不需要seo的一些商业平台系统），都在变成SPA（Single Page Application），使用React、Vue、Angular进行开发。我们先不讨论哪种方式更好，只看看它们到底是怎么做的。">
+<meta name="keywords" content="Java Web,后端,React">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Play框架和React编写Web应用">
+<meta property="og:url" content="http://unclechen.github.io/2018/05/20/使用Play框架和React编写Web应用/index.html">
+<meta property="og:site_name" content="UncleChen的博客">
+<meta property="og:description" content="一、背景上一篇文章提到使用Play框架编写Web应用，Play框架内置了模板引擎，支持MVC架构，但这本质还是一种Server Rendering。现在越来越多的网站（尤其是不需要seo的一些商业平台系统），都在变成SPA（Single Page Application），使用React、Vue、Angular进行开发。我们先不讨论哪种方式更好，只看看它们到底是怎么做的。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1frq2914y76j30rs051wga.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1frq2os3885j31e00ltdpe.jpg">
+<meta property="og:updated_time" content="2018-05-27T12:35:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Play框架和React编写Web应用">
+<meta name="twitter:description" content="一、背景上一篇文章提到使用Play框架编写Web应用，Play框架内置了模板引擎，支持MVC架构，但这本质还是一种Server Rendering。现在越来越多的网站（尤其是不需要seo的一些商业平台系统），都在变成SPA（Single Page Application），使用React、Vue、Angular进行开发。我们先不讨论哪种方式更好，只看看它们到底是怎么做的。">
+<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1frq2914y76j30rs051wga.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '9GQE7B6UON',
+      apiKey: '1b6c2bb25ddee8d24221b1df179afbde',
+      indexName: 'UncleChenBlog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键词进行搜索","hits_empty":"找不到关于“${query}”的文章","hits_stats":"找到 ${hits} 篇文章，耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://unclechen.github.io/2018/05/20/使用Play框架和React编写Web应用/"/>
+
+
+
+
+
+  <title>使用Play框架和React编写Web应用 | UncleChen的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c7b0eb7b32d0e8723fcb885bc9778590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UncleChen的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2018/05/20/使用Play框架和React编写Web应用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用Play框架和React编写Web应用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-20T08:00:00+08:00">
+                2018-05-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2018/05/20/使用Play框架和React编写Web应用/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h2><p>上一篇文章提到<a href="http://unclechen.github.io/2018/05/13/%E4%BD%BF%E7%94%A8Play%E6%A1%86%E6%9E%B6%E7%BC%96%E5%86%99Web%E5%BA%94%E7%94%A8/">使用Play框架编写Web应用</a>，Play框架内置了模板引擎，支持MVC架构，但这本质还是一种Server Rendering。现在越来越多的网站（尤其是不需要seo的一些商业平台系统），都在变成SPA（Single Page Application），使用React、Vue、Angular进行开发。我们先不讨论哪种方式更好，只看看它们到底是怎么做的。</p>
+<a id="more"></a>
+<h2 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h2><p>扯了这么多，下面看一下如何配置我们的Play工程，来使得我们可以方便编写ReactJS代码构建WebApp，同时方便地把Java代码和我们的前端代码打包到一起，进行发布。</p>
+<h3 id="Play"><a href="#Play" class="headerlink" title="Play"></a>Play</h3><p>我使用的Play版本是2.6.x，关于这个Play的Starter工程，请参考前一篇文章<a href="http://unclechen.github.io/2018/05/13/%E4%BD%BF%E7%94%A8Play%E6%A1%86%E6%9E%B6%E7%BC%96%E5%86%99Web%E5%BA%94%E7%94%A8/">使用Play框架编写Web应用</a>，我们就以这个工程作为基础。</p>
+<h3 id="React"><a href="#React" class="headerlink" title="React"></a>React</h3><blockquote>
+<p>关于如何使用React开发Web应用，我觉得只要你稍微懂一点js和html，你就可以对着React官方的教程开始编写应用。因为React支持ES6标准去写代码，而ES6已经具备一个主流的高级编程语言该有面向对象、FP（Functional Programing）等特性，简单来说就是对于有过类似Java编程基础的人来说非常友好。</p>
+</blockquote>
+<p>之前我也有一篇博客介绍了<a href="http://unclechen.github.io/2017/06/16/%E4%BD%BF%E7%94%A8ReactJS%E5%BC%80%E5%8F%91Chrome%E6%8F%92%E4%BB%B6/">使用React开发Chrome插件</a>，里面提到创建一个React应用最好的脚手架工具就是Facebook官方的<a href="https://github.com/facebook/create-react-app" target="_blank" rel="external">Create-React-App</a>，这里我们还继续用它，关于这个脚手架的用法和React工程配置的基础知识，这次暂时略过。如果想深入了解这个脚手架的用法，请参考<a href="https://github.com/facebook/create-react-app" target="_blank" rel="external">https://github.com/facebook/create-react-app</a>。</p>
+<h2 id="三、整合React代码和Play工程的代码"><a href="#三、整合React代码和Play工程的代码" class="headerlink" title="三、整合React代码和Play工程的代码"></a>三、整合React代码和Play工程的代码</h2><p><strong>下面说正题，现在我们已经会写Play代码，也会写ReactJS代码了。要怎么组织我们的代码结构，才可以使得React的JS代码和Play的Java代码整合起来呢？</strong></p>
+<h3 id="1-新建一个React项目"><a href="#1-新建一个React项目" class="headerlink" title="1.新建一个React项目"></a>1.新建一个React项目</h3><p>我们进入命令行，打开之前的Play工程，然后输入命令创建一个react-app：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cd play-java-starter-example</div><div class="line">npx create-react-app web-app</div><div class="line">cd web-app</div><div class="line">npm start</div></pre></td></tr></table></figure>
+<p>此时，我们的工程目录下面就多出了一个<code>web-app</code>的文件夹，我们就在这个文件夹里面编写JS代码。</p>
+<p>运行上面的命令之后，控制台里面会提示我们可以访问<a href="http://localhost:3000" target="_blank" rel="external">localhost:3000</a>。</p>
+<h3 id="2-配置development-server的proxy"><a href="#2-配置development-server的proxy" class="headerlink" title="2.配置development server的proxy"></a>2.配置development server的proxy</h3><p>我们知道上面启动React程序时，其实没有启动后端的服务器，而是脚手架里面默认配置好的一个Webpack development server。而前面我们知道Play框架启动的服务器监听的是<strong>9000</strong>端口，并非是<strong>3000</strong>端口。而且这两个程序完全是两个进程，通常是没法监听一个端口的。</p>
+<p>所以为了在开发环境下，方便我们同时编写前端的JS代码和后端的Java代码，我们需要把development server接收到的请求转发到启动的Play项目的那个Server去。</p>
+<p>我们需要修改<code>/web-app/package.json</code>文件，添加下面这行配置：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">"proxy": "http://localhost:9000/"</div></pre></td></tr></table></figure>
+<h3 id="3-启动Play项目作为后端服务器"><a href="#3-启动Play项目作为后端服务器" class="headerlink" title="3.启动Play项目作为后端服务器"></a>3.启动Play项目作为后端服务器</h3><p>这里还是和前一篇博客一样，我们运行<code>sbt run</code>启动了一个Server，监听着<code>9000</code>端口的请求。我们在开发的时候，一个request会经过Webpack dev server的代理，走到我们用Play编写的API Server。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1frq2914y76j30rs051wga.jpg" alt="Webpack dev server PROXY"></p>
+<p>如此，我们就可以不用使用Play内置的模板引擎去编写Web App了，完全可以使用我们已经学会的ReactJS去写应用。</p>
+<p><strong>这里必须强调的一点是：由于我们分离了JS代码和Java代码，JS使用的框架和Webpack开发环境支持热加载，我们在修改JS代码后，浏览器会自动刷新应用到最新的JS代码；Java使用的框架是Play，这个框架编写程序的时候也可以支持热加载，我们在修改Java代码后，当有请求过来时，也会重新编译最新的Java代码并应用它们。这可以使得我们的开发效率得到极大的提升！</strong></p>
+<h3 id="4-验证效果"><a href="#4-验证效果" class="headerlink" title="4.验证效果"></a>4.验证效果</h3><p>现在我们已经分别启动了React应用和Play编写的后端应用，恰好这个Play的Starter工程下面还有一个<code>CountController.java</code>，负责处理<code>routes</code>中定义的<code>localhost:9000/count</code>请求，我们在JS中发一个请求到这里试试效果。打开<code>/web-app/src/App.js</code>，添加一个方法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">componentDidMount() &#123;</div><div class="line">  fetch(<span class="string">'/count'</span>)</div><div class="line">  .then(<span class="function"><span class="params">response</span> =&gt;</span> &#123;<span class="built_in">console</span>.log(response)&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这里我们向<code>localhost:3000/count</code>发送了请求，由于我们配置了Webpack Dev server的<code>proxy</code>，请求会被转发到<code>localhost:9000/count</code>。</p>
+<p>然后打开Chrome浏览器，右键打开<code>inspect</code>，进入<code>network</code>，然后在地址栏输入<code>http://localhost:3000</code>，我们可以看到chrome调试器的network记录中出现了下面的请求，并且返回了<code>200 OK</code>。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1frq2os3885j31e00ltdpe.jpg" alt="chrome inspection proxy"></p>
+<p>通常我们和后端接口通信用的都是JSON协议，这里我们也可以改造一下这个Controller。参考<a href="https://www.playframework.com/documentation/2.6.13/JavaJsonActions" target="_blank" rel="external">https://www.playframework.com/documentation/2.6.13/JavaJsonActions</a>，我们把<code>count</code>方法改成下面这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> Result <span class="title">count</span><span class="params">()</span> </span>&#123;</div><div class="line">    ObjectNode result = Json.newObject(); <span class="comment">// play框架使用的是Jackson处理json</span></div><div class="line">    result.put(<span class="string">"code"</span>, <span class="number">0</span>);</div><div class="line">    result.put(<span class="string">"message"</span>, <span class="string">"OK"</span>);</div><div class="line">    result.put(<span class="string">"data"</span>, counter.nextCount());</div><div class="line">    <span class="keyword">return</span> ok(result);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>即可返回JSON格式的response了。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">HTTP/1.1 <span class="number">200</span> OK</div><div class="line"><span class="attribute">Content-Type</span>: application/json; charset=utf-8</div><div class="line"></div><div class="line">&#123;"code":0,"message":"OK","data":1&#125;</div></pre></td></tr></table></figure>
+<h3 id="4-打包和发布"><a href="#4-打包和发布" class="headerlink" title="4.打包和发布"></a>4.打包和发布</h3><p>上面讲的是开发模式里我们怎么配置代码的结构，其实<code>web-app</code>这个目录本质上放在任何一个地方都可以，尤其是那种JS和Java开发完全是不同的人在负责的团队。但是有些团队（比如我所在的团队），写JS的和写Java的就是一个人或者这个团队里的人，同时负责这两份代码，那么把JS代码和Java代码放在一起还是更好一些。</p>
+<p>打包时，我们首先应该打包JS代码，create-react-app已经为我们准备了一个命令<code>npm run build</code>，即可把我们的js代码、css代码和index.html静态文件统一打包输出在<code>/web-app/build</code>目录。然后我们再把Java代码打包，在Play工程里面，运行<code>sbt package</code>，也可以把程序打包成一个可执行的jar包。</p>
+<p>分别打包JS代码和Java代码之后，我们可以根据自己的需要，把它们放在同一个服务器上或者不同的路径下甚至是不同的服务器上，这里本质上其实是把两个程序在物理上分离了。其实还有一种方式就是把js、css和index.html这种静态文件也一起打入到jar里面，然后统一由这个jar来提供访问，这时在物理上两个程序是一起部署的。</p>
+<h2 id="四、小结"><a href="#四、小结" class="headerlink" title="四、小结"></a>四、小结</h2><p>上面介绍了使用Play框架做后端 + React框架做前端来编写一个Web App。但通常在一个更大型的业务系统中，这里介绍到东西只能算是前端(Web、Native App) -&gt; 中台，一般这个中台还会依赖一个更加纯粹的后台Service。中台代码负责处理请求校验和一些缓存，然后中台再向后台请求，后台的代码会操作数据库。有的团队（比如我所在的团队），在分工方面，前端和中台是一个人在负责，后台是一个人在负责。</p>
+<p>本质上这里我们其实就是使用Play框架编写了一个后台API而已，其实用其他的框架也是一样OK的，比如SpringBoot，这里也有一篇文章介绍<a href="https://spring.io/guides/tutorials/react-and-spring-data-rest/" target="_blank" rel="external">https://spring.io/guides/tutorials/react-and-spring-data-rest/</a>。</p>
+<p>下面是两篇参考资料：</p>
+<ul>
+<li><a href="http://ticofab.io/react-js-tutorial-with-play_scala_webjars/" target="_blank" rel="external">http://ticofab.io/react-js-tutorial-with-play_scala_webjars/</a></li>
+<li><a href="https://www.fullstackreact.com/articles/using-create-react-app-with-a-server/" target="_blank" rel="external">https://www.fullstackreact.com/articles/using-create-react-app-with-a-server/</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>    
+    
+    
+    <ul class="post-copyright">
+    <li class="post-copyright-author">
+    <strong>本文作者：</strong>unclechen
+    </li>
+    <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="/2018/05/20/使用Play框架和React编写Web应用/" title="使用Play框架和React编写Web应用">2018/05/20/使用Play框架和React编写Web应用/</a>
+    </li>
+    <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本文采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a>进行许可。转载请注明出处！
+    </li>
+    </ul>
+    
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java-Web/" rel="tag"># Java Web</a>
+          
+            <a href="/tags/后端/" rel="tag"># 后端</a>
+          
+            <a href="/tags/React/" rel="tag"># React</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/13/使用Play框架编写Web应用/" rel="next" title="使用Play框架编写Web应用">
+                <i class="fa fa-chevron-left"></i> 使用Play框架编写Web应用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="unclechen" />
+          <p class="site-author-name" itemprop="name">unclechen</p>
+           
+              <p class="site-description motion-element" itemprop="description">吃下恶魔果实，我就能变成超级赛亚人！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/unclechen" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1718455407" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、背景"><span class="nav-text">一、背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、环境搭建"><span class="nav-text">二、环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Play"><span class="nav-text">Play</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#React"><span class="nav-text">React</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、整合React代码和Play工程的代码"><span class="nav-text">三、整合React代码和Play工程的代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-新建一个React项目"><span class="nav-text">1.新建一个React项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-配置development-server的proxy"><span class="nav-text">2.配置development server的proxy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-启动Play项目作为后端服务器"><span class="nav-text">3.启动Play项目作为后端服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-验证效果"><span class="nav-text">4.验证效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-打包和发布"><span class="nav-text">4.打包和发布</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、小结"><span class="nav-text">四、小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">unclechen</span>
+</div>
+
+
+<!--
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+-->
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "071293399566469d925f180d68952611",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="/js/src/md5.min.js"></script>
+  <script type="text/javascript">
+      var gitalk = new Gitalk({
+        clientID: 'a11668e1882acefd3ff5',
+        clientSecret: '0c20ad42eb72f7677c7fb68fd25710a4edbd5ece',
+        repo: 'blog_comment_repo',
+        owner: 'unclechen',
+        admin: ['unclechen'],
+        id: md5(location.pathname),
+        distractionFreeMode: 'true'
+      })
+      gitalk.render('gitalk-container')
+  </script>
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
