@@ -100,7 +100,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1fsl72i76vnj30tk0d8dhs.jpg">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1fsl9liu6oej30l40jen1i.jpg">
-<meta property="og:updated_time" content="2018-06-24T03:43:50.000Z">
+<meta property="og:updated_time" content="2018-06-24T03:53:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="揭开JS无埋点技术的神秘面纱">
 <meta name="twitter:description" content="一、背景相信很多人都接触过“埋点”这个概念，无论是前端还是后端开发，我们都可以使用这门技术来生产出一些运营性质的原始数据（接口耗时、程序安装/启动、用户交互行为等等），然后分析它们得到一些抽象指标（例如留存率、转化率），进而决定产品运营或者代码优化的方向。现在业界有许多比较知名数据平台，比如Google Analytics、Facebook Pixel、Mixpanel、GrowingIO、诸葛I">
@@ -424,6 +424,7 @@
 
       
         <h2 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h2><p>相信很多人都接触过<strong>“埋点”</strong>这个概念，无论是前端还是后端开发，我们都可以使用这门技术来生产出一些运营性质的原始数据（接口耗时、程序安装/启动、用户交互行为等等），然后分析它们得到一些抽象指标（例如留存率、转化率），进而决定产品运营或者代码优化的方向。现在业界有许多比较知名数据平台，比如Google Analytics、Facebook Pixel、Mixpanel、GrowingIO、诸葛IO、TalkingData、神策数据等数不胜数一大票，这些平台有单纯做数据分析的，也有服务于特定领域例如广告监测转化的，都提供了多端（Android、iOS、Web、小程序、ReactNative）的埋点SDK和比较全面的BI服务。这一两年，不少平台都开始宣传一种叫<strong>“无埋点”</strong>的技术，下面以Web端为例，揭开它的神秘面纱。</p>
+<a id="more"></a>
 <h2 id="二、什么是无埋点？"><a href="#二、什么是无埋点？" class="headerlink" title="二、什么是无埋点？"></a>二、什么是无埋点？</h2><p><strong>“无埋点”</strong>在国外一些平台被叫做<code>Codeless Tracking</code>，顾名思义就是可以写“更少”的埋点代码。而<strong>“代码埋点”</strong>一般需要开发人员编写代码，监听某个html元素的产生的事件，然后调用上报数据的接口，发送数据。而无埋点则可以由非技术人员（例如运营、产品），在可视化的工具中作出配置，然后就可以将html元素中产生的行为上报到后台。下面是Mixpanel平台的可视化工具的截图。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fsl72i76vnj30tk0d8dhs.jpg" alt=""></p>
 <p>在这个工具里，需要首先输入页面的url，页面加载完成后，会出现可视化配置的工具条。点击创建事件，就可以进入元素选择模式，用鼠标点击页面上的某个元素（例如button、a这些element），就可以在弹出的对话框里面，设置这个事件的名称（比如叫<code>TEST</code>）。保存这个配置之后，如果页面在浏览器中被浏览，刚才配置的那个按钮发生点击时，就会向后台上报一个<code>TEST</code>事件。我们还可以设置上报<code>TEST</code>事件的时候，带上一些属性（properties），这些属性同样也是在页面中用鼠标去选择，然后保存起来的。</p>
