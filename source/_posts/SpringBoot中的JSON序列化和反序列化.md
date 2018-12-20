@@ -11,7 +11,7 @@ categories:
   - 技术
 ---
 
-在SpringBoot中，常常会需要把请求中的参数进行反序列化，得到我们需要的实体对象，在进行处理之后，再把实体序列化返回给请求方（这里不提什么DTO、VO、BO的概念，其实很多公司对这些领域模型的区分都不怎么严格，毕竟搬砖的靠技术，大佬们才谈规范和标准。在[阿里巴巴的Java开发手册](https://github.com/alibaba/p3c/blob/master/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4Java%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%EF%BC%88%E8%AF%A6%E5%B0%BD%E7%89%88%EF%BC%89.pdf)中对这些有比较详细的规约，建议参考）。大部分情况下，开放API的数据协议都是用的JSON（也就是请求的**`content-type:application/json`**，这篇文章只讨论这种请求类型），常见的JSON序列化工具有Jackson（SpringBoot默认使用）、Gson、FastJson等等。下面看一下怎么使用它们。
+在SpringBoot中，常常会需要把请求中的参数进行反序列化，得到我们需要的实体对象，在进行处理之后，再把实体序列化返回给请求方（这里不提什么DTO、VO、BO的概念，其实很多公司对这些领域模型的区分都不怎么严格，毕竟搬砖的靠技术，大佬们才谈规范和标准，在[阿里巴巴的Java开发手册](https://github.com/alibaba/p3c/blob/master/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4Java%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%EF%BC%88%E8%AF%A6%E5%B0%BD%E7%89%88%EF%BC%89.pdf)中对这些有比较详细的规约，建议参考）。大部分情况下，开放API的数据协议都是用的JSON（也就是请求的**`content-type:application/json`，参数以json格式放在请求body中的**，本文只讨论这种请求类型），常见的JSON序列化工具有Jackson（SpringBoot默认使用）、Gson、FastJson等等。下面看一下怎么使用它们。
 
 <!-- more -->
 
@@ -19,7 +19,7 @@ categories:
 
 ## 1.1 基本用法
 
-Jackson是SpringBoot默认的JSON序列化/反序列化框架，对于`content-type:application/json`的请求参数，需要在Controller的方法中使用`@RequestBody`来接收它。下面是基本的示例代码，`User.java`（必须有getter、setter方法和默认的无参构造函数）、`UserController.java`（方法的参数必须有`@RequestBody`注解）。
+Jackson是SpringBoot默认的JSON序列化/反序列化框架，对于`content-type:application/json`的请求参数，只需要在Controller的方法中使用`@RequestBody`注解到参数上，即可实现反序列化。下面是基本的示例代码，`User.java`（必须有getter、setter方法和默认的无参构造函数）、`UserController.java`（方法的参数必须有`@RequestBody`注解）。
 
 ```
 // User.java
@@ -118,16 +118,18 @@ curl -X POST \
 
 实际业务上，有些API要求参数会以**小写字母+下划线**的方式命名，有些又要求以**驼峰**方式命名，有时可能又为了某种兼容，参数的名字可能和代码中实体的属性名称完全不同。我们在上面的`User.java`中增加一个`private String personalPage`属性（相应地也添加了setter/getter方法），看看如何解析这个参数。
 
-**还是使用原来的请求，没有带有新的参数`personalPage`**。我们在代码中用Log打印反序列化之后的结果（直接用debug更方便），发现反序列化之后的`User`对象的`personalPage`属性为`null`。
-
-接着**使用新的请求，请求中带有了小写字母加下划线的参数`personal_page`**，我们发现反序列化之后的`User`对象的`personalPage`属性仍然为`null`。其实这很好理解，框架没有这么智能，它不会知道`personalPage`属性在序列化的数据中是叫`personal_page`的。为了指定序列化时这个属性的名称，我们可以给它使用`@JsonProperty("personal_page")`注解，这个注解也是Jackson这个框架提供的。
+然后**构造一个新的请求，在这个请求中添加一个带有了小写字母加下划线的参数`personal_page`**，我们发现反序列化之后的`User`对象的`personalPage`属性为`null`。这很好理解，框架没有这么智能，它并不会知道`personalPage`属性在序列化的数据中是叫`personal_page`的。为了指定序列化时这个属性的名称，我们可以给它使用`@JsonProperty("personal_page")`注解，这个注解也是Jackson这个框架提供的。
 
 通过`@JsonProperty`注解可以指定序列化的属性名称，但是每一个属性如果都要这么写的话，就太费劲了，我们可以统一指定这种命名的解析规则。具体做法有两种：
 
 - `application.properties`中配置一个：`spring.jackson.property-naming-strategy=CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES`（新版本好像已经用`SNAKE_CASE`替代了）。关于更多的配置参数，可以查看一下`org.springframework.boot.autoconfigure.jackson.JacksonProperties`这个类。
-- [自定义`ObjectMapper`](https://docs.spring.io/spring-boot/docs/current/reference/html/howto-spring-mvc.html#howto-customize-the-jackson-objectmapper)：ObjectMapper是Jackson的核心，它可以控制SpringBoot中如何使用Jackson的功能，下面通过配置的方式指定了自定义的`ObjectMapper`。通过这种方式，我们还可以指定更多的Jackson序列化和反序列化行为，后面会提到。
+- [自定义`ObjectMapper`](https://docs.spring.io/spring-boot/docs/current/reference/html/howto-spring-mvc.html#howto-customize-the-jackson-objectmapper)：ObjectMapper是Jackson的核心，它可以控制SpringBoot中如何使用Jackson的功能，下面通过配置的方式指定了自定义的`ObjectMapper`。这种方式除了可以配置参数名称的解析规则外，还可以指定更多的Jackson序列化和反序列化的规则。
+
+具体才使用`ObjectMapper`的时候有两种方式：一种是配置一个单例的`ObjectMapper`对象，如下所示。
 
 ```java
+// CustomObjectMapper.java
+...
 @Configuration
 public class CustomObjectMapper {
 
@@ -141,7 +143,7 @@ public class CustomObjectMapper {
 }
 ```
 
-除了配置一个单例`Bean`的方法，也可以在`SpringBootApplication`类中指定`HttpMessageConverter`来实现同样的功能。
+另一种方式是以在`SpringBootApplication`类中指定`HttpMessageConverter`来实现同样的功能。
 
 ```java
 @SpringBootApplication
@@ -158,35 +160,98 @@ public class DemoApplication extends WebMvcConfigurationSupport {
         converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
     }
 }
-
 ```
 
 
 ## 1.3 时间类型的字段处理
 
+在1.2节提到了采用`ObjectMapper`可以设置参数解析的规则，时间类型的字段处理也是一种。具体方法是：
+
+```java
+// CustomObjectMapper.java
+mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+
+// User.java
+public class User {
+    // 省略其他字段
+    private LocalDate birthDay;
+
+    public LocalDate getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(LocalDate birthDay) {
+        this.birthDay = birthDay;
+    }
+}
+```
+
+这样，在反序列化接收参数时候，都只能接收形如`yyyy-MM-dd HH:mm:ss`的字符串了。并且在序列化返回结果的时候也是返回这个格式。当然你也可以使用`@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")`注解。
+
 ## 1.4 枚举类型的字段处理
 
-## 1.5 多个对象
+这个更简单，啥也不用干，定义一个枚举`Gender`，Jackson框架自动会帮你反序列化解析成对象的属性。
 
-有的时候，我们会遵循一些标准或者规范，因此API的参数命名
+```
+// Gender.java
+public enum Gender {
+    MALE, FEMALE
+}
+
+// User.java
+public class User2 {
+    // 省略其他字段
+    private Gender gender;
+    // 省略getter/setter
+}
+```
+
+## 1.5 Jackson序列化小结
+
+总结下来，就是两种方式，一种靠注解，一种靠`CustomObjectMapper`，注解适合灵活用在某个属性上（灵活的意思是比如，某个属性名称完全没有任何规则，参数叫`a`，而属性叫`b`），如果整个工程都是统一的风格，那么最好用`CustomObjectMapper`来节省体力。这两种在能力上其实都是对应的，最灵活的方式就是可以自己定义`serializer`和`deserializer`，具体如何实现，可以参考文档。
+
+这里可以和前一篇提到的[参数校验](http://unclechen.github.io/2018/12/15/SpringBoot%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0%E6%A0%A1%E9%AA%8C/)结合起来进行使用，此时只需要将`@RequetsBody`注解换成`@Validated`注解即可。
 
 # 二、Gson
 
+除了默认的Jackson，还可以使用Gson来对参数进行反序列化，具体实现是通过`GsonHttpMessageConverter`。我们先看一下Spring里面的`HttpMessageConverter`继承关系，如下图所示。
+
+<img src="https://ws1.sinaimg.cn/large/006tNbRwly1fydmth2md0j316y0peajm.jpg" width="480"/>
+
+了解这个之后，看一下如何实现`Gson`的配置。很显然第一步是要引入`Gson`库。
+
+```
+dependencies {
+    implementation('com.google.code.gson:gson:2.8.4')
+}
+```
+
+然后回到`SpringBootApplication类`中，添加`GsonHttpMessageConverter`到Coverters。
+
+```
+@SpringBootApplication
+public class DemoApplication extends WebMvcConfigurationSupport {
+
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        // Gson
+        GsonHttpMessageConverter gsonHttpMessageConverter = new GsonHttpMessageConverter();
+        gsonHttpMessageConverter.setGson(new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .create());
+        converters.add(gsonHttpMessageConverter);
+    }
+}
+```
+
+
 # 三、FastJson
 
-# 四、特定用法
 
-## 4.1 指定序列化的名字
-
-使用Jackson的注解@JsonProperty可以设置序列化和反序列化时的JSON名
-
-## 时间类型的参数
-
-## 枚举类型的参数
-
-## 4.2 多个对象
-
-## 4.3 增加校验
 
 # 五、性能
 
