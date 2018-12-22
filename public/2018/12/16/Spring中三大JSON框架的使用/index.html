@@ -1,0 +1,962 @@
+<!doctype html>
+
+
+
+
+<html class="theme-next pisces" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,Spring,后台,Service,Json序列化," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="UncleChen的博客" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="在SpringBoot中，常常会需要把请求中的参数进行反序列化，得到我们需要的实体对象，在进行处理之后，再把实体序列化返回给请求方（这里不提什么DTO、VO、BO的概念，其实很多公司对这些领域模型的区分都不怎么严格，毕竟搬砖的靠技术，大佬们才谈规范和标准，在阿里巴巴的Java开发手册中对这些有比较详细的规约，建议参考）。大部分情况下，开放API的数据协议都是用的JSON（也就是请求的content">
+<meta name="keywords" content="Java,Spring,后台,Service,Json序列化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring中三大JSON框架的使用">
+<meta property="og:url" content="http://unclechen.github.io/2018/12/16/Spring中三大JSON框架的使用/index.html">
+<meta property="og:site_name" content="UncleChen的博客">
+<meta property="og:description" content="在SpringBoot中，常常会需要把请求中的参数进行反序列化，得到我们需要的实体对象，在进行处理之后，再把实体序列化返回给请求方（这里不提什么DTO、VO、BO的概念，其实很多公司对这些领域模型的区分都不怎么严格，毕竟搬砖的靠技术，大佬们才谈规范和标准，在阿里巴巴的Java开发手册中对这些有比较详细的规约，建议参考）。大部分情况下，开放API的数据协议都是用的JSON（也就是请求的content">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fy8x6ahy8hj30z40scq5q.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fydmth2md0j316y0peajm.jpg">
+<meta property="og:updated_time" content="2018-12-22T08:04:45.250Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring中三大JSON框架的使用">
+<meta name="twitter:description" content="在SpringBoot中，常常会需要把请求中的参数进行反序列化，得到我们需要的实体对象，在进行处理之后，再把实体序列化返回给请求方（这里不提什么DTO、VO、BO的概念，其实很多公司对这些领域模型的区分都不怎么严格，毕竟搬砖的靠技术，大佬们才谈规范和标准，在阿里巴巴的Java开发手册中对这些有比较详细的规约，建议参考）。大部分情况下，开放API的数据协议都是用的JSON（也就是请求的content">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fy8x6ahy8hj30z40scq5q.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '9GQE7B6UON',
+      apiKey: '1b6c2bb25ddee8d24221b1df179afbde',
+      indexName: 'UncleChenBlog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键词进行搜索","hits_empty":"找不到关于“${query}”的文章","hits_stats":"找到 ${hits} 篇文章，耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://unclechen.github.io/2018/12/16/Spring中三大JSON框架的使用/"/>
+
+
+
+
+
+  <title>Spring中三大JSON框架的使用 | UncleChen的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c7b0eb7b32d0e8723fcb885bc9778590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UncleChen的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2018/12/16/Spring中三大JSON框架的使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring中三大JSON框架的使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-16T08:00:00+08:00">
+                2018-12-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2018/12/16/Spring中三大JSON框架的使用/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在SpringBoot中，常常会需要把请求中的参数进行反序列化，得到我们需要的实体对象，在进行处理之后，再把实体序列化返回给请求方（这里不提什么DTO、VO、BO的概念，其实很多公司对这些领域模型的区分都不怎么严格，毕竟搬砖的靠技术，大佬们才谈规范和标准，在<a href="https://github.com/alibaba/p3c/blob/master/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4Java%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%EF%BC%88%E8%AF%A6%E5%B0%BD%E7%89%88%EF%BC%89.pdf" target="_blank" rel="external">阿里巴巴的Java开发手册</a>中对这些有比较详细的规约，建议参考）。大部分情况下，开放API的数据协议都是用的JSON（也就是请求的<strong><code>content-type:application/json</code>，参数以json格式放在请求body中的</strong>，本文只讨论这种请求类型），常见的JSON序列化工具有Jackson（SpringBoot默认使用）、Gson、FastJson等等。下面看一下怎么使用它们。</p>
+<a id="more"></a>
+<h1 id="一、Jackson"><a href="#一、Jackson" class="headerlink" title="一、Jackson"></a>一、Jackson</h1><h2 id="1-1-基本用法"><a href="#1-1-基本用法" class="headerlink" title="1.1 基本用法"></a>1.1 基本用法</h2><p>Jackson是SpringBoot默认的JSON序列化/反序列化框架，对于<code>content-type:application/json</code>的请求参数，只需要在Controller的方法中使用<code>@RequestBody</code>注解到参数上，即可实现反序列化。下面是基本的示例代码，<code>User.java</code>（必须有getter、setter方法和默认的无参构造函数）、<code>UserController.java</code>（方法的参数必须有<code>@RequestBody</code>注解）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// User.java</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User2</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Integer id;</div><div class="line">    <span class="keyword">private</span> String name;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> id;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(Integer id)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.id = id;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// UserController.java</span></div><div class="line"><span class="meta">@RestController</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserController</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOGGER = LoggerFactory.getLogger(UserController.class);</div><div class="line"></div><div class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/user/post"</span>, method = RequestMethod.POST)</div><div class="line">    <span class="function"><span class="keyword">public</span> ServiceResponse <span class="title">getUserByPost</span><span class="params">(@RequestBody User user)</span> </span>&#123;</div><div class="line">        LOGGER.info(user.getId() + <span class="string">": "</span> + user.getName());</div><div class="line">        ServiceResponse serviceResponse = <span class="keyword">new</span> ServiceResponse();</div><div class="line">        serviceResponse.setCode(<span class="number">0</span>);</div><div class="line">        serviceResponse.setMessage(<span class="string">"test"</span>);</div><div class="line">        <span class="keyword">return</span> serviceResponse;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// ServiceResponse.java，作为getUserByPost的返回值，自动被序列化返回。</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServiceResponse</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> code;</div><div class="line">    <span class="keyword">private</span> String message;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCode</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> code;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCode</span><span class="params">(<span class="keyword">int</span> code)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.code = code;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getMessage</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> message;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMessage</span><span class="params">(String message)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.message = message;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>用postman发出一个请求试试。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fy8x6ahy8hj30z40scq5q.jpg" width="400"></p>
+<p>喜欢用<code>curl</code>的话，也可以用下面的命令发请求。</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">curl -X POST \</div><div class="line">  http://127.0.0.1:8080/user/post \</div><div class="line">  -<span class="ruby">H <span class="string">'Content-Type: application/json'</span> \</span></div><div class="line"><span class="ruby">  -H <span class="string">'cache-control: no-cache'</span> \</span></div><div class="line"><span class="ruby">  -d <span class="string">'&#123;</span></span></div><div class="line"><span class="ruby">	<span class="string">"id"</span>: <span class="number">1</span>,</span></div><div class="line"><span class="ruby">	<span class="string">"name"</span>: <span class="string">"unclechen"</span></span></div><div class="line"><span class="ruby">&#125;<span class="string">'</span></span></div></pre></td></tr></table></figure>
+<p>返回结果如下，可以看到<code>ServiceResponse</code>对象，自动被框架序列化返回。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"code"</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">"message"</span>: <span class="string">"test"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>由此看到，作为SpringBoot中默认使用的JSON框架，基本上不用做任何事情，就可以实现json请求的参数反序列化以及处理结果的序列化。</p>
+<blockquote>
+<p>注意：虽然不用做什么事情，但是也不能做多余的事。比如对于User.java类，一定要保证它会有一个无参数的构造函数。按照Java的规则，如果你没有指定任何构造函数，那么编译时会自动添加一个无参构造函数，但是如果你指定了含有参数的构造函数，那么就不会再添加一个无参构造函数了，此时反序列化就会失败，抛出<code>com.fasterxml.jackson.databind.exc.InvalidDefinitionException</code>。</p>
+</blockquote>
+<h2 id="1-2-字段命名映射的处理"><a href="#1-2-字段命名映射的处理" class="headerlink" title="1.2 字段命名映射的处理"></a>1.2 字段命名映射的处理</h2><p>实际业务上，有些API要求参数会以<strong>小写字母+下划线</strong>的方式命名，有些又要求以<strong>驼峰</strong>方式命名，有时可能又为了某种兼容，参数的名字可能和代码中实体的属性名称完全不同。我们在上面的<code>User.java</code>中增加一个<code>private String personalPage</code>属性（相应地也添加了setter/getter方法），看看如何解析这个参数。</p>
+<p>然后<strong>构造一个新的请求，在这个请求中添加一个带有了小写字母加下划线的参数<code>personal_page</code></strong>，我们发现反序列化之后的<code>User</code>对象的<code>personalPage</code>属性为<code>null</code>。这很好理解，框架没有这么智能，它并不会知道<code>personalPage</code>属性在序列化的数据中是叫<code>personal_page</code>的。为了指定序列化时这个属性的名称，我们可以给它使用<code>@JsonProperty(&quot;personal_page&quot;)</code>注解，这个注解也是Jackson这个框架提供的。</p>
+<p>通过<code>@JsonProperty</code>注解可以指定序列化的属性名称，但是每一个属性如果都要这么写的话，就太费劲了，我们可以统一指定这种命名的解析规则。具体做法有两种，一种是配置的方式，一种是编程的方式。</p>
+<ul>
+<li><code>application.properties</code>配置文件中设置：<code>spring.jackson.property-naming-strategy=CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES</code>（新版本好像已经用<code>SNAKE_CASE</code>替代了）。关于更多的配置参数，可以查看一下<code>org.springframework.boot.autoconfigure.jackson.JacksonProperties</code>这个类。配置文件里面有哪些Jackson的配置可以写，可以参考<a href="https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html" target="_blank" rel="external">这里</a>。</li>
+<li>编程<a href="https://docs.spring.io/spring-boot/docs/current/reference/html/howto-spring-mvc.html#howto-customize-the-jackson-objectmapper" target="_blank" rel="external">自定义<code>ObjectMapper</code></a>：ObjectMapper是Jackson的核心，它可以控制SpringBoot中如何使用Jackson的功能，下面通过配置的方式指定了自定义的<code>ObjectMapper</code>。这种方式除了可以配置参数名称的解析规则外，还可以指定更多的Jackson序列化和反序列化的规则。</li>
+</ul>
+<p>具体使用<code>ObjectMapper</code>的时候有两种方式：<strong>一种是配置一个单例的<code>ObjectMapper</code>对象</strong>，如下所示。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// CustomObjectMapper.java</span></div><div class="line">...</div><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomObjectMapper</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Bean</span></div><div class="line">    <span class="function"><span class="keyword">public</span> ObjectMapper <span class="title">getObjectMapper</span><span class="params">()</span> </span>&#123;</div><div class="line">        ObjectMapper mapper = <span class="keyword">new</span> ObjectMapper();</div><div class="line">        <span class="comment">// 指定PropertyNamingStrategy，甚至可以自定义PropertyNamingStrategy</span></div><div class="line">        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);</div><div class="line">        <span class="keyword">return</span> mapper;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>另一种方式是以在<code>SpringBootApplication</code>类中指定<code>HttpMessageConverter</code>来实现同样的功能。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SpringBootApplication</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoApplication</span> <span class="keyword">extends</span> <span class="title">WebMvcConfigurationSupport</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        SpringApplication.run(DemoApplication.class, args);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configureMessageConverters</span><span class="params">(List&lt;HttpMessageConverter&lt;?&gt;&gt; converters)</span> </span>&#123;</div><div class="line">        Jackson2ObjectMapperBuilder builder = <span class="keyword">new</span> Jackson2ObjectMapperBuilder();</div><div class="line">        builder.propertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);</div><div class="line">        converters.add(<span class="keyword">new</span> MappingJackson2HttpMessageConverter(builder.build()));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="1-3-时间类型的字段处理"><a href="#1-3-时间类型的字段处理" class="headerlink" title="1.3 时间类型的字段处理"></a>1.3 时间类型的字段处理</h2><p>配置文件的方式不赘述，<code>spring.jackson.date-format=</code>即可。</p>
+<p>在1.2节提到了采用<code>ObjectMapper</code>可以设置参数解析的规则，时间类型的字段处理也是一种。具体方法是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// CustomObjectMapper.java</span></div><div class="line">mapper.setDateFormat(<span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>));</div><div class="line"></div><div class="line"><span class="comment">// User.java</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</div><div class="line">    <span class="comment">// 省略其他字段</span></div><div class="line">    <span class="keyword">private</span> LocalDate birthDay;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> LocalDate <span class="title">getBirthDay</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> birthDay;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBirthDay</span><span class="params">(LocalDate birthDay)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.birthDay = birthDay;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样，在反序列化接收参数时候，都只能接收形如<code>yyyy-MM-dd HH:mm:ss</code>的字符串了。并且在序列化返回结果的时候也是返回这个格式。当然你也可以使用<code>@JsonFormat(timezone = &quot;GMT+8&quot;, pattern = &quot;yyyy-MM-dd HH:mm:ss&quot;)</code>注解。不过有时为了让接口可以更灵活，可能我们的VO/DTO里面还是会把<code>XXXTime</code>定义成<code>String</code>，等到反序列化完成之后，再手动校验它们。</p>
+<h2 id="1-4-枚举类型的字段处理"><a href="#1-4-枚举类型的字段处理" class="headerlink" title="1.4 枚举类型的字段处理"></a>1.4 枚举类型的字段处理</h2><p>这个更简单，啥也不用干，定义一个枚举<code>Gender</code>，Jackson框架自动会帮你反序列化解析成对象的属性。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Gender.java</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">Gender</span> &#123;</span></div><div class="line">    MALE, FEMALE</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// User.java</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User2</span> &#123;</span></div><div class="line">    <span class="comment">// 省略其他字段</span></div><div class="line">    <span class="keyword">private</span> Gender gender;</div><div class="line">    <span class="comment">// 省略getter/setter</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当传入的参数不在枚举值范围的时候，框架会抛出异常，我们可以在全局的异常Handler里面处理它，然后向用户返回友好的信息。</p>
+<p>如果不希望Jackson框架抛出异常的话，可以对自定义的<code>ObjectMapper</code>进行设置，<code>ObjectMapper.configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true);</code>。</p>
+<h2 id="1-5-Jackson序列化小结"><a href="#1-5-Jackson序列化小结" class="headerlink" title="1.5 Jackson序列化小结"></a>1.5 Jackson序列化小结</h2><p>总结下来，就是两种方式，一种靠注解，一种靠<code>CustomObjectMapper</code>，注解适合灵活用在某个属性上（灵活的意思是比如，某个属性名称完全没有任何规则，参数叫<code>a</code>，而属性叫<code>b</code>），如果整个工程都是统一的风格，那么最好用<code>CustomObjectMapper</code>来节省体力（个人也更推荐这种做法，节省体力，API风格规范统一，便于团队协作）。</p>
+<p>两种方式在能力上其实都是对应的，最灵活的方式就是可以自己定义<code>serializer</code>和<code>deserializer</code>，具体如何实现，可以参考文档。不过其实Jackson已经提供了足够多的反序列化配置选项来给我们用，在<a href="https://fasterxml.github.io/jackson-databind/javadoc/2.8/index.html?com/fasterxml/jackson/databind/DeserializationFeature.html" target="_blank" rel="external"><code>DeserializationFeature.java</code></a>里面我们可以找到诸如<code>READ_UNKNOWN_ENUM_VALUES_AS_NULL</code>这样的配置。</p>
+<p>反序列化还可以和前一篇提到的<a href="http://unclechen.github.io/2018/12/15/SpringBoot%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0%E6%A0%A1%E9%AA%8C/">参数校验</a>结合起来进行使用，此时只需要将<code>@RequetsBody</code>注解前面加上一个<code>@Validated</code>注解即可。</p>
+<h1 id="二、Gson"><a href="#二、Gson" class="headerlink" title="二、Gson"></a>二、Gson</h1><p>除了默认的Jackson，还可以使用Gson来对参数进行反序列化，具体实现是通过<code>GsonHttpMessageConverter</code>。我们先看一下Spring里面的<code>HttpMessageConverter</code>继承关系，如下图所示。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fydmth2md0j316y0peajm.jpg" width="480"></p>
+<p>了解这个之后，看一下如何将SpringBoot的Json框架替换成<code>Gson</code>。</p>
+<h2 id="2-1-基本用法"><a href="#2-1-基本用法" class="headerlink" title="2.1 基本用法"></a>2.1 基本用法</h2><p>第一步，引入<code>Gson</code>库。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">    implementation(<span class="string">'org.springframework.boot:spring-boot-starter-web'</span>)</div><div class="line">    implementation(<span class="string">'com.google.code.gson:gson:2.8.4'</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line">configurations &#123;</div><div class="line">    compile.exclude <span class="string">group:</span> <span class="string">'com.fasterxml.jackson.core'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里强制剔除掉Jackson是为了防止SpringBoot的<code>AutoConfig</code>机制因为Jackson的类存在导致Gson的失效。Spring-AutoConfig使用的是<code>@ConditionalOnClass(Gson.class)</code>自动配置Gson，使用的是<code>@ConditionalOnClass(ObjectMapper.class)</code>自动配置的Jackson，由于<code>ObjectMapper.class</code>在<code>com.fasterxml.jackson.core</code>中，所以把它所在的库exclude掉。</p>
+<p>第二步，回到<code>SpringBootApplication类</code>中，添加<code>GsonHttpMessageConverter</code>到Coverters。同时去掉Jackson的Converter和ObjectMapper（如果有的话）。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SpringBootApplication</span></div><div class="line">public <span class="class"><span class="keyword">class</span> <span class="title">DemoApplication</span> <span class="keyword">extends</span> <span class="title">WebMvcConfigurationSupport</span> </span>&#123;</div><div class="line"></div><div class="line">    public static void main(<span class="type">String</span>[] args) &#123;</div><div class="line">        <span class="type">SpringApplication</span>.run(<span class="type">DemoApplication</span>.<span class="keyword">class</span>, args);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    public void configureMessageConverters(<span class="type">List</span>&lt;<span class="type">HttpMessageConverter</span>&lt;?&gt;&gt; converters) &#123;</div><div class="line">        <span class="comment">// Gson</span></div><div class="line">        <span class="type">GsonHttpMessageConverter</span> gsonHttpMessageConverter = <span class="keyword">new</span> <span class="type">GsonHttpMessageConverter</span>();</div><div class="line">        converters.add(gsonHttpMessageConverter);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>除了代码方式，还可以写到配置文件。具体可以配置的属性有哪些，可以参考源代码<code>com.google.gson.FieldNamingPolicy.java</code>。</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="regexp">//</span> application.properties</div><div class="line"><span class="comment"># Naming policy that should be applied to an object's field during serialization and deserialization.</span></div><div class="line">spring.gson.field-naming-policy=LOWER_CASE_WITH_UNDERSCORES</div></pre></td></tr></table></figure>
+<blockquote>
+<p>配置这里，我始终都没有实践成功，虽然我确定已经排除掉了Jackson库，但是<code>spring.gson.field-naming-policy= LOWER_CASE_WITH_UNDERSCORES</code>不知道为什么一直都没有配置成功。希望熟悉的朋友可以指点一下。</p>
+</blockquote>
+<h2 id="2-2-字段命名映射的处理"><a href="#2-2-字段命名映射的处理" class="headerlink" title="2.2 字段命名映射的处理"></a>2.2 字段命名映射的处理</h2><p>上面只是很简单的添加了<code>Gson</code>作为Json框架，使用<code>GsonBuilder</code>创建Gson对象，可以对序列化的映射规则进行配置，代码如下：</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">configureMessageConverters</span><span class="params">(List&lt;HttpMessageConverter&lt;?&gt;&gt; converters)</span> </span>&#123;</div><div class="line">    <span class="comment">// Gson</span></div><div class="line">    GsonHttpMessageConverter gsonHttpMessageConverter = <span class="keyword">new</span> GsonHttpMessageConverter();</div><div class="line">    <span class="comment">// 自定义Gson，配置参数解析规则</span></div><div class="line">    gsonHttpMessageConverter.setGson(<span class="keyword">new</span> GsonBuilder()</div><div class="line">            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)</div><div class="line">            .create());</div><div class="line">    converters.add(gsonHttpMessageConverter);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>除了这种方式，还可以在SpringBoot的配置文件中配置Gson的Mapper规则。</p>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// application.properties</span></div><div class="line"># Preferred JSON mapper <span class="keyword">to</span> use <span class="keyword">for</span> HTTP <span class="keyword">message</span> conversion.</div><div class="line">spring.http.converters.preferred-json-mapper=gson</div></pre></td></tr></table></figure>
+<h2 id="2-3-时间参数的处理"><a href="#2-3-时间参数的处理" class="headerlink" title="2.3 时间参数的处理"></a>2.3 时间参数的处理</h2><p>既然都是用<code>GsonBuilder</code>，那么很简单加一行<code>.setDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;)</code>即可。</p>
+<h2 id="2-4-枚举参数的处理"><a href="#2-4-枚举参数的处理" class="headerlink" title="2.4 枚举参数的处理"></a>2.4 枚举参数的处理</h2><p>和Jackson一样，Gson也不需要我们干什么就会自动将字符串形式的参数转换成枚举对象。</p>
+<h1 id="三、FastJson"><a href="#三、FastJson" class="headerlink" title="三、FastJson"></a>三、FastJson</h1><h2 id="3-1-基本用法"><a href="#3-1-基本用法" class="headerlink" title="3.1 基本用法"></a>3.1 基本用法</h2><p>阿里出产的轮子，官方有wiki-<a href="https://github.com/alibaba/fastjson/wiki/%E5%9C%A8-Spring-%E4%B8%AD%E9%9B%86%E6%88%90-Fastjson" target="_blank" rel="external">《在 Spring 中集成 Fastjson》</a>，这里我就不搬运了。本质上也是一样的，替换SpringBoot自带的<code>HttpMessageConverter</code>为<code>FastJsonHttpMessageConverter</code>即可。</p>
+<p>在官方文档中提到一句：</p>
+<blockquote>
+<p>SpringBoot 2.0.1版本中加载WebMvcConfigurer的顺序发生了变动，故需使用converters.add(0, converter);指定FastJsonHttpMessageConverter在converters内的顺序，否则在SpringBoot 2.0.1及之后的版本中将优先使用Jackson处理。详情：<a href="https://github.com/spring-projects/spring-boot/issues/12389" target="_blank" rel="external">WebMvcConfigurer is overridden by WebMvcAutoConfiguration #12389</a></p>
+</blockquote>
+<h2 id="3-2-配置映射规则"><a href="#3-2-配置映射规则" class="headerlink" title="3.2 配置映射规则"></a>3.2 配置映射规则</h2><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">@SpringBootApplication</div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">DemoApplication</span> <span class="title">extends</span> <span class="title">WebMvcConfigurationSupport</span> &#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>) </span>&#123;</div><div class="line">        SpringApplication.run(DemoApplication.class, args);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configureMessageConverters</span>(<span class="params">List&lt;HttpMessageConverter&lt;?&gt;&gt; converters</span>) </span>&#123;</div><div class="line">        FastJsonHttpMessageConverter converter = <span class="keyword">new</span> FastJsonHttpMessageConverter();</div><div class="line">        <span class="comment">//自定义配置...</span></div><div class="line">        FastJsonConfig config = <span class="keyword">new</span> FastJsonConfig(); <span class="comment">// 按照阿里的文档说，生产环境要尽可能单例配置对象</span></div><div class="line">        config.setDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>); <span class="comment">// 设置时间格式</span></div><div class="line">        <span class="comment">// 字段名称映射规则，详见：https://github.com/alibaba/fastjson/wiki/PropertyNamingStrategy_cn</span></div><div class="line">        config.getParserConfig().propertyNamingStrategy = PropertyNamingStrategy.SnakeCase; <span class="comment">// 设置反序列化名称规则</span></div><div class="line">        config.getSerializeConfig().propertyNamingStrategy = PropertyNamingStrategy.SnakeCase; <span class="comment">// 设置序列化名称规则</span></div><div class="line">        converter.setFastJsonConfig(config);</div><div class="line">        <span class="comment">// 添加下面这一段是因为高版本的Fastjson的MediaType默认为*/*，而高版本的Spring不允许这样，需要明确指定MediaType。详见：https://github.com/alibaba/fastjson/issues/1554</span></div><div class="line">        List&lt;MediaType&gt; supportedMediaTypes = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.APPLICATION_JSON);</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.APPLICATION_JSON_UTF8);</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.APPLICATION_ATOM_XML);</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.APPLICATION_FORM_URLENCODED);</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.APPLICATION_OCTET_STREAM);</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.APPLICATION_PDF);</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.APPLICATION_RSS_XML);</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.APPLICATION_XHTML_XML);</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.APPLICATION_XML);</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.IMAGE_GIF);</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.IMAGE_JPEG);</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.IMAGE_PNG);</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.TEXT_EVENT_STREAM);</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.TEXT_HTML);</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.TEXT_MARKDOWN);</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.TEXT_PLAIN);</div><div class="line">        supportedMediaTypes.<span class="keyword">add</span>(MediaType.TEXT_XML);</div><div class="line">        converter.setSupportedMediaTypes(supportedMediaTypes);</div><div class="line">        converters.<span class="keyword">add</span>(<span class="number">0</span>, converter); <span class="comment">// 加入到HttpMessageConverterList的最前面</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="四、性能"><a href="#四、性能" class="headerlink" title="四、性能"></a>四、性能</h1><p>这里我也没有做过真正的测试，网上随便一搜可以找到大量讨论，我个人的态度比较开放，觉得在功能、性能上，三个框架都能满足基本使用，喜欢使用最简洁的方式。不过比较早的时候我开发Android App用的都是Gson，猜测可能是Gson这个库比较精简，没有太多复杂的功能，不过后来fastjson也针对Android出了专门的版本。到现在，Kotlin出来了，大家可能又有适配Kotlin的需求，具体还是看各自的需要来选择吧。</p>
+<h1 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h1><p>三大框架各自有自己的默认配置（实际上默认配置可能是随着框架的版本而变化的），使用框架的时候要熟悉它们，才可以避免一些麻烦。</p>
+<ul>
+<li>比如Jackson，默认情况下，对请求中多余的属性，会反序列化失败，需要把<code>DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES</code>设置为<code>false</code>才可以反序列化请求参数。</li>
+<li>比如Gson，默认会忽略多余的属性。但是对java8里面的LocalDate类型的属性，反序列化需要手动编写<code>deserialize</code>方法，因为Gson默认只能处理<code>java.util.Date</code>类型的属性。</li>
+</ul>
+<p>最后对于怎么使用框架，如果写配置能满足，那是最简单的、最方便管理的。<a href="https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html" target="_blank" rel="external">common-application-properties</a>里面预制了大量的配置，但是有时配置可能不够，这时还是编程方式来的更好一些。总之，我建议统一使用一种方式，保证整个项目风格的统一最好。</p>
+
+      
+    </div>
+
+    <div>    
+    
+    
+    <ul class="post-copyright">
+    <li class="post-copyright-author">
+    <strong>本文作者：</strong>unclechen
+    </li>
+    <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="/2018/12/16/Spring中三大JSON框架的使用/" title="Spring中三大JSON框架的使用">2018/12/16/Spring中三大JSON框架的使用/</a>
+    </li>
+    <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本文采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a>进行许可。转载请注明出处！
+    </li>
+    </ul>
+    
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+            <a href="/tags/后台/" rel="tag"># 后台</a>
+          
+            <a href="/tags/Service/" rel="tag"># Service</a>
+          
+            <a href="/tags/Json序列化/" rel="tag"># Json序列化</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/15/SpringBoot自定义请求参数校验/" rel="next" title="SpringBoot自定义请求参数校验">
+                <i class="fa fa-chevron-left"></i> SpringBoot自定义请求参数校验
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="unclechen" />
+          <p class="site-author-name" itemprop="name">unclechen</p>
+           
+              <p class="site-description motion-element" itemprop="description">吃下恶魔果实，我就能变成超级赛亚人！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/unclechen" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1718455407" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、Jackson"><span class="nav-text">一、Jackson</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-基本用法"><span class="nav-text">1.1 基本用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-字段命名映射的处理"><span class="nav-text">1.2 字段命名映射的处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-时间类型的字段处理"><span class="nav-text">1.3 时间类型的字段处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-枚举类型的字段处理"><span class="nav-text">1.4 枚举类型的字段处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-Jackson序列化小结"><span class="nav-text">1.5 Jackson序列化小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、Gson"><span class="nav-text">二、Gson</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-基本用法"><span class="nav-text">2.1 基本用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-字段命名映射的处理"><span class="nav-text">2.2 字段命名映射的处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-时间参数的处理"><span class="nav-text">2.3 时间参数的处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-枚举参数的处理"><span class="nav-text">2.4 枚举参数的处理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、FastJson"><span class="nav-text">三、FastJson</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-基本用法"><span class="nav-text">3.1 基本用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-配置映射规则"><span class="nav-text">3.2 配置映射规则</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、性能"><span class="nav-text">四、性能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、总结"><span class="nav-text">五、总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">unclechen</span>
+</div>
+
+
+<!--
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+-->
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "071293399566469d925f180d68952611",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+      var gitalk = new Gitalk({
+        clientID: 'a11668e1882acefd3ff5',
+        clientSecret: '0c20ad42eb72f7677c7fb68fd25710a4edbd5ece',
+        repo: 'blog_comment_repo',
+        owner: 'unclechen',
+        admin: ['unclechen'],
+        id: md5(location.pathname),
+        distractionFreeMode: 'true'
+      })
+      gitalk.render('gitalk-container')
+  </script>
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -324,6 +324,152 @@
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <div class="post-block" style="opacity: 1; display: block;">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2017/05/13/WebView缓存原理分析和应用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/05/13/WebView缓存原理分析和应用/" itemprop="url">WebView缓存原理分析和应用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-13T08:00:00+08:00">
+                2017-05-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>现在的App开发，或多或少都会用到Hybrid模式，到了WebView这边，经常会加载一些js文件（例如和WebView用来Native通信的bridge.js），而这些js文件不会经常发生变化，所以我们希望js在WebView里面加载一次之后，如果js没有发生变化，下次就不用再发起网络请求去加载，从而减少流量和资源的占用。那么有什么方式可以达到这个目的呢？先得从WebView的缓存原理入手。</p>
+<h1 id="二、WebView的缓存类型"><a href="#二、WebView的缓存类型" class="headerlink" title="二、WebView的缓存类型"></a>二、WebView的缓存类型</h1><p>WebView主要包括两类缓存，<strong>一类是浏览器自带的网页数据缓存</strong>，这是所有的浏览器都支持的、由HTTP协议定义的缓存；<strong>另一类是H5缓存</strong>，这是由web页面的开发者设置的，H5缓存主要包括了App Cache、DOM Storage、Local Storage、Web SQL Database 存储机制等，这里我们主要介绍App Cache来缓存js文件。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/05/13/WebView缓存原理分析和应用/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>    
+    
+    
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
     <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/12/11/python利用beautifulsoup+selenium自动翻页抓取网页内容/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1052,165 +1198,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <div class="post-block" style="opacity: 1; display: block;">
-    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2016/09/02/Android地理位置服务解析/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="unclechen">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="UncleChen的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/09/02/Android地理位置服务解析/" itemprop="url">Android地理位置服务解析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-02T08:00:00+08:00">
-                2016-09-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="手机设备有哪几种定位方式"><a href="#手机设备有哪几种定位方式" class="headerlink" title="手机设备有哪几种定位方式"></a>手机设备有哪几种定位方式</h1><h2 id="GPS"><a href="#GPS" class="headerlink" title="GPS"></a>GPS</h2><p>基于卫星发射的信号，可以推算出手机到每颗卫星的距离，根据卫星的位置，推测出手机的位置。</p>
-<p>这是一张简单的GPS定位原理图，需要一点数学知识，先不讨论这个细节，需要的同学看<a href="http://baike.baidu.com/view/193655.htm" target="_blank" rel="external">这里</a>。</p>
-<p><img src="http://ww1.sinaimg.cn/large/65e4f1e6gw1f7fbixzcaxj20dw0bo750.jpg" alt="gps定位原理图"></p>
-<p>现在卫星信号全球都覆盖了，手机一般都有GPS芯片，因此可以实现定位。GPS方式准确度是最高的，走卫星通道，不需要联网就可以要使用。但是它的缺点也非常明显：</p>
-<ul>
-<li>1.比较耗电; </li>
-<li>2.绝大部分用户默认不开启GPS模块，也不会长时间开着; </li>
-<li>3.从GPS模块启动到获取第一次定位数据，可能需要<strong>比较长的时间</strong>; </li>
-<li>4.<strong>只能在户外使用</strong>，当有遮挡物干扰时，几乎无法使用，如城市大楼密集的地方。</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/09/02/Android地理位置服务解析/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>    
-    
-    
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1255,7 +1247,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-count">31</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1277,7 +1269,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">43</span>
+                <span class="site-state-item-count">44</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
