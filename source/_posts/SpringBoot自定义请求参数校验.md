@@ -229,7 +229,7 @@ public class UserController {
 
 ## 3.3 以编程的方式校验（手动）
 
-这种方式可以算是原始的Hibernate-Validation的方式。直接看代码，这里有一个比较不同的是，可以使用[Hibernate-Validation的Fail fast mode](https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#section-fail-fast)。因为前面的方式，都将所有的参数都验证完了，再把错误返回。有时我们希望遇到一个参数错误，就立即返回。设置`fast-fail`为`true`可以达到这个目的。不过貌似不能再用@Validated注解方法参数了，而是要用`ValidatorFactory`创建`Validator`。
+这种方式可以算是原始的Hibernate-Validation的方式。直接看代码，这里有一个比较不同的是，可以使用[Hibernate-Validation的Fail fast mode](https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#section-fail-fast)。因为前面的方式，都将所有的参数都验证完了，再把错误返回。有时我们希望遇到一个参数错误，就立即返回。设置`fast-fail`为`true`可以达到这个目的。不过貌似不能再用@Validated注解方法参数了，而是要用`ValidatorFactory`创建`Validator`。**在实际开发中，不必每次都编写代码创建Validator，可以采用`@Configuration`的方式创建，然后再`@Autowired`注入到每个需要使用Validator的Controller当中。**
 
 ```
 @RestController
@@ -371,7 +371,8 @@ public class User {
 }
 ```
 
-在上面的方法中，我们处理了`BindException`（GET方法参数校验错误）和`MethodArgumentNotValidException`（POST方法参数校验错误），这两类Exception里面都有一个`BindingResult`对象，它里面有一个包装成`FieldError`的List，保存着Bean对象出现错误的Field等信息。取出它里面`defaultMessage`，放到统一的`ServiceResponse`返回即可实现返回码和消息的定制。由于消息内容是有注解默认的`DefaultMessage`决定的，为了按照自定义的描述返回，在Bean对象的注解上需要手动赋值为希望返回的消息内容。
+在上面的方法中，我们处理了`BindException`（非请求body参数，例如@RequestParam接收的）和`MethodArgumentNotValidException`（请求body里面的参数，例如@RequestBody接收的），这两类Exception里面都有一个`BindingResult`对象，它里面有一个包装成`FieldError`的List，保存着Bean对象出现错误的Field等信息。取出它里面`defaultMessage`，放到统一的`ServiceResponse`返回即可实现返回码和消息的定制。由于消息内容是有注解默认的`DefaultMessage`决定的，为了按照自定义的描述返回，在Bean对象的注解上需要手动赋值为希望返回的消息内容。
+
 
 ```
 ...
@@ -403,7 +404,7 @@ private String name;
 这种情况比较特殊，一般当参数错误的时候，会返回一个整体的参数错误的错误码，然后携带参数的错误信息。但有时，业务上就要不同的参数错误，既要错误码不同，错误信息也要不同。我想了下，有两种思路。
 
 - 第一种：通过message同时包含错误码和错误信息，在全局异常捕获方法中，再把它们拆开。
-- 第二种：手动校验，抛出自定义的Exception（里面带有code、message）。手动校验这里，如果每一个Controller都去写一遍，确实比较费劲，可以用AOP来校验参数，或者抽出一个基类BaseController的方式。
+- 第二种：手动校验，抛出自定义的Exception（里面带有code、message）。手动校验这里，如果每一个Controller都去写一遍，确实比较费劲，可以结合AOP来实现，或者抽出一个基类BaseController的方式。
 
 # 四、小结
 
