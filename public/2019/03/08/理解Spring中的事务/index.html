@@ -1,0 +1,947 @@
+<!doctype html>
+
+
+
+
+<html class="theme-next pisces" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Spring,后台,Service," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="UncleChen的博客" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Spring为事务管理提供了丰富的支持，对于底层不同的事务（ 如Java Transaction API (JTA), JDBC, Hibernate, Java Persistence API (JPA), and Java Data Objects (JDO)）管理提供了统一的抽象编程模型，而且它的API也非常易于开发者理解和使用。 Spring事务管理分为编程式和声明式的两种。编程式事务指的">
+<meta name="keywords" content="Spring,后台,Service">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解Spring中的事务">
+<meta property="og:url" content="http://unclechen.github.io/2019/03/08/理解Spring中的事务/index.html">
+<meta property="og:site_name" content="UncleChen的博客">
+<meta property="og:description" content="Spring为事务管理提供了丰富的支持，对于底层不同的事务（ 如Java Transaction API (JTA), JDBC, Hibernate, Java Persistence API (JPA), and Java Data Objects (JDO)）管理提供了统一的抽象编程模型，而且它的API也非常易于开发者理解和使用。 Spring事务管理分为编程式和声明式的两种。编程式事务指的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcly1g0qutyc3mnj30th0j20un.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g0quuh50khj30lo0c1dhf.jpg">
+<meta property="og:updated_time" content="2019-03-08T05:50:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="理解Spring中的事务">
+<meta name="twitter:description" content="Spring为事务管理提供了丰富的支持，对于底层不同的事务（ 如Java Transaction API (JTA), JDBC, Hibernate, Java Persistence API (JPA), and Java Data Objects (JDO)）管理提供了统一的抽象编程模型，而且它的API也非常易于开发者理解和使用。 Spring事务管理分为编程式和声明式的两种。编程式事务指的">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tKfTcly1g0qutyc3mnj30th0j20un.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":true,"scrollpercent":true},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '9GQE7B6UON',
+      apiKey: '1b6c2bb25ddee8d24221b1df179afbde',
+      indexName: 'UncleChenBlog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键词进行搜索","hits_empty":"找不到关于“${query}”的文章","hits_stats":"找到 ${hits} 篇文章，耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://unclechen.github.io/2019/03/08/理解Spring中的事务/"/>
+
+
+
+
+
+  <title>理解Spring中的事务 | UncleChen的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c7b0eb7b32d0e8723fcb885bc9778590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UncleChen的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <div class="post-block" style="opacity: 1; display: block;">
+    <link itemprop="mainEntityOfPage" href="http://unclechen.github.io/2019/03/08/理解Spring中的事务/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="unclechen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UncleChen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">理解Spring中的事务</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-08T08:00:00+08:00">
+                2019-03-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2019/03/08/理解Spring中的事务/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Spring为事务管理提供了丰富的支持，对于底层不同的事务（ 如Java Transaction API (JTA), JDBC, Hibernate, Java Persistence API (JPA), and Java Data Objects (JDO)）管理提供了统一的抽象编程模型，而且它的API也非常易于开发者理解和使用。</p>
+<p>Spring事务管理分为编程式和声明式的两种。编程式事务指的是通过编码方式实现事务；声明式事务基于AOP，将具体业务逻辑与事务处理解耦。声明式事务对我们的业务代码无侵入，一般更倾向于选择它。而编程式的事务一般使用<code>TransactionTemplate</code>。本文主要介绍常用的声明式事务。</p>
+<a id="more"></a>
+<h2 id="1-Transactional注解基本用法"><a href="#1-Transactional注解基本用法" class="headerlink" title="1.Transactional注解基本用法"></a>1.Transactional注解基本用法</h2><h3 id="1-1-配置数据源和事务管理器"><a href="#1-1-配置数据源和事务管理器" class="headerlink" title="1.1 配置数据源和事务管理器"></a>1.1 配置数据源和事务管理器</h3><p>配置数据源可以采用xml配置，也可以在代码中。下面是一段代码配置示例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="meta">@MapperScan</span>(basePackages = <span class="string">"com.xxx.dao"</span>,</div><div class="line">    sqlSessionFactoryRef = DataSourceConfiguration.SQL_SESSION_FACTORY_NAME)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DataSourceConfiguration</span> </span>&#123;</div><div class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String DATASOURCE_NAME = <span class="string">"xxxDataSource"</span>;</div><div class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String SQL_SESSION_FACTORY_NAME = <span class="string">"xxxProductSessionFactory"</span>;</div><div class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String TRANSACTION_MANAGER_NAME = <span class="string">"xxxProductTransaction"</span>;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="meta">@Bean</span>(name = DataSourceConfiguration.DATASOURCE_NAME)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">public</span> DataSource <span class="title">getDataSource</span><span class="params">()</span> </span>&#123;</div><div class="line">    DataSourceProperties dataSourceProperties = getDataSourceProperties();</div><div class="line">    <span class="keyword">return</span> dataSourceProperties.initializeDataSourceBuilder().build();</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="meta">@Bean</span></div><div class="line">  <span class="meta">@ConfigurationProperties</span>(<span class="string">"spring.datasource.xxx"</span>) </div><div class="line"></div><div class="line">  <span class="comment">// 数据源配置写在properties配置文件中，以spring.datasource开头，借助ConfigurationProperties注解来读取</span></div><div class="line">  <span class="function"><span class="keyword">public</span> DataSourceProperties <span class="title">getDataSourceProperties</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> DataSourceProperties();</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">  <span class="meta">@Bean</span>(name = DataSourceConfiguration.TRANSACTION_MANAGER_NAME)</div><div class="line">  <span class="function"><span class="keyword">public</span> PlatformTransactionManager <span class="title">transactionManager</span><span class="params">(</span></span></div><div class="line"><span class="function"><span class="params">      @Named(DataSourceConfiguration.DATASOURCE_NAME)</span> <span class="keyword">final</span> DataSource dataSource) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> DataSourceTransactionManager(dataSource);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="1-2-给需要使用事务的地方添加注解"><a href="#1-2-给需要使用事务的地方添加注解" class="headerlink" title="1.2 给需要使用事务的地方添加注解"></a>1.2 给需要使用事务的地方添加注解</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">@Service</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">XXXServiceImpl</span> <span class="keyword">implements</span> <span class="title">XXXService</span> </span>&#123;</div><div class="line"></div><div class="line">  ...</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="meta">@Transactional</span>(transactionManager = DataSourceConfiguration.TRANSACTION_MANAGER_NAME)</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">foo</span><span class="params">()</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果项目中只有一个事务管理器，可以不用设置注解的<code>transactionManager</code>属性，关于注解属性的详细介绍在第3节。</p>
+<p>虽然使用注解方式来实现事务管理看起来非常简单，但是如果对Spring注解实现事务的原理不够理解的话，在使用事务出现错误的时候，很难理解、排查问题。</p>
+<h2 id="2-Transactional注解实现的原理"><a href="#2-Transactional注解实现的原理" class="headerlink" title="2. Transactional注解实现的原理"></a>2. Transactional注解实现的原理</h2><ul>
+<li><p>对于使用了<code>Transactional</code>注解的方法的类，Spring AOP代理会在运行时生成这个类的代理对象。</p>
+</li>
+<li><p>当这个对象运行这个注解方法时，会读取<code>@Transactional</code>注解里面配置的信息，决定该方法是否要使用<code>TransactionInterceptor</code>拦截器来拦截。</p>
+</li>
+<li><p>当拦截器拦截该方法时，会在调用该方法之前，创建事务，并在这个事务中执行该方法，最后根据执行是否有异常使用<strong>抽象事务管理器（AbstractPlatformTransactionManager）</strong>操作数据源提交或者回滚这个事务。下面是一张常见的Spring注解事务实现机制图。</p>
+</li>
+</ul>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1g0qutyc3mnj30th0j20un.jpg" width="800"></p>
+<p>Spring AOP代理有两种实现，<code>Cglib</code>和<code>JDK Proxy</code>。对于实现了接口的类，默认走<code>JDK代理</code>，对于未实现接口的类，默认走<code>Cglib</code>。Spring中事务管理的框架由<code>AbstractPlatformTransactionManager</code>提供，具体Manager的实现取决于操作的数据源，比如数据源是数据库时，就会使用<code>DataSourceTransactionManager</code>管理JDBC的Connection。下图是<code>AbstractPlatformTransactionManager</code>具体实现类关系。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g0quuh50khj30lo0c1dhf.jpg" width="600"></p>
+<h2 id="3-Transactional注解提供的属性"><a href="#3-Transactional注解提供的属性" class="headerlink" title="3. Transactional注解提供的属性"></a>3. Transactional注解提供的属性</h2><p>除了基本用法之外，还应该知道它提供了哪些属性供开发者设置，以及这些属性如何在事务管理时发挥作用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">@Target</span>(&#123;ElementType.METHOD, ElementType.TYPE&#125;)</div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</div><div class="line"><span class="meta">@Inherited</span></div><div class="line"><span class="meta">@Documented</span></div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Transactional &#123;</div><div class="line">    <span class="meta">@AliasFor</span>(<span class="string">"transactionManager"</span>)</div><div class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</div><div class="line">     </div><div class="line">    <span class="meta">@AliasFor</span>(<span class="string">"value"</span>)</div><div class="line">    <span class="function">String <span class="title">transactionManager</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</div><div class="line">     </div><div class="line">    <span class="function">Propagation <span class="title">propagation</span><span class="params">()</span> <span class="keyword">default</span> Propagation.REQUIRED</span>;</div><div class="line">     </div><div class="line">    <span class="function">Isolation <span class="title">isolation</span><span class="params">()</span> <span class="keyword">default</span> Isolation.DEFAULT</span>;</div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">timeout</span><span class="params">()</span> <span class="keyword">default</span> TransactionDefinition.TIMEOUT_DEFAULT</span>;</div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">readOnly</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">false</span></span>;</div><div class="line">     </div><div class="line">    Class&lt;? extends Throwable&gt;[] rollbackFor() <span class="keyword">default</span> &#123;&#125;;</div><div class="line">     </div><div class="line">    String[] rollbackForClassName() <span class="keyword">default</span> &#123;&#125;;</div><div class="line">     </div><div class="line">    Class&lt;? extends Throwable&gt;[] noRollbackFor() <span class="keyword">default</span> &#123;&#125;;</div><div class="line">     </div><div class="line">    String[] noRollbackForClassName() <span class="keyword">default</span> &#123;&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p><code>name</code>、<code>transactionManager</code>：当项目中有多个事务管理器时，选择使用哪一个</p>
+</li>
+<li><p><code>propagation</code>：事务的传播行为，默认为REQUIRED。这里需要开发者有更多了解，参考<a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/transaction/annotation/Propagation.html" target="_blank" rel="external">官方API文档</a>。</p>
+</li>
+<li><p><code>isolation</code>：事务的隔离级别，默认DEFAULT，即采用数据服务器设置的隔离级别。</p>
+</li>
+<li><p><code>timeout</code>：超时时间，默认-1</p>
+</li>
+<li><p><code>readOnly</code>：是否为只读事务，默认false；对于一些不需要事务的只读操作，可以设置为true</p>
+</li>
+<li><p><code>rollbackFor</code>、<code>rollbackForClassName</code>：指定触发回滚的异常类型</p>
+</li>
+<li><p><code>noRollbackFor</code>、<code>noRollbackForClassName</code>：指定不触发混滚的异常类型</p>
+</li>
+</ul>
+<p><code>@Transactional</code>注解也可以添加到类级别上。当把<code>@Transactional</code>注解放在类级别时，表示所有该类的公共方法都配置相同的事务属性信息。此时如果方法级别也加了注解，会覆盖类级别的注解。</p>
+<h2 id="4-Spring事务失效的常见原因"><a href="#4-Spring事务失效的常见原因" class="headerlink" title="4. Spring事务失效的常见原因"></a>4. Spring事务失效的常见原因</h2><p>了解Spring注解实现事务的基本原理，看下一些比较容易出现的事务失败的原因。</p>
+<h3 id="4-1-内部方法调用失效"><a href="#4-1-内部方法调用失效" class="headerlink" title="4.1 内部方法调用失效"></a>4.1 内部方法调用失效</h3><p>Spring是通过AOP代理的方式来识别方法上面的注解，如果是同一个类中一个方法A调用另一个注解方法B，将无法被代理从而导致事务失效。因此方法A上面没有注解，代理对象在执行这个方法时，不会给A方法添加事务，所以被调用的B方法也不会运行在事务里面了。</p>
+<h3 id="4-2-private方法失效"><a href="#4-2-private方法失效" class="headerlink" title="4.2 private方法失效"></a>4.2 <code>private</code>方法失效</h3><p>这个意思是说只有给一个<code>public</code>方法加<code>Transactional</code>注解。Spring才会给它进行事务管理。原因是<code>TransactionInterceptor</code>拦截器时，会间接调用到一个<code>AbstractFallbackTransactionAttributeSource</code>里面的<code>computeTransactionAttribute</code>方法，通过这个方法来回去注解上的各个属性，同时会判断该方法是否为<code>public</code>，若不是public则不会读取注解属性，返回null。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">protected</span> TransactionAttribute <span class="title">computeTransactionAttribute</span><span class="params">(Method method, Class&lt;?&gt; targetClass)</span> </span>&#123;</div><div class="line">  <span class="comment">// Don't allow no-public methods as required.</span></div><div class="line">  <span class="keyword">if</span> (allowPublicMethodsOnly() &amp;&amp; !Modifier.isPublic(method.getModifiers())) &#123;</div><div class="line"></div><div class="line">     <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line"></div><div class="line">  &#125;</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="4-3-多线程切换导致事务失效"><a href="#4-3-多线程切换导致事务失效" class="headerlink" title="4.3 多线程切换导致事务失效"></a>4.3 多线程切换导致事务失效</h3><p>Spring会把很多一个事务中使用的很多变量放到很多<code>ThreadLocal</code>中，并保存在一个<code>org.springframework.transaction.support.TransactionSynchronizationManager</code>类中。如果在一个线程中启动了一个事务，Spring首先会初始化设置这些TheadLocal的值（<code>actualTransactionActive=true</code>），并把事务里这些<code>ThreadLocal</code>通过<code>TransactionSynchronizationManager</code>与这个线程绑定了。那么假设此时切换到另一个线程中，另一个线程将无法获得这些<code>ThreadLocal</code>，也无法知道当前是不是在一个事务里面，更无法知道这个事务做了哪些配置。所以切换线程之后，事务就无法管理了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">TransactionSynchronizationManager</span> </span>&#123;</div><div class="line">  <span class="keyword">private</span> stati <span class="keyword">final</span> Log logger = LogFactory.getLog(TransactionSynchronizationManager.class);</div><div class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;Map&lt;Object, Object&gt;&gt; resources = <span class="keyword">new</span> NamedThreadLocal(<span class="string">"Transactional resources"</span>);</div><div class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;Set&lt;TransactionSynchronization&gt;&gt; synchronizations = <span class="keyword">new</span> NamedThreadLocal(<span class="string">"Transaction synchronizations"</span>);</div><div class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;String&gt; currentTransactionName = <span class="keyword">new</span> NamedThreadLocal(<span class="string">"Current transaction name"</span>);</div><div class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;Boolean&gt; currentTransactionReadOnly = <span class="keyword">new</span> NamedThreadLocal(<span class="string">"Current transaction read-only status"</span>);</div><div class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;Integer&gt; currentTransactionIsolationLevel = <span class="keyword">new</span> NamedThreadLocal(<span class="string">"Current transaction isolation level"</span>);</div><div class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;Boolean&gt; actualTransactionActive = <span class="keyword">new</span> NamedThreadLocal(<span class="string">"Actual transaction active"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>了解了切换线程导致的事务失效原因后，是不是觉得可以做点什么，让事务延续呢？当然是可以的，如果我们手动地给另一个线程也设置这些ThreadLocal，就可以将事务延续了。</p>
+<h3 id="4-4-单元测试中注解的方法自动回滚失效"><a href="#4-4-单元测试中注解的方法自动回滚失效" class="headerlink" title="4.4 单元测试中注解的方法自动回滚失效"></a>4.4 单元测试中注解的方法自动回滚失效</h3><p>有时候我们会给单元测试里面的某个testFunction加上<code>@Transactional</code>注解，希望这个方法运行完成之后，可以自动回滚，不污染数据源。但是有时回滚会失效。</p>
+<p>先看下官方文档中，<a href="https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-testing.html" target="_blank" rel="external">测试章节</a>提到的问题。</p>
+<blockquote>
+<p>If your test is <code>@Transactional</code>, it rolls back the transaction at the end of each test method by default. However, as using this arrangement with either RANDOM_PORT or DEFINED_PORT implicitly provides a real servlet environment, the HTTP client and server run in separate threads and, thus, in separate transactions. Any transaction initiated on the server does not roll back in this case.</p>
+</blockquote>
+<p>通常情况下，<code>@SpringBootTest</code>注解里面的<code>webEnvironment</code>默认值是<code>MOCK</code>，它在运行单测时，不会真正启动一个Server来进行测试。但是如果我们手动将这个值改为<code>RANDOM_PORT/DEFINED_PORT</code>后，会启动一个真实的Web环境，内置的Server会启动起来。然后此时发出HTTP请求的Client和处理请求的Server试运行在不同的线程里面的，按照3.3的分析，这里的事务肯定就无法自动生效了，单元测试方法上面的<code>@Transactional</code>注解就是失效了。</p>
+<p>所以如果你不需要启动真实的Server时，建议使用<code>@SpringBootTest</code>默认的<code>webEnvironment</code>，此时请求的client只能用<code>MockMvc</code>来发，而不是<code>TestRestTemplate</code>，这样就可以让单测跑完之后自动回滚了。</p>
+<h2 id="5-参考资料"><a href="#5-参考资料" class="headerlink" title="5. 参考资料"></a>5. 参考资料</h2><ul>
+<li><a href="https://www.ibm.com/developerworks/cn/java/j-master-spring-transactional-use/index.html" target="_blank" rel="external">https://www.ibm.com/developerworks/cn/java/j-master-spring-transactional-use/index.html</a></li>
+<li><a href="https://dzone.com/articles/spring-transaction-management-over-multiple-thread-1" target="_blank" rel="external">https://dzone.com/articles/spring-transaction-management-over-multiple-thread-1</a></li>
+<li><a href="https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-testing.html" target="_blank" rel="external">https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-testing.html</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>    
+    
+    
+    <ul class="post-copyright">
+    <li class="post-copyright-author">
+    <strong>本文作者：</strong>unclechen
+    </li>
+    <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="/2019/03/08/理解Spring中的事务/" title="理解Spring中的事务">2019/03/08/理解Spring中的事务/</a>
+    </li>
+    <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本文采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a>进行许可。转载请注明出处！
+    </li>
+    </ul>
+    
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+            <a href="/tags/后台/" rel="tag"># 后台</a>
+          
+            <a href="/tags/Service/" rel="tag"># Service</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/02/Jackson自定义反序列化Deserializer/" rel="next" title="Jackson自定义反序列化Deserializer">
+                <i class="fa fa-chevron-left"></i> Jackson自定义反序列化Deserializer
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="unclechen" />
+          <p class="site-author-name" itemprop="name">unclechen</p>
+           
+              <p class="site-description motion-element" itemprop="description">吃下恶魔果实，我就能变成超级赛亚人！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/unclechen" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/1718455407" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Transactional注解基本用法"><span class="nav-text">1.Transactional注解基本用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-配置数据源和事务管理器"><span class="nav-text">1.1 配置数据源和事务管理器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-给需要使用事务的地方添加注解"><span class="nav-text">1.2 给需要使用事务的地方添加注解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Transactional注解实现的原理"><span class="nav-text">2. Transactional注解实现的原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Transactional注解提供的属性"><span class="nav-text">3. Transactional注解提供的属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Spring事务失效的常见原因"><span class="nav-text">4. Spring事务失效的常见原因</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-内部方法调用失效"><span class="nav-text">4.1 内部方法调用失效</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-private方法失效"><span class="nav-text">4.2 private方法失效</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-多线程切换导致事务失效"><span class="nav-text">4.3 多线程切换导致事务失效</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-单元测试中注解的方法自动回滚失效"><span class="nav-text">4.4 单元测试中注解的方法自动回滚失效</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-参考资料"><span class="nav-text">5. 参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">unclechen</span>
+</div>
+
+
+<!--
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+-->
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "071293399566469d925f180d68952611",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+      var gitalk = new Gitalk({
+        clientID: 'a11668e1882acefd3ff5',
+        clientSecret: '0c20ad42eb72f7677c7fb68fd25710a4edbd5ece',
+        repo: 'blog_comment_repo',
+        owner: 'unclechen',
+        admin: ['unclechen'],
+        id: md5(location.pathname),
+        distractionFreeMode: 'true'
+      })
+      gitalk.render('gitalk-container')
+  </script>
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
